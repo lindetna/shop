@@ -1,0 +1,631 @@
+<photo_video>
+	<div if={ ACTIVITES_READ } class="content with_submenu">
+		<div class="activites page_activites photo_video">
+			<div id="add_categorie" class="edit edit_categorie hidden">	
+				<div class="informations">
+					<div class="table">
+						<div class="cell_1">
+							<div class="block_titre">
+								<label for="photo">Titre:</label>	
+								<input type="text" name="titre" id="titre">
+							</div>
+							<div class="block_photo">
+								<div id="image_upload">
+									<label for="photo">Photo:</label>	
+									<input type='file' value="choisir une image" id="categorie_photo_upload" name="image" class="photo_upload photo_add pointer" onchange={ readURL } />
+									<div class="image_position">
+										<img class="preview" src="#"/>
+									</div>
+									<input type="hidden" id="image">
+									<button id="reset_image" onclick={resetImage}>X</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="save_categorie" class="hidden save_categorie">
+					<button class="button annuler cancel_submit" onclick={ cancelCategorie }>Annuler</button>
+					<button class="button enregistrer save_submit" onclick={ saveCategorie }>Enregistrer</button>
+				</div>
+			</div>
+
+			<div class="actions_container hide_when_edit hide_when_edit_categorie hide_when_edit_produit hide_when_add hide_when_add_categorie hide_when_add_activite hide_when_add_produit">
+
+				<div id="actions" class="actions">
+
+					<button id="add_categorie_button" onclick={ addCategorie } class="button btn_nav action_button_size">Ajouter une gallerie</button>
+					<button id="add_activite_button" onclick={ addActivite } class="button btn_nav hidden action_button_size">Ajouter une activité</button>
+				</div>
+			</div>
+			<div class="categories" id="categorie_tableau">
+				<div id="entete_categorie" class="entete-tableau hide_when_edit_categorie hide_when_add_categorie">
+					<div class="cell_1"></div>
+					<div class="cell_3">
+						<p class="small">Titre</p>
+					</div>
+					<div class="cell_2">
+						<p class="small">Image</p>
+					</div>
+					
+					<div class="cell_5">
+						<p class="small">Actions</p>
+					</div>
+				</div>
+				<div each={ photovideo } id="categorie_{ id }" class="categorie hide_when_add_categorie">
+					<div class="show_infos hide_when_edit_categorie hide_when_add_categorie" onclick={ showGallery }>
+						<div class="cell_1">
+							<!-- <input type="checkbox" name="action[]">  -->
+						</div>
+						
+						<div class="cell_3">
+							<p class="small nature">{ titre }</p>
+						</div>
+						<div class="cell_2">
+							<img class="img_activites" src="/img/uploads/photo_video/{ image }">
+						</div>
+						<div class="cell_5">
+							<p class="modif"><img class="edit_element_img" onclick={ editCategorie } title="Modifier" src="/img/edit.png">
+						    
+							<img class="delete_element_img" onclick={ validDeleteCategorie } title="Supprimer" delete_id="{ id }" src="/img/delete.png">
+							</p>
+						</div>
+					</div><!-- /.show_infos -->
+					<!-- Début Catégorie Activité Modifie -->
+					<div id="categorie_{ id }_edit" class="edit edit_categorie hidden edit_categorie_block">
+						<div class="general_block">
+							<div class="cell_1 activite_image">
+								<div class="block_titre">
+									<label for="photo">Titre:</label>	
+									<input type="text" name="titre_{ id }" id="titre_{ id }" value={ titre }>
+								</div>
+								<div class="block_photo">
+									<div id='image_upload_{ id }'>
+										<label for="photo">Photo:</label>	
+										<input type='file' name="image_{ id }" value="choisir une image" id="photo_upload_{id}" class="photo_upload photo_add pointer"  onchange={readURLEdit} />
+										<div class="image_position">
+							    			<img class="preview_{id}" src="/img/uploads/photo_video/{image}"/>
+										</div>
+										<button id="reset_image" onclick={resetImageEdit}>X</button>
+							    		<input class="hidden" type="text" name="image_{ id }" id="image_{ id }">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="save_categorie">
+							<button class="button annuler cancel_submit" onclick={ cancelCategorie }>Annuler</button>
+							<button class="button enregistrer save_submit" onclick={ saveEditCategorie }>Enregistrer</button>
+						</div>
+					</div> <!-- /.edit_categorie -->
+					<!-- Fin Catégorie Activité Modifie -->
+					<div id="categorie_{ id }_delete" class="delete hidden">
+						<div>
+							<p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p>
+							<button class="button enregistrer" name="categorie_delete_{ id }" onclick={ deleteCategorie }>Supprimer</button>
+							<button class="button annuler" name="cancel_{ id }" onclick={ cancelDeleteCategorie }>Annuler</button>
+						</div>
+					</div>
+					<!-- Begin Activites_activites -->
+			</div><!-- /End .categories /tableau-container -->
+			</div><!-- /End .activites -->
+			<div class="gallerie_photo hidden">
+			<button id="add_categorie_button" onclick={ RevenirCategorie } class="button btn_nav action_button_size add_button_photo_gallerie ">Revenir aux Catégories</button>
+				<div class="column_gallerie">
+					<img src="../../../img/exemples/image1.jpg" title="image" alt="image">
+				</div>
+				<div class="column_gallerie hidden">
+					<img src="../../../img/exemples/image2.jfif">
+				</div>
+				<div class="column_gallerie">
+					<img src="../../../img/exemples/image3.jpg">
+				</div>
+				<div class="column_gallerie">
+					<img src="../../../img/exemples/image4.jpg">
+				</div>
+			</div>
+			<div class="gallerie_photo hidden">
+				<div class="column_gallerie">
+					<img src="../../../img/exemples/image1.jpg" title="image" alt="image">
+				</div>
+				<div class="column_gallerie">
+					<img src="../../../img/exemples/image2.jfif">
+				</div>
+				<div class="column_gallerie">
+					<img src="../../../img/exemples/image3.jpg">
+				</div>
+				<div class="column_gallerie">
+					<img src="../../../img/exemples/image4.jpg">
+				</div>
+			</div>
+		</div>
+	</div><!-- /End .content -->
+	<script>
+		var _this = this;
+		var app = opts;
+		this.app = opts;
+		this.loaded = false;
+		var permissions = app.session.permissions;
+		var ACTIVITES_READ = this.ACTIVITES_READ = permissions.ACTIVITES_READ || false;
+
+		if( ! _this.app.session.activites){
+			_this.app.session.activites = {};
+		}
+
+		app.on('unmount-photo_video', function(){
+			_this.app.off('unmount-photo_video');
+		    _this.unmount();
+        });
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+		this.tinyMCE;
+		this.loaded = false;
+
+		this.thingsToLoad = ['exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+
+
+
+
+		this.currentCategorieId = '';
+		this.currentCategorieLibelle = '';
+		this.currentActiviteId = '';
+		this.currentActiviteLibelle = '';
+		this.currentModele = undefined;
+		this.currentModeleId = undefined;
+
+		this.categories = [];
+		this.idCategories = {};
+		this.activites = [];
+		this.idActivites = {};
+		this.produits = [];
+		this.idProduits = {};
+
+		app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			_this.numToLoad--;
+			if( _this.loaded ){
+			}
+		});
+
+		_this.app.loadScript('/js/admin/tinymce/tinymce.min.js', 'tinymce_js', function tinymce() {
+			_this.tinyMCE = true;
+
+		});
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			$(".slide-up", e.target).slideToggle("slow");
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		readURL(input) {
+			console.log('upload button clicked!');
+            if (input.path[0].files) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('#categorie_photo_upload')[0].files[0].name);
+	                reader.onload = function (input) {
+	                    $('.preview')
+	                        .attr('src', input.target.result)
+	                        .width(150)
+	                        .height(150);
+	                };
+	                $(".preview").show();
+	                $("#image").val($('#categorie_photo_upload')[0].files[0].name);
+	                reader.readAsDataURL($('#categorie_photo_upload')[0].files[0]);
+            }    
+        }
+
+		saveCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var data = new FormData();
+			var selector = "";
+			if(e.item) {
+				selector = "#image_" + e.item.id;
+				console.log('111111111111111111', selector)
+			} else {
+				selector = "#categorie_photo_upload"
+				console.log('22222222222222', selector)
+
+			}
+			var xhr = new XMLHttpRequest();
+			xhr.open('post', '/admin/site/photo_video', true);
+			var image = $(selector)[0].files[0].name;
+			xhr.send(data);
+			$('#image').val(image);
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/photo_video', 
+					fields: ['titre', 'image'],
+					tag: _this,
+					elements: _this.photovideo,
+					idElements: _this.idPhotovideo,
+					typeElement: 'photo_video',
+					hideClass: 'hidden',
+				});
+			}
+			console.log('enregistrement');
+			$(".hide_when_add_categorie").removeClass('hidden');
+			$('#add_categorie').addClass('hidden');
+		}
+ 			readURLEdit(e) {
+        		if (e.item.id) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('#photo_upload_' + e.item.id)[0].files[0].name);
+	                reader.onload = function (input) {
+	                	console.log(e.item.id)
+	                    $('.preview_' + e.item.id)
+	                        .attr('src', input.target.result)
+	                        .width(150)
+	                        .height(150);
+	                };
+	                $(".preview_" + e.item.id).show();
+	                $("#image_" + e.item.id).val($('#photo_upload_' + e.item.id)[0].files[0].name);
+	                reader.readAsDataURL($('#photo_upload_' + e.item.id)[0].files[0]);
+            	}
+        	}
+		saveEditCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			//console.log(e.item)
+			if ( $('#photo_upload_' + e.item.id)[0].files[0] ) {
+				var data = new FormData();
+
+				data.append("image", $('#photo_upload_' + e.item.id)[0].files[0],  $('#photo_upload_' + e.item.id)[0].files[0].name);
+
+				var xhr = new XMLHttpRequest();
+
+				xhr.open('post', '/admin/site/photo_video', true);
+				var image = $('#photo_upload_' + e.item.id)[0].files[0].name;
+				//console.log(image)
+				xhr.send(data);
+			} else {
+				$("#image_" + e.item.id).val(e.item.image);
+			}
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/photo_video', 
+					fields: ['titre', 'image'],
+					tag: _this,
+					elements: _this.photovideo,
+					idElements: _this.idPhotovideo,
+					hideClass: 'hidden',
+				});
+			}
+			$(".hide_when_add_categorie").removeClass('hidden');
+			$('#add_categorie').addClass('hidden');
+		}
+
+        resetImage(e){
+			var id = e.item ? '_' + e.item.id : '';
+        	$(".preview").attr('src','#');
+        	$(".preview").hide();
+        	$('#categorie_photo_upload' + id).val("");
+        }
+          resetImageEdit(e){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview_" + e.item.id).attr('src','#');
+        	$(".preview_" + e.item.id).hide();
+        	$('#photo_upload_' + e.item.id).val("");
+			$('#photo_upload_' + e.item.id).type = '';
+			$('#photo_upload_' + e.item.id).type = 'file';
+        }
+
+		editCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+		 		$(".hide_when_edit_categorie").addClass('hidden');
+				_this.E_M.editElement({ event: e, prefixId: 'categorie_', hideClass: 'hidden', });
+			}
+		}
+		addCategorie(e){
+			if(_this.E_M){
+				$(".hide_when_add_categorie").addClass('hidden');
+				$('#save_categorie').addClass('inline_block').removeClass('hidden');
+				$('#actions').addClass('hidden').removeClass('inline_block');
+				$('input[type=text]', '#add_categorie').val('');
+				_this.E_M.addElement({
+					event: e,
+					prefixId: 'categorie_',
+					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		validDeleteCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({
+					event: e, 
+					prefixId: 'categorie_', 
+					hideClass: 'hidden', });
+			}
+		}
+
+		validDeleteActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, hideClass: 'hidden',});
+			}
+		}
+
+		validDeleteProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, hideClass: 'hidden',});
+			}
+		}
+
+		cancelDeleteCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({
+					event: e,
+					prefixId: 'categorie_', 
+					hideClass: 'hidden',});
+			}
+		}
+
+		deleteCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e,
+				tag: _this, 
+				url: '/admin/site/photo_video', 
+				elements: _this.photovideo, 
+				idElements: _this.idPhotovideo, 
+				type_element: 'photo_video', 
+				hideClass: 'hidden',});
+			}
+		}
+
+		cancelDeleteActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e,  hideClass: 'hidden',});
+			}
+		}
+
+		deleteActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var item = e.item;
+				var categorieId = item.id_categorie;
+				var elements =  _this.categories[_this.idCategories[categorieId]]['activites'];
+				var idElements = _this.categories[_this.idCategories[categorieId]]['idActivites'];
+
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/activites/activites', elements: elements, idElements: idElements, type_element: 'activite', hideClass: 'hidden',});
+			}
+		}
+
+		cancelDeleteProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'produit_', hideClass: 'hidden',});
+			}
+		}
+
+
+
+		cancelCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				if(e.item){
+					$('.entete_activite', $('#categorie_' + e.item.id)).addClass('hidden');
+					$(".hide_when_edit_categorie").removeClass('hidden');
+				}else{
+					$(".hide_when_add_categorie").removeClass('hidden');
+				}
+				$('#save_categorie').addClass('hidden').removeClass('inline_block');
+				$('#actions').addClass('inline_block').removeClass('hidden');
+				$('#current_activite').text('').attr('title', '').hide();
+				$('#current_').text('').attr('title', '').hide();
+				$('.actions_container').show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'visible', ],
+					prefixId: 'categorie_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		cancelActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+
+				var categorie = getCurrentCategorie();
+				var idCategorie = categorie.id;
+
+				if(e.item){
+					$(".hide_when_edit_activite", $('#categorie_' + idCategorie )).removeClass('hidden');
+
+				}else{
+
+					$(".hide_when_add_activite", $('#categorie_' + idCategorie )).removeClass('hidden');
+				}
+
+				$('#save_activite').addClass('hidden').removeClass('inline_block');
+				$('#actions').removeClass('hidden');
+				$('#add_activite_button').removeClass('inline_block').addClass('hidden');
+				$('#current_activite').text('').attr('title', '').hide();
+				$('.entete_activite', $('#categorie_' + idCategorie)).removeClass('hidden');
+				$('.actions_container').removeClass('hidden');
+				$('#add_activite_button').removeClass('hidden'); //.addClass('inline_block');
+
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'visible', ],
+					prefixId: 'activite_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		this.cancelProduit = function cancelProduit(e){
+			e.stopPropagation();			e.preventDefault();
+			if(_this.E_M){
+				if(e.item){
+					var idActivite = e.item.id_activite;
+					var id = e.item.id;
+					$('.hide_when_edit_produit', $('#activite_' + idActivite)).removeClass('hidden');
+					$(".hide_when_edit", $('#activite_' + idActivite + '_edit')).removeClass('hidden');
+				}else{
+					var idActivite = _this.currentActiviteId;
+					//var categorieId = _this.currentCategorieId;
+					$(".hide_when_add_produit", $('#activite_' + idActivite  + '_edit')).removeClass('hidden');
+				}
+				$('#save_produit').addClass('hidden').removeClass('inline_block');
+				$('#actions').removeClass('hidden');
+
+
+				$('#save_activite').addClass('hidden').removeClass('inline_block');
+				$('#actions').removeClass('hidden');
+				$('#add_activite_button').removeClass('inline_block').addClass('hidden');
+				$('#current_activite').text('').attr('title', '').hide();
+				$('.actions_container').removeClass('hidden');
+				$('#add_activite_button').removeClass('hidden').addClass('inline_block');
+
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'visible', ],
+					prefixId: 'produit_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		this.idPhotovideo = {};
+        this.photovideo = [];
+        function getProduit() {
+           var getParams ={ type_element: 'photo_video'};
+             if(document.getElementById('id_exercice')){
+                 getParams.id_exercice = document.getElementById('id_exercice').value;
+             } else if( _this.app.session.exercices.selected ){
+                 getParams.id_exercice = _this.app.session.exercices.selected;
+             }
+            $.getJSON('/admin/site/photo_video', getParams, function (data){ 
+                console.log('getproduits data :: ' + JSON.stringify(data));
+                if(data && data.elements){
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var fields = { id: 'id', id_entreprise: 'id_entreprise', titre: 'titre', image: 'image',};
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                        }
+                        _this.idPhotovideo[d['id']] = i;
+                        _this.photovideo.push(d);
+                    }
+                    _this.update();
+                }
+            });
+        }
+        getProduit();
+
+
+		showGallery(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$(".hide_when_add_categorie").addClass('hidden');
+				$(".gallerie_photo").removeClass('hidden');
+				//$("add_button_photo_gallerie").removeClass('hidden');
+			}
+		}
+
+		RevenirCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$(".gallerie_photo").addClass('hidden');
+				$(".hide_when_add_categorie").removeClass('hidden');
+			}
+
+		}
+
+
+
+/*		function getCurrentCategorie() {
+			return _this.categories[ _this.idCategories[ _this.currentCategorieId ]];
+		}
+
+		function getActivites() {
+			var categorie = getCurrentCategorie();
+			return categorie.activites;
+		}
+*/
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			editCategorie = null;
+			RevenirCategorie = null;
+			editActivite = null;
+			editProduit = null;
+			showContents = null;
+			showCategories = null;
+			showGallery = null;
+			hideActivites = null;
+			showProduits = null;
+			hideProduits = null;
+			addCategorie = null;
+			addActivite = null;
+			addProduit = null;
+			validDeleteCategorie = null;
+			validDeleteActivite = null;
+			validDeleteProduit = null;
+			cancelDeleteCategorie = null;
+			deleteCategorie = null;
+			cancelDeleteActivite = null;
+			deleteActivite = null;
+			cancelDeleteProduit = null;
+			deleteProduit = null;
+			cancelCategorie = null;
+			cancelActivite = null;
+			cancelProduit = null;
+			saveCategorie = null;
+			saveCategorie = null;
+			saveEditCategorie = null;
+			saveProduit = null;
+			makeVisible = null;
+			makeInvisible = null;
+			getElements = null;
+			toggleVisible = null;
+		});
+
+    </script>
+</photo_video>

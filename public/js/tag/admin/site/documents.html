@@ -1,0 +1,642 @@
+<documents>
+	<!--<div id="titre_page"><h1>Actualités</h1></div>-->
+	<div class="actualite_site with_submenu">
+		<div id="add_documents" class="edit edit_journal hidden">
+			<div class="celladd">
+				<input type="hidden" name="type_element" value="documents">
+				<input type="hidden" id="documents_classe" name="documents_classe" value="">
+			</div>
+			<div class="celladd">
+				<div>
+					<label for="titre" class="label_titre">Titre:</label>
+					<input name="documents_titre" id="documents_titre" class="titre">
+					<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="documents_visible" id="documents_visible" class="documents_visible" title="Visible" value="visible">
+					<div>A la Une
+						<input onclick={ toggleUne } type="image" src="/img/annonces.png" name="documents_la_une" id="documents_la_une" class="documents_visible" title="Pas la Une" value="non">
+					</div>
+				</div>
+			</div>
+			<div class="celladd block">
+				<div id='image_upload'>
+					<label for="photo">Photo:</label>	
+					<input type='file' value="choisir une image" id="photo_upload" class="photo_upload photo_add pointer" onchange={readURL} />
+    				<button for="documentsPhoto" class="select_image" text="Choisir une image">Choisir une image</button>
+					<div class="image_position">
+		    			<img class="preview" src="#"/>
+					</div>
+					<button id="reset_image" onclick={resetImage}>X</button>
+		    		<input class="hidden" type="text" name="documents_image" id="documents_image">
+				</div>
+				<div id='document_container_upload'>
+					<label for="photo">Fichier:</label>	
+					<input type='file' value="choisir une image" id="document_upload" class="photo_upload photo_add pointer" />
+					<button id="reset_image" onclick={resetImage}>X</button>
+		    		<input class="hidden" type="text" name="documents_documents" id="documents_documents">
+				</div>
+			</div>
+			<div class="celladd add_button">
+				<button name="cancel_submit" class="button annuler cancel_submit pointer" onclick={ cancelDocuments }>Annuler</button>
+				<button name="save_submit" class="button enregistrer save_submit pointer" onclick={ saveDocuments }>Enregistrer</button>
+			</div>
+		</div>
+		<div class="actions" id="actions">
+			<input id="add_documents_button" type="button" value="Ajouter un document" class="ajouter button pointer" name="add_element_button" onclick={ addDocuments }>
+		</div>
+		<div class="documents_content documents_edit_content">
+			<div class="corps_documents">
+				<div class="entete_documents">
+					<div class=" cell_1">Image</div>
+					<div class=" cell_2">Titre</div>
+					<div class=" cell_3">Fichier</div>
+					<div class=" oeil_visibilite cell_4">Visibilité</div>
+					<div class=" cell_5">Actions</div>
+				</div>
+				<div each={ documents } id="documents_{ id }" class="documents_ligne documents_edit_ligne">
+					<div class="show_infos hide_when_edit">
+						<div class=" image cell_1"><img class="photo" src="/img/uploads/site/documents/{image}"></div>
+						<div class=" cell_2"><h3>{titre}</h3></div>
+						<div id="text_container_{id}" class=" introduction showmore cell_3">
+							<a href="/img/uploads/site/documents/{documents}">{documents}</a>
+    					</div>
+						<div class=" oeil_visibilite cell_4"><input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="visible_{ id }" name="visible_{ id }"></i></div>
+						<div class=" actions cell_5">
+							<div>
+								<p class="modif"><img class="edit_element_img" onclick={ editDocuments } title="Modifier" src="/img/edit.png"> </p><p class="modif"><img class="delete_element_img" onclick={ validDeleteDocuments } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p><p class="modif"><img if={ !image } alt="monter" title="Monter" class="monter_element_img pointer" onclick={ switchUp } src="/img/compta/fleche_haut.png"></p><p class="modif"><img if={ !last } alt="descendre" title="Descendre" class="pointer descendre_element_img" onclick={ switchDown } src="/img/compta/fleche_bas.png"></p>
+							</div>
+						</div>
+					</div>
+					<div id="documents_{ id }_edit" class="edit edit_documents hidden">
+						<div class="celladd">
+							<div>
+								<label class="label_titre" for="titre">Titre:</label>
+								<input name="documents_titre_{ id }" id="documents_titre_{ id }" class="titre" type="text" value={ titre }>
+								<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="documents_visible_{id}" id="documents_visible_{id}" class="documents_visible" title="Visible" value="{visible}">
+							</div>
+							<div>A la Une
+								<input onclick={ toggleUne } type="image" src="/img/annonces.png" name="documents_la_une_{id}" id="documents_la_une_{id}" class="documents_visible" title="Pas la Une" value="{la_une}">
+							</div>
+						</div>
+						<div class="celladd block">
+							<div id='image_upload_edit'>
+								<label for="photo">Photo:</label>	
+								<input type='file' value="choisir une image" id="photo_upload_{id}" class="photo_upload photo_add pointer" onchange={readURLEdit} />
+			    				<button for="documentsPhoto" class="select_image" text="Choisir une image">Choisir une image</button>
+								<div class="image_position">
+					    			<img class="preview_{id}" src="/img/uploads/site/documents/{image}"/>
+								</div>
+								<button id="reset_image" onclick={resetImageEdit}>X</button>
+					    		<input class="hidden" type="text" name="documents_image_{ id }" id="documents_image_{ id }">
+							</div>
+							<div id='document_upload_edit'>
+								<label for="photo">Fichier:</label>	
+								<input type='file' value="choisir une image" id="documents_upload_{id}" class="photo_upload photo_add doc_edit pointer" />
+								<div class="image_position">
+									<iframe src="/img/uploads/site/documents/{documents}"></iframe>
+								</div>
+								<button id="reset_image" onclick={resetImageEdit}>X</button>
+					    		<input class="hidden" type="text" name="documents_documents_{ id }" id="documents_documents_{ id }">
+							</div>
+						</div>
+						<div class="celladd add_button">
+							<button name="cancel_submit_{ id }" onclick={ cancelEditDocuments } class="pointer button annuler cancel_submit">Annuler</button>
+							<button name="save_submit_{ id }" onclick={ saveEditDocuments } class="pointer button enregistrer save_submit">Enregistrer</button>
+						</div>
+					</div>
+					<div id="documents_{ id }_delete" class="delete hidden">
+						<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" id="delete_{ id }" class="pointer" onclick={ deleteDocuments }>Supprimer</button><button class="pointer" name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteDocuments }>Annuler</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	var app = opts;
+	var _this = this;
+	this.app = opts;
+	var permissions = app.session.permissions;
+
+	app.on('unmount-documents', function(){
+		app.off('unmount-documents');		
+		_this.unmount();
+	});
+
+	this.loaded = false;
+
+	this.thingsToLoad = [ 'documents', 'E_M' ];
+	this.numToLoad = this.thingsToLoad.length;
+
+	if( ! _this.app.session.documents){
+		_this.app.session.documents = {};
+		_this.app.session.documents.elements = [];
+		_this.app.session.documents.idElements = {};
+		_this.documents = _this.app.session.documents.elements;
+		_this.idDocuments = _this.app.session.documents.idElements;
+	}else{
+		_this.documents = _this.app.session.documents.elements;
+		_this.numToLoad--;
+	}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.documents = [];
+		this.idDocuments = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		_this.app.loadScript('/js/admin/tinymce/tinymce.min.js', 'tinymce_js', function tinymce() {
+		});
+
+		readURL(input) {
+			console.log('upload button clicked!');
+            if (input.path[0].files) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('.photo_add')[0].files[0].name);
+	                reader.onload = function (input) {
+	                    $('.preview')
+	                        .attr('src', input.target.result)
+	                        .width(200)
+	                        .height(200);
+	                };
+	                $(".preview").show();
+	                $("#documents_image").val($('.photo_add')[0].files[0].name);
+	                reader.readAsDataURL($('.photo_add')[0].files[0]);
+            }
+        }
+
+        readURLEdit(e) {
+        	if (e.item.id) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('#photo_upload_' + e.item.id)[0].files[0].name);
+	                reader.onload = function (input) {
+	                	console.log(e.item.id)
+	                    $('.preview_' + e.item.id)
+	                        .attr('src', input.target.result)
+	                        .width(200)
+	                        .height(200);
+	                };
+	                $(".preview_" + e.item.id).show();
+	                $("#documents_image_" + e.item.id).val($('#photo_upload_' + e.item.id)[0].files[0].name);
+	                reader.readAsDataURL($('#photo_upload_' + e.item.id)[0].files[0]);
+            	}
+        }
+
+        resetImage(){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview").attr('src','#');
+        	$(".preview").hide();
+        	$('#photo_upload').val("");
+			$('#photo_upload').type = '';
+			$('#photo_upload').type = 'file';
+        }
+
+        resetImageEdit(e){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview_" + e.item.id).attr('src','#');
+        	$(".preview_" + e.item.id).hide();
+        	$('#photo_upload_' + e.item.id).val("");
+			$('#photo_upload_' + e.item.id).type = '';
+			$('#photo_upload_' + e.item.id).type = 'file';
+        }
+
+        toggleUne(e) {
+			var node = e.target;
+			if($(node).attr('value') == 'hidden') {
+				$(node).attr('value', 'oui').attr('title', 'a la une').attr('src', '/img/annonces.png');
+			} else {
+				$(node).attr('value', 'non').attr('title', 'pas a la une').attr('src', '/img/annonces_selected.png');
+			}
+		}
+
+		switchUp(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchUp');
+			do_switch(e, -1);
+		}
+
+		switchDown(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchDown');
+			do_switch(e, 1);	
+		}
+
+		function do_switch(e, i) {
+			var item = e.item;
+			var item_id = item.id;
+			var position_in_table;
+			var switch_with_id;
+			console.log(e.item.type);
+			if(item.type == 'documents') {
+				position_in_table =  parseInt(_this.idDocuments[item_id]);
+				if(_this.documents[position_in_table + i]) {
+					switch_element(item_id, position_in_table, position_in_table + i, _this.idDocuments, _this.documents);
+				}
+			}
+		}
+
+		function switch_element(element_id1, element_position1, element_position2, idTable, table){
+			var tmp_element = table[element_position1];
+			var tmp_info;
+			var element_id2 = table[element_position2].id;
+
+			var item_id_reference = table[element_position1].reference;
+			var switch_with_id_reference = table[element_position2].reference;
+
+			idTable[element_id1] = element_position2;
+			idTable[element_id2] = element_position1;
+			table[element_position1] = table[element_position2];
+			table[element_position2] = tmp_element;
+
+			//interchanger ref
+			tmp_info = table[element_position1].reference;
+			table[element_position1].reference = table[element_position2].reference;
+			table[element_position2].reference = tmp_info;
+
+			//interchanger first
+			tmp_info = table[element_position1].first;
+			table[element_position1].first = table[element_position2].first;
+			table[element_position2].first = tmp_info;
+
+			//interchanger last
+			tmp_info = table[element_position1].last;
+			table[element_position1].last = table[element_position2].last;
+			table[element_position2].last = tmp_info;
+
+			updatePosition([
+						{
+							id: element_id1,
+							reference: table[element_position2].reference,
+						},
+						{
+							id: element_id2,
+							reference: table[element_position1].reference,
+						}
+					]);
+		}
+
+		function updatePosition(params){
+			var data = {};
+
+			data.action = "update_reference";
+			data.params = params;
+			$.ajax('/admin/site/documents', {
+				data : data,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+					_this.update();
+				}
+			}).done(function(){
+				console.log('done!...');
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				tag = null;
+			}); //, 'json'
+		}
+
+		function getDocuments() {
+			getElements({
+				tag: _this,
+				url: '/admin/site/documents', 
+				elements: _this.documents,
+				idElements: _this.idDocuments,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', image: 'image', titre: 'titre', documents: 'documents', visible: 'visible'},
+				getParameters: { type_element: 'documents'},
+				type: 'documents',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		}
+		getDocuments();
+
+		editDocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var id = e.item.id;
+				$(".documents_edit_ligne").removeClass("documents_ligne");
+				$(".documents_edit_content").removeClass("documents_content");
+		 		$(".actions").hide();
+		 		$(".preview").hide();
+				$(".entete_documents").hide();
+				$(".show_infos").hide();
+				$(".preview").show();
+				_this.E_M.editElement({ event: e, prefixId: 'documents_', hideClass: 'hidden' });
+			}
+		}
+
+		addDocuments(e){
+			$(".documents_content").hide();
+			$('input[type=text]', '#add_documents').val('');
+			if(_this.E_M){
+				$("#add_documents_button").hide();
+				$(".preview").hide();
+				_this.E_M.addElement({event: e, prefixId: 'documents_', hideClass: 'hidden'});
+			}
+		}
+
+		validDeleteDocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'documents_',});
+			}
+		}
+
+		deleteDocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var index_element;
+				index_element = _this.idDocuments[e.item.id];
+				if(_this.documents.length == 2) {
+					if(_this.documents[index_element + 1]){
+						_this.documents[index_element + 1].first = true;
+					}
+					else if(_this.documents[index_element - 1]){
+						_this.documents[index_element - 1].last = true;
+					}
+				} else if(!_this.documents[index_element - 1] && _this.documents[index_element + 1]){
+					_this.documents[index_element + 1].first = true;
+				} else if(!_this.documents[index_element + 1] && _this.documents[index_element - 1]){
+					_this.documents[index_element - 1].last = true;
+				}
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/site/documents', elements: _this.documents, idElements: _this.idDocuments, type_element: 'documents',});
+			}
+		}
+
+
+		cancelDeletedocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'documents_',});
+			}
+		}
+
+		cancelDocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['titre', 'image','documents', 'visible', ],
+					prefixId: 'documents_',
+					hideClass: 'hidden',
+				});
+				$("#add_documents_button").show();
+				$(".documents_content").show();
+				$(".entete_documents").show();
+			}
+		}
+
+		cancelEditDocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['titre', 'image', 'documents', 'visible', ],
+					prefixId: 'documents_',
+					hideClass: 'hidden',
+				});
+				$("#add_documents_button").show();
+				$(".documents_edit_content").addClass("documents_content");
+				$(".documents_content").show();
+				$(".entete_documents").show();
+				$(".documents_edit_ligne").addClass("documents_ligne");
+				$(".documents_ligne").show();
+				$('.show_infos').show();
+				$('.actions').show();
+			}
+		}
+
+		saveDocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var data = new FormData();
+
+			data.append("imageA", $('#photo_upload')[0].files[0],  $('#photo_upload')[0].files[0].name);
+			data.append("imageA", $('#document_upload')[0].files[0],  $('#document_upload')[0].files[0].name);
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('post', '/admin/site/documents', true);
+			var image = $('.photo_add')[0].files[0].name;
+			xhr.send(data);
+			$("#documents_documents").val($('#document_upload')[0].files[0].name);
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/documents', 
+					fields: ['titre', 'image', 'documents', 'visible', 'la_une' ],
+					tag: _this,
+					elements: _this.documents,
+					idElements: _this.idDocuments,
+					typeElement: 'documents',
+					suffixId: 'documents',
+					prefixFields: 'documents_',
+					prefixId: 'documents_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+					},
+					beforeUpdate: function(params){
+					},
+				});
+			$(".documents_content").show();
+			$("#add_documents_button").show();
+			$(".entete_documents").show();
+		 	$('.show_infos').show();
+		 	$(".documents_ligne").addClass();
+		 	$(".documents_content").addClass();
+			}
+		}
+		
+		saveEditDocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			console.log(e.item)
+			if ( $('#photo_upload_' + e.item.id)[0].files[0] || $('#documents_upload_' + e.item.id)[0].files[0] ) {
+				var data = new FormData();
+				if ( $('#photo_upload_' + e.item.id)[0].files[0]) {
+					data.append("image", $('#photo_upload_' + e.item.id)[0].files[0],  $('#photo_upload_' + e.item.id)[0].files[0].name);
+					$("#documents_image_" + e.item.id).val($('#photo_upload_' + e.item.id)[0].files[0].name);
+					var image = $('#photo_upload_' + e.item.id)[0].files[0].name;
+				} else {
+					$("#documents_image_" + e.item.id).val(e.item.image);
+				}
+				if ($('#documents_upload_' + e.item.id)[0].files[0] ) {
+					data.append("imageA", $('#documents_upload_' + e.item.id)[0].files[0],  $('#documents_upload_' + e.item.id)[0].files[0].name);
+					$("#documents_documents_" + e.item.id).val( $('#documents_upload_' + e.item.id)[0].files[0].name);
+				} else {
+					$("#documents_documents_" + e.item.id).val(e.item.documents);
+				}
+				var xhr = new XMLHttpRequest();
+
+				xhr.open('post', '/admin/site/documents', true);
+				xhr.send(data);
+			} else {
+				$("#documents_image_" + e.item.id).val(e.item.image);
+				$("#documents_documents_" + e.item.id).val(e.item.documents);
+			}
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/documents', 
+					fields: ['titre', 'image', 'documents', 'visible', 'la_une'],
+					tag: _this,
+					elements: _this.documents,
+					idElements: _this.idDocuments,
+					typeElement: 'documents',
+					suffixId: 'documents',
+					prefixFields: 'documents_',
+					prefixId: 'documents_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+					},
+					beforeUpdate: function(params){
+					},
+				});
+			$(".entete_documents").show();
+		 	$('.actions').show();
+		 	$(".documents_edit_ligne").addClass("documents_ligne");
+		 	$(".documents_edit_content").addClass("documents_content");
+		 	$(".documents_content").addClass();
+		 	$('.show_infos').show();
+		 	$("#documents_" + e.item.id + "_edit").addClass("hidden");
+			}
+		}
+
+		showdocuments(e){
+			e.stopPropagation();
+			e.preventDefault();
+			$('#add_documents_button').removeClass('hidden');
+			var documentsId = $('#current_documents').val();
+			$('.show_infos', $('#documents_' + documentsId)).removeClass('hidden');
+			$('#current_documents').val('').addClass('hidden');
+			$('#entete_documents').removeClass('hidden');
+			$('.documents').removeClass('hidden');
+			if( _this.currentdocumentsReference != '') {
+				$('#add_documents').slideUp().addClass('hidden');
+			}
+			_this.currentdocumentsReference = '';
+		}
+		
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			console.log(params);
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					console.log('elements: ' + JSON.stringify(tag.documents))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addDocuments = null;
+			editDocuments = null;
+			validDeleteDocuments = null;
+			cancelDeleteDocuments = null;
+			deleteDocuments = null;
+			cancelDocuments = null;
+			cancelEditDocuments = null;
+			showContents = null;
+			makeVisible = null;
+			saveDocuments = null;
+			getDocuments = null;
+			getElements = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+		</script>
+</documents>

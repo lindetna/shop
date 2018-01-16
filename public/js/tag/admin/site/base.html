@@ -1,0 +1,47 @@
+<submenu>
+	<ul if={ submenu && SITE_READ } class="submenu">
+		<li each={ submenu } class="{ selected : ( menuField === currentPage )} icon"><!--<div class="triangle"><a href="{ url }" class="{ class }"></a></div>--><span><a href="{url}">{ text }</a></span></li>
+	</ul>
+	<script>
+	var app = opts;
+	this.app = opts;
+	var _this = this;
+	var permissions = app.session.permissions;
+	var SITE_READ = this.SITE_READ = permissions.SITE_READ || false;
+	this.currentModule;
+	this.currentPage;
+
+	if( SITE_READ ){
+		this.submenu = [
+		{ url: '#/site', text: 'Tableau de bord', menuField: 'root', class: 'tableau icon_submenu'},
+		{ url: '#/site/menu', text: 'Menu', menuField: 'menu', class: 'menu reservation icon_submenu'},
+		{ url: '#/site/journaux', text: 'Communications', menuField: 'communications', class: 'communications icon_submenu'},
+		{ url: '#/site/actualites', text: 'Actualités', menuField: 'actualites', class: 'actualites icon_submenu'},
+		{ url: '#/site/integration', text: 'Intégration', menuField: 'integration', class: 'integration icon_submenu'},
+		{ url: '#/site/journaux', text: 'Agendas', menuField: 'agendas', class: 'agendas icon_submenu'},
+		{ url: '#/site/journaux', text: 'Sondages', menuField: 'sondages', class: 'sondages icon_submenu'},
+		{ url: '#/site/documents', text: 'Documents', menuField: 'documents', class: 'documents icon_submenu'},
+		{ url: '#/site/photo_video', text: 'photo_video', menuField: 'photo_video', class: 'photo_video icon_submenu'},
+		{ url: '#/site/parametres', text: 'Paramètres', menuField: 'parametres', class: 'parametres icon_submenu'},
+		];
+	}
+
+	app.on('unmount-submenu', function(){
+		app.off('unmount-submenu');			
+		_this.unmount();
+	});
+
+	app.on('mount-module', function(module){
+		console.log('submenu event => mount-module: module:' + module);
+		_this.currentModule = module;
+	});
+
+	app.on('mount-page', function(module, page){
+		console.log('submenu event => mount-page: module: ' + module + ', page: ' + page);
+		_this.currentModule = module;
+		_this.currentPage = page;
+		_this.update();
+	});
+	this.update();
+	</script>
+</submenu>

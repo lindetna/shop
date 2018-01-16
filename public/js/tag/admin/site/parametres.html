@@ -1,0 +1,398 @@
+<parametres>
+	<!--<div id="titre_page"><h1>Actualités</h1></div>-->
+	<div id="validation_site" class="hidden">            
+		<p class="center">Etes-vous sùr de vouloir enregistrer ?</p>
+		<div class="center">                 
+			<button class="button annuler" onclick={ cancelModal }>Annuler</button>
+			<button class="button enregistrer" id="save_modal" target="" value="" onclick={ saveBackground }>Valider</button>             
+		</div>           
+	</div>
+	<div id="validation_entreprise" class="hidden">            
+		<p class="center">Etes-vous sùr de vouloir enregistrer ?</p>
+		<div class="center">
+			<button class="button annuler" onclick={ cancelModal2 }>Annuler</button>
+			<button class="button enregistrer" id="save_modal" target="" value="" onclick={ saveEntreprise }>Valider</button>             
+		</div>           
+	</div>
+	<div class="filtres menu_site">
+		<header class="opened" id="header_site" onclick="{ showContents }">Paramètres du Site</header>
+		<div class="slide-up hidden">
+			<div class="with_submenu">
+				<div>
+					<span>Background du Site</span>
+					<div id='image_upload'>
+						<input type='file' value="choisir une image" id="photo_upload" class="photo_upload photo_add pointer"  onchange={readURL} />
+						<div class="image_position">
+		    				<img each={ site } class="preview" src="/img/uploads/site/{background}"/>
+		    			</div>
+						<button id="reset_image" onclick={resetImage}>X</button>
+						<input class="hidden" type="text" name="site_background" id="site_background">
+					</div>
+					<div class="celladd add_button">
+						<button name="save_submit" class="button enregistrer save_submit pointer" onclick={ modalBackground }>Enregistrer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="filtres menu_entreprise">
+		<header class="opened" id="header_entreprise" onclick="{ showContents }">Paramètres Entreprise</header>
+		<div class="slide-up hidden">
+			<div class="with_submenu">
+				<div>
+					<span>Logo Entreprise</span>
+					<div id='image_upload'>
+						<input type='file' value="choisir une image" id="entreprise_upload" class="photo_upload entreprise_add pointer" onchange={readURLEntreprise} />
+						<div class="image_position">
+		    				<img each={ entreprise } class="preview_logo" src="/img/uploads/entreprise/{logo}"/>
+		    			</div>
+						<button id="reset_image" onclick={resetLogo}>X</button>
+						<input class="hidden" type="text" name="entreprise_logo" id="entreprise_logo">
+					</div>
+					<div class="celladd add_button">
+						<button name="save_submit" class="button enregistrer save_submit pointer" onclick={ modalEntreprise }>Enregistrer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+
+	var app = opts;
+	var _this = this;
+	this.app = opts;
+	var permissions = app.session.permissions;
+
+	app.on('unmount-parametres', function(){
+		app.off('unmount-parametres');		
+		_this.unmount();
+	});
+
+	this.loaded = false;
+
+	this.thingsToLoad = [ 'parametres', 'E_M' ];
+	this.numToLoad = this.thingsToLoad.length;
+
+	if( ! _this.app.session.parametres){
+		_this.app.session.parametres = {};
+		_this.app.session.parametres.elements = [];
+		_this.app.session.parametres.idElements = {};
+		_this.parametres = _this.app.session.parametres.elements;
+		_this.idparametres = _this.app.session.parametres.idElements;
+	}else{
+		_this.parametres = _this.app.session.parametres.elements;
+		_this.numToLoad--;
+	}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.parametres = [];
+		this.idParametres = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		readURL(input) {
+			console.log('upload button clicked!');
+            if (input.path[0].files) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('.photo_add')[0].files[0].name);
+	                reader.onload = function (input) {
+	                    $('.preview')
+	                        .attr('src', input.target.result)
+	                        .width(200)
+	                        .height(200);
+	                };
+	                $(".preview").show();
+	                $("#site_background").val($('.photo_add')[0].files[0].name);
+	                reader.readAsDataURL($('.photo_add')[0].files[0]);
+            }    
+        }
+
+        readURLEntreprise(input) {
+			console.log('upload button clicked!');
+            if (input.path[0].files) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('.entreprise_add')[0].files[0].name);
+	                reader.onload = function (input) {
+	                    $('.preview_logo')
+	                        .attr('src', input.target.result)
+	                        .width(200)
+	                        .height(200);
+	                };
+	                $(".preview_logo").show();
+	                $("#entreprise_logo").val($('.entreprise_add')[0].files[0].name);
+	                reader.readAsDataURL($('.entreprise_add')[0].files[0]);
+            }    
+        }
+
+        resetImage(){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview").attr('src','#');
+        	$(".preview").hide();
+        	$('#photo_upload').val("");
+			$('#photo_upload').type = '';
+			$('#photo_upload').type = 'file';
+        }
+
+        resetLogo(){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview_logo").attr('src','#');
+        	$(".preview_logo").hide();
+        	$('#entreprise_upload').val("");
+			$('#entreprise_upload').type = '';
+			$('#entreprise_upload').type = 'file';
+        }
+
+		this.site = [];
+		this.idSite = {};
+
+		cancelModal(e) {         
+			e.preventDefault();         
+			e.preventUpdate = true;
+			var id = $("#save_modal").val();
+			/*$("#validation_verification_" + id).removeClass('oui');
+			$("#validation_verification_" + id).removeClass('non');
+			$("#button_valider_" + id).addClass('hidden');  */
+			$.modal.close();     
+		}
+
+		cancelModal2(e) {         
+			e.preventDefault();         
+			e.preventUpdate = true;
+			var id = $("#save_modal2").val();
+			/*$("#validation_verification_" + id).removeClass('oui');
+			$("#validation_verification_" + id).removeClass('non');
+			$("#button_valider_" + id).addClass('hidden');  */
+			$.modal.close();     
+		}
+
+		function getBackground() {
+			getElements({
+				tag: _this,
+				url: '/admin/site/parametres', 
+				elements: _this.site,
+				idElements: _this.idSite,
+				fields: {background: 'background'},
+				getParameters: { type_element: 'site'},
+				type: 'site',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		}
+		getBackground();
+
+		saveBackground(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var data = new FormData();
+
+			data.append("background", $('.photo_add')[0].files[0],  $('.photo_add')[0].files[0].name);
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('post', '/admin/site/parametres', true);
+			$("#site_background").val($('.photo_add')[0].files[0].name);
+			xhr.send(data);
+			if(_this.E_M){
+				$.modal.close(); 
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/parametres', 
+					fields: ['background'],
+					tag: _this,
+					elements: _this.site,
+					idElements: _this.idSite,
+					typeElement: 'site',
+					suffixId: 'site',
+					prefixFields: 'site_',
+					prefixId: 'site_',
+					beforeSend: function(params){
+					},
+					beforeUpdate: function(params){
+
+					},
+				});
+			}
+			$("#header_site").click();
+		}
+
+		this.entreprise = [];
+		this.idEntreprise = {};
+
+		function getEntreprise() {
+			getElements({
+				tag: _this,
+				url: '/admin/site/parametres_entreprise', 
+				elements: _this.entreprise,
+				idElements: _this.idEntreprise,
+				fields: {logo: 'logo'},
+				getParameters: { type_element: 'entreprise'},
+				type: 'entreprise',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		}
+		getEntreprise();
+
+		saveEntreprise(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var data = new FormData();
+
+			data.append("logo", $('.entreprise_add')[0].files[0],  $('.entreprise_add')[0].files[0].name);
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('post', '/admin/site/parametres_entreprise', true);
+			$("#entreprise_logo").val($('.entreprise_add')[0].files[0].name);
+			xhr.send(data);
+			if(_this.E_M){
+				$.modal.close(); 
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/parametres_entreprise', 
+					fields: ['logo'],
+					tag: _this,
+					elements: _this.entreprise,
+					idElements: _this.idEntreprise,
+					typeElement: 'entreprise',
+					suffixId: 'entreprise',
+					prefixFields: 'entreprise_',
+					prefixId: 'entreprise_',
+					beforeSend: function(params){
+					},
+					beforeUpdate: function(params){
+
+					},
+				});
+			}
+			$("#header_entreprise").click();
+		}
+
+		modalEntreprise(e) {
+        	e.preventUpdate = true;
+        	$('#validation_entreprise').modal();
+        }
+
+        modalBackground(e) {
+        	e.preventUpdate = true;
+        	$('#validation_site').modal();
+        }
+		
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			console.log(e)
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			console.log(params);
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					console.log('elements: ' + JSON.stringify(tag.actualites))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addActualites = null;
+			editActualites = null;
+			validDeleteActualites = null;
+			cancelDeleteActualites = null;
+			deleteActualites = null;
+			cancelActualites = null;
+			cancelEditActualites = null;
+			showContents = null;
+			makeVisible = null;
+			saveActualites = null;
+			getActualites = null;
+			getElements = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+	</script>
+</parametres>

@@ -1,0 +1,52 @@
+<submenu>
+	<ul if={ submenu } class="submenu">
+		<li each={ submenu } class="{ selected : ( menuField === currentPage )} icon"><!--<div class="triangle"><a href="{ url }" class="{ class }"></a></div>--><span><a href="{url}">{ text }</a></span></li>
+	</ul>
+	<script>
+	var app = opts;
+	var _this = this;
+	this.currentModule;
+	this.currentPage;
+	this.currentSelected;
+
+	this.submenu = [
+/**************************************
+	{ url: '#/activites', text: 'Tableau de bord', menuField: 'root', class: 'tableau icon_submenu'},
+***************************************/
+	{ url: '#/activites/activites', text: 'Activites', menuField: 'activites', class: 'activites icon_submenu'},
+	{ url: '#/activites/stock', text: 'Stock', menuField: 'stock', class: 'stock icon_submenu'},
+//	{ url: '#/activites/liste_inscriptions', text: 'Liste des Inscriptions', menuField: 'liste_inscriptions', class: 'l_inscriptions icon_submenu'},
+	//{ url: '#/compta/fournisseurs', text: 'Fournisseurs', menuField: 'fournisseurs', class: 'fournisseurs icon_submenu'},
+	//{ url: '#/compta/tresorerie', text: 'Trésorerie', menuField: 'tresorerie', class: 'tresorerie icon_submenu'},
+	{ url: '#/activites/impressions', text: 'Impressions', menuField: 'impressions', class: 'impressions icon_submenu'},
+//	{ url: '#/activites/parametrages', text: 'Paramétrages', menuField: 'parametrages', class: 'parametrages icon_submenu'},
+	];
+
+	app.on('unmount-submenu', function(){
+		app.off('unmount-submenu');			
+		_this.unmount();
+	});
+
+	app.on('mount-module', function(module){
+		console.log('submenu event => mount-module: module:' + module);
+		_this.currentModule = module;
+	});
+
+	app.on('mount-page', function(module, page){
+		console.log('submenu event => mount-page: module: ' + module + ', page: ' + page);
+
+		/* delete it when root page come back */
+		if(page == 'root'){
+			page = 'activites';
+		}
+		/**************************************/
+
+		_this.currentModule = module;
+		_this.currentPage = page;
+		console.log('***current page: ' + page)
+		_this.update();
+	});
+
+	//this.update();
+	</script>
+</submenu>

@@ -1,0 +1,553 @@
+<liste_inscriptions>
+	<div  if={ ACTIVITES_READ || SALARIES_READ } class="content with_submenu">
+		<div class="liste_inscriptions liste_inscriptions_liste_inscriptions">
+			<div class="filtres_container">
+				<div class="block_info_montant">
+					<div class="cell block_info_montant_total">
+						<div class="cell center info_montant debit">
+							<div class="title">Montant</div>
+							<div class="montant">{ parseInt(montant_total).toFixed(2) } €</div>
+						</div>
+						<div class="cell center info_montant credit last">
+							<div class="title">Règlement</div>
+							<div class="montant">{ parseInt(reglement_total).toFixed(2)} €</div>
+						</div>
+					</div>
+					<div class="cell block_info_montant_solde">
+						<div class="cell center info_montant debit">
+							<div class="title">Reste à payer</div>
+							<div class="montant">{ parseInt(reste_payer_total).toFixed(2)} €</div>
+						</div>
+					</div>
+					<div class="cell_1 button_export"></div>
+					<div class="cell_2 button_imprimer"></div>
+				</div>
+				<!-- FILTRES -->
+				<div class="filtre_block">
+					<div class="header block-slider">
+						<header class="opened center" onclick= { showContents }>Filtres</header>
+						<div class="table bloc_test slide-up hidden">
+							<div class="line-separator"></div>
+							<div class="bloc_gauche">
+								<div class="row1 identite">
+									Nom / Prénom / Matricule
+									<p><input type="text" name="num_adherent"></p>
+								</div>
+								<div class="row2 activite_produit">
+									Activités & Produits
+									<p><input type="text" name="activites_adherent"></p>
+								</div>
+							</div>
+							<div class="bloc_centre">
+								<div class="row1 option_bloc_center"> 
+									<div class="cell_1 status">
+										<p value={ IS_CE ? 'de salariés' : "d'adhérents" }>Statut</p>
+									</div>
+									<div class="cell_2 input_status">
+										<select class="activite" id="activite"  name="activite">
+											<option disabled selected>Choisir un Statut</option>
+											<option each={ stats} value="{ id }">{ nom }
+											</option>
+										</select>
+									</div>
+								</div>
+								<div class="row2">
+									<div class="cell_1 dette">
+										<p>Dette</p>
+									</div>
+									<div class="cell_2 input_dette">
+										<select class="activite" id="activite" name="activite">
+											<option disabled selected></option>
+											<option each={ dettes} value="{ id }">{ nom }
+											</option>
+										</select>
+									</div>
+								</div>
+								<div class="row3"> 
+									<div class="cell_1 quotient">
+										Quotient
+									</div>
+									<div class="cell_2 input_quotient">
+										<div class="test">
+											<div class="cell_1 quotient1"> 
+												<input type="text" name="filtre_quotient" id="quotient" value="">
+											</div>
+											<div class="cell_2 quotient2">
+												<input type="text" name="filtre_quotient" id="quotient" value="">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bloc_droite">
+								<div class="row1">
+									<div class="cell_1 service">
+										<p value={ IS_CE ? 'de salariés' : "d'adhérents" }>Service</p>
+									</div>
+									<div class="cell_2 input_service">
+										<select class="activite" id="activite" name="activite">
+											<option disabled selected>Choisir un Service</option>
+											<option each={ services} value="{ id }">{ nom }
+											</option>
+										</select>
+									</div>
+								</div>
+								<div class="row2">
+									<div class="cell_1 age">Age</div>
+									<div class="cell_2 input_age">
+										<div class="cell_2 age1">
+											<input type="text" name="age" id="age" value="">
+										</div>
+										<div class="cell_2 age2">
+											<input type="text" name="age" id="age" value="">
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>	
+					</div>
+				</div>
+				<!-- FIN FILTRES -->
+				<div class="listas_block">
+					<div class="header block-slider">
+						<header class="center opened" onclick= { showContents }>Liste des inscriptions</header>
+						<div class="bloc_test slide-up">
+							<div class="entete-tableau "> 
+								<div class="cell_1 center">
+									<p class="small">Date d'inscription</p>
+								</div>
+								<div class="cell_2 left">
+									<p class="small">Titre Prénom & Nom</p>
+								</div>
+								<div class="cell_3 left">
+									<p class="small">Activité<br>Produits</p>
+								</div>
+								<div class="cell_4 left">
+									<p class="small">Montant<br>Règlement</p>
+									</div>
+								<div class="cell_5 center">
+									<p class="small">Reste à Payer</p>
+								</div>
+								<div class="cell_6 center">
+									<p class="small">Mode de Paiement<br>Etat du Paiement</p>
+								</div>
+							</div>
+							<div each={ inscriptions } class="table1 inscription">
+								<div class="row">
+									<div class="cell_1 center">
+										<p>{ convertDateToView(date_inscription)}</p>
+									</div>
+									<div class="cell_2">
+										<p>{ this.salaries[this.idSalaries[id_salarie]].titre } { this.salaries[this.idSalaries[id_salarie]].prenom } { this.salaries[this.idSalaries[id_salarie]].nom }</p>
+									</div>
+									<div class="cell_3">
+										<p>{ libelle_activite }</p>
+									</div>
+									<div class="cell_4">
+										<p>{ montant } €</p>
+									</div>
+									<div class="cell_5">
+										<p>{ solde } €</p>
+									</div>
+									<div class="cell_6">
+										<p>{ mode_paiement }</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="cell_1 center">
+										<p></p>
+									</div>
+									<div class="cell_2">
+										<p></p>
+									</div>
+									<div class="cell_3">
+										<p>{ produit }</p>
+									</div>
+									<div class="cell_4">
+										<p>{ reglement } €</p>
+									</div>
+									<div class="cell_5">
+										<p></p>
+									</div>
+									<div class="cell_6">
+										<p> { etat_paiement }</p>
+									</div>
+								</div>
+							</div>
+						</div><!--fin class table-->		
+					</div> <!--fin class listas_block-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<script> 
+		var _this = this;
+		var app = opts;
+		this.app = opts;
+	  	var permissions = app.session.permissions;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var ACTIVITES_READ = this.ACTIVITES_READ = permissions.ACTIVITES_READ || false;
+		var SALARIES_READ = this.SALARIES_READ = permissions.SALARIES_READ || false;
+		
+		this.salaries = [];
+		this.idSalaries = {};
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idComptes[d['id']] = i;
+						_this.comptes.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+
+				_this.comptes = data.elements;
+				_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+
+			//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+			if( _this.loaded ){
+			}
+		});
+
+		this.convertDateToView = function convertDateToView(date){
+			if(_this.E_M){
+				return _this.E_M.convertDateToView(date);
+			}
+		}
+
+		_this.app.on('unmount-liste_inscriptions', function(){
+			_this.app.off('unmount-liste_inscriptions');
+			_this.unmount();
+		});
+
+		this.elements = [];
+		this.idElements = {};
+
+		editElement(e){
+			if(_this.E_M){
+				_this.E_M.editElement({event: e, tag: _this,
+					end: function(params){
+						var item = params.item;
+						var edit = params.edit;
+						if(item.type === 'tresorerie'){
+							$('.type_tresorerie', edit).show();
+							$('.id_compte option', edit).each(function(){
+								var t = this.text;
+								if(t.charAt(0)!=='5'){
+									this.setAttribute('disabled', 'disabled');
+								}
+							});
+						}
+					}
+				});
+			}
+		}
+
+		addElement(e){
+			$('#actions').addClass('hidden').removeClass('inline_block');
+			$('input[type=text], select', '#add_element').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e});
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteElement(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/salaries/liste_inscriptions'});
+			}
+		}
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'nature', 'type', 'id_compte', 'visible', 'domiciliation', 'bic', 'iban'],
+					tag: _this,
+				});
+			}
+		}
+
+		saveElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/salaries/liste_inscriptions', 
+					fields: ['libelle', 'nature', 'type', 'id_compte', 'visible', 'domiciliation', 'bic', 'iban'],
+					tag: _this,
+				});
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		selectExercice(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+		this.inscriptions = [];
+		this.idInscriptions = { };
+		
+		function getInscription() {
+			var getParams = {};
+
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+			$.getJSON('/admin/inscription/inscription', getParams, function (data){ 
+				if(data && data.elements){
+					_this.inscriptions = [];
+					_this.idInscriptions = { };
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = { id: 'id', id_salarie: 'id_salarie', date_inscription: 'date_inscription', id_produit: 'id_produit', montant: 'montant', solde: 'solde', libelle: 'produit', reglement: 'reglement' };
+					var montant = 0;
+					var reglement = 0;
+					var reste_payer = 0;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						montant = montant + parseInt(d['montant']); //changer le type du variable pour pouvoir additionner
+						reglement = reglement + parseInt(d['reglement']);
+						reste_payer = reste_payer + parseInt(d['solde']);
+						_this.idInscriptions[d['id']] = i;
+						_this.inscriptions.push(d);
+					
+					}
+					_this.montant_total = montant; //montant valeur du montant total
+					_this.update();
+				
+					_this.reglement_total = reglement; //reglement est valeur du reglement total
+					_this.update();
+					
+					reste_payer_total = reste_payer;
+					_this.update();
+				}
+			});
+		}
+		getInscription();
+
+		function getSalaries(){
+        	getElements({
+				tag: _this,
+				url: '/admin/salaries/salaries', 
+				elements: _this.salaries,
+				idElements: _this.idSalaries,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', montant: 'montant', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', statut: 'statut', date_entree: 'date_entree', date_sortie: 'date_sortie', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', quotientN1: 'quotientN1', quotientN2: 'quotientN2', tranche_salaire: 'tranche_salaire', valeur: 'valeur',solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', fonction: 'fonction', visible: 'visible'},
+				getParameters: { type_element: 'salaries'},
+				type: 'salaries',
+				action: 'update',
+				end: function(tag){
+					tag.loaded = true;
+				},
+			});
+		}
+		getSalaries();
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+// console.log('getElements params: ' + JSON.stringify(params));
+// console.log('getElements data: ' + JSON.stringify(data));
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+
+						if(params.action){
+							d['action'] = params.action;
+						}
+
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			cancelDeleteElement = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelElement = null;
+			saveElement = null;
+			showContents = null;
+			makeVisible = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+	</script>
+</liste_inscriptions>

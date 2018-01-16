@@ -1,0 +1,197 @@
+<shop>
+	<div class="navbar"></div>
+	<div class="content_tag page_shop">
+		<div class="entete_tableau shop">
+			<div class="cell cell_1">
+				<p class="">Reference</p>					
+			</div>
+			<div class="cell cell_2">
+				<p class="">Stock</p>					
+			</div>
+			<div class="cell cell_3">
+				<p class="">Prix unité</p>
+			</div>
+			<div class="cell cell_4">
+				<p class="">Paquet de</p>
+			</div>
+			<div class="cell cell_5">
+				<p class="">Nombre de paquet</p>
+			</div>
+			<div class="cell cell_6">
+				<p class="">Prix total</p>
+			</div>
+		</div>
+		<div class="table full">
+			<div class="row">
+				<div class="cell cell_1">
+					<select class="autocomplete contacts print_select"><select>					
+				</div>
+				<div class="cell cell_2">
+					<input type="text" disabled>
+				</div>
+				<div class="cell cell_3">
+					<input type="text" disabled>
+				</div>
+				<div class="cell cell_4">
+					<input type="text">
+				</div>
+				<div class="cell cell_5">
+					<input type="text">
+				</div>
+				<div class="cell cell_6">
+					<input type="text" disabled>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<script>
+	  	var _this = this;
+		var app = opts;
+		this.app = opts;
+
+		this.loaded = false;
+
+		this.E_M;
+
+		this.elements = [];
+		this.idElements = {};
+
+		function getElement(){
+			var getParams = { };
+
+			$.getJSON( '/api/element', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = { id: 'id', reference: 'reference', packof: 'packof', stock: 'stock', number_sold: 'number_sold', price: 'price'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idElements[d['id']] = i;
+						_this.elements.push(d);
+					}
+						loadSelectize('.autocomplete');
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			})
+		}
+		getElement();
+
+		this.E_M = new E_M();
+
+
+		_this.app.on('unmount-shop', function(){
+			_this.app.off('unmount-shop');
+			_this.unmount();
+		});
+
+		function formatName(item) {
+		    return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+		};
+
+		function loadSelectize (element) {
+			var $selectTo = $(element);
+			if( typeof $selectTo.selectize === 'function' ){
+				var $select = $selectTo.selectize({
+					maxItems: 1,
+					valueField: 'id',
+					labelField: 'reference',
+					searchField: ['reference',],
+					sortField: [
+						{field: 'reference', direction: 'asc'},
+					],
+					options: _this.elements,
+					persist: false,
+					openOnFocus: false,
+					closeAfterSelect: true,
+					onType: function (str) {
+						if (str === "") {
+							this.close();
+						}
+					},
+					onFocus: function () {
+						this.clear();
+						_this.update();
+					},
+					render: {
+						item: function(item, escape) {
+							var reference = item.reference;
+							return '<div>' +
+								(reference ? '<span class="name">' + escape(reference) + '</span>' : '') +
+							'</div>';
+						},
+						option: function(item, escape) {
+							var reference = item.reference;
+							return '<div>' +
+								'<span class="label">' + escape(reference) + '</span>' +
+							'</div>';
+						}
+					},
+					onChange: function(value) {
+					}
+				});
+
+				var selectize = $select[0].selectize;
+
+				var hackToClose = false;
+				selectize.on('item_remove', function(value, $item) {
+					hackToClose = true;
+				});
+				selectize.on('dropdown_open', function($dropdown) {
+					if ( hackToClose )
+						selectize.close();
+
+					hackToClose = false;
+				});
+			}
+        }
+
+		/**
+		 * Permet de loader un tag riot
+		 *
+		 * @param {string} selector: le selecteur de l'élément HTML sur lequel on souhaite mettre le TAG
+		 * @param {string} tagName: le nom du tag que l'on souhaite load
+		 * @param {string} path: le path pour accéder au TAG html
+		 * @param {string} newselector: si nous n'avons pas de selecteur pour mettre le tag, permet de set l'ID de la div qu'on va créer pour mettre le TAG
+		 * @param {string} tagContainer: si nous n'avons pas de selecteur pour mettre le tag, permet de choisir l'élément sur lequel nous allons append la div qu'on va créer
+		 * @param {string} opt: les options à passer au TAG riot enfant
+		 * @returns null.
+		 */
+		 function loadTag({ selector=null, tagName=null, path=null, newselector="newtag", tagContainer=null, opt={ parentTag: _this }}) {
+			var	mountTag = document.createElement('div');
+
+			if(newselector) {
+				newselector = newselector;
+			}
+			if(tagContainer) {
+				mountTag.setAttribute('id', newselector);
+				$(tagContainer).append(mountTag);
+			}
+
+			if( (selector || tagContainer) && tagName && path ) {
+				riot.compile( path, function() {
+					var mounted = riot.mount( tagContainer ? '#' + newselector : selector, tagName, opt);
+				});
+			}
+		}
+
+		this.on('mount', function(){
+			loadTag({ selector: ".navbar", tagName: "navbar", path: "/js/tag/navbar.html", opt: { parentTag: _this, active: "shop" }});
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			_this.trigger('unmount-navbar');
+		});
+	</script>
+
+</shop>

@@ -1,0 +1,669 @@
+<ayant_droit>
+	<div class="content with_submenu large">
+		<div id="validation_doc" class="hidden">            
+			<p class="center">Etes-vous sùr de vouloir modifier cette validation ?</p>
+			<div class="numero_cheque_oui">N° de chèque : <input type="text" id="numero_cheque" name="numero_cheque"></div> 
+			<div class="center">                 
+				<button class="button annuler" onclick={ cancelModal }>Annuler</button>
+				<button class="button enregistrer" id="save_modal" target="" value="" onclick={ saveValidation }>Valider</button>             
+			</div>           
+		</div>
+		<div class="filtres">
+			<div class="header block-slider">
+				<header class="center closed" onclick= { showContents }>Filtres</header>
+				<div class="table bloc_test slide-up hidden">
+					<div class="left_filtre_validation">
+						<div class="recherche_nom">Nom</div>
+						<div><input type="text" name="" id="recherche_nom" onchange={ rechercheNom }></div>
+						<!--<div class="tactac">
+							<div class="recherche">
+								<div class="recherche-salarie">
+									<label for="recherche_numero">{ IS_CE ? "Matricule - Nom du salarié" : "Numéro Adhérent - Nom de l'adhérent" }</label>
+									<div class="control-group">
+										<select id="select-to" class="contacts" placeholder=""></select>
+									</div>
+									<input type="checkbox" if={ currentSalarie.nom } onchange={ selectAyantsDroit } id="checkbox">
+								</div>
+							</div>
+						</div>-->
+					</div>
+					<div class="right_filtre_validation">
+						<div class="oui_non_tout"><input onclick={ verification_tout } type="radio" name="oui_non_tout" checked="checked">Tout</div>
+						<div class="oui_non_tout"><input onclick={ verification_oui } type="radio" name="oui_non_tout">Oui</div>
+						<div class="oui_non_tout"><input onclick={ verification_non } type="radio" name="oui_non_tout">Non</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+		<div class="remboursement">
+			<div class="header block-slider">
+				<header class="center closed" onclick= { showContents }>Ayants-droit</header>
+				<div class="slide-up">
+					<div class="entete-tableau"> 
+						<div class="cell_1">Date</div>
+						<div class="cell_2">Titre</div>
+						<div class="cell_4">Prénom & Nom</div>
+						<div class="cell_5">Document</div>
+						<div class="cell_6">Actions</div>
+					</div>
+					<div each={ validation } class="validation_documents_remboursements" if={ verificationToutChecked || ( verificationNonChecked && verification == 'non' ) || ( verificationOuiChecked && verification == 'oui' ) } > 
+						<div class="cell_1">{ formatDate(date) }</div>
+						<div class="cell_2">{ titre }</div>
+						<div class="cell_3">{ prenom } { nom }</div>
+						<div class="cell_4">{ montant_facture } €</div>
+						<div class="cell_5">{ remboursement } €</div>
+						<div class="cell_6">{ id_mode_paiement }</div>
+						<a id="document_pdf_{id}" class="cell_7 button_pdf" href="/img/uploads/salaries/remboursements/{document_pdf}" target="_blank"></a>
+						<div class="cell_8 { verification }" id="validation_verification_{ id }" name="validation_verification_{ id }" verification="{ verification }">
+							<input type="hidden" id="validation_value_{ id }" name="" class="validation_value" value="" >
+							<button class="button_valider" id="button_valider_{ id }" if={ verification == 'oui' || verification == 'non' }>V</button>
+
+							<button if={ verification != 'oui' && verification != 'non' } class="verification_oui" id="oui_click_{ id }" onclick={ change_oui_non }>oui</button>
+							<button if={ verification != 'oui' && verification != 'non' } class="verification_non" id="non_click_{ id }" onclick={ change_oui_non }>non</button>
+
+							<button if={ verification == 'oui' || verification == 'non' } class="verification_oui" id="oui_click_{ id }">oui</button>
+							<button if={ verification == 'oui' || verification == 'non' } class="verification_non" id="non_click_{ id }">non</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>									
+	<script>
+	  	var _this = this;
+	  	this.app = opts;
+	  	_this.verificationToutChecked = true;
+	  	_this.verificationOuiChecked = false;
+	  	_this.verificationNonChecked = false;
+	  	var permissions = app.session.permissions;
+	  	var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	  	app.on('unmount-ayant_droit', function(){
+			console.log('unmount-ayant_droit fired');
+			app.off('unmount-ayant_droit');
+			console.log('before unmount-ayant_droit, ' + _this.tagName);
+			_this.unmount();
+			console.log('after unmount-ayant_droit');
+		});
+
+		this.E_M;
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		this.loaded = false;
+
+		this.thingsToLoad = [ 'getSalarie', 'selectize', 'validation', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+
+		disableElementById(e) {
+		    _this.E_M.disableElementById(e);
+		}
+
+		showContents(e){
+			e.preventDefault();
+            e.preventUpdate = true;
+            if(_this.E_M){
+                _this.E_M.showContents(e);
+            }
+        }
+
+        _this.app.loadScript('/js/admin/selectize.min.js','selectize_js',
+         	function () {
+         		_this.numToLoad--;
+         		if(_this.numToLoad <= 0) {
+		        	loadSelectize();
+		    	}
+		    }
+		);
+
+        this.validation = [];
+        this.idValidation = {};
+
+        function getValidation(){
+			var getParams = { type_element: 'validation' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/salaries/validation_documents', getParams, function(data){
+				//console.log("data    :  " + JSON.stringify(data))
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', date:'date', titre: 'titre', prenom: 'prenom', nom: 'nom', montant_facture: 'montant_facture', remboursement: 'remboursement', id_mode_paiement: 'id_mode_paiement', document_pdf: 'document_pdf', verification: 'verification' };
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+							if(field == "verification") {
+								if(d[fields[field]] == "oui"){
+									action = 1;
+								}
+							}
+							if(field == "verification") {
+								if(d[fields[field]] == "non"){
+									action = 0;
+								}
+							}
+						}
+						_this.idValidation[d['id']] = i;
+						_this.validation.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+
+				_this.validation = data.elements;
+				_this.numToLoad--;
+			})
+		}
+		getValidation();
+
+		function formatName(item) {
+		    console.log('function name: ' + arguments.callee.caller.name);
+		    return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+		};
+
+		function loadSelectize () {
+			var $selectTo = $('#select-to');
+
+			if( typeof $selectTo.selectize === 'function' ){
+				var $select = $selectTo.selectize({
+					maxItems: 1,
+					valueField: 'id',
+					labelField: 'name',
+					searchField: ['prenom', 'nom', 'numero_salarie'],
+					sortField: [
+						/* {field: 'prenom', direction: 'asc'}, */
+						{field: 'nom', direction: 'asc'}
+					],
+					options: _this.salaries,
+					persist: false,
+					openOnFocus: false,
+					closeAfterSelect: true,
+					onType: function (str) {
+						console.log('ontype str: ' + str);
+						if (str === "") {
+							this.close();
+						}
+					},
+					onFocus: function () {
+						this.clear();
+						console.log('onfocus')
+						_this.update();
+					},
+					render: {
+						item: function(item, escape) {
+							var name = formatName(item);
+							return '<div>' +
+								(name ? '<span class="name">' + escape(name) + '</span>' : '') +
+								(item.numero_salarie ? '<span class="email">' + escape(item.numero_salarie) + '</span>' : '') +
+							'</div>';
+						},
+						option: function(item, escape) {
+							var name = formatName(item);
+							var label = name || item.numero_salarie;
+							var caption = name ? item.numero_salarie : null;
+							return '<div>' +
+								'<span class="label">' + escape(label) + '</span>' +
+								(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+							'</div>';
+						}
+					},
+					onChange: function(value) {
+									console.log("gdgfgdfdffddfdfsdsdsffdsfds")
+
+						console.log('onchange value:' + value)
+
+						updateSalarie(value);
+						getInscription(value);
+						if(value) {
+							_this.selectedAyantDroit = { id: value, type: 'salarie' };
+							if($('#checkbox').length) {
+								$('#checkbox').prop('checked');
+							} else {
+								checkbox();
+							}
+						} else {
+							_this.selectedAyantDroit = { id: null, type: '' };
+						}
+						$('.ayant_droit').removeClass('active');
+						_this.ayants_droit = [];
+						_this.is_reglement = false;
+						clearReglement();
+						//conditionLimitePlaces();
+						_this.update();
+						getAyantsDroit(value);
+					}
+				});
+
+				var selectize = $select[0].selectize;
+
+				var hackToClose = false;
+				selectize.on('item_remove', function(value, $item) {
+					hackToClose = true;
+				});
+				selectize.on('dropdown_open', function($dropdown) {
+					if ( hackToClose )
+						selectize.close();
+
+					hackToClose = false;
+				});
+			}
+        }
+
+		_this.salaries = [];
+		_this.idSalaries = {};
+
+		function getSalaries(){
+			var getParams = {};
+
+			console.log('elements before: ' + JSON.stringify(_this.elements));
+			$.getJSON('/admin/salaries/salaries', getParams, function (data){
+				if(data && data.elements){
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idSalaries[d['id']] = i;
+						_this.salaries.push(d);
+					}
+					_this.update();
+
+					_this.loaded = true;
+
+					_this.numToLoad--;
+		        	if(_this.numToLoad <= 0) {
+		        		loadSelectize();
+		    		}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}
+		getSalaries();
+
+		rechercheNom(e){
+			this.validation = [];
+        	this.idValidation = {};
+        	var search = $("#recherche_nom").val();
+        	var getParams = { type_element: 'validation', result_search: search };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/salaries/validation_documents', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', date:'date', titre: 'titre', prenom: 'prenom', nom: 'nom', montant_facture: 'montant_facture', remboursement: 'remboursement', mode_paiement: 'mode_paiement', document_pdf: 'document_pdf', verification: 'verification' };
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idValidation[d['id']] = i;
+						_this.validation.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}
+
+				_this.validation = data.elements;
+				_this.numToLoad--;
+			})
+        	_this.update();
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			console.log(params);
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					console.log('elements: ' + JSON.stringify(tag.actualites))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		this.formatDate = function formatDate (date) {
+                                var datePart = date.match(/\d+/g),
+                                year = datePart[0],
+                                month = datePart[1], 
+                                day = datePart[2];
+                                return day+'/'+month+'/'+year;
+                            }
+
+        saveElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/salaries/validation_documents', 
+					fields: ['verification'],
+					tag: _this,
+				});
+			}
+		}
+
+        change_oui_non(e) {
+        	e.preventUpdate = true;
+        	var id = e.item.id;
+        	$("#save_modal").val(id);
+        	//var cheque_oui = "";
+        	$("#save_modal").prop('target', e.currentTarget.id);
+        	if (e.currentTarget.id == 'oui_click_' + id) {
+        		$(".numero_cheque_oui").removeClass("hidden");
+        		if (_this.validation[ _this.idValidation[ id ]].mode_paiement == 'virement') {
+		 			$(".numero_cheque_oui").addClass("hidden");
+        		}
+		 		_this.validation[ _this.idValidation[ id ]].verification = 'oui';
+			} else if (e.currentTarget.id == 'non_click_' + id) {
+		 		_this.validation[ _this.idValidation[ id ]].verification = 'non';
+		 		$(".numero_cheque_oui").addClass("hidden");
+			}
+			$(e.currentTarget).attr('test','test');
+        	$('#validation_doc').modal();
+        	console.log('tes: ' + $(e.currentTarget).attr('test'));
+        }
+
+        /*cheque_oui(e){
+        	var id = e.item.id;
+        	$("#save_modal").val(id);
+        	var cheque_oui = "";
+        	$("#save_modal").prop('target', e.currentTarget.id);
+        	if (e.currentTarget.id == 'oui_click_' + id) {
+		 		if (_this.validation[ _this.idValidation[ id ]].mode_paiement == 'cheque') {
+		 			_this.cheque_oui = "cheque";
+		 			console.log(_this.cheque_oui)
+		 		}
+			} else if (e.currentTarget.id == 'non_click_' + id) {
+				console.log("test test test test test");
+			}
+			$(e.currentTarget).attr('test','test');
+        	$('#validation_doc').modal();
+        	console.log('tes: ' + $(e.currentTarget).attr('test'));
+        }*/
+
+        verification_tout(e) {
+        	_this.verificationNonChecked = false;
+        	_this.verificationOuiChecked = false;
+            _this.verificationToutChecked = e.currentTarget.checked;
+            _this.update();
+        }
+
+        verification_oui(e) {
+        	_this.verificationToutChecked = false;
+        	_this.verificationNonChecked = false;
+            _this.verificationOuiChecked = e.currentTarget.checked;
+            _this.update();
+        }
+
+        verification_non(e) {
+        	_this.verificationOuiChecked = false;
+        	_this.verificationToutChecked = false;
+            _this.verificationNonChecked = e.currentTarget.checked;
+            _this.update();
+        }
+
+        saveValidation(e) { 
+        	e.stopPropagation();
+			e.preventDefault();
+			
+
+			if(_this.E_M){
+				var id = $("#save_modal").val();
+				var target = $("#save_modal").prop('target');
+				var numero_cheque = $("#numero_cheque").val();
+				var verification = 	_this.validation[ _this.idValidation[ id ]].verification;
+				var data = { action: 'update', verification: verification, id: id, numero_cheque: numero_cheque };
+				var data2 = { action: 'update', verification: verification, id: id };
+				if (target == 'oui_click_' + id) {
+					$.ajax('/admin/salaries/validation_documents', {
+						data : data,
+						type : 'POST',
+						dataType: 'json',
+						success: function (result, textStatus, jqXHR){
+							$.modal.close(); 
+				        	if (target == 'oui_click_' + id) {
+				        		$("#validation_value_" + id, $("#validation_verification_" + id)).val('oui')
+				        		$("#validation_verification_" + id).removeClass('non');
+				        		$("#validation_verification_" + id).addClass('oui');
+				        	} else {
+				        		$("#validation_value_" + id, $("#validation_verification_" + id)).val('non')
+				        		$("#validation_verification_" + id).addClass('non');
+				        		$("#validation_verification_" + id).removeClass('oui');
+				        	}
+	   					}
+					}).done(function(){
+						console.log('done!...');
+						tag = null;
+					}).fail(function(){
+						console.log('fail!...');
+						tag = null;
+					}); //, 'json'
+				} else {
+					$.ajax('/admin/salaries/validation_documents', {
+						data : data2,
+						type : 'POST',
+						dataType: 'json',
+						success: function (result, textStatus, jqXHR){
+							$.modal.close(); 
+				        	if (target == 'oui_click_' + id) {
+				        		$("#validation_value_" + id, $("#validation_verification_" + id)).val('oui')
+				        		$("#validation_verification_" + id).removeClass('non');
+				        		$("#validation_verification_" + id).addClass('oui');
+				        	} else {
+				        		$("#validation_value_" + id, $("#validation_verification_" + id)).val('non')
+				        		$("#validation_verification_" + id).addClass('non');
+				        		$("#validation_verification_" + id).removeClass('oui');
+				        	}
+	   					}
+					}).done(function(){
+						console.log('done!...');
+						tag = null;
+					}).fail(function(){
+						console.log('fail!...');
+						tag = null;
+					}); //, 'json'
+				}
+			}   
+		}
+
+		cancelModal(e) {         
+			e.preventDefault();         
+			e.preventUpdate = true;
+			var id = $("#save_modal").val();
+			/*$("#validation_verification_" + id).removeClass('oui');
+			$("#validation_verification_" + id).removeClass('non');
+			$("#button_valider_" + id).addClass('hidden');  */
+			$.modal.close();     
+		}
+
+/* RECHERCHE SALARIE */ 
+
+		this.selectedAyantDroit = '';
+
+		selectAyantsDroit(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if ($(e.currentTarget).is('input')) {
+				$('.ayant_droit').removeClass('active');
+				if($(e.currentTarget).is(':checked')) {
+					_this.selectedAyantDroit.id = $('.selectize-dropdown-content .selected').attr('data-value');
+					_this.selectedAyantDroit.type = 'salarie';
+				} else {
+					_this.selectedAyantDroit = { id: null, type: '' };
+				}
+			} else {
+				$('#checkbox').attr('checked', false);
+				$('.ayant_droit').removeClass('active');
+				$(e.currentTarget).addClass('active');
+				_this.selectedAyantDroit.id = $(e.currentTarget).attr('value');
+				_this.selectedAyantDroit.type = 'ayantdroit';
+
+			}
+			console.log('selected', _this.selectedAyantDroit);
+		}
+
+		_this.currentSalarie = {};
+		_this.ayants_droit = [];
+
+		function getCurrentSalarie(id) {
+			var getParams = { id: id };
+
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+			$.getJSON('/admin/salaries/salaries', getParams, function (data){
+				if(data && data.elements){
+					_this.currentSalarie = {} ;
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', visible: 'visible', montant: 'montant'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+							console.log("toto rererererere  :::: " + d[fields[field]])
+						}
+						_this.currentSalarie = d;
+					}
+					_this.montant_paiement = _this.currentSalarie.solde;
+				}
+				_this.update();
+			})
+		}
+
+		function updateSalarie(id) {
+			console.log('updateSalarie: ' + id);
+			_this.salarie = [];
+
+			if(id.length > 0) {
+				// _this.currentSalarie = _this.salaries[_this.idSalaries[id]];
+				getCurrentSalarie(id);
+			} else {
+				_this.currentSalarie = [];
+			}
+
+			_this.update();
+		}
+
+		increment(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			// conditionLimitePlaces();
+	    	if(_this.currentSalarie.nom) {
+	    		setQuantite('increment', e);
+	    	}
+	    }
+	    
+	    decrement(e) {
+	    	e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.currentSalarie.nom) {
+	    		setQuantite('decrement', e);
+	    	}
+	    }
+	</script>				
+</ayant_droit>

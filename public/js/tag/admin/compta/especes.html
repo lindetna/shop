@@ -1,0 +1,1513 @@
+<especes>
+    <div id="loader" class="loader hidden">
+    </div> 
+    <!--<div id="titre_page"><h1>Trésorerie</h1></div> -->
+    <div if={ COMPTA_READ } class="content with_submenu">
+        <div class="compta compta_tresorerie compta_especes">
+            <img class="hidden" id="logo_entreprise" src="../../../img/logo.png">
+            <div id="print" class="hidden">
+                <span id="entreprisePrint"></span>
+                <header id="entete_print"></header>
+                <div class="remise_esp">Remise d'{ page_name }</div>
+                <span id="num_remise">{ num_remise_impression }</span>
+                <span id="print_date_remise">{ date_remise_impression }</span>
+                <div id="vertical_print">
+                    <div id="print_coordonnees_bancaire"></div>
+                    <div id="banque_print">{banque}</div>
+                    <div id="titulaire_print">{titulaire}</div>
+                    <div id="rib_print">{rib}</div>
+                    <div id="iban_print">{iban} BIC: {bic}</div>
+                </div>
+                <!-- <div class="divTable">
+                    <div class="divTableBody">
+                        <div class="divTableRow colorPrint">
+                            <div class="divTableCell color">Nom du Titulaire</div>
+                            <div class="divTableCell color">Banque</div>
+                            <div class="divTableCell color">Numéro de Chéque</div>
+                            <div class="divTableCell color">Montant</div>
+                        </div>
+                        <div class="divTableRow" each={ remisePrint } id='remisePrint_{ id }'>
+                            <div class="divTableCell">{ titulairePrint }</div>
+                            <div class="divTableCell">{ banquePrint }</div>
+                            <div class="divTableCell">{ nu_chequePrint }</div>
+                            <div class="divTableCell">{ montantPrint }</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="footer">
+                    <div id="num_cheque">{nb_cheques}</div>
+                    <div id="table_print">
+                        <div class="divTableCell">TOTAL</div>
+                        <div id="total_remise_print" class="divTableCell">{total_remise}</div>
+                    </div>
+                </div> -->
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_cheques } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/cheques">
+                        Chèques
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_especes } class="nav_compta_parametrage block-slider">
+                <header class="comptes-title center opened" onclick= { showContents }>
+                    Espèces
+                </header>
+                <div class="slide-up">
+                    <div class="fieldsets_liaison_comptable">
+                        <div class="liaison_comptable_fs">
+                            <div class="content_especes">
+                                <div class="content_especes_left">
+                                    <div class="table table_montant_caisse">
+                                        <div class="row row_montant_1">
+                                            <div class="montant_caisse">
+                                                <div class="input_compte_banque">
+                                                    <span>Compte Caisse</span>
+                                                    <select id="select_compte" name="liste_compte banque" onchange={ setSolde }>
+                                                        <option value=""></option>
+                                                        <option each={ comptesCaisse } value="{ id }" reference="">{ reference } { libelle }</option>
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="montant_caisse_cell_1">
+                                                    Montant de la caisse
+                                                </div>
+                                                <div class="montant_caisse_cell_2">
+                                                    <input type="text" value={ solde } id="input_montant_caisse" name="input_montant_caisse" placeholder="0.00€" disabled="disabled">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row_montant_2">
+                                            <div class="date_remise">
+                                                <div class="date_remise_cell_1">
+                                                    Date de remise
+                                                </div>
+                                                <div class="date_remise_cell_2">
+                                                    <input type="text" id="date_remise" class="date l-large date_remise">
+                                                </div>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </div>
+                                <div class="content_especes_right">
+                                    <div class="span_nombres">
+                                        <span>Nombres</span>
+                                    </div>
+                                    <div class="tarif_right">  
+                                        <div class="row row_nombres_1">
+
+                                            <div class="treso_container_cell_1">
+                                                <div class="treso_cell_1">
+                                                    <div class="plus_cell_1">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+                                                    <div class ="input_treso_cell_1">
+                                                        <input type="text" id="input_especes_500" name="content_especes" val-num="500" placeholder="0" value="0" disabled="disabled" id="content_especes">
+                                                    </div>
+                                                    <div class="moins_cell_1">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_2">
+                                                <label for="">500 €</label>
+                                            </div>
+
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" id="input_especes_2" class="input_especes" name="content_especes" val-num="2" placeholder="0" value="0" disabled="disabled" size="6">
+                                                    </div>
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_4">
+                                                <label for="">2 €</label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row row_nombres_2">
+                                            <div class="treso_container_cell_1">
+                                                <div class="treso_cell_1">
+                                                    <div class="plus_cell_1">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+
+                                                    <div class="input_treso_cell_1">
+                                                        <input type="text" id="input_especes_200" class="input_especes" name="content_especes" val-num="200" placeholder="0" value="0" disabled="disabled" size="6">
+                                                    </div> 
+                                                    <div class="moins_cell_1">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>  
+                                                </div>
+                                            </div>
+
+                                            <div class="cell_2"><label for="">200 €</label></div>
+
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" id="input_especes_1" class="input_especes" name="content_especes" val-num="1" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="cell_4"><label for="">1 €</label></div>
+                                        </div>
+
+
+                                        <div class="row row_nombres_3">
+                                            <div class="treso_container_cell_1">
+                                                <div class="treso_cell_1">
+                                                    <div class="plus_cell_1">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+                                                    <div class ="input_treso_cell_1">
+                                                        <input type="text" id="input_especes_100" name="content_especes" val-num="100" placeholder="0" value="0" disabled="disabled" id="content_especes">
+                                                    </div>
+                                                    <div class="moins_cell_1">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_2"><label for="">100 €</label></div>
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" id="input_especes_050" class="input_especes" name="content_especes" val-num="0.50" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_4"><label for="">0,50 €</label></div>
+                                        </div>
+
+
+                                        <div class="row row_nombres_4">
+                                            <div class="treso_container_cell_1">
+                                                <div class="treso_cell_1">
+                                                    <div class="plus_cell_1">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+                                                    <div class="input_treso_cell_1">
+                                                        <input type="text" id="input_especes_50" class="input_especes" name="content_especes" val-num="50" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+                                                    <div class="moins_cell_1">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_2"><label for="">50 €</label></div>
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>  
+                                                    </div>  
+
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" class="input_especes" name="content_especes" val-num="0.20" placeholder="0" id="input_especes_020" value="0" disabled="disabled">
+                                                    </div>
+
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="cell_4"><label for="">0,20 €</label></div>
+                                        </div>
+
+
+                                        <div class="row row_nombres_5">
+                                            <div class="treso_container_cell_1">
+                                                <div class="treso_cell_1">
+                                                    <div class="plus_cell_1">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+                                                    <div class="input_treso_cell_1">
+                                                        <input type="text" id="input_especes_20" class="input_especes" name="content_especes" val-num="20" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+
+                                                    <div class="moins_cell_1">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_2"><label for="">20 €</label></div>
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>  
+
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" id="input_especes_010" class="input_especes" name="content_especes" val-num="0.10" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_4"><label for="">0,10 €</label></div>
+                                        </div>
+
+
+                                        <div class="row row_nombres_6">
+                                            <div class="treso_container_cell_1">
+                                                <div class="treso_cell_1">
+                                                    <div class="plus_cell_1">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+
+                                                    <div class="input_treso_cell_1">
+                                                        <input type="text" id="input_especes_10" class="input_especes" name="content_especes" val-num="10" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+                                                    <div class="moins_cell_1">  
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                            <div class="cell_2"><label for="">10 €</label></div>
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>
+                                                    </div>
+
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" id="input_especes_005" class="input_especes" name="content_especes" val-num="0.05" disabled="disabled" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>          
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_4"><label for="">0,05 €</label></div>
+                                        </div>
+
+
+                                        <div class="row row_nombres_7">
+                                            <div class="treso_container_cell_1">
+                                                <div class="treso_cell_1">  
+                                                    <div class="plus_cell_1">
+                                                        <button onclick="{ decrement }">-</button>  
+                                                    </div>
+                                                    <div class="input_treso_cell_1">
+                                                        <input type="text" id="input_especes_5" class="input_especes" name="content_especes" val-num="5" placeholder="0" value="0" disabled="disabled">
+                                                    </div>
+                                                    <div class="moins_cell_1">
+                                                        <button onclick="{ increment }">+</button>  
+                                                    </div>  
+                                                </div>
+                                            </div>
+
+                                            <div class="cell_2"><label for="">5 €</label></div>
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>      
+                                                    </div>
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" id="input_especes_002" class="input_especes" name="content_especes" val-num="0.02" placeholder="0" value="0" disabled="disabled">  
+                                                    </div>  
+
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                            <div class="cell_4"><label for="">0,02 €</label></div>
+                                        </div>
+
+                                        <div class="row row_nombres_8">
+                                            <div class="cell_1"></div>
+                                            <div class="cell_2"></div>
+                                            <div class="treso_container_cell_2">
+                                                <div class="treso_cell_2">
+                                                    <div class="plus_cell_2">
+                                                        <button onclick="{ decrement }">-</button>    
+                                                    </div> 
+                                                    <div class="input_treso_cell_2">
+                                                        <input type="text" id="input_especes_001" class="input_especes" name="content_especes" val-num="0.01" placeholder="0" value="0" disabled="disabled">    
+                                                    </div>
+                                                    <div class="moins_cell_2">
+                                                        <button onclick="{ increment }">+</button>    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_4"><label for="">0,01 €</label></div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="table c100">
+                                <div class="row">
+                                    <div class="content_especes_bottom">
+                                        <div class="content_especes_bottom_left">
+                                            <p>Total de la remise { numeraire } €</p>
+                                        </div>
+                                    </div>
+                                    <div class="content_especes_bottom_right">
+
+                                        <div class="num_libelle">
+                                            <p>Journal de remise </p> 
+                                            <select id="journal_remise" class="compte_banque_select">
+                                                <option value="">Choisir un journal</option>
+                                                <option value={ id } each={ journaux }>{ libelle }</option>
+                                            </select>    
+                                        </div>
+
+                                        <div class="numero_remise">
+                                            <p>Numéro de la remise</p>
+                                            <input id="remise" class="input_numero_remise" type="text" pattern="[a-zA-Z0-9-]" name="remise" placeholder="Numéro de remise">
+                                        </div>
+                                    </div>
+
+                                    <div class="content_especes_save">
+                                        <button type="submit" class="register_tresorerie_especes" value="enregistrer" onclick={ openModalSaveElement }>Enregistrer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="impression_remise_esp hidden">
+                            <div class="table tab_remise_esp">
+                                <div class="row_1">
+                                    <div class="cell_1">Valeur</div>
+                                    <div class="cell_2">Quantité</div>
+                                    <div class="cell_3">Montant</div>
+                                    <div class="cell_4">Valeur</div>
+                                    <div class="cell_5">Quantité</div>
+                                    <div class="cell_6">Montant</div>
+                                </div>
+                                <div class="row_2">
+                                    <div class="cell_1">500</div>
+                                    <div class="cell_2">{ remise_500 }</div>
+                                    <div class="cell_3">{ somme_remise_500 }</div>
+                                    <div class="cell_4">2</div>
+                                    <div class="cell_5">{ remise_2 }</div>
+                                    <div class="cell_6">{ somme_remise_2 }</div>
+                                </div>
+                                <div class="row_3">
+                                    <div class="cell_1">200</div>
+                                    <div class="cell_2">{ remise_200 }</div>
+                                    <div class="cell_3">{ somme_remise_200 }</div>
+                                    <div class="cell_4">1</div>
+                                    <div class="cell_5">{ remise_1 }</div>
+                                    <div class="cell_6">{ somme_remise_1 }</div>
+                                </div>
+                                <div class="row_4">
+                                    <div class="cell_1">100</div>
+                                    <div class="cell_2">{ remise_100 }</div>
+                                    <div class="cell_3">{ somme_remise_100 }</div>
+                                    <div class="cell_4">0.50</div>
+                                    <div class="cell_5">{ remise_050 }</div>
+                                    <div class="cell_6">{ somme_remise_050 }</div>
+                                </div>
+                                <div class="row_5">
+                                    <div class="cell_1">50</div>
+                                    <div class="cell_2">{ remise_50 }</div>
+                                    <div class="cell_3">{ somme_remise_50 }</div>
+                                    <div class="cell_4">0.20</div>
+                                    <div class="cell_5">{ remise_020 }</div>
+                                    <div class="cell_6">{ somme_remise_020 }</div>
+                                </div>
+                                <div class="row_6">
+                                    <div class="cell_1">20</div>
+                                    <div class="cell_2">{ remise_20 }</div>
+                                    <div class="cell_3">{ somme_remise_20 }</div>
+                                    <div class="cell_4">0.10</div>
+                                    <div class="cell_5">{ remise_010 }</div>
+                                    <div class="cell_6">{ somme_remise_010 }</div>
+                                </div>
+                                <div class="row_7">
+                                    <div class="cell_1">10</div>
+                                    <div class="cell_2">{ remise_10 }</div>
+                                    <div class="cell_3">{ somme_remise_10 }</div>
+                                    <div class="cell_4">0.05</div>
+                                    <div class="cell_5">{ remise_005 }</div>
+                                    <div class="cell_6">{ somme_remise_005 }</div>
+                                </div>
+                                <div class="row_8">
+                                    <div class="cell_1">5</div>
+                                    <div class="cell_2">{ remise_5 }</div>
+                                    <div class="cell_3">{ somme_remise_5 }</div>
+                                    <div class="cell_4">0.02</div>
+                                    <div class="cell_5">{ remise_002 }</div>
+                                    <div class="cell_6">{ somme_remise_002 }</div>
+                                </div>
+                                <div class="row_9">
+                                    <div class="cell_1"></div>
+                                    <div class="cell_2"></div>
+                                    <div class="cell_3"></div>
+                                    <div class="cell_4">0.01</div>
+                                    <div class="cell_5">{ remise_001 }</div>
+                                    <div class="cell_6">{ somme_remise_001 }</div>
+                                </div>
+                            </div>
+                            <div class="table c100 remise_esp_total">
+                                <div class="cell_1 vide_total_remise"></div>
+                                <div class="cell_2 total_remise">TOTAL</div>
+                                <div class="cell_3 valeur_total_remise">{ numeraire }</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div if={ COMPTA_READ && parametresCompte.id_journal_especes } class="nav_compta_parametrage block-slider">
+                    <header class="closed" onclick= { showContents }>
+                        Historique des remises d'èspeces
+                    </header>
+
+                    <div if={ COMPTA_READ } class="slide-up content_cheque_remise hidden">
+                        <!-- content_with_especes -->
+                        <!-- <div class="content_especes_remises"></div> -->
+                        <div class="especes_remise">
+                            <div class="compte_especes">
+                                <div class="cell_1">
+                                    <p>Numero de la remise</p>
+                                </div>
+                                <div class="cell_2">
+                                    <p>Date de la remise</p>
+                                </div>
+                                <div class="cell_3">
+                                    <p>Compte de caisse</p>
+                                </div>
+                                <div class="cell_4">
+                                    <p>Compte de la remise</p>
+                                </div>
+                                <div class="cell_5">
+                                    <p>Montant</p>
+                                </div>
+                                <div class="cell_6">
+                                    <p>Actions</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bande_2 remise" each={ remises } id='remise_{ id }'>
+                            <div class="table c100">
+                                <div class="cell_1">
+                                    <p id="numremisePrint2_{id}">{ numero }</p>
+                                </div>
+                                <div class="cell_2">
+                                    <p id="dateremisePrint2">{ convertDateToView(date) }</p>
+                                </div>
+                                <div class="cell_3">
+                                    <p>{ this.comptes[this.idComptes[id_compte_type_paiement]].reference + ' - ' + this.comptes[this.idComptes[id_compte_type_paiement]].libelle }</p>
+                                </div>
+                                <div class="cell_4">
+                                    <p>{ this.comptes[this.idComptes[id_compte_remise]].reference + ' - ' + this.comptes[this.idComptes[id_compte_remise]].libelle }</p>
+                                </div>
+                                <div class="cell_5">
+                                    <p id="montantremisePrint2_{id}">{ montant }</p>
+                                </div>
+                                <div class="cell_6">
+                                    <img class="img" id="imprim" src="/img/compta/imprimer.png" alt="Impression" onclick={ lanceImpression }>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div if={ COMPTA_READ && parametresCompte.id_journal_virements } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/virements">
+                        Virements
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_prelevements } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/prelevement">
+                        Prélèvements
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_cartebleue } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/cartebleue">
+                        Carte Bleue
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_chequesvacances } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/chequevacances">
+                        Chèques Vacances
+                    </a>
+                </header>
+            </div>
+        </div>
+        <div id="validation_remise" class="hidden">
+            <p class="center">Etes-vous sùr de vouloir enregistrer cette remise ?</p>
+            <div class="center">
+                <button class="button annuler" onclick={ cancelModal }>Annuler</button><button class="button enregistrer" onclick={ saveRemise }>Valider</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    var app = opts;
+    this.app = opts;
+    this.page_name = "espèces";
+    var _this = this;
+    var permissions = app.session.permissions;
+    var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+    app.on('unmount-especes', function(){
+        app.off('unmount-especes');
+        $('.jquery-modal, .modal').remove();
+        _this.unmount();
+    });
+
+    _this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+        _this.E_M = new E_M();
+
+        if( _this.loaded ){
+        }
+    });
+
+    this.update();
+
+    this.convertDateToView = function convertDateToView(date){
+        var convertedDate = '';
+        if( ! date){
+            convertedDate = "Date sans valeur";
+        }else{
+            var year = date.substr(0,4);
+            var month = date.substr(5,2);
+            var day = date.substr(8,2);
+            var convertedDate = day + "/" + month + "/" + year;
+        }
+        return convertedDate;
+    }
+
+    cancelModal(e) {
+        e.preventDefault();
+        e.preventUpdate = true;
+
+        $.modal.close();
+    }
+
+    openModalSaveElement(e) {
+        $('#validation_remise').modal();
+    }
+
+    this.comptes = [];
+    this.idComptes = {};
+    this.parametresCompte = {};
+    this.especes = [];
+    this.idEspeces = {};
+    this.numeraire = 0;
+
+    function getParametresComptes(){
+        var getParams = {};
+        if( _this.selectedExercice ){
+            getParams.id_exercice = _this.selectedExercice;
+        }else if(document.getElementById('id_exercice')){
+            getParams.id_exercice = document.getElementById('id_exercice').value;
+        }
+
+        $.getJSON( '/admin/compta/parametres', getParams, function(data){
+            if(data && data.elements){
+                // console.log("tototototto : "+JSON.stringify(data))
+                _this.parametresCompte = data.elements[0];
+                _this.numToLoad--;
+                _this.update();
+            }else{
+                // TODO: no data elements, get and manage error!...
+            }
+            _this.numToLoad--;
+        })
+    }
+
+    getParametresComptes();
+
+    this.solde = '0.00';
+
+    setSolde(e) {
+        e.preventDefault();
+        e.preventUpdate = true;
+
+        if($(e.currentTarget).val() !== "") {
+            _this.solde = _this.comptesCaisse[_this.idComptesCaisse[$(e.currentTarget).val()]].solde;
+        } else {
+            _this.solde = "0.00";
+        }
+        _this.update();
+    }
+
+    this.remises = [];
+    this.idRemises = {};
+    function getRemise(){
+        var getParams = { type: 'especes', remise: true };
+        if( _this.selectedExercice ){
+            getParams.id_exercice = _this.selectedExercice;
+        }else if(document.getElementById('id_exercice')){
+            getParams.id_exercice = document.getElementById('id_exercice').value;
+        }
+
+        $.getJSON( '/admin/compta/reglement', getParams, function(data){
+            console.log('regl data:', JSON.stringify(data));
+            if(data && data.elements){
+                _this.remises = [];
+                _this.idRemises = {};
+                var i, field, d, y, r;
+                var l = data.elements.length;
+                /*var fields = { id: 'id', numero: 'numero', date: 'date', montant: 'montant', id_journal: 'id_journal', id_compte: 'id_compte' };*/
+                var remise_fields = { id: 'id' , numero: 'numero', date: 'date', montant: 'montant', id_compte_remise: 'id_compte_remise', id_compte_type_paiement: 'id_compte_type_paiement', type: 'type', nb_cheques: 'nb_cheques', id_journal: 'id_journal' };
+                var reglement_fields = { re_id: 'id' , id_inscription: 'id_inscription', id_salarie: 'id_salarie', re_montant: 'montant', date_remise: 'date_remise', titulaire_paiement: 'titulaire_paiement', domiciliation: 'domiciliation', numero_cheque: 'numero_cheque', date_reglement: 'date_reglement', date_inscription: 'date_inscription', id: 'id_parent', id_compte_remise: 'id_compte_remise', id_compte_type_paiement: 'id_compte_type_paiement', id_journal: 'id_journal_remise'};
+                var currentRemise = 0;
+                for(i=0, y=0; i<l; i++){
+                    if(currentRemise != data.elements[i].id) {
+                        currentRemise = data.elements[i].id;
+                        d = {};
+                        for(field in remise_fields){
+                            d[remise_fields[field]] = data.elements[i][field];
+                        }
+                        d.reglements = [];
+                    }
+                    r = {};
+                    for(field in reglement_fields){
+                        r[reglement_fields[field]] = data.elements[i][field];
+                    }
+
+                    d.reglements.push(r);
+
+                    if(i+1 == l || data.elements[i + 1].id != currentRemise) {
+                        _this.idRemises[d['id']] = y;
+                        _this.remises.push(d);
+                        y++;
+                    }
+                }
+                _this.update();
+                console.log('remise', _this.remises);
+            }
+        })
+    }
+    getRemise();
+
+    /*function getComptes(){
+        var getParams = { type_element: 'compte' };
+        if(document.getElementById('')){
+            getParams.id_exercice = document.getElementById('id_exercice').value;
+        }
+
+        $.getJSON( '/admin/compta/comptes', getParams, function(data){
+            if(data && data.elements){
+                var l = data.elements.length;
+                var i, d; 
+                var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+                for(i=0; i<l; i++){
+                    if(data.elements[i]['visible'] == 'visible') {
+                        d = new Object();
+
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                        }
+                        _this.idComptes[d['id']] = i;
+                        _this.comptes.push(d);
+                    }
+                }
+                _this.numToLoad--;
+                _this.update();
+            }else{
+                    // TODO: no data elements, get and manage error!...
+            }
+            _this.numToLoad--;
+        })
+    }
+    getComptes();*/
+
+    this.parametresBancaire = [];
+    this.idParametresBancaire = {};
+
+    function getParametresBancaire() {
+            var getParams = { };
+            var banque = "";
+            var rib = "";
+            var bic = "";
+            var iban = "";
+            var titulaire = "";
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/parametres', getParams, function(data){
+                /*debugtime-console.log('getFacture AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+                if(data && data.elements){
+                    var l = data.elements.length;
+                    var i, d; 
+                    var fields = {id: 'id', rib:'rib', bic:'bic', iban:'iban', titulaire:'titulaire', banque:'banque'};
+                    for(i=0; i<l; i++){
+                        d = new Object();
+
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                            if (field == 'banque') {
+                                banque = d[fields[field]];
+                                console.log(banque)
+                            }
+                            _this.banque = banque;
+                            if (field == 'rib') {
+                                rib = d[fields[field]];
+                                console.log(rib)
+                            }
+                            _this.rib = rib;
+                            if (field == 'bic') {
+                                bic = d[fields[field]];
+                                console.log(bic)
+                            }
+                            _this.bic = bic;
+                            if (field == 'iban') {
+                                iban = d[fields[field]];
+                                console.log(iban)
+                            }
+                            _this.iban = iban;
+                            if (field == 'titulaire') {
+                                titulaire = d[fields[field]];
+                                console.log(titulaire)
+                            }
+                            _this.titulaire = titulaire;
+                            console.log(d[fields[field]]);
+                        }
+                        _this.idParametresBancaire[d['id']] = i;
+                        _this.parametresBancaire.push(d);
+                    }
+                        //_this.numToLoad--;
+                        _this.update();
+                    }else{
+                        // TODO: no data elements, get and manage error!...
+                    }
+                    //_this.numToLoad--;
+                })
+        }   
+        getParametresBancaire();
+
+    saveRemise(e) {
+        e.preventDefault();
+        e.preventUpdate = true;
+        var remise_500 = $("#input_especes_500").val();
+        _this.remise_500 = $("#input_especes_500").val();
+        //console.log("_this.tactac_500 : " + _this.tactac_500);
+        var somme_remise_500 = 500 * $("#input_especes_500").val();
+        _this.somme_remise_500 = 500 * $("#input_especes_500").val();
+        var remise_200 = _this.remise_200 = $("#input_especes_200").val();
+        var somme_remise_200 = _this.somme_remise_200 = 200 * $("#input_especes_200").val();
+        var remise_100 = _this.remise_100 = $("#input_especes_100").val();
+        var somme_remise_100 = _this.somme_remise_100 = 100 * $("#input_especes_100").val();
+
+        var remise_50 = _this.remise_50 = $("#input_especes_50").val();
+        var somme_remise_50 = _this.somme_remise_50 = 50 * $("#input_especes_50").val();
+        var remise_20 = _this.remise_20 = $("#input_especes_20").val();
+        var somme_remise_20 = _this.somme_remise_20 = 20 * $("#input_especes_20").val();
+        var remise_10 = _this.remise_10 = $("#input_especes_10").val();
+        var somme_remise_10 = _this.somme_remise_10 = 10 * $("#input_especes_10").val();;
+        var remise_5 =  _this.remise_5 =  $("#input_especes_5").val();
+
+        var somme_remise_5 = _this.somme_remise_5 = 5 * $("#input_especes_5").val();
+        var remise_2 =  _this.remise_2 =  $("#input_especes_2").val();
+        var somme_remise_2 = _this.somme_remise_2 = 2 * $("#input_especes_2").val();
+        var remise_1 =  _this.remise_1 =  $("#input_especes_1").val();
+        var somme_remise_1 = _this.somme_remise_1 = 1 * $("#input_especes_1").val();
+
+        var remise_050 =  _this.remise_050 =  $("#input_especes_050").val();
+        var somme_remise_050 = _this.somme_remise_050 = 0.50 * $("#input_especes_050").val();
+        var remise_020 =  _this.remise_020 =  $("#input_especes_020").val();
+        var somme_remise_020 = _this.somme_remise_020 = 0.20 * $("#input_especes_020").val();
+        var remise_010 =  _this.remise_010 =  $("#input_especes_010").val();
+        var somme_remise_010 = _this.somme_remise_010 = 0.10 * $("#input_especes_010").val();
+
+        var remise_005 =  _this.remise_005 =  $("#input_especes_005").val();
+        var somme_remise_005 = _this.somme_remise_005 = 0.05 * $("#input_especes_005").val();
+        var remise_002 =  _this.remise_002 =  $("#input_especes_002").val();
+        var somme_remise_002 = _this.somme_remise_002 = 0.02 * $("#input_especes_002").val();
+        var remise_001 =  _this.remise_001 =  $("#input_especes_001").val();
+        var somme_remise_001 = _this.somme_remise_001 = 0.01 * $("#input_especes_001").val();
+
+        var date_remise_impression = _this.date_remise_impression = $("#date_remise").val();
+        var num_remise_impression = _this.num_remise_impression = $("#remise").val();
+
+        var total_remise = _this.total_remise = 500 * $("#input_especes_500").val() + 200 * $("#input_especes_200").val() + 100 * $("#input_especes_100").val() + 50 * $("#input_especes_50").val() + 20 * $("#input_especes_20").val() + 10 * $("#input_especes_10").val() + 5 * $("#input_especes_5").val() + 2 * $("#input_especes_2").val() + 1 * $("#input_especes_1").val() + 050 * $("#input_especes_050").val() + 020 * $("#input_especes_020").val() + 010 * $("#input_especes_010").val() + 005 * $("#input_especes_005").val() + 002 * $("#input_especes_002").val() + 001 * $("#input_especes_001").val();
+
+        if(_this.solde == _this.numeraire && $('#select_compte').val() != '' && _this.solde != 0) {
+            var url = '/admin/compta/reglement';
+            var data = { action: 'add_remise' };
+            if(document.getElementById('id_exercice')){
+                var id_exercice = document.getElementById('id_exercice').value;
+            } else if( _this.app.session.exercices.selected ){
+                var id_exercice = _this.app.session.exercices.selected;
+            }
+            data.id_exercice = id_exercice;
+        
+            data.montant = _this.solde;
+            data.type = 'especes';
+            data.id_journal = $('#journal_remise').val();
+            data.numero = $('#remise').val();
+            data.date = _this.E_M.convertDateToDb($('#date_remise').val());
+           /* var ids = [];
+            $('.action', $('.reglement')).each(function() {
+                if($(this).is(':checked')) {
+                    ids.push($(this).val());
+                }
+            })
+            data.ids = ids;*/
+            _this.E_M.showLoader();
+
+            $.ajax(url, {
+            data : data,
+            type : 'POST',
+            dataType: 'json',
+            success: function (result, textStatus, jqXHR){
+                    getComptesCaisse();
+                    getRemise();
+                    _this.E_M.removeLoader({time: 1000})
+                    _this.solde = '0.00';
+                    _this.numeraire = '0.00';
+                    $('#select_compte').val('');
+                    $('#banque').val('');
+                    $('#remise').val('');
+                    $('.input_especes').val(0);
+                    $('#journal_remise').val('');
+                    $('#date_remise').datepicker({
+                        dateFormat: 'dd/mm/yy'
+                    });
+             
+                    $('#date_remise').datepicker( "setDate", new Date() );
+                    $.modal.close();
+                    _this.update();
+                }
+            }).done(function(){
+                console.log('done!...');
+                tag = null;
+            }).fail(function(){
+                console.log('fail!...');
+                tag = null;
+            });
+        }
+
+        //$('header').hide();
+        var ids = [];
+        var tactac = "";
+        tactac = "Filtres : ";
+        $('.print').each(function() {
+                if($(this).is(':checked')) {
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                    //console.log( $(this).attr('id') );
+                    //$("#filtres_print").text($("#"+ids).val());
+                }
+                _this.tactac = "";
+            });
+        $('.print_select').each(function() {
+                if($(this).is(':selected')) {
+                    //console.log("toto");
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                    //console.log("tatatata : " + $(this).attr('id') );
+                    //$("#filtres_print").text($("#"+ids).val());
+                }
+                console.log("tatatatata");
+                _this.tactac = "";
+            });
+        $('.print_input_text').each(function() {
+                if($(this).val()) {
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                    //console.log( $(this).attr('id') );
+                    //$("#filtres_print").text($("#"+ids).val());
+                }
+                _this.tactac = "";
+            });
+        //console.log("ids : " + ids.length);
+        //$('.print').each(function() {
+        var i, d;
+                //if($(this).is(':checked')) {
+       for(i=0; i<ids.length; i++){
+            if ($("#"+ids[i]).is( "option" ) ) {
+                _this.tactac += $("#"+ids[i]).text() + "\n";
+                //console.log("taat : " + $("#"+ids[i]).text());
+            } else {
+                _this.tactac += $("#"+ids[i]).val() + "\n";
+            }
+           //console.log($("#"+ids[i]).val())
+        }
+                    _this.update();
+                //}
+            //})
+        document.title = $("#entrepriseName").text();
+        window.print();
+        //var indexdiv = $(e.currentTarget).attr('value');
+        //$('#balancegenerale' + indexdiv).addClass('hidden');
+      /*  $('#lance_impression').printPreview();
+       // Add keybinding (not recommended for production use)
+       $(document).bind('keydown', function(e) {
+               var code = (e.keyCode ? e.keyCode : e.which);
+               if (code == 80 && !$('#print-modal').length) {
+                   $.printPreview.loadPrintPreview();
+                   return false;
+               }            
+       }); */ 
+       // $('header').show();
+    }
+
+
+    this.journaux = [];
+    this.idJournaux = {};
+
+    function getJournaux(){
+        var getParams = { type: "tresorerie" };
+        if(document.getElementById('id_exercice')){
+            getParams.id_exercice = document.getElementById('id_exercice').value;
+        }
+
+        $.getJSON('/admin/compta/journaux', getParams, function (data){
+            console.log('dd', JSON.stringify(data));
+            if(data && data.elements){
+                var i, field, d; 
+                var l = data.elements.length;
+                                        
+                var fields = {id: 'id', libelle: 'libelle', id_compte: 'id_compte', visible: 'visible'};
+                for(i=0; i<l; i++){
+                    d = new Object();
+                    for(field in fields){
+                        d[fields[field]] = data.elements[i][field];
+                    }
+                    _this.idJournaux[d['id']] = i;
+                    _this.journaux.push(d);
+                }
+                _this.update();
+                //console.log('')
+            }else{
+                // TODO: no data elements, get and manage error!...
+                if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+                }
+            }
+        });
+    }
+    getJournaux();
+
+    // BLOCK POUR LA PAGE ESPECES MONTANT CAISSE
+
+    getCompteCaisse(e) {
+        $.getJSON( '/admin/compta/especes', function(data){
+            /*debugtime-console.log('getAnalytiques AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+            if(data && data.elements){
+                var l = data.elements.length;
+                var i, d; 
+                var fields = {id: 'id', reference: 'reference', credit: 'credit', libelle: 'libelle',};
+                for(i=0; i<l; i++){
+                    d = new Object();
+
+                    for(field in fields){
+                        console.log("tototototo : " + data.elements[i][field]);
+                        console.log(fields);
+                        d[fields[field]] = data.elements[i][field];
+                        if (d[fields['id']] == $('#select_compte').val()) {
+                            $('#input_montant_caisse').val(d[fields['credit']] + '.00€');
+                        }
+                    }
+                    _this.idEspeces[d['id']] = i;
+                }
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+            //_this.numToLoad--;
+        })
+    }
+
+    showContents(e){
+        e.preventDefault();
+        e.preventUpdate = true;
+        if(_this.E_M){
+            console.log(e.target);
+            _this.E_M.showContents(e);
+        }
+    };
+
+    increment(e) {
+
+        var input = $('input',e.currentTarget.parentNode.parentNode);
+        var value = parseFloat($(input).val());
+        var valnum = parseFloat($(input).attr('val-num'));
+
+        console.log(valnum);
+        $(input).val(value+1);
+        _this.numeraire = parseFloat(_this.numeraire) + valnum;
+        _this.numeraire = _this.numeraire.toFixed(2);
+        if(parseFloat(_this.numeraire) + valnum <= _this.solde) {
+            $(input).val(value+1);
+            _this.numeraire = parseFloat(_this.numeraire) + valnum;
+            _this.numeraire = _this.numeraire.toFixed(2);
+        } 
+        _this.update();
+    }
+
+    decrement(e) {
+
+        var input = $('input',e.currentTarget.parentNode.parentNode);
+        var value = parseFloat($(input).val());
+        var valnum = parseFloat($(input).attr('val-num'));
+        _this.valnum = parseFloat($(input).attr('val-num'));
+        console.log("tata : " + _this.valnum)
+        $(input).val(value-1);
+
+        if (value == 0) {
+            var input = $('input', e.currentTarget.parentNode.parentNode);
+            var value = $(input).val(value = 0);
+        } else {
+            _this.numeraire = parseFloat(_this.numeraire) - valnum;
+            _this.numeraire = _this.numeraire.toFixed(2);
+            _this.update();
+        }
+    }
+
+    this.comptes = [];
+    this.idComptes = {};
+    function getCompte(){
+        console.log("ok");
+        var getParams = { type_element: 'compte' };
+
+        $.getJSON( '/admin/compta/comptes', getParams, function(data){
+            console.log('mydata:',data);
+            if(data && data.elements){
+                var d = { };
+                var l = data.elements.length;
+                for(i=0; i<l; i++){
+                    d = { };
+                    d['id'] = data.elements[i]['id'];
+                    d['libelle'] = data.elements[i]['libelle'];
+                    d['reference'] = data.elements[i]['reference'];
+                    _this.idComptes[d['id']] = i;
+                    _this.comptes.push(d);
+                }
+                _this.update();
+            }else{
+                // TODO: no data elements, get and manage error!...
+            }
+            console.log(_this.comptes);
+        })
+    }
+    getCompte();
+
+    function loadDateTemplate() {
+        console.log('11')
+        var $date = $('#date_remise');
+        if($date) {
+            console.log(22)
+            $.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+            $date.datepicker({
+                dateFormat: 'dd/mm/yy',
+            });
+            $date.datepicker('setDate', new Date());
+        }
+    }
+
+    formatDateField(e){
+        e.preventDefault();
+        e.preventUpdate = true;
+
+        if(_this.E_M){
+            _this.E_M.formatDateField({
+                event: e
+            });
+        }
+    }
+
+    /*function getEspeces(){
+        var getParams = { type_element: 'especes', comptes_especes: 1};
+        if( _this.selectedExercice ){
+            getParams.id_exercice = _this.selectedExercice;
+        }else if(document.getElementById('id_exercice')){
+            getParams.id_exercice = document.getElementById('id_exercice').value;
+        }
+
+        $.getJSON( '/admin/compta/especes', getParams, function(data){
+
+            if(data && data.elements){
+                var l = data.elements.length;
+                var i, d; 
+                var fields = {id: 'id', reference: 'reference', credit: 'credit', libelle_compte: 'libelle_compte',};
+                for(i=0; i<l; i++){
+                    d = new Object();
+
+                    for(field in fields){
+                                d[fields[field]] = data.elements[i][field];
+                            }
+                            console.log(d[fields[field]]);
+                            _this.idEspeces[d['id']] = i;
+                            _this.especes.push(d);
+                        }
+                        _this.update();
+                    }else{
+                    }
+                })
+    }
+    getEspeces();*/
+
+    this.on('mount', function(){
+    });
+
+
+    this.on('updated', function(){
+
+    });
+
+    this.comptesCaisse = [ ];
+    this.idComptesCaisse = { };
+
+    function getComptesCaisse() {
+        _this.comptes = [ ];
+        _this.idComptes = { };
+        getElements({ tag: _this,
+             url: '/admin/compta/especes',
+             elements: _this.comptesCaisse,
+             idElements: _this.idComptesCaisse, 
+             getParameters: { reference: '53' }, 
+             fields: { id: 'id', reference: 'reference', debit: 'debit', credit: 'credit', libelle: 'libelle' }})
+    }
+
+    getComptesCaisse();
+
+    function getElements(params){
+        var tag = params.tag;
+        var url = params.url;
+        var fields = params.fields;
+        var elements = params.elements;
+        var idElements = params.idElements;
+        var getParameters = params.getParameters || {};
+        $.getJSON( url, getParameters, function(data) {
+            console.log("data :", JSON.stringify(data));
+
+            if(data && data.elements){
+                if(params.init && typeof params.init === 'function'){
+                    params.init(tag);
+                }
+
+                var i, field, d;
+                var l = data.elements.length;
+
+                for(i=0; i<l; i++){
+                    d = new Object();
+                    for(field in fields){
+                        d[fields[field]] = data.elements[i][field];
+                    }
+
+                    d['solde'] = parseFloat(data.elements[i]['debit'] - data.elements[i]['credit']).toFixed(2);
+
+                    if( typeof idElements[d['id']] === 'undefined'){
+                        idElements[d['id']] = i;
+                        elements.push(d);
+                    }else{
+                        elements[ idElements[d['id']] ] = d;
+                    }
+                }
+                //TODO: changer le code en-dessous
+                loadDateTemplate();
+                console.log('elements:', elements);
+                tag.update();
+                if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+                    params.beforeUpdate(tag);
+                }
+                if(params.end && typeof params.end === 'function'){
+                    params.end(tag);
+                }
+            }else{
+                // TODO: no data elements, get and manage error!...
+            }
+            tag = null;
+            url = null;
+            fields = null;
+            elements = null;
+            idElements = null;
+        });
+    }  
+
+    // FONCTION IMPRIMER
+    (function($) { 
+    // Initialization
+    $.fn.printPreview = function() {
+        this.each(function() {
+            $(this).bind('click', function(e) {
+                e.preventDefault();
+                if (!$('#print-modal').length) {
+                    $.printPreview.loadPrintPreview();
+                }
+            });
+        });
+        return this;
+    };
+
+    // Private functions
+    var mask, size, print_modal, print_controls;
+    $.printPreview = {
+        loadPrintPreview: function() {
+            // Declare DOM objects
+            print_modal = $('<div id="print-modal"></div>');
+            print_controls = $('<div id="print-modal-controls">' + 
+                                    '<a href="#" class="print" title="Print page">Imprimer la Page</a>' +
+                                    '<a href="#" class="close" title="Close print preview">Fermer</a>').hide();
+            var print_frame = $('<iframe id="print-modal-content" scrolling="no" border="0" frameborder="0" name="print-frame" />');
+            // Raise print preview window from the dead, zooooooombies
+            print_modal
+                .hide()
+                .append(print_controls)
+                .append(print_frame)
+                .appendTo('body');
+            // The frame lives
+            for (var i=0; i < window.frames.length; i++) {
+                if (window.frames[i].name == "print-frame") {    
+                    var print_frame_ref = window.frames[i].document;
+                    break;
+                }
+            }
+            print_frame_ref.open();
+            print_frame_ref.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
+                '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' + 
+                '<head></head>' +
+                '<body></body>' +
+                '</html>');
+            print_frame_ref.close();
+            // Grab contents and apply stylesheet
+            var $iframe_head = $('head link[media*=print], head link[media=all]').clone(),
+                $iframe_body = $('body > *:not(#print-modal):not(script)').clone();
+            $iframe_head.each(function() {
+                $(this).attr('media', 'all');
+            });
+            /*$('head', print_frame_ref).append($iframe_head);
+            $('body', print_frame_ref).append($iframe_body);
+*/
+                $('body > *:not(#print-modal):not(script)').clone().each(function() {
+                    $('body', print_frame_ref).append(this.outerHTML);
+                });
+                $('head link[media*=print], head link[media=all]').each(function() {
+                    $('head', print_frame_ref).append($(this).clone().attr('media', 'all')[0].outerHTML);
+                });
+
+            // Disable all links
+            $('a', print_frame_ref).bind('click.printPreview', function(e) {
+                e.preventDefault();
+            });
+
+            // Introduce print styles
+            $('head').append('<style type="text/css">' +
+                '@media print {' +
+                    '/* -- Print Preview --*/' +
+                    '#print-modal-mask,' +
+                    '#print-modal {' +
+                        'display: none !important;' +
+                    '}' +
+                    '@page {' +  /* auto is the initial value */
+                            'margin-top: 0;'+
+                            'margin-bottom: 0;'+ /* this affects the margin in the printer settings */
+                    '}'+
+                    'body {' +
+                        'margin-top: 100px;' +
+                    '}'+
+                    'body:before{'+
+                        'margin-top: 100px;' +
+                        'content:url("../img/logo.png");' +
+                    '}' +
+                    'nav {' +
+                        'display: none;' +
+                    '}' +
+                '}' +
+                '</style>'
+            );
+            // Load mask
+            $.printPreview.loadMask();
+            // Disable scrolling
+            $('body').css({overflowY: 'hidden', height: '100%'});
+            $('img', print_frame_ref).load(function() {
+                print_frame.height($('body', print_frame.contents())[0].scrollHeight);
+            });
+
+            // Position modal            
+            starting_position = $(window).height() + $(window).scrollTop();
+            var css = {
+                    top:         starting_position,
+                    height:      '100%',
+                    overflowY:   'auto',
+                    zIndex:      10000,
+                    display:     'block'
+                }
+            print_modal
+                .css(css)
+                .animate({ top: $(window).scrollTop()}, 400, 'linear', function() {
+                    print_controls.fadeIn('slow').focus();
+                });
+            print_frame.height($('body', print_frame.contents())[0].scrollHeight);
+
+            // Bind closure
+            $('a', print_controls).bind('click', function(e) {
+                e.preventDefault();
+                if ($(this).hasClass('print')) { window.print(); }
+                else { $.printPreview.distroyPrintPreview(); }
+            });
+        },
+
+        distroyPrintPreview: function() {
+            print_controls.fadeOut(100);
+            print_modal.animate({ top: $(window).scrollTop() - $(window).height(), opacity: 1}, 400, 'linear', function(){
+                print_modal.remove();
+                $('body').css({overflowY: 'auto', height: 'auto'});
+            });
+            mask.fadeOut('slow', function()  {
+                mask.remove();
+            });             
+            $(document).unbind("keydown.printPreview.mask");
+            mask.unbind("click.printPreview.mask");
+            $(window).unbind("resize.printPreview.mask");
+        },
+
+        /* -- Mask Functions --*/
+        loadMask: function() {
+            size = $.printPreview.sizeUpMask();
+            mask = $('<div id="print-modal-mask" />').appendTo($('body'));
+            mask.css({              
+                position:           'absolute', 
+                top:                0, 
+                left:               0,
+                width:              size[0],
+                height:             size[1],
+                display:            'none',
+                opacity:            0,                          
+                zIndex:             9999,
+                backgroundColor:    '#000'
+            });
+
+            mask.css({display: 'block'}).fadeTo('400', 0.75);
+
+            $(window).bind("resize..printPreview.mask", function() {
+                $.printPreview.updateMaskSize();
+            });
+
+            mask.bind("click.printPreview.mask", function(e)  {
+                $.printPreview.distroyPrintPreview();
+            });
+
+            $(document).bind("keydown.printPreview.mask", function(e) {
+                if (e.keyCode == 27) {  $.printPreview.distroyPrintPreview(); }
+            });
+        },
+
+        sizeUpMask: function() {
+           // if ($.browser.msie) {
+                // if there are no scrollbars then use window.height
+                var d = $(document).height(), w = $(window).height();
+                return [
+                    window.innerWidth ||                        // ie7+
+                    document.documentElement.clientWidth ||     // ie6  
+                    document.body.clientWidth,                  // ie6 quirks mode
+                    d - w < 20 ? w : d
+                ];
+           // } else { return [$(document).width(), $(document).height()]; }
+        },
+
+        updateMaskSize: function() {
+            var size = $.printPreview.sizeUpMask();
+            mask.css({width: size[0], height: size[1]});
+        }
+    }
+})(jQuery);
+
+    lanceImpression(e) {
+        //$('header').hide();
+        var ids = [];
+        var tactac = "";
+        tactac = "Filtres : ";
+        $('.print').each(function() {
+                if($(this).is(':checked')) {
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                    //console.log( $(this).attr('id') );
+                    //$("#filtres_print").text($("#"+ids).val());
+                }
+                _this.tactac = "";
+            });
+        $('.print_select').each(function() {
+                if($(this).is(':selected')) {
+                    //console.log("toto");
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                    //console.log("tatatata : " + $(this).attr('id') );
+                    //$("#filtres_print").text($("#"+ids).val());
+                }
+                console.log("tatatatata");
+                _this.tactac = "";
+            });
+        $('.print_input_text').each(function() {
+                if($(this).val()) {
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                    //console.log( $(this).attr('id') );
+                    //$("#filtres_print").text($("#"+ids).val());
+                }
+                _this.tactac = "";
+            });
+        //console.log("ids : " + ids.length);
+        //$('.print').each(function() {
+        var i, d;
+                //if($(this).is(':checked')) {
+       for(i=0; i<ids.length; i++){
+            if ($("#"+ids[i]).is( "option" ) ) {
+                _this.tactac += $("#"+ids[i]).text() + "\n";
+                //console.log("taat : " + $("#"+ids[i]).text());
+            } else {
+                _this.tactac += $("#"+ids[i]).val() + "\n";
+            }
+           //console.log($("#"+ids[i]).val())
+        }
+                    _this.update();
+                //}
+            //})
+        document.title = $("#entrepriseName").text();
+        window.print();
+        //var indexdiv = $(e.currentTarget).attr('value');
+        //$('#balancegenerale' + indexdiv).addClass('hidden');
+      /*  $('#lance_impression').printPreview();
+       // Add keybinding (not recommended for production use)
+       $(document).bind('keydown', function(e) {
+               var code = (e.keyCode ? e.keyCode : e.which);
+               if (code == 80 && !$('#print-modal').length) {
+                   $.printPreview.loadPrintPreview();
+                   return false;
+               }            
+       }); */ 
+       // $('header').show();
+
+    }
+
+//// FIN FONCTION IMPRIMER
+
+    </script>
+
+</especes>

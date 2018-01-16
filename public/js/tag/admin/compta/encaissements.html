@@ -1,0 +1,20 @@
+<encaissements>
+	<div if={ COMPTA_READ } class="content with_submenu">
+
+	</div>
+
+	<script>
+		var app = opts;
+	  	var _this = this;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+	  	app.on('unmount-encaissements', function(){
+			app.off('unmount-encaissements');
+			_this.unmount();
+		});
+
+		this.update();
+
+	</script>
+
+</encaissements>

@@ -1,0 +1,856 @@
+<stock>
+	<!-- <div id="titre_page"><h1>{ IS_CE ? 'Salariés ' : "Adhérents " }  </h1><h1 id="ajout_ou_edit"></h1></div> /* new menutop*/--> 
+	<div class="content with_submenu">
+		<div class="LogoImpressionExport">
+			<div class="LogoVide"></div>
+			<div class="Logo">
+				<img class="exportbutton" src="/img/button_export.png" alt="exportbutton">
+	            <img class="imprimerbutton" src="/img/imprimer.png" alt="imprimer_button" onclick={ lanceImpression }>
+            </div>
+		</div>
+		<div class="salaries salaries_salaries">
+			<div class="filtres hide_when_edit filtres_container">
+				<div class="filtre_block">
+					<header class="opened" onclick="{ showContents }">Filtres</header>
+					<div class="slide-up hidden">
+						<div class="line-separator"></div>
+					
+					<div class="Entete_stock_Categorie">
+						<div class="Info_catégorie">
+						<!-- 	<div class="categorie" >
+								<label class="label1">Catégorie</label>
+								<select>
+									<option></option>
+									<option>fffffffff</option>
+								</select>
+							</div> -->
+							<div class="activite">
+								<label class="label2" for="filtre_activite">Activité</label>
+								<select name="filtre_journal" id="filtre_journal" onchange={ filterChange }>
+									<option></option>
+									<option each="{ activiteStock }" value="{ id }" id="select_activite_{id}" class="print_select">{ libelle }</option>
+								</select>
+							</div>
+
+
+							<div class="produit">
+								<label class="label3">Produit</label>
+								<select name="filtre_journal" id="filtre_journal" onchange={ filterChange }>
+									<option></option>
+									<option each="{ this.parentTag.journaux }" value="{ id }" id="select_produit_{id}" class="print_select">{ libelle }</option>
+								</select>
+							</div>
+						</div>
+						<div id="print_hidden">	
+							<input  onclick={ comptesMov }  type="checkbox" name="comptes_mov" >
+							<label>Stocks en alerte</label>
+
+						</div>
+					</div>					
+				</div>
+				</div>
+			</div>
+		</div>
+		<div class="slide-up">
+			<div class="line-separator"></div>
+			<div class="filtre"></div>
+		</div>
+			<div class="EnteteStockTable">
+				<div class="cell_1">
+					<p class="small">Produits</p>
+				</div>
+				<div class="cell_2">
+					<p class="small center">Nombre de Billets</p>
+				</div>
+				<div class="cell_3">
+					<p class="small center">Stocks Vendu</p>
+				</div>
+				<div class="cell_4">
+					<p class="small center">Stocks Restant</p>
+				</div>
+				<div class="cell_5">
+					<p class="small center">Stocks d'alerte</p>
+				</div>
+				<div class="cell_6">
+					<p class="small center">Date de Validité</p>
+				</div>
+			</div>
+			<div each={ produitStock } if={ ! comptesMovChecked || ( parseInt(stock_alerte) > parseInt(stock_restant) ) }   class="contentInfosStock" id="{ id }">
+				<div class="InfoStock">
+				<div class="cell_1">
+						<p class=" nature" >{ libelle }</p>
+					</div>
+					<div class="cell_2">
+						<p class=" nature center">{ nombre_billets }</p>
+					</div>
+					<div class="cell_3">
+						<p class=" nature center">{ stock_vendu }</p>
+					</div>
+					<div class="cell_4">
+						<p class=" nature center"> { stock_restant } </p>
+					</div>
+					<div class="cell_5">
+						<p class=" nature center">{ stock_alerte }</p>
+					</div>
+					<div class="cell_6">
+						<p class=" nature center">{ convertDateToView( date_validite ) }</p>
+					</div>									
+				</div>
+			</div>
+		</div>
+		
+	<script>
+      	var _this = this;
+      	this.app = opts;
+      	this.loaded = false;
+      	this.sceances = [{id: 1, nom: 'Scéance 1'}, {id: 2, nom: 'Scéance 2'}, ]
+      	this.thingsToLoad = [ 'exercices', 'E_M', 'pegjs' ];
+      	this.numToLoad = this.thingsToLoad.length;
+      	this.champs = {};
+      	var permissions = app.session.permissions;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+      	var SALARIES_READ = this.SALARIES_READ = permissions.SALARIES_READ || false;
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+		this.PEG;
+
+		this.comptes = [];
+		this.idComptes = {};
+		this.grammar = {};
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+
+			}
+		});
+		_this.app.loadScript('/js/admin/tableexport.js','tableexport_js', function(){
+            
+        });
+
+		//----------convertir la date en format jj/mm/annee---------------
+        _this.convertDateToView = function convertDateToView(date){
+            if(_this.E_M){
+                return _this.E_M.convertDateToView(date);
+            }
+        }
+		//-------FIN---convertir la date en format jj/mm/annee---------------
+
+
+		/******************************************************************************************************
+		_this.app.loadScript('/js/admin/jquery-ui/jquery-ui-datepicker-fr.js','jquery-ui-datepicker-fr_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			  $( function() {
+			    $( "#datepicker" ).datepicker({
+			      showOtherMonths: true,
+			      selectOtherMonths: true
+			    });
+			  } );
+			}
+		});
+		********************************************************************************************************/
+
+   		this.produitStock=[];
+        this.idProduitStock={};
+        //console.log("totototyo" + this.elements)
+        function getProduitStock() {
+           var getParams ={ type_element: 'stock'};
+             if(document.getElementById('id_exercice')){
+                 getParams.id_exercice = document.getElementById('id_exercice').value;
+             } else if( _this.app.session.exercices.selected ){
+                 getParams.id_exercice = _this.app.session.exercices.selected;
+             }
+            $.getJSON('/admin/activites/activites', getParams, function (data){ 
+                console.log('getproduits data :: ' + JSON.stringify(data));
+                if(data && data.elements){
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var fields = { id: 'id', libelle: 'libelle', categorie: 'categorie', nombre_billets: 'nombre_billets', stock_alerte: 'stock_alerte', stock_vendu: 'stock_vendu', stock_restant: 'stock_restant', date_validite: 'date_validite', };
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                        }
+                        _this.idProduitStock[d['id']] = i;
+                        _this.produitStock.push(d);
+                    }
+                    _this.update();
+                    console.log('getProduits 1 produitStock: ', JSON.stringify(_this.produitStock ));
+                    console.log('getProduits 2 idProduitStock: ', JSON.stringify(_this.idProduitStock));
+                }
+            });
+        }
+        getProduitStock();
+
+        this.activiteStock=[];
+        this.idactiviteStock={};
+        function getActiviteStock() {
+           var getParams ={ type_element: 'activite', id_modele: 1,};
+             if(document.getElementById('id_exercice')){
+                 getParams.id_exercice = document.getElementById('id_exercice').value;
+             } else if( _this.app.session.exercices.selected ){
+                 getParams.id_exercice = _this.app.session.exercices.selected;
+             }
+            $.getJSON('/admin/activites/activites', getParams, function (data){ 
+                console.log('getactiviteStock data :: ' + JSON.stringify(data));
+                if(data && data.elements){
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var fields = { id: 'id', libelle: 'libelle', id_categorie:'id_categorie'};
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                        }
+                        _this.idactiviteStock[d['id']] = i;
+                        _this.activiteStock.push(d);
+                    }
+                    _this.update();
+                    //console.log('getProduits 1 activiteStock: ', JSON.stringify(_this.activiteStock ));
+                    //console.log('getProduits 2 idactiviteStock: ', JSON.stringify(_this.idactiviteStock));
+                }
+            });
+        }
+        getActiviteStock();
+
+ 		comptesMov(e) {
+            _this.comptesMovChecked = e.currentTarget.checked;
+            _this.update();
+            console.log('csfff fghts')
+        }
+
+		function loadTag(params) {
+			var selector = params.selector;
+			var tagName = params.tagName;
+			var opt = { parentTag: _this };
+			var url = params.url;
+			var newselector = "newtag";
+			var	mountTag = document.createElement('div');
+
+			if(params.newselector) {
+				newselector = params.newselector;
+			}
+			if(params.tagContainer) {
+				mountTag.setAttribute('id', newselector);
+				$(params.tagContainer).append(mountTag);
+			}
+			if(params.opt) {
+				opt = params.opt;
+			}
+			if( (params.selector || params.tagContainer) && params.tagName && params.url ) {
+				riot.compile( url, function() {
+					mounted = riot.mount( params.tagContainer ? '#' + newselector : selector, tagName, opt);
+				});
+			}
+		}
+
+		//wait the mount event to load event listeners
+		this.on('mount', function(){
+			var params = { selector: '.filtre', tagName: 'filtre-stock', url: '/js/tag/admin/compta/filtre-stock.html', opt: { parentTag: _this, checked: 'ec_non_valides' } };
+			loadTag(params);
+		});
+
+		filterChange (e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			var $current = $(e.currentTarget);
+			var currentVal = $current.val();
+			
+			if($('#filtre_journal')){
+				// $('.InfoStock').hide();
+			}			
+		}
+
+		_this.app.on('unmount-stock', function(){
+			_this.app.off('unmount-stock');
+			_this.unmount();
+		});
+
+        _this.copyValue = function copyValue(base, target){
+        	var theBase = document.getElementById(base);
+        	var theTarget = document.getElementById(target);
+        	theTarget.value = theBase.value;
+        }
+
+        _this.copyNum = function copyNum(firstBase, target){
+            var n = document.getElementById(firstBase);
+            var i = document.getElementById(target);
+            var result = n.value;
+            result = _this.E_M.replaceAccents(result).toLowerCase();
+            i.value = result;
+        }
+
+        makeId(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+        	if(e.item){
+        		var id = e.item.id;
+        		_this.copyValues('nom_' + id, 'prenom_' + id, 'identifiant_internet_' + id);
+        	}else{
+        		_this.copyValues('nom', 'prenom', 'identifiant_internet');	
+        	}                     
+        }
+
+        copyMatricule(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+        	if(e.item){
+        		var id = e.item.id;
+        		_this.copyNum('numero_salarie_' + id, 'numero_salarie_ayant_droit_' + id);
+        	}else{
+        		_this.copyNum('numero_salarie', 'ayant_droit_numero_salarie');	
+        	}                     
+        }
+
+        _this.copyValues = function copyValues(firstBase, sndBase, target){
+            var n = document.getElementById(firstBase);
+            var p = document.getElementById(sndBase);
+            var i = document.getElementById(target);
+            var result = p.value + "." + n.value;
+            result = _this.E_M.replaceAccents(result).toLowerCase();
+            i.value = result;
+        }
+
+		genPass(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			var pass;
+			if(e.item){
+			 	pass = 'mot_de_passe' + e.item.id;
+			}else{
+				pass = 'mot_de_passe';
+			}
+			_this.genString(pass);
+
+		}
+
+		_this.genString = function genString(id) {
+			var cible = document.getElementById(id);
+			cible.value = '';
+			var abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&@$_{';
+			var pass = '';
+        	longueur = 8;
+        	for(i=0;i<longueur;i++){
+            	var wpos = Math.round(Math.random()*abc.length);
+            	pass+=abc.substring(wpos,wpos+1);
+        	}        	
+        	cible.value = pass;
+		}
+
+		//utile pour les 4 champs RIB
+		focusNextOne(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			var limit = e.currentTarget.getAttribute('maxlength');
+			var next_one = e.currentTarget.getAttribute('next-to-focus');
+			var next = document.getElementById(next_one);
+			var length = e.currentTarget.value.length;
+			if(length == limit){
+				next.focus();
+			}
+		}
+
+        formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+
+			if(_this.E_M){
+				_this.E_M.formatDateField({
+					event: e
+				});
+				var field_for_age = e.currentTarget.getAttribute('field-for-age');
+				var fieldAge = document.getElementById(field_for_age);
+
+				// la date ecrite par l'utilisateur
+				var date = e.currentTarget.value;
+				var length = date.length;
+				if(length == 10){
+					var year = date.substr(6, 4);
+					var month = date.substr(3,2);
+					var day = date.substr(0,2);
+					var todayDate = new Date();
+					var todayYear = todayDate.getFullYear();
+					var todayMonth = todayDate.getMonth();
+					var todayDay = todayDate.getDate();
+					var age = todayYear - year;
+
+					if(todayMonth < month - 1){
+						age --;
+					}
+
+					if(month - 1 == todayMonth && todayDay < day){
+						age --;
+					}
+					if (field_for_age) {
+						fieldAge.innerHTML = age + ' Ans';
+					}
+				} else {
+					if (field_for_age) {
+						fieldAge.innerHTML = "";
+					}
+				}
+			}
+        }
+
+
+        _this.convertDateToDb = function convertDateToDb(date){   
+			if(_this.E_M){
+				return _this.E_M.convertDateToDb(date);
+			}
+        }
+
+        //rajoute les '.' automatiquement
+        addDotToEndPhoneNumber(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+        	e.currentTarget.value = _this.E_M.addDotToEndPhoneNumber(e.currentTarget.value);
+        }
+
+		saveSalarie(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				var isEdit = e.item ? true : false;
+
+				var idElement = isEdit ? e.item.id : '';
+				var suffixId = isEdit ? '_' + e.item.id : '';
+
+                $("#ajout_ou_edit").text("");
+
+                var rib_1 = document.getElementById("rib_1" + suffixId);
+                var rib_2 = document.getElementById("rib_2" + suffixId);
+                var rib_3 = document.getElementById("rib_3" + suffixId);
+                var rib_4 = document.getElementById("rib_4" + suffixId);
+                var rib_for_db = document.getElementById("rib" + suffixId);
+                rib_for_db.value = rib_1.value + rib_2.value + rib_3.value + rib_4.value;
+
+				var fields = ['numero_salarie', 'nom', 'prenom', 'titre','numero_et_voie', 'numero_appartement_ou_etage', 'entree_batiment', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'identifiant_internet', 'mot_de_passe', 'nom_de_naissance', 'date_de_naissance', 'situation_familiale', 'telephone', 'portable', 'email_personnel', 'email_professionnel', 'fonction', 'statut', 'date_entree', 'date_sortie', 'banque', 'titulaire', 'rib', 'iban', 'bic', 'option_1', 'option_2', 'option_3', 'option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10', 'quotient', 'quotientN1', 'quotientN2', 'tranche_salaire', 'valeur','solde', 'reglement', 'participation_adherent', 'participation_association', 'visible'];
+
+				var l = fields.length;
+				var element, ayantsDroits;
+
+				if( isEdit ){
+					element = _this.salaries[ _this.idSalaries[ idElement ] ];
+				}else{
+					element = new Object();
+				}
+				var data = {};
+
+				for(i=0; i<l; i++){
+					field = fields[i];
+
+					if( isEdit ){
+						fieldId  = field + '_' + idElement;
+					}else{
+						fieldId  = field;
+					}
+
+					if(document.getElementById( fieldId )){
+						elem = document.getElementById( fieldId );
+						if( elem.type === 'checkbox'){
+							if( elem.checked ){
+								value = 1;
+							}else{
+								value = 0;
+							}
+						}else if( elem.type === 'radio'){
+							elem = document.querySelector('input[name="' + fieldId + '"]:checked');
+							if(elem){
+								value = elem.value;
+							}else{
+								value = null;
+							}
+						}else{
+							value = elem.value;
+						}
+					}else{
+						value = null;
+					}
+
+					data[field] = value;
+
+					element[field] = value;
+				}
+
+				if( isEdit ){
+					ayantsDroits = _this.salaries[ _this.idSalaries[ idElement ] ].ayantsDroits;
+					data['ayants_droits'] = ayantsDroits;
+				}else{
+//////////////////////////////////////////////////////////
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// TODO: get new ayants droits and add them to new salarie
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//////////////////////////////////////////////////////////
+				}
+
+				data['id_exercice'] = document.getElementById('id_exercice').value;
+
+				if( isEdit ){
+					data['id'] = idElement;
+					data.action = 'update';
+				}else{
+					data.action = 'add';
+				}
+
+			console.log('saveSalarie data: ' + JSON.stringify(data));
+			console.log('id_exercice: ' + data.id_exercice);
+				$.ajax('/admin/salaries/salaries', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						console.log('saveElement result: ' + JSON.stringify(result));
+						this.result = result;
+						if(result && ! result.error){
+							if( isEdit ){
+								var $container = $('#salarie_' + idElement);
+								var $editContainer = $('#salarie_' + idElement + '_edit');
+								var $show_infos = $('.show_infos', $container);
+							}else{
+								var $addElement = $('#add_element');
+								var $filtres = $('.filtres');
+
+								if( result.id ){
+									element.id = result.id;
+								}
+
+								_this.salaries.push(element);
+
+								numElement = _this.salaries.length - 1;
+								_this.idSalaries[result.id] = numElement;
+							}
+
+							_this.update();
+
+							if( isEdit ){
+								$show_infos.removeClass('hidden');
+								$editContainer.addClass('hidden');
+							}else{
+								$addElement.addClass('hidden');
+								$filtres.removeClass('hidden');
+							}
+							$('.hide_when_add, .hide_when_edit').removeClass('hidden');
+						}else if(result.ids){
+							// TODO:
+						}else if(result.error){
+							// TODO:
+							setTimeout(function(){ $('#loader').addClass('hidden'); }, 0);
+						}
+					}
+				}).done(function(){
+					console.log('done!...');
+				}).fail(function(){
+					console.log('fail!...');
+				}); //, 'json'
+
+/****************************************************
+				_this.E_M.saveElement({
+					event: e,
+					url: '/admin/salaries/salaries',
+					fields: ['numero_salarie', 'nom', 'prenom', 'titre','numero_et_voie', 'numero_appartement_ou_etage', 'entree_batiment', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'identifiant_internet', 'mot_de_passe', 'nom_de_naissance', 'date_de_naissance', 'situation_familiale', 'telephone', 'portable', 'email_personnel', 'email_professionnel', 'fonction', 'statut', 'date_entree', 'date_sortie', 'banque', 'titulaire', 'rib', 'iban', 'bic', 'option_1', 'option_2', 'option_3', 'option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10', 'quotient', 'quotientN1', 'quotientN2', 'tranche_salaire', 'valeur','solde', 'reglement', 'participation_adherent', 'participation_association', 'visible'],
+					tag: _this,
+					elements: _this.salaries,
+					idElements: _this.idSalaries,
+					typeElement: 'salaries',
+					prefixId: 'salaries_',
+					hideClass: 'hidden',
+					end: function(){
+						$('.hide_when_edit').removeClass('hidden');
+					}
+				});
+/*****************************************************/
+			}
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+        showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+            if(_this.E_M){
+                _this.E_M.showContents(e);
+            }
+        }
+
+        function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/salaries/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d;
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idComptes[d['id']] = i;
+						_this.comptes.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+
+				_this.comptes = data.elements;
+				_this.app.setByIds(_this.comptes, _this.idComptes);
+				_this.numToLoad--;
+			})
+		}
+
+        function getParametrages(){
+        	var getParams = {};
+
+			$.getJSON('/admin/salaries/parametrages', getParams, function(data){
+				if(data && data.element){
+					var i, field, d;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', champ_1: 'champ_1', champ_2: 'champ_2', champ_3: 'champ_3', champ_4: 'champ_4', champ_5: 'champ_5', champ_6: 'champ_6', champ_7: 'champ_7',	champ_8: 'champ_8', champ_9: 'champ_9', champ_10: 'champ_10', champ_1_ayant_droit: 'champ_1_ayant_droit', champ_2_ayant_droit: 'champ_2_ayant_droit', champ_3_ayant_droit: 'champ_3_ayant_droit', champ_4_ayant_droit: 'champ_4_ayant_droit', champ_5_ayant_droit: 'champ_5_ayant_droit', champ_6_ayant_droit: 'champ_6_ayant_droit', champ_7_ayant_droit: 'champ_7_ayant_droit',	champ_8_ayant_droit: 'champ_8_ayant_droit', champ_9_ayant_droit: 'champ_9_ayant_droit', champ_10_ayant_droit: 'champ_10_ayant_droit', formule_quotient: 'formule_quotient'};
+					_this.champs.champ_1 = data.element[0].champ_1;
+					_this.champs.champ_2 = data.element[0].champ_2;
+					_this.champs.champ_3 = data.element[0].champ_3;
+					_this.champs.champ_4 = data.element[0].champ_4;
+					_this.champs.champ_5 = data.element[0].champ_5;
+					_this.champs.champ_6 = data.element[0].champ_6;
+					_this.champs.champ_7 = data.element[0].champ_7;
+					_this.champs.champ_8 = data.element[0].champ_8;
+					_this.champs.champ_9 = data.element[0].champ_9;
+					_this.champs.champ_10 = data.element[0].champ_10;
+					_this.champs.champ_1_ayant_droit = data.element[0].champ_1_ayant_droit;
+					_this.champs.champ_2_ayant_droit = data.element[0].champ_2_ayant_droit;
+					_this.champs.champ_3_ayant_droit = data.element[0].champ_3_ayant_droit;
+					_this.champs.champ_4_ayant_droit = data.element[0].champ_4_ayant_droit;
+					_this.champs.champ_5_ayant_droit = data.element[0].champ_5_ayant_droit;
+					_this.champs.champ_6_ayant_droit = data.element[0].champ_6_ayant_droit;
+					_this.champs.champ_7_ayant_droit = data.element[0].champ_7_ayant_droit;
+					_this.champs.champ_8_ayant_droit = data.element[0].champ_8_ayant_droit;
+					_this.champs.champ_9_ayant_droit = data.element[0].champ_9_ayant_droit;
+					_this.champs.champ_10_ayant_droit = data.element[0].champ_10_ayant_droit;
+					_this.champs.formule_quotient = data.element[0].formule_quotient;
+					_this.champs.arrondi_decimal = data.element[0].arrondi_decimal;
+					_this.update();
+					_this.loaded = true;
+
+				}else{
+					// TODO: no data elements, get and manage error!...
+					console.log('else non if');
+				}
+			});
+        }
+		getParametrages();
+
+		this.salaries = [];
+		this.idSalaries = {};
+
+        function getSalaries(){
+        	getElements({
+				tag: _this,
+				url: '/admin/salaries/salaries', 
+				elements: _this.salaries,
+				idElements: _this.idSalaries,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', statut: 'statut', date_entree: 'date_entree', date_sortie: 'date_sortie', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', quotientN1: 'quotientN1', quotientN2: 'quotientN2', tranche_salaire: 'tranche_salaire', valeur: 'valeur',solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', fonction: 'fonction', visible: 'visible'},
+				getParameters: { type_element: 'salaries'},
+				type: 'salaries',
+				action: 'update',
+				end: function(tag){
+					tag.loaded = true;
+				},
+			});
+		}
+		getSalaries();
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+
+						if(params.action){
+							d['action'] = params.action;
+						}
+
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+
+    lanceImpression(e) {
+        //$('header').hide();
+        var ids = [];
+        var tactac = "";
+        tactac = "Filtres : ";
+        $('.print').each(function() {
+                if($(this).is(':checked')) {
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                }
+                _this.tactac = "";
+            });
+        $('.print_select').each(function() {
+                if($(this).is(':selected')) {
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                }
+                console.log("tatatatata");
+                _this.tactac = "";
+            });
+        $('.print_input_text').each(function() {
+                if($(this).val()) {
+                    _this.tactac = "";
+                    ids.push($(this).attr('id'));
+                }
+                _this.tactac = "";
+            });
+        var i, d;
+
+       for(i=0; i<ids.length; i++){
+            if ($("#"+ids[i]).is( "option" ) ) {
+                _this.tactac += $("#"+ids[i]).text() + "\n";
+
+            } else {
+                _this.tactac += $("#"+ids[i]).val() + "\n";
+            }
+        }
+                    _this.update();
+
+        document.title = $("#entrepriseName").text();
+        window.print();
+
+
+    }
+//// FIN FONCTION IMPRIMER
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			showContents = null;
+			addDotsToPhoneNumber = null;
+			makeId = null;
+			copyMatricule = null;
+			genPass = null;
+			copyMatricule = null;
+			focusNextOne = null;
+			getElements = null;
+			formatDateField = null;
+		});
+	</script>
+</stock>

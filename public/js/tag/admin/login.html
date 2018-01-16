@@ -1,0 +1,63 @@
+<login-admin>
+	<div class="container_login center">
+		<!-- <div>
+			<img src="/img/logo_axis.png">
+		</div>
+		<div class="widget login left">
+			<p>
+				<span class="wl_title"> Identifiant / Mot de passe</span>
+			</p>
+			<form onsubmit="{ login }" method="post">
+				<input type="text" placeholder="identifiant" name="identifiant"><br>
+				<input type="password" placeholder="mot de passe" name="password"><br>
+				<div>
+					<div class="cell_block">
+						<a href ="#">J'ai perdu mon identifiant</a> <br/>
+						<a href ="#">J'ai perdu mon mot de passe</a>
+					</div>
+					<div class="cell_block right">
+						<button class="blue bold">Entrer</button>
+					</div>
+				</div>
+			</form>
+		</div> -->
+	</div>
+<!--
+	<div id="login" class="widget">
+		<h1 class="w_title">Espace Client</h1>
+		<div class="w_content">
+			<p class="error error-login">{ error }</p>
+			<form onsubmit="{ login }" method="post">
+				<input type="text" name="identifiant" placeholder="identifiant"><br>
+				<input type="password" name="password" placeholder="mot de passe"><br>
+				<button>connexion</button>
+			</form>
+		</div>
+	</div>
+-->
+	<script>
+	var app = opts;
+	this.error = '';
+
+    login(e){
+		e.preventDefault();
+	
+		if( ! this.identifiant || this.identifiant == ''
+			|| ! this.password || this.password == ''){
+
+			return false;
+		}
+
+		app.adminLogin({
+			identifiant: this.identifiant.value,
+			password: this.password.value
+		});
+	}
+
+	app.on('admin-login-failed', function(error){
+		this.error = error;
+		console.log('<login>.on(admin-login-failed): ' + error);
+	});
+
+	</script>
+</login-admin>

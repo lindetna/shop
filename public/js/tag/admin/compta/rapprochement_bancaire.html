@@ -1,0 +1,1107 @@
+<rapprochement_bancaire>
+	<div if={ COMPTA_READ } class="compta content with_submenu rapprochement_bancaire">
+		<div id="loader" class="loader hidden">
+        </div>
+		<div id="rappro1" class="compta compta_rapprochement_bancaire">
+			<div id="add_element" class="edit edit_rapprochement hidden">
+			    <div class="saisie_rapprochement">
+			     	<div class="row1">
+				     	<div class="cell_1 right"> 
+				     		<span>Date du Jour</span>
+				     	</div>
+				     	<div class="cell_2">
+				     					<label class="xs-large label-date date_du_jour" for="date_du_jour"></label>
+										<input type="hidden" name="date_du_jour" id="date_du_jour" type="date" 											required value={ convertDateToDb($('#front_date_du_jour').val()) }>
+										<input type="text" id="front_date_du_jour"  maxlength="10" 												field-for-date="date_du_jour" required="required" 												      class="date l-large date_du_jour front_date_du_jour" 												    onchange={ formatDateField }> 
+				     	 </div>
+				     	<div class="cell_3">
+				     		<label for="mois"> Mois</label>
+				     		<select name="mois" class="edit_mois" id="mois" onchange={ setNumeroPointage } required>
+								<option value="1">janvier</option>
+								<option value="2">février</option>
+								<option value="3">mars</option>
+								<option value="4">avril</option>
+								<option value="5">mai</option>
+								<option value="6">juin</option>
+								<option value="7">juillet</option>
+								<option value="8">août</option>
+								<option value="9">septembre</option>
+								<option value="10">octobre</option>
+								<option value="11">novembre</option>
+								<option value="12">décembre</option>
+							</select>
+				     	</div>
+				     	<div class="cell_4">
+				     		<label for="annee"> Année</label>
+				     		<select name="annee" class="input_1" id="annee" onchange={ setNumeroPointage } required>
+				     			<option value="2014">2014</option>
+				     			<option value="2015">2015</option>
+				     			<option value="2016">2016</option>
+				     			<option value="2017">2017</option>
+				     			<option value="2018">2018</option>
+				     			<option value="2019">2019</option>
+				     			<option value="2020">2020</option>
+				     			<option value="2021">2021</option>
+				     		</select>
+				     	</div>
+				     	<div class="cell_5">
+				     	</div>
+				     	<div class="cell_6">
+				     	</div>
+				    </div>
+				    <div class="row2">
+						<div class="cell_1 right">
+							<span>Compte</span>
+						</div>
+						<div class="cell_2">
+				    		<label for="Compte"></label>
+				     		<select class="input_compte" id="id_compte" name="id_compte" size="0" 											onchange={ setNumeroPointage } 		required>
+				     			<option each={ comptes } value="{ id }">{ reference } { libelle }</option>
+						</select>
+				    		</div>
+						<div class="cell_3">Solde Bancaire</div>
+				     		<div class="cell_4">
+							<label for="Debit">Débit</label>
+							<input type="text" class="debit debit_block" id="debit" name="debit"  size="10" 									maxlength="15"  onchange={ setFixed } onclick={ blockContents }/>
+				     		</div>
+				     		<div class="cell_5">
+							<label for="Credit">Crédit</label>
+							<input type="text" class="credit credit_block" id="credit" name="credit"  										size="10" maxlength="15" onchange={ setFixed } onclick={ blockContents }/>
+				     		</div>
+				     		<div class="cell_6">
+				     		<label for="numero_pointage"> N° de Pointage </label>
+				     		<input type="text" class="input_2" id="numero_pointage" name="numero_pointage"  size="10" 								maxlength="15" disabled />
+				     		</div>
+				</div>
+				</div>
+				<div class="annuler_enregistrer right">
+					<button name="cancel_submit" class="button annuler" onclick={ cancelElement }>Annuler</button>
+					<button name="save_submit" onclick={ saveElement } class="button enregistrer" >Enregistrer</button> 
+				</div>
+			</div>
+			<div id="filtres" class="nav_compta_pointage block-slider">
+				<header class="filtre-title center header-title closed" id="filtre_en_tete" onclick= { showContents }>
+					Filtres
+				</header>
+				<div class="slide-up">
+					<div class="compte_middle">
+						<div class="filtre_compte cell_1"> 
+							<label class="s-large margin-left" for="filtre_compte">Comptes</label>
+	  						<select name="filtre_compte" id="filtre_compte" onchange={ filterChange }>
+	  							<option value=""></option>
+	  							<option each="{ comptes }" class="print_select" id="print_select_comptes_{id}" 										value="{ id }">{ 	reference } { libelle }</option>
+	  						</select>
+						</div>
+						<div class="date_compte cell_2">
+							<label>Date</label>
+								<input type="text" class="print_input_text" id="filtre_date_debut" 											onchange={ filterChange }>
+								<input class="print_input_text" type="text" id="filtre_date_fin" 											onchange={ filterChange }>
+						</div>
+						<div class="filtre_numero_pointage cell_3">
+							N° de pointage
+							<select class="input_solde">
+									<option value=""></option>
+									<option each="{ elements }" value="">{ numero_pointage }</option>
+							</select>
+						</div>
+						<div class="filtre_mois cell_4">
+							<label for="mois_filtre">Mois</label>
+				     		<select name="mois_filtre" class="edit_mois" id="mois_filtre" onchange={ setNumeroPointage } >
+								<option value="1">janvier</option>
+								<option value="2">février</option>
+								<option value="3">mars</option>
+								<option value="4">avril</option>
+								<option value="5">mai</option>
+								<option value="6">juin</option>
+								<option value="7">juillet</option>
+								<option value="8">août</option>
+								<option value="9">septembre</option>
+								<option value="10">octobre</option>
+								<option value="11">novembre</option>
+								<option value="12">décembre</option>
+							</select>
+
+						</div>
+						<div class="filtre_annee cell_5">
+							<label for="annee_filtre">Année</label>
+				     		<select name="annee_filtre" class="input_1" id="annee_filtre" onchange={ setNumeroPointage }>
+				     			<option value="2014">2014</option>
+				     			<option value="2015">2015</option>
+				     			<option value="2016">2016</option>
+				     			<option value="2017">2017</option>
+				     			<option value="2018">2018</option>
+				     			<option value="2019">2019</option>
+				     			<option value="2020">2020</option>
+				     			<option value="2021">2021</option>
+				     		</select>
+						</div>
+					</div>  
+	   			</div>
+	   		</div>
+			<div class="actions" id="actions">
+				<button name="save_submit" class="button ajouter save_submit" name="add_element_button" onclick={ addElement }  type="					submit">Ajouter un rapprochement</button>			  
+			</div>
+	        <div class="entete-tableau">
+	        	<div class="cell_1">Date</div>
+	        	<div class="cell_2">Compte</div>
+	        	<div class="cell_3">Mois</div>
+	        	<div class="cell_4">Année</div>
+	        	<div class="cell_5">N° de Pointage</div>
+	        	<div class="cell_6">Débit</div>
+	        	<div class="cell_7">Crédit</div>
+	        	<div class="cell_8">Nbr Ecritures</div>
+	        	<div class="cell_9">Ecart</div>
+	        	<div class="cell_10">Pointage</div>
+	        	<div class="cell_11">Actions</div>
+	        </div>
+	        <div each={ elements } id="{ id }" class="ligne_rapprochement_row">
+				<div class="show_infos">
+		        	<div class="cell_1 ">
+		        		<p class="title" content="{ date_du_jour }">{ convertDateToView(date_du_jour) }</p> 
+		        	</div>
+		        	<div class="cell_2">
+		        		<p class="title" content="{ comptes[ idComptes[ id_compte ] ].reference }">{ comptes[ idComptes[ id_compte ] ]						.reference } { comptes[ idComptes[ id_compte ] ].libelle }</p>
+		        	</div>
+		        	<div class="cell_3">
+		        		<p class="title" content="{ mois }"> { mois } </p>
+		        	</div>
+		        	<div class="cell_4">
+		        		<p class="title" content="{ annee }"> { annee } </p>
+		        	</div>
+		        	<div class="cell_5">
+		        		<p class="title" content="{ numero_pointage }"> { numero_pointage } </p>
+		        	</div>
+		        	<div class="cell_6">
+		        		<p class="title" content="{ debit.toFixed(2) }">{ debit ? debit : '0.00' }</p>
+		        	</div>
+					<div class="cell_7">
+		        		<p class="title" content="{ credit.toFixed(2) }">{ credit ? credit : '0.00' }</p>
+		        	</div>
+		        	<div class="cell_8">{ num_ecritures_validees }</div>
+		        	<div class="cell_9">{ (Math.abs(credit - debit)).toFixed(2) }</div>
+		        	<div class="cell_10 modif">
+		        		<img class="pointage_img edit_element_img" src="/img/pointage.png"
+		                   alt="pointage" onclick={ editPointage } title="Pointage"></div>
+		        	<div class="cell_11">
+		        		<p class="modif">
+		        			<img class="edit_element_img" src="/img/edit.png"
+		                   		alt="edit" onclick={ editElement } title="Modifier">
+	                   		<img class="delete_element_img" onclick={ validDeleteElement } title="Supprimer" delete_id="{ id }" src="						/img/delete.png">
+                   		</p>
+		            </div>
+		        </div>
+				<div id="{ id }_edit" class="edit edit_rapprochement_bancaire hidden">
+			     	<div class="row1">
+				     	<div class="cell_1 right">
+				     	<span>Date du jour</span>
+				     		</div>
+				     	<div class="cell_2">
+				     		<label class="xs_large label-date date_du_jour" for="date_du_jour_{ id }"></label>
+							<input type="hidden" name="date_du_jour_{ id }" id="date_du_jour_{ id }" type="date" value={ 								convertDateToDb($('#front_date_du_jour').val()) }>
+							<input type="text" id="front_date_du_jour_{ id }" maxlength="10" field-for-date="									date_du_jour_{ id }" required="required" class="date l-large date_du_jour 										front_date_du_jour" onchange={ formatDateField }> 
+						</div>
+				     	<div class="cell_3">
+				     		<label for="mois_{ id }">Mois</label>
+				     		<select name="mois_{ id }" class="edit_mois mois" id="mois_{ id }" onchange={ setNumeroPointage } >
+				     			<option value="{ mois }">{ mois }</option>
+								<option value="1">janvier</option>
+								<option value="2">février</option>
+								<option value="3">mars</option>
+								<option value="4">avril</option>
+								<option value="5">mai</option>
+								<option value="6">juin</option>
+								<option value="7">juillet</option>
+								<option value="8">août</option>
+								<option value="9">septembre</option>
+								<option value="10">octobre</option>
+								<option value="11">novembre</option>
+								<option value="12">décembre</option>
+							</select>
+				     	</div>
+				     	<div class="cell_4">
+				     		<label for="annee_{ id }">Année</label>
+				     		<select name="annee_{ id }" class="input_1 annee" id="annee_{ id }" onchange={ setNumeroPointage } >
+				     			<option value="{ annee }">{ annee }</option>
+				     			<option value="2014">2014</option>
+				     			<option value="2015">2015</option>
+				     			<option value="2016">2016</option>
+				     			<option value="2017">2017</option>
+				     			<option value="2018">2018</option>
+				     			<option value="2019">2019</option>
+				     			<option value="2020">2020</option>
+				     			<option value="2021">2021</option>
+				     		</select>
+				     	</div>
+				     	<div class="cell_5">
+				     	</div>
+				     	<div class="cell_6">
+				     	</div>
+				    </div>
+				    <div class="row2">
+				    	<div class="cell_1 right">
+				    		<label for="Compte">Compte</label>				     		
+				     	</div>
+			     		<div class="cell_2">
+			     			<select name="id_compte_{ id }" class="input_compte id_compte" id="id_compte_{ id }" onchange={ 							setNumeroPointage }>
+				     			<option value=""></option>
+				     			<option each={ comptes } value="{ id }" selected="{ 'selected' : id == id_compte }">{ 									reference } { libelle }</option>
+							</select>			     				     		
+			     		</div>		     
+				     	<div class="cell_3">Solde Bancaire </div>
+				     	<div class="cell_4">
+							<label for="Debit_{ id }">Débit</label>
+							 <input type="text" class="input_solde debit_block debit_{ id } debit" id="debit_{ id }" 								name="debit_{ id }"  size="10" maxlength="15" value={ debit } onchange={ setFixed } 									onclick={ blockContents }/>
+				     	</div>
+						<div class="cell_5">
+							<label for="Credit_{ id }">Crédit</label>
+							<input type="text" class="input_solde credit_block credit_{ id } credit" id="credit_{ id }" 								name="credit_{ id }"  size="10" maxlength="15" value={ credit }  onchange={ setFixed } 									onclick={ blockContents }/>
+				     	</div>
+
+				     	<div class="cell_6">
+				     		<label for="numero_pointage_{ id }">N° de Pointage </label>
+				     		<input type="text" class="input_2 numero_pointage" id="numero_pointage_{ id }" name="" size="10" 							maxlength="15" value={ numero_pointage } disabled />
+				     	</div>
+					</div>
+					<div class="annuler_enregistrer right">
+						<button name="cancel_submit_{ id }" class="button annuler" onclick={ cancelElement }>Annuler</button> 							<button name="save_submit_{ id }" onclick={ saveElement } class="button enregistrer" >Enregistrer							</button> 
+					</div>
+				</div>
+				<div id="{ id }_delete" class="delete hidden">
+						<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button class="button 								annuler" name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteElement }>Annuler							</button><button class="button enregistrer" name="delete_{ id }" onclick={ deleteElement }>								Supprimer</button>
+						</div>
+				</div>
+	        </div>
+	    </div>
+	    <div id="rappro_edit" class="hidden">
+	    	<div class="nav_compta_pointage_filtre block-slider">
+				<header class="filtre-title center header-title closed" onclick= { showContents }>
+					Filtres
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="filtres_contenaire">
+						<div class="filtres_cell1">
+							<div class="cell_date"> Date
+								<input type="text" id="filtre_date_debut" class="input_solde" 												onchange={ filterChange }>
+								<input type="text" id="filtre_date_fin" class="input_solde" onchange={ filterChange }>
+							</div>
+							<div class="cell_operation"> N°Opération
+								<input type="text" class="input_solde" name=""   size="10" maxlength="10"/>
+							</div>
+						</div>
+						<div class="filtres_cell2">
+							<div class="cell_non_rapprochees"> 
+								<input type="checkbox" id="ec_valides">
+								Ecritures Non Rapprochées   
+							</div> 
+							<div class="cell_rapprochees"> 
+								<input type="checkbox" id="">
+								<span>Ecritures Rapprochées</span> 
+							</div> 
+							<div class="cell_annulees"> 
+								<input type="checkbox" id="ec_non_valides">
+								<span>Ecritures Annulées</span> 
+							</div> 
+						</div>
+						<div class="filtres_cell4">
+						<div class="pointage"> 
+								<span class="pointage">N°Pointage</span>
+								<select class="input_solde">
+									<option value=""></option>
+									<option each="{ elements }" value="">{ numero_pointage }</option>
+								</select>
+							</div>								
+							<div class="mois_1">Mois
+								<label for="mois_filtre"></label>
+								<select name="mois_filtre" class="input_mois_annee" >
+									<option value="1">janvier</option>
+									<option value="2">février</option>
+									<option value="3">mars</option>
+									<option value="4">avril</option>
+									<option value="5">mai</option>
+									<option value="6">juin</option>
+									<option value="7">juillet</option>
+									<option value="8">août</option>
+									<option value="9">septembre</option>
+									<option value="10">octobre</option>
+									<option value="11">novembre</option>
+									<option value="12">décembre</option>
+								</select>
+							</div> 
+							<div class="annee_1">Année
+								<label for="annee"></label>
+								<select name="annee" class="input_1 annee">
+									<option value="2014">2014</option>
+									<option value="2015">2015</option>
+									<option value="2016">2016</option>
+									<option value="2017">2017</option>
+									<option value="2018">2018</option>
+									<option value="2019">2019</option>
+									<option value="2020">2020</option>
+									<option value="2021">2021</option>
+								</select>
+							</div>
+		 				</div>
+						<div class="filtres_cell5">
+							<div class="piece"> N°Pièce
+								<input type="text" class="input_solde_piece" name=""   size="10" maxlength="10"/>
+							</div>
+							<div class="libelle"> 
+								<span class="libelle">Libellé</span>
+								<input type="text" id="" size="10" maxlength="10" class="input">
+							</div>
+							<div class="filtre_solde">	
+							<div class="filtre_montant"> 
+								Montant
+							</div>								
+							<div class="filtre_debit"><span>Débit</span>
+								<select name="filtre_debit" class="input_solde">
+									<option value=""></option>
+									<option each="{ elements }" value="">{ debit }</option>
+								</select>
+							</div> 
+							<div class="filtre_credit"><span>Crédit</span>
+								<select name="filtre_debit" class="input_solde">
+									<option value=""></option>
+									<option each="{ elements }" value="">{ credit }</option>
+								</select>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="nav_compta_pointage block-slider">
+				<header id="" class="pointage-title center header-title opened" onclick= { showContents }>
+					Pointage
+				</header>
+			    <div class="slide-up">
+			    	<div class="line-separator"></div>
+					<div each="{ elements }" class="contenaire_compte2" if={ active == id }>
+						<div class="cell1">Compte
+							<input type="text" name="compte" class="input_compte" size="10" maxlength="10" 										value="{ comptes[ idComptes[ id_compte ] ].reference } 													{ comptes[ idComptes[ id_compte ] ].libelle }" disabled> 
+						</div>
+						<div class="cell2">Solde Bancaire</div>
+						<div class="cell3" >
+							<span>Débit</span>
+							<input type="text" class="input_solde" name=""   size="10" maxlength="10" 										value="{ this.mode_expert == false ? parseFloat(debit).toFixed(2) : 											parseFloat(credit).toFixed(2) }" disabled />
+						</div>
+						<div class="cell4" >
+							<span>Crédit</span>
+							<input type="text" class="input_solde" name=""   size="10" maxlength="10" 										value="{ this.mode_expert == false ? parseFloat(credit).toFixed(2) : 											parseFloat(debit).toFixed(2) }" disabled />
+						</div>
+						<div class="cell5" >
+							<span>Mois</span> 
+							<input type="text" class="mois" name=""  size="4" maxlength="2" value="{ mois }" disabled />
+						</div>
+						<div class="cell6">
+							<span>Année</span>
+							<input type="text" class="annee" name=""  size="5" maxlength="4" value="{ annee }" disabled />
+						</div>
+						<div class="cell7" >
+							<span>N° de Pointage</span> 	
+							<input type="text" name="" class="input" size="7" maxlength="4" value="{ numero_pointage }" 								disabled />
+						</div>
+					</div>
+					<div class="contenaire_soldes c100 ">				
+						<div class="cell1 c60">
+							<div class="table c100">
+								<div class="block_mode_expert c40"> 
+									<input type="checkbox" class="input" name="mode_expert" id="mode_expert" 										onchange={ toggleModeExpert }/>
+									<label for="mode_expert">Mode Expert</label>
+								</div>
+								<div class="solde_theo_reel">
+									<div>
+										<div class="cell_1 right c60" id="solde_theo">
+											<span>Solde Théorique</span>
+										</div>
+										<div class="cell_2 c40" id="solde_theo_debit">Débit
+											<input type="text" class="input" name="debit_theo"  													id="debit_theo" size="10" maxlength="10" disabled 												      value="{ getSoldeTheorique('debit') }" />
+										</div>
+										<div class="cell_2 c40" id="solde_theo_credit">Crédit
+											<input type="text" class="input" id="credit_theo" 													name="credit_theo"   size="10" maxlength="10" disabled 												      value="{ getSoldeTheorique('credit') }" />
+										</div>
+									</div>
+									<div>
+										<div class="cell_1 right c60" id="solde_reel" >
+											<span>Solde Réel</span> 
+										</div>
+										<div class="cell_2 c40" id="solde_reel_debit">
+											<input type="text" class="input" id="debit_reel" 													name="debit_reel"   size="10" maxlength="10" disabled 												      value="{ this.mode_expert == false ? 														    (Math.abs(Math.abs(totalDebit + totalCredit) + 													  parseFloat(getCurrentCompte().debit) - 														parseFloat(getCurrentCompte().credit))).toFixed(2) :												      (Math.abs(Math.abs(totalDebit + totalCredit) - 													    parseFloat(getCurrentCompte().debit) + 														  parseFloat(getCurrentCompte().credit))).														toFixed(2)}"/>
+										</div>
+										<div class="cell_2 c40" id="solde_reel_credit">
+											<input type="text" class="input" id="credit_reel" 													name="credit_reel"   size="10" maxlength="10" disabled />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="cell2 c40 right" >
+							<div class="cell_block center block_couleur_info color1">
+								<span class="italic">Total Débit</span>
+								<br>
+								<span>{ this.mode_expert == false ? (Math.abs(pointageCredit)).toFixed(2) : 										(Math.abs(pointageDebit)).toFixed(2) }<span class="euro-sign">€</span></span>
+							</div>
+							<div class="cell_block center block_couleur_info color2">
+								<span class="italic">Total Crédit</span>
+								<br>
+								<span>{	this.mode_expert == false ? (Math.abs(pointageDebit)).toFixed(2) : 										(Math.abs(pointageCredit)).toFixed(2) }<span class="euro-sign">€</span></span>
+							</div>
+							<div class="cell_block center block_couleur_info color3">
+								<span class="italic">Ecart</span>
+								<br>
+								<span>{ this.mode_expert == false ? (((parseFloat(getCurrentCompte().debit)) + 										(-parseFloat(getCurrentCompte().credit)) + pointageCredit - 											      pointageDebit)).toFixed(2) : (((- parseFloat(getCurrentCompte().debit)) + 									    (parseFloat(getCurrentCompte().credit)) - pointageCredit + pointageDebit)).toFixed(2								  )}	
+								<span class="euro-sign">€</span></span>
+							</div>
+						</div>
+					</div>
+					<div class="pointage_operation">
+						<div class="contenaire_operations">
+				        	<div class="cell_date">Date</div>
+				        	<div class="cell_operations">N°Operation</div>
+				        	<div class="cell_piece">N°Pièce</div>
+				        	<div class="cell_libelle">Libellé</div>
+				        	<div class="cell_debit">Débit</div>
+				        	<div class="cell_credit">Crédit</div>
+				        	<div class="cell_pointage"><span class="checkbox edit_element_img"> <input type="checkbox" 								id="selectall" onchange="{ toggleCheckAll }"></span>Pointage</div>
+				        </div>
+				        <div id="pointage" >
+					        <div each={ ecrituresPointage } class="contenaire_details" id="ecritures_{ id }">
+					        	<div class="cell_date">
+					        		<span class="">{ convertDateToView(date_enregistrement) }</span>
+					        	</div>
+					        	<div class="cell_operations">
+					        		<span class="">{ num_operation }</span>
+					        	</div>
+					        	<div class="cell_piece">
+					        		<span class="">{ num_piece }</span>
+					        	</div>
+					        	<div class="cell_libelle">
+					        		<span class="">{ libelle }</span>
+					        	</div>
+					        	<div class="cell_debit">
+					        		<span class="" id="debit_{ id }" >{ this.mode_expert == false ? 											parseFloat(credit).toFixed(2) : parseFloat(debit).toFixed(2) }</span>
+					        	</div>
+					        	<div class="cell_credit">
+					        		<span class="" id="credit_{ id }" >{ this.mode_expert == false ? 											parseFloat(debit).toFixed(2) : parseFloat(credit).toFixed(2) }</span>
+					        	</div>
+					        	<div class="cell_pointage">
+					        		<span class="checkbox"> <input type="checkbox" class="pointage edit_element_img" 									id-db="{ id }" onchange="{ toggleCheck }"></span>
+					        	</div>
+					        </div>
+						</div>
+					</div>
+				</div>
+				<div class="actions_pointage right">
+					<button name="cancel_submit_{ id }" class="button annuler" onclick={ cancelPointage }>Annuler</button> 
+					<button name="save_submit_{ id }" onclick={ savePointage } class="button enregistrer" >Enregistrer</button>
+				</div>
+			</div>    
+		</div>
+	</div>
+
+
+	<script>
+
+
+		var _this = this;
+		var app = opts;
+		this.app = opts;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+		this.loaded = false;
+		this.date_du_jour = (new Date()).toLocaleDateString();
+
+		this.thingsToLoad = [ 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+		this.mode_expert = false;
+
+		this.totalDebit = 0;
+		this.totalCredit = 0;
+		this.nbecritures;
+
+		toggleModeExpert(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if($(e.currentTarget).is(":checked") == true) {
+				_this.mode_expert = true;
+			} else {
+				_this.mode_expert = false;
+			}
+			_this.update();
+		}
+
+		this.ecrituresPointage = [];
+		this.idEcrituresPointage = {};
+
+		function getEcrituresPointage(id){
+			var url = '/admin/compta/ecritures';
+			var id_exercice = document.getElementById('id_exercice').value;
+			var getParams = { id_compte: id, id_exercice : id_exercice, pointage: true};
+			$.getJSON(url, getParams, function (data){
+				if(data && data.elements) {		
+					_this.ecrituresPointage = [];
+					_this.idEcrituresPointage = {};
+					_this.totalDebit = 0;
+					_this.totalCredit = 0;
+					var l = data.elements.length;
+					var i, d;
+					for(i=0; i<l; i++){
+						_this.idEcrituresPointage[data.elements[i]['id']] = i;
+						_this.ecrituresPointage.push(data.elements[i]);
+						_this.totalDebit += parseFloat(data.elements[i].debit);
+						_this.totalCredit += parseFloat(data.elements[i].credit);
+					}
+					_this.update();
+				}
+			});
+		}
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/rapprochement_bancaire', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id',date_du_jour:'date_du_jour',reference: 'reference', mois: 'mois', annee:'annee', 							   debit: 'debit', credit: 'credit', numero_pointage: 'numero_pointage'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		setNumeroPointage(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var isEdit = e.item ? true : false;
+			var id = isEdit ? '_' + e.item.id : '';
+			var annee = $('#annee' + id).val();
+			var mois = $('#mois' + id).val();
+			var compte = $('#id_compte' + id).val();
+			if(mois && mois.length == 1){
+				mois = '0' + mois;
+			}
+
+			if(mois && mois.length && mois.length != 0 && annee &&  annee.length && annee.length != 0 && compte && compte.length 					&& compte.length != 0) {
+				$('#numero_pointage' + id).val(annee + '-' + mois + '-' + compte);
+			}
+		}
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+			if( _this.loaded ){
+			}
+		});
+
+	  	_this.app.on('unmount-rapprochement_bancaire', function(){
+			_this.app.off('unmount-rapprochement_bancaire');
+			_this.unmount();
+		});
+
+		this.elements = [];
+		this.idElements = {};
+		this.soldeTheoriqueDebit = 0;
+		this.soldeReelDebit = 0;
+		this.soldeTheoriqueCredit = 0;
+		this.soldeReelCredit = 0;
+		this.pointageDebit = 0;
+		this.pointageCredit = 0;
+		this.currentElementId;
+
+
+		editPointage(e){
+			var id = e.item.id;
+			_this.currentElementId = id;
+			var id_compte = e.item.id_compte;
+			_this.active = id;
+			_this.update();
+ 			console.log('item: ' + JSON.stringify(e.item))
+			console.log('id: ' + id + ', currentElementId: ' + _this.currentElementId)
+			console.log( 'editPointage elements : ' + JSON.stringify(_this.elements[ _this.idElements[ id ] ]));
+ 			$('#rappro1').hide();
+ 			$('#rappro_edit').show();
+ 			getEcrituresPointage(id_compte);
+ 		}
+
+		cancelPointage(e){
+			_this.active = 0;
+			_this.update();
+ 			$('#rappro1').show();
+ 			$('#rappro_edit').hide();
+ 		}
+
+ 		savePointage(e){
+ 			$('#rappro1').show();
+ 		 	$('#rappro_edit').hide();
+			if(_this.E_M){
+				$('#actions, #filtres').removeClass('hidden');
+				_this.E_M.showLoader();
+				_this.E_M.saveElement({
+					event: e,
+					action: "update_pointage", 
+					url: '/admin/compta/ecritures',
+                	 		fields: ['ids_pointage'],
+					tag: _this,
+					end: function(p){
+						_this.E_M.removeLoader({time: 1000});
+					},
+				});
+			}
+		}
+
+ 		//  savePointage(e){
+			//  _this.active = 0;
+			//  _this.update();
+ 		//  	$('#rappro1').show();
+ 		//  	$('#rappro_edit').hide(); 
+ 		//  		if(_this.E_M){
+			// 	$('#actions, #filtres').removeClass('hidden');
+			// 	_this.E_M.showLoader();
+			// 	_this.E_M.saveElement({
+			// 		event: e, 
+			// 			url: '/admin/compta/compta_rapprochement_bancaire',
+   //                     fields: ['ecritures_pointage'],
+			// 		tag: _this,
+			// 		end: function(p){
+			// 			_this.E_M.removeLoader({time: 1000});
+			// 		},
+			// 	});
+			// }
+
+ 		//  }
+
+		editElement(e){
+			if(_this.E_M){
+			_this.E_M.editElement({event: e, tag: _this,
+				});
+			loadDateTemplate(e.item.id);
+			}
+		}
+
+		addElement(e){
+			$('#actions, #filtres').addClass('hidden');
+			$('input[type=text], select', '#add_element').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e, end: function(){ loadDateTemplate(); },});
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteElement(e){
+			if(_this.E_M){
+				_this.E_M.showLoader();
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/compta/rapprochement_bancaire', end: function(p){
+					if(_this.E_M) {
+						_this.E_M.removeLoader({time: 1000});
+					} else {
+						setTimeout(function(){ $('#loader').addClass('hidden'); }, 1000);
+					}	
+				}});
+			}
+		}
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelElement(e){
+			if(_this.E_M){
+				$('#actions, #filtres').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['date_du_jour','mois','annee', 'reference', 'debit','credit', 'numero_pointage'],
+					tag: _this,
+				});
+			}
+		}
+
+		this.getCurrentCompte = function getCurrentCompte(){
+			return _this.elements[ _this.idElements[ _this.currentElementId ]];
+		}
+		getElements({
+			tag: _this,
+			url: '/admin/compta/comptes', 
+			elements: this.comptes,
+			idElements: this.idComptes,
+			fields: { id: 'id', reference: 'reference', libelle: 'libelle'},
+			getParameters: { type_element: 'compte', rapprochement_bancaire: 1},
+			end: function(tag){ 
+				console.log('getComptes: comptes: ' + JSON.stringify(tag.comptes));
+				console.log('getComptes: idComptes: ' + JSON.stringify(tag.idComptes));
+			},
+		});
+		
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+			console.log('getElements: url: ' + url + ', data' + JSON.stringify(data));
+
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+
+						if( typeof idElements[d['id']] === 'undefined'){
+							idElements[d['id']] = i;
+							elements.push(d);
+						}else{
+							elements[ idElements[d['id']] ] = d;
+						}
+			
+				}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}
+				
+					tag.update();
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		
+		saveElement(e){
+			if(_this.E_M){
+				$('#actions, #filtres').removeClass('hidden');
+				_this.E_M.showLoader();
+				_this.E_M.saveElement({
+					event: e, 
+						url: '/admin/compta/rapprochement_bancaire',
+                       fields: ['date_du_jour','id_compte','mois','annee','debit','credit', 'numero_pointage'],
+					tag: _this,
+					end: function(p){
+						_this.E_M.removeLoader({time: 1000});
+					},
+				});
+			}
+		}
+
+		blockContents(e){
+			e.preventDefault();
+            e.preventUpdate = true;
+            var isEdit;
+            var htmlId;
+            var $this = $(e.currentTarget);
+            if($this.hasClass('debit')){
+            	htmlId = 'credit';
+            }else if($this.hasClass('credit')){
+            	htmlId = 'debit';
+            }
+
+            if(e.item){
+            	isEdit = true;
+            	htmlId = htmlId + '_' + e.item.id;
+            }else{
+            	isEdit = false;
+            }
+            $('#' + htmlId).val('');
+        }
+		 	
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		selectExercice(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if( _this.app.session.exercices.selected != $('#id').val()){
+				_this.app.session.exercices.selected = $('#id').val();
+			}
+		}
+
+		function getRapprochement(){
+			var getParams = {};
+			if(document.getElementById('id')){
+				getParams.id = document.getElementById('id').value;
+			}
+			$.getJSON('/admin/compta/rapprochement_bancaire', getParams, function (data){
+				if(data && data.elements){
+					console.log('getRapprochement: ' + JSON.stringify(data));
+					var i, field, d; 
+					var l = data.elements.length;
+					var fields = {id: 'id',date_du_jour:'date_du_jour', mois: 'mois', annee:'annee', id_compte: 'id_compte', 							    numero_pointage: 'numero_pointage', num_ecritures_validees: 'num_ecritures_validees'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						d['debit'] = data.elements[i]['debit'] ? parseFloat(data.elements[i]['debit']).toFixed(2) : '0.00';
+						d['credit'] = data.elements[i]['credit'] ? parseFloat(data.elements[i]['credit']).toFixed(2) : '0.00';
+						_this.idElements[d['id']] = i;
+						_this.elements.push(d);
+					}
+					_this.update();
+					console.log('elements : ', _this.elements);
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			});
+		}
+
+		this.convertDateToDb = function convertDateToDb(date){   
+            var year = date.substr(6, 4);
+		    var month = date.substr(3,2);
+		    var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			return convertedDate;
+        }
+
+        this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+        }
+
+		formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.formatDateField({
+					event: e
+				});
+			}
+		}
+
+        function loadDateTemplate(id) {
+
+			var $date;
+			if(id){
+				$date = $('#front_date_du_jour_' + id);
+				console.log('front date ... id: ' + $date.attr('id'))
+
+			}else{
+				$date = $('.front_date_du_jour');
+				console.log('$date id: ' + $date.attr('id'));
+
+			}
+			if($date) {
+				$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				$date.datepicker({
+			      dateFormat: 'dd/mm/yy',
+			    });
+			    $date.datepicker( "setDate", new Date());
+			}
+		}
+
+		
+        
+		this.toggleCheck = true;
+		this.toggleCheckAll = true;
+
+		toggleCheckAll(e) {
+			e.preventDefault();
+			var value = e.currentTarget.checked;
+			$(".pointage").each(function(){
+				$(this).prop("checked", value);
+			});
+			toggleCheck();
+		}
+
+		toggleCheck(e) {
+			e.preventDefault();
+			toggleCheck();
+		}
+
+		function toggleCheck() {
+			_this.soldeReelDebit = 0; 
+			_this.soldeReelCredit = 0; 
+			_this.soldeTheoriqueDebit = 0;
+			_this.soldeTheoriqueCredit = 0;
+			_this.pointageDebit = 0;
+			_this.pointageCredit = 0;
+
+			$('input[type=checkbox]:checked', $('#pointage')).each(function(index){
+				var id = $(this).attr('id-db');
+				var element = _this.ecrituresPointage[ _this.idEcrituresPointage[ id ]];
+				console.log('toggleCheck id: ' + id)
+				_this.soldeTheoriqueDebit += Math.abs(parseFloat(element.debit));
+				_this.soldeTheoriqueCredit += Math.abs(parseFloat(element.credit));
+				_this.soldeReelDebit += Math.abs(parseFloat(element.debit));
+				_this.soldeReelCredit += Math.abs(parseFloat(element.credit));
+				_this.pointageDebit -=  parseFloat(element.debit);
+				_this.pointageCredit -=  parseFloat(element.credit);
+			})
+		}
+		this.getSoldeTheorique = function getSoldeTheorique(type) {
+			var value;
+
+			if(type == 'debit'){
+				if(_this.mode_expert == false){
+					value =  (Math.abs(_this.soldeTheoriqueDebit + parseFloat(_this.getCurrentCompte().debit) + 									_this.soldeTheoriqueCredit)).toFixed(2);
+				}else{
+					value =  (Math.abs(_this.soldeTheoriqueDebit + parseFloat(_this.getCurrentCompte().credit) - 									_this.soldeTheoriqueCredit)).toFixed(2);
+				}
+			}
+			if(type == 'credit'){
+				if(_this.mode_expert == false){
+					value = (Math.abs(_this.soldeTheoriqueCredit + parseFloat(_this.getCurrentCompte().credit) +									_this.soldeTheoriqueDebit )).toFixed(2);
+				}else{
+					value = (Math.abs(_this.soldeTheoriqueCredit + parseFloat(_this.getCurrentCompte().debit) -									_this.soldeTheoriqueDebit )).toFixed(2);
+				}
+			}
+
+			return value;
+		}
+
+		// this.getSoldeReel = function getSoldeReel(type) {
+		// 	var value;
+
+		// 	if(type == 'debit'){
+		// 		if(_this.mode_expert == false){
+		// 			value =  (Math.abs(_this.soldeReelDebit + _this.soldeReelCredit + parseFloat(_this.getCurrentCompte().debit) )).toFixed(2);
+		// 		}else{
+		// 			value =  (Math.abs(_this.soldeReelDebit + _this.soldeReelCredit + parseFloat(_this.getCurrentCompte().credit) )).toFixed(2);
+		// 		}
+		// 	}
+		// 	if(type == 'credit'){
+		// 		if(_this.mode_expert == false){
+		// 			value = (Math.abs(_this.soldeReelDebit + _this.soldeReelCredit + parseFloat(_this.getCurrentCompte().credit) )).toFixed(2);
+		// 		}else{
+		// 			value = (Math.abs(_this.soldeReelDebit + _this.soldeReelCredit + parseFloat(_this.getCurrentCompte().debit) )).toFixed(2);
+		// 		}
+		// 	}
+
+		// 	return value;
+		// }
+		
+		setFixed(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			$(e.currentTarget).val(parseFloat($(e.currentTarget).val()).toFixed(2))
+		}	
+
+		getRapprochement();
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+			loadDateTemplate();
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			cancelDeleteElement = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelElement = null;
+			saveElement = null;
+			savePointage = null;
+			showContents = null;
+			makeVisible = null;
+			makeInvisible = null;
+			toggleVisible = null;
+			getElements = null;
+		});
+	</script>
+</rapprochement_bancaire>

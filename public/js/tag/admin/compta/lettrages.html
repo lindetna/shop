@@ -1,0 +1,2196 @@
+<lettrages>
+	<!--<div id="titre_page"><h1>Lettrages</h1></div>-->
+	<div class="lettrages with_submenu">
+		<div class="groupe_bloc">
+			<div>
+				<div class="cell_block center block_couleur_info color1">
+					<span class="italic">Total Débit</span>
+					<br>
+					<span class="montant">{ total_debit }<span class="euro-sign">€</span></span>
+				</div>
+				<div class="cell_block center block_couleur_info color2">
+					<span class="italic">Total Crédit</span>
+					<br>
+					<span class="montant">{ total_credit }<span class="euro-sign">€</span></span>
+				</div>
+			</div>
+			<div>
+				<div class="cell_block center block_couleur_info color1">
+					<span class="italic">Solde Débit</span>
+					<br>
+					<span class="montant">{ solde_debit }<span class="euro-sign">€</span></span>
+				</div>
+				<div class="cell_block center block_couleur_info color2">
+					<span class="italic">Solde Crédit</span>
+					<br>
+					<span class="montant">{ solde_credit }<span class="euro-sign">€</span></span>
+				</div>
+			</div>
+			<div>
+	            <div class="cell_block button_export export_pdf"></div>
+	            <div class="cell_block button_imprimer export_pdf"></div>
+			</div>
+		</div>
+		<div class="header">
+			<header class="closed" onclick="{ showContents }">Filtres</header>
+			<div class="slide-up hidden filtre">
+				<div class="inline_block">
+					  		<div class="filtre_journaux_comptes">
+						  		<label class="s-large" for="filtre_journal">Journaux</label>
+						  		<select name="filtre_journal" id="filtre_journal" class="" onchange={ filterChange }>
+						  			<option value=""></option>
+						  			<option each="{ this.journaux }" value="{ id }">{ libelle }</option>
+						  		</select>
+						  		<label class="s-large" for="filtre_compte">Comptes</label>
+						  		<select name="filtre_compte" id="filtre_compte" class="" onchange={ filterChange }>
+						  			<option value=""></option>
+						  			<option each="{ this.comptes }" value="{ id }">{ reference } { libelle }</option>
+						  		</select>
+						  	</div>
+						  	<div class="filtre_budget_analyt">
+						  		<label class="s-large" for="filtre_budget">Budget</label>
+						  		<select name="filtre_budget" id="filtre_budget" class="" onchange={ filterChange }>
+						  			<option value=""></option>
+						  			<option each="{ this.budgets }" value="{ id }">{ libelle }</option>
+						  		</select>
+						  		<label class="s-large" for="filtre_analytique">Analytique</label>
+						  		<select name="filtre_analytique" id="filtre_analytique" class="" onchange={ filterChange }>
+						  			<option value=""></option>
+						  			<option each="{ this.analytiques }" value="{ id }">{ libelle }</option>
+						  		</select>
+						  	</div>
+						  	<div class="filtre_fournisseur_salarie">
+						  		<label class="s-large" for="filtre_fournisseur">Fournisseur</label>
+						  		<select name="filtre_fournisseur" id="filtre_fournisseur" class="" onchange={ filterChange }>
+						  			<option value=""></option>
+						  			<option each="{ this.fournisseurs }" value="{ id }">{ libelle }</option>
+						  		</select>
+						  		<label class="s-large" for="filtre_salarie">{ IS_CE ? 'Salarié' : 'Adhérent' }</label>
+						  		<div class="filtre_salarie">
+							  		<select name="filtre_salarie" id="filtre_salarie" class="" onchange={ filterChange }>
+							  		</select>
+							  	</div>
+						  	</div>
+						  	<div class="filtre_libelle">
+						  		<label class="s-large" for="filtre_libelle">Libelle</label>
+						  		<input type="text" id="filtre_libelle" onchange={ filterChange }>
+						  	</div>
+					  	</div>
+					  	<div class="c40 inline_block filtres_checkbox">
+					  		<div class="c49 inline_block">
+					  			<input type="checkbox" id="ec_valides" onchange={ filterChange }><label for="ec_valides">Ecritures Validées</label>
+					  		</div>
+					  		<div class="c49 inline_block">
+					  			<input type="checkbox" id="ec_lettrees" onchange={ filterChange }><label for="ec_lettrees">Ecritures Lettrées</label>
+					  		</div>
+					  		<div class="c49 inline_block">
+					  			<input type="checkbox" id="ec_non_valides" onchange={ filterChange } checked><label for="ec_non_valides">Ecritures Non Validées</label>
+					  		</div>
+					  		<div class="c49 inline_block">
+					  			<input type="checkbox" id="ec_non_lettrees" onchange={ filterChange }><label for="ec_non_lettrees">Ecritures Non Lettrées</label>
+					  		</div>
+					  		<div class="c40 inline_block">
+					  			<input type="checkbox" id="ec_du_jour" onchange={ filterChange }><label for="ec_du_jour">Ecritures du Jour</label>
+					  		</div>
+					  		<div class="c55 inline_block">
+					  			<label>Date</label><input type="text" id="filtre_date_debut" onchange={ filterChange }><input type="text" id="filtre_date_fin" onchange={ filterChange }>
+					  		</div>
+					  		<div class="c49 inline_block">
+					  			<label for="filtre_operation">N° Opération</label><input type="text" id="filtre_operation" onchange={ filterChange }>
+					  		</div>
+					  		<div class="c49 inline_block">
+					  			<label for="filtre_piece">N° Pièce</label><input type="text" id="filtre_piece" onchange={ filterChange }>
+					  		</div>
+						</div>
+			</div>
+		</div>
+		<div class="header">
+			<header class="opened" onclick="{ showContents }">Liste des écritures</header>
+			<div class="slide-up">
+				<div class="lettrage_content">
+					<div class="corps_lettrage">
+						<div class="entete_lettrage">
+							<div class="cell_1"></div>
+							<div class="cell_2">
+								<p class="">Journal</p>
+								<p class="">Date</p>
+							</div>
+							<div class="cell_3">
+								<p class="">N° Opération</p>
+								<p class="">N° Pièce</p>
+							</div>
+							<div class="ecriture">
+								<div class="cell_4">
+									<p class="">Compte</p>
+									<p class="">Libelle</p>
+								</div>
+								<div class="cell_10">
+									<p>Tiers - Analytique</p>
+								</div>
+								<div class="cell_6">
+									<p class="center">Débit</p>
+								</div>
+								<div class="cell_7">
+									<p class="center">Crédit</p>
+								</div>
+							</div>
+							<div class="cell_9">
+								<p class="">Lettrage</p>
+							</div>
+						</div>
+						<div each={ elements } id="{ num_operation }" class="ecriture_operation" time={ console.log('id : ' + id + ' ' + (Date.now() - actualTime)) && (Date.now() - actualTime) }>
+							<div each={ pieces } id="piece_{ num_piece }" class="piece">
+								<div class="show_infos">
+									<div class="cell_1">
+									</div>
+									<div class="cell_2">
+										<p class="title">{ this.journaux[ this.idJournaux[ id_journal ]].libelle }</p>
+										<p class="title">{ date_enregistrement }</p>
+									</div>
+									<div class="cell_3">
+										<p class="title operation">{ this.prefixe_num_op ? this.prefixe_num_op + "-" : '' }{ num_operation }</p>
+										<p class="title piece">{ this.prefixe_num_pieces ? this.prefixe_num_pieces + "-" : '' }{ num_piece }</p>
+									</div>
+									<div each={ ecritures } if={ id != -1 } id="ecriture_{ id }" db_id="{ id }"  action="update_ecriture" class="ecriture">
+										<div class="table c100">
+											<div class="cell_4">
+												<p class="compte_libelle pointer" if={ this.comptes[ this.idComptes[id_compte] ].reference[0] === "4" } title="{ this.comptes[ this.idComptes[id_compte] ].libelle }">{ this.comptes[ this.idComptes[id_compte] ].reference }</p>
+											</div> 
+											<div class="cell_10">
+												<p class="compte_libelle" if={ this.comptes[ this.idComptes[id_compte] ].reference[0] === "4" }>{ this.analytiques[ this.idAnalytiques[ id_analytique ]].libelle }
+												</p>
+												<p class="compte_libelle" if={ this.comptes[ this.idComptes[id_compte] ].reference.substring(0, 3) === "401" }>{ this.fournisseurs[ this.idFournisseurs[ id_fournisseur ]].libelle }
+												</p>
+												<p class="compte_libelle" if={ this.comptes[ this.idComptes[id_compte] ].reference.substring(0, 3) === "411" }>{ this.salaries[ this.idSalaries[ id_salarie ]].prenom + " " + this.salaries[ this.idSalaries[ id_salarie ]].nom }
+												</p>
+											</div> 
+											<div class="cell_6">
+												<p class="center">{ parseFloat(debit).toFixed(2) }</p>
+											</div>
+											<div class="cell_7">
+												<p class="center">{ parseFloat(credit).toFixed(2) }</p>
+											</div>
+										</div>
+										<div class="table c100">
+											<div class="cell_11">
+												{libelle}
+											</div>
+										</div>
+										<div class="cell_9 db_lettrages" id="lettrage_{ id }_edit">
+											<input type="text" name="lettrage_{id}" id="lettrage_{id}" class="lettrage readonly" value="{lettrage}" if={ lettrage } readonly>
+											<input if={ !lettrage} type="text" name="lettrage_{id}" id="lettrage_{id}" class="lettrage" value="{lettrage}" onchange={saveLettrage}>
+										</div>
+									</div>
+								</div>
+							</div><!-- /pieces -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="cancel_save_submit">
+			<button name="save_submit_{ num_operation }" class="button enregistrer" onclick={ loadGet }>Enregistrer</button>
+		</div>
+	</div>
+	<script>
+		var _this = this;
+		this.app = opts;
+		var bool = "false";
+		/*debugtime-this.debugTime = Date.now();
+		this.actualTime = Date.now()
+		console.log('debug.time:', this.debugTime);-debugTime*/
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		this.nbComptes = 2;
+		this.loaded = false;
+
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+
+		function loadDateTemplate() {
+			var $date = $('#front_date_enregistrement');
+			if($date) {
+				$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				$date.datepicker({
+			      showOn: "button",
+			      buttonImage: "/img/activites_menu.png",
+			      buttonImageOnly: true,
+			      buttonText: "Select date",
+			      dateFormat: 'dd/mm/yy'
+			    });
+			}
+		}
+
+		function formatName(item) {
+		    console.log('function name: ' + arguments.callee.caller.name);
+		    return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+		};
+
+		function loadSelectize (selector) {
+			var $select = $(selector).selectize({
+				maxItems: 1,
+				valueField: 'id',
+				labelField: 'name',
+				searchField: ['prenom', 'nom', 'numero_salarie'],
+				sortField: [
+					{field: 'prenom', direction: 'asc'},
+					{field: 'nom', direction: 'asc'}
+				],
+				options: _this.salaries ? _this.salaries : null,
+				persist: false,
+				openOnFocus: false,
+				closeAfterSelect: true,
+			    onType: function (str) {
+				    if (str === "") {
+				        this.close();
+				    }
+				},
+				render: {
+					item: function(item, escape) {
+						var name = formatName(item);
+						return '<div>' +
+							(name ? '<span class="name">' + escape(name) + '</span>' : '') +
+							(item.numero_salarie ? '<span class="email">' + escape(item.numero_salarie) + '</span>' : '') +
+						'</div>';
+					},
+					option: function(item, escape) {
+						var name = formatName(item);
+						var label = name || item.numero_salarie;
+						var caption = name ? item.numero_salarie : null;
+						return '<div>' +
+							'<span class="label">' + escape(label) + '</span>' +
+							(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+						'</div>';
+					}
+				},
+			});
+			var selectize = $select[0].selectize;
+
+			var hackToClose = false;
+			selectize.on('item_remove', function(value, $item) {
+			    hackToClose = true;
+			});
+			selectize.on('dropdown_open', function($dropdown) {
+			    if ( hackToClose )
+			        selectize.close();
+
+			    hackToClose = false;
+			});
+        }
+
+         _this.app.loadScript('/js/admin/selectize.min.js','selectize_js',
+         	function () {
+         		_this.numToLoad--;
+         		if(_this.numToLoad <= 0) {
+		        	loadSelectize('#filtre_salarie');
+		    	}
+		    }
+		);
+
+		this.total_debit = null;
+		this.total_credit = null;
+		this.solde_debit = null;
+		this.solde_credit = null; 
+
+		this.thingsToLoad = [ 'getSalarie', 'selectize'  ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		function getSalaries(){
+			var getParams = {};
+
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+			console.log('elements before: ' + JSON.stringify(_this.elements));
+			$.getJSON('/admin/salaries/salaries', getParams, function (data){
+				/*debugtime-console.log('getSalarie AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idSalaries[d['id']] = i;
+						_this.salaries.push(d);
+					}
+					_this.update();
+
+					_this.loaded = true;
+
+					_this.numToLoad--;
+
+					if(_this.numToLoad <= 0) {
+		        		loadSelectize("#filtre_salarie");
+		    		}
+
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}
+		//getSalaries();
+
+		this.filtres = [
+			{ 
+				nom_db: 'id_journal',
+				id: 'filtre_journal',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			
+			{ 
+				nom_db: 'id_compte',
+				id: 'filtre_compte',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_analytique',
+				id: 'filtre_analytique',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_fournisseur',
+				id: 'filtre_fournisseur',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_salarie',
+				id: 'filtre_salarie',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'num_operation',
+				id: 'filtre_operation',
+				value: false,
+				ignore: true,
+				type: "text",
+			},
+			{ 
+				nom_db: 'num_piece',
+				id: 'filtre_piece',
+				value: false,
+				ignore: true,
+				type: "text",				
+			},
+			{ 
+				nom_db: 'date_enregistrement',
+				id: 'filtre_date_debut',
+				date: "date_debut",
+				value: false,
+				ignore: true,
+				type: "text",				
+			},
+			{ 
+				nom_db: 'date_enregistrement',
+				id: 'filtre_date_fin',
+				date: "date_fin",
+				value: false,
+				ignore: true,
+				type: "text",				
+			},
+			{ 
+				nom_db: 'status',
+				id: 'ec_valides',
+				value: 'active',
+				ignore: true,
+				type: "checkbox",				
+			},
+			{ 
+				nom_db: 'status',
+				id: 'ec_non_valides',
+				value: 'standby',
+				ignore: false,
+				type: "checkbox",	
+			},
+			{ 
+				nom_db: 'lettrage',
+				id: 'ec_lettrees',
+				value: null,
+				ignore: true,
+				type: "checkbox",	
+			},
+			{ 
+				nom_db: 'nonlettrage',
+				id: 'ec_non_lettrees',
+				value: null,
+				ignore: true,
+				type: "checkbox",	
+			},
+			{ 
+				nom_db: 'date_enregistrement',
+				id: 'ec_du_jour',
+				value: false,
+				date: "date_debut",
+				ignore: true,
+				type: "checkbox",	
+			},
+			{ 
+				nom_db: 'libelle',
+				id: 'filtre_libelle',
+				value: false,
+				ignore: true,
+				type: "text",	
+			},
+			{ 
+				nom_db: 'id_budget',
+				id: 'filtre_budget',
+				type: 'select',
+				value: false,
+				ignore: true,
+			},
+		];
+
+		this.idFiltres = { filtre_journal: 0, filtre_compte: 1, filtre_analytique: 2, filtre_fournisseur: 3, filtre_salarie: 4, filtre_operation: 5, filtre_piece: 6, filtre_date_debut: 7, filtre_date_fin: 8, ec_valides: 9, ec_non_valides: 10, ec_lettrees: 11, ec_non_lettrees: 12, ec_du_jour: 13, filtre_libelle: 14, filtre_budget: 15 };
+
+		filterChange (e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var $current = $(e.currentTarget);
+			var currentVal = $current.val();
+			var id = $current.attr('id');
+			var filtre = _this.filtres[_this.idFiltres[id]];
+
+			if(filtre.type == "select" || filtre.type == 'text') {
+				if(currentVal != '') {
+					filtre.ignore = false;
+					filtre.value = currentVal;
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'checkbox') {
+				if($current.is(':checked') == true) {
+					if(filtre.id == "ec_du_jour") {
+						var now = new Date();
+						var year = now.getFullYear();
+						var month = now.getMonth() + 1;
+						var day = now.getDate();
+						filtre.date_debut = year + "-" + month + "-" + day;
+					}
+					filtre.ignore = false;
+				} else {
+					filtre.ignore = true;
+				}
+			} else {
+			}
+			var objet_non_lettre = _this.filtres[_this.idFiltres['ec_non_lettrees']];
+			var objet_lettre = _this.filtres[_this.idFiltres['ec_lettrees']];
+			var objet_valide = _this.filtres[_this.idFiltres['ec_valides']];
+			var objet_non_valide = _this.filtres[_this.idFiltres['ec_non_valides']];
+
+			if(objet_non_lettre.ignore == false && objet_lettre.ignore == false) {
+				objet_non_lettre.ignore = true;
+				objet_lettre.ignore = true;
+			}
+			if(objet_valide.ignore == false && objet_non_valide.ignore == false) {
+				objet_valide.ignore = true;
+				objet_non_valide.ignore = true;
+			}
+			var filtre_data = [];
+			for(var index in _this.filtres) {
+				if(_this.filtres[index].ignore == false) {
+					filtre_data.push(_this.filtres[index]);
+				}
+			}
+			getEcritures();
+		}
+
+
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					//_this.numToLoad--;
+
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			//_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			getParams.visible = 'visible';
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				/*debugtime-console.log('getComptes AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					var invisible_nb = 0;
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] === 'visible') {
+							d = new Object();
+
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idComptes[d['id']] = i - invisible_nb;
+							_this.comptes.push(d);
+						} else {
+							invisible_nb += 1;
+						}
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		//getComptes();
+
+		this.fournisseurs = [];
+		this.idFournisseurs = {};
+
+		function getFournisseurs() {
+			var getParameters = { type_element: 'fournisseur' };
+			var type = 'fournisseur';
+			$.getJSON( '/admin/compta/fournisseurs', getParameters, function(data){
+				console.log('data ::::: ' + JSON.stringify(data))
+				if(data && data.elements){
+					_this.fournisseurs = [];
+					_this.idFournisseurs = {};
+
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = { id: 'id', libelle: 'libelle' };
+				
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(type){
+							d['type'] = type;
+						}
+						_this.idFournisseurs[d['id']] = i;
+						_this.fournisseurs.push(d);
+					}		  
+					_this.update();
+					console.log('elements: ' + JSON.stringify(_this.fournisseurs))
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		getFournisseurs();
+
+		this.journaux = [];
+		this.idJournaux = {};
+
+		function getJournaux(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/journaux', getParams, function(data){
+				/*debugtime-console.log('getJournaux AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte', _type: 'type', nature: 'nature'};
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] === 'visible') { 
+							d = new Object();
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idJournaux[d['id']] = i;
+							_this.journaux.push(d);
+						}
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		//getJournaux();
+
+		this.budgets = [];
+		this.idBudgets = {};
+
+		function getBudgets(){
+			var getParams = { type_element: 'budget', visible: 'visible'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/budgets', getParams, function(data){
+				/*debugtime-console.log('getBudgets AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', nature: 'nature', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', sum_depense: 'sum_depense', sum_recette: 'sum_recette', analytique: 'analytique'};
+					for(i=0; i<l; i++){
+						//if(data.elements[i]['visible'] === 'visible') { 
+							d = new Object();
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idBudgets[d['id']] = i;
+							_this.budgets.push(d);
+						//}
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		// getBudgets();
+
+		this.analytiques = [];
+		this.idAnalytiques = {};
+		this.ecritures = [];
+		this.idEcritures = {};
+		this.add_debit_total = (0).toFixed(2);
+		this.add_credit_total = (0).toFixed(2);
+
+		changeDebitCredit(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if($(e.currentTarget).hasClass('debit')) {
+				if(e.item.id == 1) {
+					if(_this.nbAddComptes.length == 2) {
+						$('#credit_2').val(parseFloat($(e.currentTarget).val()).toFixed(2));
+						$('#debit_2').val((0).toFixed(2));
+					}
+				} else if(e.item.id == 2) {
+					if(_this.nbAddComptes.length == 2) {
+						$('#credit_1').val(parseFloat($(e.currentTarget).val()).toFixed(2));
+						$('#debit_1').val((0).toFixed(2));
+					}
+				}
+				$(e.currentTarget).val(parseFloat($(e.currentTarget).val()).toFixed(2));
+				$('#credit_' + e.item.id).val((0).toFixed(2));
+			} else if($(e.currentTarget).hasClass('credit')) {
+				if(e.item.id == 1) {
+					if(_this.nbAddComptes.length == 2) {
+						$('#debit_2').val(parseFloat($(e.currentTarget).val()).toFixed(2));
+						$('#credit_2').val((0).toFixed(2));
+					}
+				} else if(e.item.id == 2) {
+					if(_this.nbAddComptes.length == 2) {
+						$('#debit_1').val(parseFloat($(e.currentTarget).val()).toFixed(2));
+						$('#credit_1').val((0).toFixed(2));
+					}
+				}
+				$(e.currentTarget).val(parseFloat($(e.currentTarget).val()).toFixed(2));
+				$('#debit_' + e.item.id).val((0).toFixed(2));
+			} 
+
+			var debit = 0;
+			var credit = 0;
+
+			$('input.debit', '.add_ecriture').each(function(){
+				if(Number.isInteger(parseFloat($(this).val())))
+					debit += parseFloat($(this).val());
+			})
+
+			$('input.credit', '.add_ecriture').each(function(){
+				if(Number.isInteger(parseFloat($(this).val())))
+					credit += parseFloat($(this).val());
+			})
+
+			_this.add_debit_total = debit.toFixed(2);
+			_this.add_credit_total = credit.toFixed(2);
+			_this.update();
+		}
+
+		changeDebitCredit_e (e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			changeDebitCredit_edit('change', e);
+		}
+
+		function changeDebitCredit_edit (type, e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			console.log('item:', e.item);
+			if(type == 'change') {
+				if($(e.currentTarget).hasClass('debit')) {
+					$(e.currentTarget).val(parseFloat($(e.currentTarget).val()).toFixed(2));
+					$('.credit input', '.ecriture[db_id=' + e.item.ecriture.id + ']').val((0).toFixed(2));
+				} else if($(e.currentTarget).hasClass('credit')) {
+					$(e.currentTarget).val(parseFloat($(e.currentTarget).val()).toFixed(2));
+					$('.debit input', '.ecriture[db_id=' + e.item.ecriture.id + ']').val((0).toFixed(2));
+				}
+				var parent = $('.edit_block_ecritures .ecriture[db_id=' + e.item.ecriture.id + ']')[0];
+				parent = $(parent.parentNode)[0];
+				var num_piece = e.item.ecriture.num_piece;
+			} else if (type == 'save') {
+				var parent = $('.edit_block_ecritures .ecriture[db_id=' + e.item.ecritures[0].id + ']')[0];
+				parent = $(parent.parentNode)[0];
+				var num_piece = e.item.ecritures[0].num_piece; 
+			}
+			var debit = 0;
+			var credit = 0;
+
+			$('.ecriture', parent).not('.hidden').each(function(){
+				if(Number.isInteger(parseFloat($('input.debit', this).val())))
+					debit += parseFloat($('input.debit', this).val());
+				if(Number.isInteger(parseFloat($('input.credit', this).val())))
+					credit += parseFloat($('input.credit', this).val());
+			})
+
+			var parent_container = $(parent.parentNode)[0];
+			for(index in _this.elements) {
+				// TODO: remove this loop
+				if(_this.elements[index].pieces[0].num_piece == num_piece) {
+					var piece = _this.elements[index].pieces[0];
+					piece.edit_credit_total = credit.toFixed(2);
+					piece.edit_debit_total = debit.toFixed(2);
+				}
+			}
+			_this.update();
+			/*$('.info_montant.debit .montant', parent_container).text(debit.toFixed(2));
+			$('.info_montant.credit .montant', parent_container).text(credit.toFixed(2));
+			var ecart = Math.abs(debit - credit).toFixed(2);
+			$('.info_montant.ecart .montant', parent_container).text(ecart);*/
+		}
+
+		 cloneLibelle(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var libelleMain = e.currentTarget.value;
+            $('.libelle', '#add_piece').each(function(index, value){
+                this.value = libelleMain;
+            });
+		}
+
+		function getAnalytiques(){
+			var getParams = { type_element: 'analytique', visible: 'visible'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/budgets', getParams, function(data){
+				/*debugtime-console.log('getAnalytiques AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+				
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idAnalytiques[d['id']] = i;
+						_this.analytiques.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		//getAnalytiques();
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+
+			}
+		});
+
+	  	_this.app.on('unmount-lettrages', function(){
+			_this.app.off('unmount-lettrages');
+			_this.unmount();
+		});
+
+		this.elements = [];
+		this.idElements = {};
+
+		this.nbAddComptes = [
+			{id: 1},
+			{id: 2},
+		];
+
+		this.fournisseurs = [
+			{ id: 1, libelle: 'rrrrr'},
+			{ id: 2, libelle: 'dddd'},
+			{ id: 3, libelle: 'zzzzz'},
+			{ id: 4, libelle: 'qqqqq'},
+		];
+		this.idFournisseurs = {
+			1: 0,
+			2: 1,
+			3: 2,
+			4: 3,
+		};
+
+		this.salaries = [];
+		this.idSalaries = {};
+
+		editElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				console.log('1');
+				_this.E_M.editElement({event: e, prefixId: 'piece_', tag: _this, hideClass: 'hidden'});
+							
+				$('#front_date_enregistrement_' +  e.item.id).datepicker({
+			      showOn: "button",
+			      buttonImage: "/img/activites_menu.png",
+			      buttonImageOnly: true,
+			      buttonText: "Select date",
+			      dateFormat: 'dd/mm/yy'
+			    });
+			}
+			console.log("show all : ", JSON.stringify(_this.elements));
+		}
+
+		addElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.addElement({event: e, prefixId: 'piece_'});
+			}
+		}
+
+		validDeleteElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'piece_'});
+			}
+		}
+
+		cancelDeleteElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'piece_'});
+			}
+		}
+
+		deleteElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.deleteElement({
+					event: e, 
+					tag: _this, 
+					url: '/admin/compta/ecritures',
+					elements: _this.elements[ _this.idElements[ e.item.num_operation ] ].pieces,
+					idElements: _this.elements[ _this.idElements[ e.item.num_operation ] ].idPieces,
+					end: function(p){
+						var tag = p.tag;
+						var item = p.item;
+						var element = tag.elements[ tag.idElements[ item.num_operation ] ];
+						if( element.pieces.length <= 0 ){
+							tag.elements.splice( tag.idElements[ item.num_operation ], 1);
+							tag.idElements[ item.num_operation ] = null;
+							tag.app.setByIds(tag.elements, tag.idElements);
+						}
+					},
+				});
+				_this.update();
+			}
+		}
+
+		deleteElements(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+
+			}
+		}
+
+		add_deleteCompte(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			deleteCompte('add', e);
+		}
+
+		update_deleteCompte(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			deleteCompte('update', e);
+		}
+
+		formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.formatDateField({
+					event: e
+				});
+			}
+			// recupère l'id de l'élément sur lequel on a cliqué
+
+			// var currentTarget = e.currentTarget;
+			// var date = currentTarget.value;
+			// var length = date.length;
+			// var id = currentTarget.id;
+
+			// // input hidden pour qu'on lui envoie la bonne value
+			// var field_for_date = currentTarget.getAttribute('field-for-date');
+			// var fieldDate = document.getElementById(field_for_date);
+			
+			// var date_for_db = '';
+			
+			// date_for_db = _this.convertDateToDb(date);
+
+			// if(length == 10){
+			// 	fieldDate.value = date_for_db;
+			// } else {
+			// 	fieldDate.value = '';
+			// }
+
+        }
+
+        this.convertDateToDb = function convertDateToDb(date){   
+            var year = date.substr(6, 4);
+		    var month = date.substr(3,2);
+		    var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			return convertedDate;
+        }
+
+        this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+        }
+        
+		function deleteCompte(action, e){
+			var item = e.item;
+			if(action == 'add') {
+			    // index on the collection
+			    var index = _this.nbAddComptes.indexOf(item);
+
+			    // remove from collection
+			    _this.nbAddComptes.splice(index, 1);
+
+			    var debit = 0;
+				var credit = 0;
+
+				_this.update();
+
+				$('input.debit', '.add_ecriture').each(function(){
+					if(Number.isInteger(parseFloat($(this).val())))
+						debit += parseFloat($(this).val());
+				})
+
+				$('input.credit', '.add_ecriture').each(function(){
+					if(Number.isInteger(parseFloat($(this).val())))
+						credit += parseFloat($(this).val());
+				})
+
+				_this.add_debit_total = debit.toFixed(2);
+				_this.add_credit_total = credit.toFixed(2);
+			} else if (action == 'update') {
+				// TODO: remove this loop
+				var block_ecriture = $('#ecriture_' + $(e.currentTarget).attr('parentId') + '_' + $(e.currentTarget).attr('delete_id') + '_edit');
+				if(block_ecriture.attr('action') === 'add_ecriture') {
+					_this.elements[_this.idElements[$(e.currentTarget).attr('parentId')]].pieces[0].ecritures.splice(e.item.index, 1);
+				} else if(block_ecriture.attr('action') === 'update_ecriture') {
+					$(block_ecriture).addClass('hidden').attr('action', 'delete_ecriture');
+				}
+			}
+			_this.update();
+		}
+
+		cancelElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(!e.item){
+				$('.block_info_montant').show();
+				if($('.liste-ecritures-title').hasClass('closed')) {
+					$('.liste-ecritures-title').removeClass('closed').addClass('opened');
+					$('.slide-up', '.liste-ecritures').slideToggle('fast');
+				}
+				var a = $('.add_ecriture.block-slider header');
+				var b = [];
+				b.target = a[0];
+				_this.E_M.showContents(b);
+				_this.add_debit_total = (0).toFixed(2);
+				_this.add_credit_total = (0).toFixed(2);
+				_this.update();
+				var fields= ['libelle', 'id_journal', 'date_enregistrement', ];
+				var l = fields.length;
+				for(i=0; i<l; i++){
+					field = fields[i];
+					$('.' + field, '#add_piece' ).val( '' );
+				}
+				$('#journalCheckBox, #dateCheckBox, #libelleCheckBox').removeAttr('checked');
+
+				$('input, select', '#add_piece').removeClass('required');
+			}
+			if(_this.E_M && e.item){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'id_journal', 'id_compte', 'date_enregistrement', 'debit', 'credit'],
+					prefixId: 'piece_',
+					tag: _this,
+					hideClass: 'hidden',
+				});
+				var item = e.item;
+				var copyItem = jQuery.extend(true, {}, e.item);
+				var ecritures = item.ecritures;
+				
+				for(var i = 0, l = ecritures.length; i < l; i++){
+					if(ecritures[i].id != -1) {
+						$('#debit_' + item.id + '_' + ecritures[i].id,'#piece_' + item.id + '_edit').val(parseFloat(ecritures[i].debit).toFixed(2));
+						$('#credit_' + item.id + '_' + ecritures[i].id,'#piece_' + item.id + '_edit').val(parseFloat(ecritures[i].credit).toFixed(2));
+						$('#libelle_' + item.id + '_' + ecritures[i].id,'#piece_' + item.id + '_edit').val(ecritures[i].libelle);
+						$('#id_compte_' + item.id + '_' + ecritures[i].id + ' option','#piece_' + item.id + '_edit').removeAttr('selected');
+						$('#id_compte_' + item.id + '_' + ecritures[i].id + ' option[value=' + ecritures[i].id_compte + ']', '#piece_' + item.id + '_edit').prop('selected', 'selected');
+					}
+				}
+				/*$('.info_montant.debit .montant', '#piece_' + item.id + '_edit').text((item.edit_debit_total).toFixed(2));
+				$('.info_montant.credit .montant', '#piece_' + item.id + '_edit').text((item.edit_credit_total).toFixed(2));
+				var ecart = Math.abs(item.edit_credit_total - item.edit_debit_total).toFixed(2);
+				$('.info_montant.ecart .montant', '#piece_' + item.id + '_edit').text(ecart);*/
+				$('input, select', '#piece_' + item.id + '_edit').removeClass('required');
+				$('.edit_block_ecritures .ecriture', '#piece_' + item.id + '_edit').removeClass('hidden').attr('action', 'update_ecriture');
+
+				$('#date_enregistrement_' + item.id, '#piece_' + item.id + '_edit').val(_this.convertDateToDb(e.item.date_enregistrement));
+				for(var i = ecritures.length - 1; i >= 0; i--) {
+					if(ecritures[i].action === 'add_ecriture' && ecritures[i].id == '-1') {
+						ecritures.splice(i, 1);
+					}
+				}
+				_this.update();
+			}
+		}
+
+		setCompteRattachement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			$('#id_compte_2').val(_this.journaux[_this.idJournaux[$(e.currentTarget).val()]].id_compte);
+			if(_this.journaux[_this.idJournaux[$(e.currentTarget).val()]].type == "tresorerie") {
+				if(_this.journaux[_this.idJournaux[$(e.currentTarget).val()]].id_compte !== undefined)
+					$('#id_compte_2').attr("disabled", "disabled");
+			} else {
+				$('#id_compte_2').removeAttr("disabled");
+			}
+		}
+
+		saveElementAndNew(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.add_debit_total - _this.add_credit_total == 0) {
+				saveElement(e, true);
+			}
+		}
+
+
+		save(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if( !e.item ) {
+				if(_this.add_debit_total - _this.add_credit_total == 0) {
+					saveElement(e, false);
+				}
+			} else {
+				console.log('eelse');
+				changeDebitCredit_edit('save', e);
+				if(e.item.edit_debit_total - e.item.edit_credit_total == 0) {
+					saveElement(e, false);
+				}
+			}
+		}
+
+		function checkRequiredValue(element, missingParameters, selector) {
+			if(element === '') {
+				$(selector).addClass('required');
+				return(true);
+			} else {
+				$(selector).removeClass('required');
+				if(missingParameters === false) {
+					return(false);
+				} else {
+					return(true);
+				}
+			}
+		}
+
+		function saveElement(e, resave){
+			var params = { hideClass: 'hidden', }
+			var isEdit = false;
+
+			var field, fieldById, suffixOperationId = '', data = {};
+			var numOperation, numPiece, numElement, numParentElement;
+			var newOperation, newPiece, newEcriture;
+			var $ecritures, ecritures, idEcritures;
+			/*var fieldChilds = ['libelle', 'id_compte', 'debit', 'credit', 'id_fournisseur', 'id_salarie', 'id_analytique'];
+			var ecrituresFields = ['libelle', 'id_compte', 'debit', 'credit', 'id_fournisseur', 'id_salarie', 'id_analytique'];*/
+			var action, id_exercice, libelle;
+			var tag = _this;
+			var elements = _this.elements;
+			var idElements = _this.idElements;
+			var parentElement, element;
+			var orderInOperation;
+			var ecrituresByOrderInPiece = {};
+			var missingParameters = false;
+			if( e.item ){
+				var item = e.item;
+				//var copyItem = jQuery.extend(true, {}, e.item);
+				isEdit = true;
+				numOperation = item.num_operation;
+				numPiece = item.num_piece;
+				parentElement = elements[ idElements[ numOperation ] ];
+				numElement = parentElement['idPieces'][ numPiece ];
+				element = parentElement['pieces'][ numElement ];
+				ecritures = element.ecritures;
+				idEcritures = element.idEcritures;
+
+				$ecritures = $('.ecritures_ids_' + numOperation + '_' + numPiece, $('#' + numOperation));
+				action = 'update_operation';
+				suffixOperationId = '_' + numOperation;
+				orderInOperation = item.order_in_operation;
+				/*var id_salarie = document.getElementById('id_salarie' + suffixOperationId).value;
+				var id_fournisseur = document.getElementById('id_fournisseur' + suffixOperationId).value;*/
+			}else{
+				numParentElement = elements.length;
+				// we create only one element
+				numElement = 0;
+				elements.push(new Object());
+				parentElement = elements[numParentElement];
+				parentElement.pieces = [];
+				parentElement.idPieces = {};
+				parentElement.pieces[ numElement ] = {};
+				element = parentElement.pieces[0];
+
+				element.ecritures = [];
+				element.idEcritures = {};
+
+				ecritures = element.ecritures;
+				idEcritures = element.idEcritures;
+
+				/***************************************************
+				numOperation = _this.app.makeId(idElements);
+				element.num_operation = numOperation;
+				element.id = numOperation;
+
+				idElements[ numOperation ] = numElement;
+				***************************************************/
+
+				$ecritures = $('.ecritures_ids', $('#add_piece'));
+				action = 'add_operation';
+				id_exercice = $('#id_exercice').val();//tag.id_exercice.value;
+				element.id_exercice = id_exercice;
+				orderInOperation = 0;
+			}
+			data.action = action;
+			var id_journal = document.getElementById('id_journal' + suffixOperationId).value;
+			var date_enregistrement = document.getElementById('date_enregistrement' + suffixOperationId).value;
+			missingParameters = checkRequiredValue(id_journal, missingParameters, '#id_journal' + suffixOperationId);
+			missingParameters = checkRequiredValue(date_enregistrement, missingParameters, '#date_enregistrement' + suffixOperationId);
+			element.action = action;
+			element.id_journal = id_journal;
+			/*element.id_salarie = id_salarie;
+			element.id_fournisseur = id_fournisseur;*/
+			element.date_enregistrement = _this.convertDateToView(date_enregistrement);
+			element.order_in_operation = orderInOperation;
+
+			data.ecritures = [];
+			$ecritures.each(function (index){
+				// if isEdit => id from DB
+				// if ! isEdit || action == add_operation  => id generated from app
+				var id;
+				var i = data.ecritures.length;
+				var action = $(this).attr('action');
+				data.ecritures.push(new Object());
+				var dataEcriture = data.ecritures[i];
+				var suffixEcritureId
+				var ecriture;
+
+				/* 
+					TODO: 
+						new ecriture if isEdit is true, have no db_id attribute ...
+				*/
+				if( isEdit ){
+					id = $(this).attr('db_id');
+					suffixEcritureId = suffixOperationId + '_' + (id || '');
+
+					if( action === 'add_ecriture' ){
+						ecritures.push(new Object);
+						ecriture = ecritures[ ecritures.length - 1 ];
+					}else{
+						ecriture = ecritures[ idEcritures[id] ];
+					}
+				}else{
+					ecritures.push(new Object);
+					ecriture = ecritures[ ecritures.length - 1 ];
+/*********************************
+					id = _this.app.makeId( idEcritures );
+					ecriture.id = id;
+					idEcritures[ id ] = ecritures.length - 1;
+*************************************/
+					suffixEcritureId = '_' + (i + 1);
+				}
+
+				/*if( ! ecriture.analytiques ){
+					ecriture.analytiques = [];
+					ecriture.idAnalytiques = {};
+				}*/
+
+				var id_compte = document.getElementById('id_compte' + suffixEcritureId).value;
+				missingParameters = checkRequiredValue(id_compte, missingParameters, '#id_compte' + suffixEcritureId);
+				var debit = document.getElementById('debit' + suffixEcritureId).value;
+				missingParameters = checkRequiredValue(debit, missingParameters, '#debit' + suffixEcritureId);
+				debit = parseFloat(debit).toFixed(2);
+				var credit = document.getElementById('credit' + suffixEcritureId).value;
+				missingParameters = checkRequiredValue(credit, missingParameters, '#credit' + suffixEcritureId);
+				credit = parseFloat(credit).toFixed(2);
+				var id_salarie = document.getElementById('id_salarie' + suffixEcritureId).value;
+				var id_fournisseur = document.getElementById('id_fournisseur' + suffixEcritureId).value;
+				// analytique 
+				var id_analytique = document.getElementById('id_analytique' + suffixEcritureId).value;
+
+				libelle = document.getElementById('libelle' + suffixEcritureId).value;
+
+				missingParameters = checkRequiredValue(libelle, missingParameters, '#libelle' + suffixEcritureId);
+				dataEcriture.action = action;
+				if(action == 'add_ecriture') {
+					dataEcriture.id_exercice = $('#id_exercice').val();
+				}
+				dataEcriture.num_operation = numOperation;
+
+				dataEcriture.num_piece = numPiece;
+
+				dataEcriture.id = id;
+				dataEcriture.order_in_operation = orderInOperation;
+				dataEcriture.order_in_piece = i;
+				dataEcriture.date_enregistrement = date_enregistrement;
+				dataEcriture.id_journal = id_journal;
+				dataEcriture.id_fournisseur = id_fournisseur;
+				dataEcriture.id_analytique = id_analytique;
+				dataEcriture.id_salarie = id_salarie;
+				dataEcriture.libelle = libelle;
+				dataEcriture.id_compte = id_compte;
+				dataEcriture.debit = debit;
+				dataEcriture.credit = credit;
+
+				if( id_exercice ){
+					dataEcriture.id_exercice = id_exercice;
+				}
+				ecriture.action = action;
+
+				if(action == 'add_ecriture') {
+					ecriture.id_exercice = $('#id_exercice').val();
+				}
+
+				ecriture.order_in_operation = orderInOperation;
+				ecriture.order_in_piece = i;
+
+				ecrituresByOrderInPiece[i] = ecriture;
+
+				ecriture.date_enregistrement = date_enregistrement;
+				ecriture.id_journal = id_journal;
+				ecriture.id_fournisseur = id_fournisseur;
+				ecriture.id_salarie = id_salarie;
+				ecriture.id_analytique = id_analytique;
+				ecriture.libelle = libelle;
+				ecriture.id_compte = id_compte;
+				ecriture.debit = debit;
+				ecriture.credit = credit;
+
+				//var suffixAnalytiqueId;
+				/*$('.analytique_ids'  + suffixEcritureId).each(function (index){
+					dataEcriture.analytiques.push(new Object());
+					var j = dataEcriture.analytiques.length;
+					var dataAnalytique = dataEcriture.analytiques[j];
+					var id_analytique = $(this).attr('id');
+					var suffixAnalytiqueId = suffixEcritureId + '_' + id_analytique;
+					dataAnalytique.id = document.getElementById('id_analytique' + suffixAnalytiqueId).value;
+					dataAnalytique.debit = document.getElementById('debit' + suffixAnalytiqueId).value;
+					dataAnalytique.credit = document.getElementById('credit' + suffixAnalytiqueId).value;
+					dataAnalytique.order_ecriture = j;
+				});*/
+				
+			});
+			if(missingParameters === false) {
+				$.ajax('/admin/compta/ecritures', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						if(!result.error) {
+							if( !isEdit ){
+								if(!resave) {
+									$('.block_info_montant').show();
+									if($('.liste-ecritures-title').hasClass('closed')) {
+										$('.liste-ecritures-title').removeClass('closed').addClass('opened');
+										$('.slide-up', '.liste-ecritures').slideToggle('fast');
+									}
+									var a = $('.add_ecriture.block-slider header');
+									var b = [];
+									b.target = a[0];
+									_this.E_M.showContents(b);
+									_this.add_debit_total = (0).toFixed(2);
+									_this.add_credit_total = (0).toFixed(2);
+									_this.update();
+
+									var fields= ['libelle', 'id_journal', 'date_enregistrement', ];
+									var l = fields.length;
+									for(i=0; i<l; i++){
+										field = fields[i];
+										$('.' + field, '#add_piece' ).val( '' );
+									}
+									$('#journalCheckBox, #dateCheckBox, #libelleCheckBox').removeAttr('checked');
+									$('input, select', '#add_piece').removeClass('required');
+
+									element.num_operation = result.ids[0].num_operation;
+									element.num_piece = result.ids[0].num_piece;
+								} else {
+									_this.add_debit_total = (0).toFixed(2);
+									_this.add_credit_total = (0).toFixed(2);
+									_this.nbAddComptes = [
+									{id: 1},
+									{id: 2},
+									];
+									_this.update();
+
+									var fields= [];
+									if(!$('#journalCheckBox').is(':checked'))
+										fields.push('id_journal');
+
+									if(!$('#dateCheckBox').is(':checked'))
+										fields.push('date_enregistrement');
+
+									if(!$('#libelleCheckBox').is(':checked')) {
+										fields.push('libelle');
+									} else {
+										$('.liste-add-ecriture .add_ecriture_infos .libelle').val($('#libelle').val());
+									}
+
+									var l = fields.length;
+									for(i=0; i<l; i++){
+										field = fields[i];
+										$('.' + field, '#add_piece' ).val( '' );
+									}
+									$('input, select', '#add_piece').removeClass('required');
+
+									element.num_operation = result.ids[0].num_operation;
+									element.num_piece = result.ids[0].num_piece;
+								}
+							} else {
+								for(var i = ecritures.length - 1; i >= 0; i--) {
+									if(ecritures[i].id == '-1' || ecritures[i].action == 'delete_ecriture') {
+										ecritures.splice(i, 1);
+									}
+								}
+							}
+
+							if(result.ids){
+								if( isEdit ){
+									var $container = $('#piece_' + numPiece);
+									var $editContainer = $('#piece_' + numPiece + '_edit');
+									$('.show_infos', $container).removeClass(params.hideClass);
+									$editContainer.addClass(params.hideClass);
+									$('.ecriture.hidden[action=delete_ecriture]', $editContainer).remove();
+								}else{
+								}
+								$('input, select', '#piece_' + numPiece + '_edit').removeClass('required');
+								var ids = result.ids;
+								var i, e, resultId, l = ids.length, currentNumPiece;
+								for(i=0; i<l; i++){
+									resultId = ids[i];
+									e = ecrituresByOrderInPiece[ resultId['order_in_piece'] ];
+									e.id = resultId['id'];
+									idEcritures[ resultId['id'] ] = parseFloat(resultId['order_in_piece']);
+
+									if(i === 0){
+										element.num_operation = resultId['num_operation'];
+										parentElement.num_operation = resultId['num_operation'];
+
+										//Demander à Olivier à quoi sert cette ligne
+										if(! isEdit) {
+											idElements[ resultId['num_operation'] ] = numParentElement;
+										}
+									}
+
+									if( currentNumPiece !== resultId['num_piece']){
+										element.num_piece = resultId['num_piece'];
+										element.id = resultId['num_piece'];
+										parentElement.id = resultId['num_operation']
+										parentElement.idPieces[ resultId['num_piece'] ] = numElement;
+									}
+								}
+				/************************
+				result: {
+				"messages":[
+				{"affectedRows":"1","insertId":"0"},
+				{"affectedRows":"1","insertId":"0"}
+				],
+				"ids":[
+				{"id":"1","num_operation":"1","order_in_operation":"0","order_in_piece":"0"},
+				{"id":"2","num_operation":"1","order_in_operation":"0","order_in_piece":"1"}
+				]
+				}
+				element.id = result.id;
+				elements.push(element);
+				numElement = elements.length - 1;
+				idElements[result.id] = numElement;
+				*************************/
+								tag.update();
+							}else if(result.messages){
+								// TODO:
+							}else if(result.error){
+								// TODO:
+							}
+							tag = null;
+						}
+					}
+				}).done(function(){
+					console.log('done!...');
+					tag = null;
+				}).fail(function(){
+					console.log('fail!...');
+					tag = null;
+				}); //, 'json'
+			} else if( missingParameters === true && ! isEdit ) {
+				_this.elements.pop();
+			} else if( missingParameters === true && isEdit ) {
+				ecritures = item.ecritures;
+				// suppression des clones des lignes ajoutées
+				if(ecritures[ecritures.length - 1].action === "add_ecriture")
+					ecritures.pop();
+				//tag.update();
+			}
+		}
+
+		selectExercice(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+
+		addCompte(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			addLineCompte('add', e);
+		}
+
+		addCompte_edit(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			addLineCompte('edit', e);
+		}
+
+		function addLineCompte(action, e) {
+			if(action == 'add') {
+				var newItem = { id: _this.nbAddComptes.length + 1};
+				_this.nbAddComptes.push(newItem);
+			} else if (action == 'edit') {
+				var tmp = {
+							id: -1,
+							debit: 0,
+							credit: 0,
+							action: 'add_ecriture',
+						};
+				console.log('this all : ', _this.idElements, 'this test : ', _this.idElements[14], 'this : ', _this.idElements[e.item.id], ' id : ', e.item.id);
+				_this.elements[_this.idElements[e.item.id]].pieces[0].ecritures.push(tmp);
+			}
+			_this.update();
+		}
+
+		showComplementaire(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			/*
+			 * 6 et 7 analytique
+			 * 401 fournisseurs
+			 * 411 client/salarie
+			 */
+			var value = $(e.currentTarget).val();
+			var reference = $('option[value=' + value + ']', e.currentTarget).attr('reference');
+			var idTarget = $(e.currentTarget).attr('id');
+			var selector = "#" + idTarget.replace(/compte/g, 'salarie');
+
+			var block_complementaire = $(e.currentTarget.parentNode.parentNode);
+			if (reference[0] == 6 || reference[0] == 7) {
+				$('.info_analytique', block_complementaire).removeClass('hidden');
+				$('.info_salarie', block_complementaire).addClass('hidden');
+				$('.info_fournisseur', block_complementaire).addClass('hidden');	
+			} else if (reference.substring(0, 3) == "411") {
+				$('.info_analytique', block_complementaire).addClass('hidden');
+				$('.info_salarie', block_complementaire).removeClass('hidden');
+				$('.info_fournisseur', block_complementaire).addClass('hidden');
+				loadSelectize(selector);
+			} else if (reference.substring(0, 3) == "401") {
+				$('.info_analytique', block_complementaire).addClass('hidden');
+				$('.info_salarie', block_complementaire).addClass('hidden');
+				$('.info_fournisseur', block_complementaire).removeClass('hidden');
+			} else {
+				$('.info_analytique', block_complementaire).addClass('hidden');
+				$('.info_salarie', block_complementaire).addClass('hidden');
+				$('.info_fournisseur', block_complementaire).addClass('hidden');
+			}
+		}
+
+
+		this.getCompteReference = function getCompteReference(num_piece) {
+			
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				if($(e.target).hasClass('closed') && $(e.target).hasClass('add-ecriture-title')) {
+					$('.block_info_montant').hide();
+					_this.nbAddComptes = [
+						{id: 1},
+						{id: 2},
+					];
+					_this.update();
+					if($('.liste-ecritures-title').hasClass('opened')) {
+						$('.liste-ecritures-title').removeClass('opened').addClass('closed');
+						$('.slide-up', $('.liste-ecritures')).slideToggle('fast');
+					}
+				} else if($(e.target).hasClass('opened') && $(e.target).hasClass('add-ecriture-title')){
+					$('.block_info_montant').show();
+					if($('.liste-ecritures-title').hasClass('closed')) {
+						$('.liste-ecritures-title').removeClass('closed').addClass('opened');
+						$('.slide-up', $('.liste-ecritures')).slideToggle('fast');
+					}
+				}
+				_this.E_M.showContents(e);
+			}
+		}
+
+		/*
+		 * getElements:
+		 * get lines from a remote DB, and tranform them as object,
+		 * if there childs or grandChilds elements, the final objects are hierarchicals
+		 * params: single objet with params inside it.
+		 *		required params:
+		 *			- fields: fields to catch in the remote json object
+		 *			- url: remote url where catch the json object containing data needed
+		 *		optional params:
+		 *			- tag: reference to the current tag object
+		 *			- getParams: params to send to the remote url
+		 *			- elements: Array containing the elements
+		 *			- idElements: object mapping shortcuts from ids elements in DB to numbers referencing elements in the Array elements
+		 *				(in that way you don't need to loop on each elements to know which one have the id that you are requesting ...)
+		 *			- childsName
+		 *			- grandChildsName
+		 *			- idChildsName
+		 *			- idGrandChildsName
+		 *			- fields
+		 *			- childsFields
+		 *			- grandChildsFields
+		 *			- fieldsForcedValues
+		 *			- childsForcedValues
+		 *			- grandChildsForcedValues
+		 *			- fieldAsId
+		 *			- childsFieldAsId
+		 *			- grandChildsFieldAsId
+		 *			- initGet
+		 *			- initData
+		 *			- each
+		 *			- end
+		 *			- error
+		 */
+		function getElements(params){
+			if( ! params || ! params.url || ! params.fields || ! params.tag ){
+				throw new Error('getElements: missing parameters!...');
+			}
+
+			var url = params.url;
+			var tag = params.tag || _this;
+			this.getParams = params.getParams || {};
+			if(params.initGet && typeof params.initGet === 'function'){
+				var initGet = params.initGet.bind(this);
+				initGet(tag);
+			}
+			$.getJSON(url, this.getParams, function (data){
+				/*debugtime-console.log('getEcritures AFTER : ', Date.now() - _this.debugTime, ' actual : ', Date.now() - _this.actualTime);
+				_this.debugTime = Date.now();-debugTime*/
+
+				console.log(data);
+				if(data && data.elements){
+					if(params.initData && typeof params.initData === 'function'){
+						var initData = params.initData.bind(this);
+						initData(tag);
+					}
+					var i, field, d, subElement; 
+					var l = data.elements.length;
+					var numElement = 0;
+					var elements = params.elements || tag.elements;
+					var idElements = params.idElements || tag.idElements;
+					var fields = params.fields;
+					var fieldsForcedValues = params.fieldsForcedValues || undefined;
+					var childsName = params.childsName || undefined;
+					var grandChildsName = params.grandChildsName || undefined;
+					var idChildsName = params.idChildsName || undefined;
+					var idGrandChildsName = params.idGrandChildsName || undefined;
+					var childsfields = params.childsfields || undefined;
+					var grandchildsfields = params.grandchildsfields || undefined;
+					var childsForcedValues = params.childsForcedValues || undefined;
+					var grandChildsForcedValues = params.grandChildsForcedValues || undefined;
+
+					var fieldAsId = params.fieldAsId || 'id';
+					var childsFieldAsId = params.childsFieldAsId || 'id';
+					var grandChildsFieldAsId = params.grandChildsFieldAsId || 'id';
+
+					var haveChilds = ( childsName && idChildsName ? true : false );
+					var haveGrandChilds = ( grandChildsName && idGrandChildsName ? true : false );
+
+					var isNewElement, numChild, currentElementId;
+					var isNewChild, numGrandChild, currentChildId;
+					var currentGrandChildId;
+
+					var childs, child, idChilds;
+					var grandChilds, grandChild, idGrandChilds;
+
+					for(i=0; i<l; i++){
+						if( currentElementId !== data.elements[i][ fieldAsId ]){
+							currentElementId = data.elements[i][ fieldAsId ];
+							isNewElement = true;
+						}else{
+							isNewElement = false;
+						}
+
+						if( haveChilds ){
+							if(currentChildId !== data.elements[i][ childsFieldAsId ] ){
+								currentChildId = data.elements[i][ childsFieldAsId ];
+								isNewChild = true;
+
+								if( isNewElement ){
+									numChild = 0;
+								}else{
+									numChild++;
+								}
+
+								if( haveGrandChilds ){
+									numGrandChild = 0;
+								}
+							}else{
+								isNewChild = false;
+								if( haveGrandChilds ){
+									numGrandChild++;
+								}
+							}
+
+							if( haveGrandChilds ){
+								currentGrandChildId = data.elements[i][ grandChildsFieldAsId ];
+							}
+						}
+
+						if( isNewElement ){
+							d = new Object();
+
+							// init id parent object
+							idElements[ currentElementId ] = numElement;
+							d['id'] = currentElementId;
+
+							d[ childsName ] = [];
+							d[ idChildsName ] = {};
+							childs = d[ childsName ];
+							idChilds = d[ idChildsName ];
+						}else{
+							// get parent object reference
+							d = elements[ idElements[ currentElementId ] ];
+						}
+
+						if( isNewChild ){
+							childs[ numChild ] = {};
+							idChilds[ currentChildId ] = numChild;
+
+							child = childs[ numChild ];
+
+							child['id'] = currentChildId;
+
+							if( haveGrandChilds ){
+								child[ grandChildsName ] = [];
+								child[ idGrandChildsName ] = {};
+								grandChilds = child[ grandChildsName ];
+								idGrandChilds = child[ idGrandChildsName ];
+							  }							
+						}
+
+						if( haveGrandChilds ){
+							grandChilds[ numGrandChild ] = {};
+							idGrandChilds[ currentGrandChildId ] = numGrandChild;
+							grandChild = grandChilds[ numGrandChild ];
+						}
+
+						if( isNewElement ){
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							d['display'] = true;
+							if( fieldsForcedValues ){
+								for(forcedField in fieldsForcedValues){
+									d[forcedField] = fieldsForcedValues[forcedField];
+								}							
+							}
+
+						}
+
+						if( childsfields && isNewChild ){
+							for( childsfield in childsfields ){
+								if(childsfield !== 'date_enregistrement')
+									child[ childsfields[ childsfield ] ] = data.elements[i][childsfield];
+								else
+									child[ childsfields[ childsfield ] ] = _this.convertDateToView(data.elements[i][childsfield]);
+							}
+							if( childsForcedValues ){
+								for(forcedField in childsForcedValues){
+									child[forcedField] = childsForcedValues[forcedField];
+								}
+							}
+						}
+
+						if( grandchildsfields  ){
+							for( grandchildfield in grandchildsfields ){
+								grandChild[ grandchildsfields[ grandchildfield ] ] = data.elements[i][grandchildfield];
+							}
+
+							if(_this.total_debit === null) {
+								_this.total_debit = 0;
+							}
+							_this.total_debit = parseFloat(_this.total_debit) + parseFloat(data.elements[i]['debit']);
+							_this.total_debit = parseFloat(_this.total_debit).toFixed(2);
+
+							if(_this.total_credit === null) {
+								_this.total_credit = 0;
+							}
+							_this.total_credit = parseFloat(_this.total_credit) + parseFloat(data.elements[i]['credit']);
+							_this.total_credit = parseFloat(_this.total_credit).toFixed(2);
+
+							if( grandChildsForcedValues ){
+								for(forcedField in grandChildsForcedValues){
+									grandChild[forcedField] = grandChildsForcedValues[forcedField];
+								}
+							}
+						}
+
+
+						if(params.each && typeof params.each === 'function'){
+							var each = params.each.bind(this);
+							each(tag);
+						}
+
+						if( ! haveChilds || isNewElement ){
+					/************************************************************
+							// if an element already exist, we should replace it
+							if( typeof idElements[d['id']] === 'undefined'){
+								idElements[d['id']] = i;
+								elements.push(d);
+							}else{
+								elements[ idElements[d['id']] ] = d;
+							}
+					*************************************************************/
+
+							elements.push(d);
+						}
+						if( isNewElement ){
+							numElement++;
+						}
+					}
+					/*debugtime-console.log('getEcritures AFTER2 for : ', Date.now() - _this.debugTime, ' actual : ', Date.now() -_this.actualTime);
+					_this.debugTime = Date.now();-debugTime*/
+
+					getSolde();					
+					/*debugtime-console.log('getEcritures AFTER3 getSolde : ', Date.now() - _this.debugTime, ' actual : ', Date.now() -_this.actualTime);
+					_this.debugTime = Date.now();-debugTime*/
+					if(params.end && typeof params.end === 'function'){
+						var end = params.end.bind(this);
+						end(tag);
+					}
+					/*debugtime-console.log('getEcritures AFTER4 update : ', Date.now() - _this.debugTime, ' actual : ', Date.now() -_this.actualTime);-debugTime*/
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(params.error && typeof params.error === 'function'){
+						var error = params.error.bind(this);
+						error(tag);
+					}
+				}
+				//_this.update();
+				if (url == '/admin/compta/lettrages') {
+					updateEcritures();
+				}
+				/*debugtime-console.log('getEcritures AFTER5 updateecritures : ', Date.now() - _this.debugTime, ' actual : ', Date.now() -_this.actualTime);-debugTime*/
+
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+				initGet = null;
+				end = null;
+			});
+		}
+
+		function getSolde() {
+			var solde = _this.total_debit - _this.total_credit;
+
+			if(solde >= 0) {
+				_this.solde_debit = solde.toFixed(2);
+				_this.solde_credit = "0.00";
+			} else {
+				_this.solde_credit = solde.toFixed(2);
+				_this.solde_debit = "0.00";
+			}
+		}
+
+		function updateEcritures() {
+			// set compte type ref
+			var reference = "";
+			for(index_e in _this.elements) {
+				var credit = debit = 0;
+				for(index_p in _this.elements[index_e].pieces) {
+					for(index in _this.elements[index_e].pieces[index_p].ecritures) {
+						debit += parseFloat(_this.elements[index_e].pieces[index_p].ecritures[index].debit);
+						credit += parseFloat(_this.elements[index_e].pieces[index_p].ecritures[index].credit);
+						for(index_c in _this.comptes) {
+							if(_this.elements[index_e].pieces[index_p].ecritures[index].id_compte == _this.comptes[index_c].id)
+								reference = _this.comptes[index_c].reference;
+						}
+						if(reference != "") {
+							if (reference[0] === '6' || reference[0] === '7') {
+								_this.elements[index_e].pieces[index_p].ecritures[index].type_compte = "analytique";
+							} else if (reference.substring(0, 3) === "411") {
+								_this.elements[index_e].pieces[index_p].ecritures[index].type_compte = "salarie";
+							} else if (reference.substring(0, 3) === "401") {
+								_this.elements[index_e].pieces[index_p].ecritures[index].type_compte = "fournisseur";
+							}
+						}
+					}
+					_this.elements[index_e].pieces[index_p].edit_debit_total = debit;
+					_this.elements[index_e].pieces[index_p].edit_credit_total = credit;
+				}
+			}
+			_this.update();
+		}
+
+		function getParametresComptes(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/parametres', getParams, function(data){
+				console.log('getPARAMETRES AFTER : ', Date.now() - _this.debugTime);
+
+				if(data && data.elements){
+					_this.parametresCompte = data.elements[0];
+					_this.prefixe_num_op = data.elements[0].prefixe_numero_operations;
+					_this.prefixe_num_pieces = data.elements[0].prefixe_numero_pieces;
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		//getParametresComptes();
+
+		function getEcritures() {
+			var filtre_data = [];
+			for(var index in _this.filtres) {
+				if(_this.filtres[index].ignore == false) {
+					filtre_data.push(_this.filtres[index]);
+				}
+			}
+			_this.elements = [];
+			_this.total_credit = 0;
+			_this.total_debit = 0;
+			_this.solde_debit = 0;
+			_this.solde_credit = 0;
+			getElements({
+				tag: _this,
+				url: '/admin/compta/lettrages', 
+				getParams: 	{ filtres: filtre_data },
+				elements: _this.elements,
+				idElements: _this.idElements,
+				fieldAsId: 'num_operation',
+				fields: { num_operation: 'num_operation',},
+				fieldsForcedValue: { action: 'update_operation', },
+				childsName: 'pieces',
+				idChildsName: 'idPieces',
+				childsFieldAsId: 'num_piece',
+				childsfields: {id_ce: 'id', num_piece: 'num_piece', num_operation: 'num_operation', id_entreprise: 'id_entreprise', order_in_operation: 'order_in_operation', id_journal: 'id_journal',  id_exercice: 'id_exercice', date_enregistrement: 'date_enregistrement', status: 'status', lettrage: 'lettrage'},
+				childsForcedValues: { action: 'update_ecriture', },
+				grandChildsName: 'ecritures',
+				idGrandChildsName: 'idEcritures',
+				grandchildsfields: {id_ce: 'id', libelle: 'libelle', id_compte: 'id_compte', order_in_piece: 'order_in_piece', debit: 'debit', credit: 'credit', type: 'type', id_analytique: 'id_analytique', id_salarie: 'id_salarie', id_fournisseur: 'id_fournisseur', num_piece: 'num_piece', num_operation: 'num_operation', lettrage: 'lettrage'},
+				grandChildsForcedValues: { action: 'update_ecriture', },
+
+				initGet: function(tag){
+					if( tag.selectedExercice ){
+						this.getParams.id_exercice = tag.selectedExercice;
+					}else if(document.getElementById('id_exercice')){
+						this.getParams.id_exercice = document.getElementById('id_exercice').value;
+					}
+				},
+
+				end: function(tag){
+					/*debugtime-console.log('getEcritures AFTER be4up : ', Date.now() - _this.debugTime, ' actual : ', Date.now() -_this.actualTime);-debugTime*/
+					tag.update();
+
+					/*debugtime-console.log('getEcritures AFTER4 aftup : ', Date.now() - _this.debugTime, ' actual : ', Date.now() -_this.actualTime);-debugTime*/
+					tag.loaded = true;
+					console.log('_this ecritures: ', JSON.stringify(_this.elements));
+				},
+			});
+		}
+
+		editEcriture(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var id = e.item.id;
+				console.log(id)
+				_this.E_M.editElement({ event: e, prefixId: 'lettrage_', hideClass: 'hidden' });
+			}
+		}
+
+		saveLettrage(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			console.log('ecritures', JSON.stringify(_this.elements))
+			var lettrage = $("#lettrage_" + e.item.id).val();
+			if(lettrage != "") {
+				data = { action: 'update', lettrage: lettrage, id: e.item.id},
+				console.log("fdffdsfsfs " + JSON.stringify(data)),
+				$.ajax('/admin/compta/lettrages', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						console.log("lettrages validées");
+						//getEcritures();
+					}
+				}).done(function(){
+					console.log('done!...');
+					tag = null;
+				}).fail(function(){
+					console.log('fail!...');
+					tag = null;
+				}); //, 'json'
+			}else {
+				console.log("modal error");
+			}
+		}
+
+		resetFiltre(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			for(var index in _this.filtres) {
+				_this.filtres[index].ignore = true;
+				if(_this.filtres[index].id == 'ec_non_valides') {
+					_this.filtres[index].ignore = false;
+				}
+			}
+			var filtre = $('fieldset.filtre');
+			$('input[type=text], select', filtre).val('');
+			$('input[type=checkbox]', filtre).prop('checked', false);
+			$('#ec_non_valides').prop('checked', true);
+
+			getEcritures();
+		}
+
+		function loadGet() {
+			/*debugtime-console.log('getSalarie : ', Date.now() - _this.actualTime);
+			_this.debugTime = Date.now();-debugTime*/
+			getSalaries();
+			/*debugtime-console.log('getComptes : ', Date.now() - _this.actualTime);
+			_this.debugTime = Date.now();-debugTime*/
+
+			getComptes();
+			/*debugtime-console.log('getJournaux : ', Date.now() - _this.actualTime);
+			_this.debugTime = Date.now();-debugTime*/
+
+			getJournaux();
+			/*debugtime-console.log('getBudgets : ', Date.now() - _this.actualTime);
+			_this.debugTime = Date.now();-debugTime*/
+
+			getBudgets();
+			/*debugtime-console.log('getAnalytiques : ', Date.now() - _this.actualTime);
+			_this.debugTime = Date.now();-debugTime*/
+
+			getAnalytiques();
+			/*debugtime-console.log('getParams : ', Date.now() - _this.actualTime);
+			_this.debugTime = Date.now();-debugTime*/
+
+			getParametresComptes();
+			/*debugtime-console.log('getEcritures : ', Date.now() - _this.actualTime);
+			_this.debugTime = Date.now();-debugTime*/
+
+			getEcritures();
+		}
+		loadGet();
+/****************************************
+_this.elements = [
+	{
+		num_operation: 1,
+		id: 1,
+		pieces: [
+			{ 
+				num_piece: 1,
+				id: 1,
+				id_journal: 2,
+				date_enregistrement: '2016-09-01',
+				id_entreprise: "0",
+				id_affilie: "1",
+				id_fournisseur: "1",
+				id_exercice: "1",
+				order_in_operation: 0,
+				
+				ecritures: [
+					{ 
+						id: 1,
+						id_compte: 2,
+						debit: 1,
+						credit: 0,
+						libelle: 'joli libelle',
+						order_in_piece: 0,
+						type: '',
+						action: 'update_ecriture',
+					},
+				],
+				idEcriture: {},
+			},
+		],
+		idPieces: {},
+	},
+];
+*****************************************/
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+			loadDateTemplate();
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			cancelDeleteElement = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelElement = null;
+			saveElement = null;
+			makeVisible = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+		});
+	</script>
+</lettrages>

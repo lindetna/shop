@@ -1,0 +1,521 @@
+<export>
+	<div if={ COMPTA_READ || PLA_READ } class="content with_submenu compta_export">
+		<span class="hidden" id="export_type" value="previsionnel"></span>
+		<!--<div id="exercice"><label>Exercice  </label><select class="id_exercice" id="id_exercice" name="id_exercice" onchange={ selectExercice }><option each={ exercices } selected={ id == selectedExercice } value="{ id }">{ nom }{ (is_default == 1) ? ' (par défaut)' : ''}</option></select></div>-->
+		<div class="export_previsionnel">
+			<div class="export_actions table c100">
+				<div class="row">
+					<div class="cell c50 left">
+						<button class="button btn_charges active" onclick={ loadCharges }>Charges</button>
+						<button class="button btn_produits" onclick={ loadProduits }>Produits</button>
+						<a class="button btn_export" href="/admin/compta/export_comptes?format=excel">Export Excel</a>
+						<!-- <button class="button btn_export">Export Excel</button> -->
+					</div>
+					<div class="cell c50 center">
+						<h1 onclick="{ toggleExport }" class="previsionnel">P.L.A PREVISIONNEL</h1>
+					</div>
+				</div>
+			</div>
+			<div if= { elements.length > 0 } class="export_total table c100">
+				<div class="row">
+					<div class="cell c50 right">
+						<span class="total_info">TOTAL CHARGES</span>
+					</div>
+					<div class="cell c12 center bleu_fonce">
+						<span if= { montant_previsionnel_total }>{ montant_previsionnel_total }</span>
+					</div>
+					<div class="cell c12 center bleu_clair">
+						<span if= { activites_total }>{ activites_total }</span>
+					</div>
+					<div class="cell c12 center vert_fonce">
+						<span if= { logistique_total }>{ logistique_total }</span>
+					</div>
+					<div class="cell c12 last center orange">
+						<span if= { pilotage_total }>{ pilotage_total }</span>
+					</div>
+				</div>
+			</div>
+			<div class="export_tableau" value="6" if= { elements.length > 0 }>
+				<div each={ elements } id="sousclasse_{ sc_id }" classe="sousclasse table c100">
+					<div class="row c100" onclick={ showComptes }>
+						<div class="cell c50 left">
+							<span>{ sc_reference } - { sousclasse }</span>
+						</div>
+						<div class="cell c12 center total_text">
+							<span>Montant Prévisionnel</span>
+						</div>
+						<div class="cell c12 center">
+							<span>Activités</span>
+						</div>
+						<div class="cell c12 center">
+							<span>Logistique</span>
+						</div>
+						<div class="cell c12 center last">
+							<span>Pilotage</span>
+						</div>
+					</div>
+					<div id="comptes_tableau_{ sc_id }" class="hidden comptes_tableau">
+						<div class="table c100" if= { comptes.length > 0 }>
+							<div each={ comptes } id="compte_{ co_id }" class="row">
+								<div class="cell c50 left">
+									<span>{ reference_co } { compte }</span>
+								</div>
+								<div class="cell c12 right { case_grise: (!montant_previsionnel)}">
+									<span if= { montant_previsionnel }>{ montant_previsionnel }</span> 
+								</div>
+								<div  class="cell c12 right { case_grise: (activites_prev_etat == 0)}">
+									<span if= { activites_prev_etat != 0 }>{ activites }</span>
+								</div>
+								<div class="cell c12 right { case_grise: (logistique_prev_etat == 0)}">
+									<span if= { logistique_prev_etat != 0 }>{ logistique }</span>
+								</div>
+								<div class="cell c12 right last  { case_grise: (pilotage_prev_etat == 0)}">
+									<span if= { pilotage_prev_etat != 0 }>{ pilotage }</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="table c100">
+						<div class="row total">
+							<div class="cell c50 right">
+								<span>TOTAL { sousclasse }</span>
+							</div>
+							<div class="cell c12 right { case_grise: (!montant_previsionnel)}">
+								<span if= { montant_previsionnel }>{ montant_previsionnel }</span>
+							</div>
+							<div class="cell c12 right { case_grise: (!activites)}">
+								<span if= { activites }>{ activites }</span>	
+							</div>
+							<div class="cell c12 right { case_grise: (!logistique)}">
+								<span if= { logistique }>{ logistique }</span>
+							</div>
+							<div class="cell c12 right last { case_grise: (!pilotage)}">
+								<span if= { pilotage }>{ pilotage }</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="export_total table c100" if= { elements.length > 0 }>
+				<div class="row">
+					<div class="cell c50 right">
+						<span class="total_info">TOTAL CHARGES</span>
+					</div>
+					<div class="cell c12 center bleu_fonce">
+						<span if= { montant_previsionnel_total }>{ montant_previsionnel_total }</span>
+					</div>
+					<div class="cell c12 center bleu_clair">
+						<span if= { activites_total }>{ activites_total }</span>
+					</div>
+					<div class="cell c12 center vert_fonce">
+						<span if= { logistique_total }>{ logistique_total }</span>
+					</div>
+					<div class="cell c12 last center 	orange">
+						<span if= { pilotage_total }>{ pilotage_total }</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="export_reel hidden">
+			<div class="export_actions table c100">
+				<div class="row">
+					<div class="cell c50 left">
+						<button class="button btn_charges active" onclick={ loadCharges }>Charges</button>
+						<button class="button btn_produits" onclick={ loadProduits }>Produits</button>
+						<a class="button btn_export" href="/admin/compta/export_comptes?format=excel">Export Excel</a>
+					</div>
+					<div class="cell c50 center">
+						<h1 onclick="{ toggleExport }" class="reel">P.L.A REEL N-1</h1>
+					</div>
+				</div>
+			</div>
+			<div if= { elements.length > 0 } class="export_total table c100">
+				<div class="row">
+					<div class="cell c49 right">
+						<span class="total_info">TOTAL CHARGES</span>
+					</div>
+					<div class="cell c10 center bleu_fonce">
+						<span if= { montant_previsionnel_total }>{ montant_previsionnel_total }</span>
+					</div>
+					<div class="cell c10 center violet">
+						<span if= { montant_reel_total }>{ montant_reel_total }</span>
+					</div>
+					<div class="cell c10 center bleu_clair">
+						<span if= { activites_reel_total }>{ activites_reel_total }</span>
+					</div>
+					<div class="cell c10 center vert_fonce">
+						<span if= { logistique_reel_total }>{ logistique_reel_total }</span>
+					</div>
+					<div class="cell c10 last center orange">
+						<span if= { pilotage_reel_total }>{ pilotage_reel_total }</span>
+					</div>
+				</div>
+			</div>
+			<div class="export_tableau" value="6" if= { elements.length > 0 }>
+				<div each={ elements } id="sousclasse_{ sc_id }" classe="table c100">
+					<div class="row c100" onclick={ showComptes }>
+						<div class="cell c49 left">
+							<span>{ sc_reference } - { sousclasse }</span>
+						</div>
+						<div class="cell c10 center total_text">
+							<span>Montant Prévisionnel</span>
+						</div>
+						<div class="cell c10 center">
+							<span>Montant Réel</span>
+						</div>
+						<div class="cell c10 center">
+							<span>Activités</span>
+						</div>
+						<div class="cell c10 center">
+							<span>Logistique</span>
+						</div>
+						<div class="cell c10 center last">
+							<span>Pilotage</span>
+						</div>
+					</div>
+					<div id="comptes_tableau_{ sc_id }" class="hidden comptes_tableau">
+						<div class="table c100">
+							<div each={ comptes } id="compte_{ co_id }" class="row">
+								<div class="cell c49 left">
+									<span>{ reference_co } { compte }</span>
+								</div>
+								<div class="cell c10 right { case_grise: (!montant_previsionnel)}">
+									<span if= { montant_previsionnel }>{ montant_previsionnel }</span> 
+								</div>
+								<div class="cell c10 right { case_grise: (!montant_reel)}">
+									<span if= { montant_reel }>{ montant_reel }</span>
+								</div>
+								<div  class="cell c10 right { case_grise: (activites_reel_etat == 0)}">
+									<span if= { activites_reel_etat != 0 }>{ activites_reel }</span>
+								</div>
+								<div class="cell c10 right { case_grise: (logistique_reel_etat == 0)}">
+									<span if= { logistique_reel_etat != 0 }>{ logistique_reel }</span>
+								</div>
+								<div class="cell c10 right last { case_grise: (pilotage_reel_etat == 0)}">
+									<span if= { pilotage_reel_etat != 0 }>{ pilotage_reel }</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="table c100">
+						<div class="row total">
+							<div class="cell c49 right">
+								<span>TOTAL { sousclasse }</span>
+							</div>
+							<div class="cell c10 right { case_grise: (!montant_previsionnel)}">
+								<span if= { montant_previsionnel }>{ montant_previsionnel }</span>
+							</div>
+							<div class="cell c10 right { case_grise: (!montant_reel)}">
+								<span if= { montant_reel }>{ montant_reel }</span>
+							</div>
+							<div class="cell c10 right { case_grise: (!activites_reel)}">
+								<span if= { activites_reel }>{ activites_reel }</span>	
+							</div>
+							<div class="cell c10 right { case_grise: (!logistique_reel)}">
+								<span if= { logistique_reel }>{ logistique_reel }</span>
+							</div>
+							<div class="cell c10 right last { case_grise: (!pilotage_reel)}">
+								<span if= { pilotage_reel }>{ pilotage_reel }</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="export_total table c100" if= { elements.length > 0 }>
+				<div class="row">
+					<div class="cell c49 right">
+						<span class="total_info">TOTAL CHARGES</span>
+					</div>
+					<div class="cell c10 center bleu_fonce">
+						<span if= { montant_previsionnel_total }>{ montant_previsionnel_total }</span>
+					</div>
+					<div class="cell c10 center violet">
+						<span if= { montant_reel_total }>{ montant_reel_total }</span>
+					</div>
+					<div class="cell c10 center bleu_clair">
+						<span if= { activites_reel_total }>{ activites_reel_total }</span>
+					</div>
+					<div class="cell c10 center vert_fonce">
+						<span if= { logistique_reel_total }>{ logistique_reel_total }</span>
+					</div>
+					<div class="cell c10 last center orange">
+						<span if= { pilotage_reel_total }>{ pilotage_reel_total }</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	  	var _this = this;
+		var app = opts;
+		_this.app = opts;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+	  	app.on('unmount-export', function(){
+			app.off('unmount-export');
+			_this.unmount();
+		});
+
+		this.update();
+
+		this.montant_previsionnel_total = 0.00;
+		this.activites_total = 0.00;
+		this.logistique_total = 0.00;
+		this.pilotage_total = 0.00;
+
+		this.elements = [];
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+
+		toggleExport(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if($("#export_type").attr("value") == "reel"){
+			 	$('.export_reel').fadeToggle("fast", function() {
+			 		$('.export_previsionnel').fadeToggle();
+			 		$("#export_type").attr("value", "previsionnel");
+			 	});
+			} else {
+			 	$('.export_previsionnel').fadeToggle("fast", function() {
+			 		$('.export_reel').fadeToggle();
+			 		$("#export_type").attr("value", "reel");
+			 	});
+			}
+		}
+
+		showComptes(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			var value = $('#export_type').attr("value");
+			var block = "";
+			if (value == "reel") {
+				block = ".export_reel";
+			} else {
+				block = ".export_previsionnel";
+			}
+			$('.comptes_tableau:not(#comptes_tableau_'+e.item["sc_id"]+')', block).hide();
+			$('#comptes_tableau_' + e.item["sc_id"], block).toggle();
+		}
+
+		function getCharges() {
+			$(".export_tableau").attr("value","6");
+			$('.total_info').text('TOTAL CHARGES');
+			getComptes("6");
+		}
+
+		function getProduits() {
+			$(".export_tableau").attr("value","7");
+			$('.total_info').text('TOTAL PRODUITS');
+			getComptes("7");
+		}
+
+		function getComptes(value){
+			value = value || '6';
+
+			_this.elements = [];
+			_this.activites_total = _this.montant_previsionnel_total = _this.pilotage_total = _this.logistique_total = 0;
+			_this.activites_reel_total = _this.montant_previsionnel_reel_total = _this.pilotage_reel_total = _this.logistique_reel_total = 0;
+			var getParams = {};
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			getParams.reference = value;
+			$.getJSON('/admin/compta/export_comptes', getParams, function (data){
+				console.log(JSON.stringify(data));
+				if(data && data.elements){
+					var i, field, d, c, b, montant_previsionnel, activites, logistique, pilotage, montant_previsionnel_total, activites_total, logistique_total, pilotage_total, montant_reel, activites_reel, logistique_reel, pilotage_reel, montant_reel_total, activites_reel_total, logistique_reel_total, pilotage_reel_total; 
+					var l = data.elements.length;
+					var fields_sc = {sc_id: 'sc_id', sc_libelle: 'sousclasse', sc_reference: 'sc_reference'};
+					var fields_co = {
+						co_id:'co_id', 
+						co_reference: 'reference_co', 
+						co_libelle: 'compte', 
+						logistique_reel_etat: 'logistique_reel_etat', 
+						logistique_prev: 'logistique_prev_etat', 
+						pilotage_reel_etat: 'pilotage_reel_etat', 
+						pilotage_prev: 'pilotage_prev_etat', 
+						activites_reel_etat: 'activites_reel_etat', 
+						activite_prev: 'activites_prev_etat', 
+						montant_previsionnel: ['debit_n_prev', 'credit_n_prev'], 
+						activites: ['depense_activite_prev', 'recette_activite_prev', 'activite_prev'], 
+						logistique: ['depense_logistique_prev', 'recette_logistique_prev', 'logistique_prev'], 
+						pilotage: ['depense_pilotage_prev', 'recette_pilotage_prev', 'pilotage_prev'], 
+						montant_reel: ['debit_n_1_reel', 'credit_n_1_reel'], 
+						activites_reel: ['depense_activite_reel', 'recette_activite_reel', 'activites_reel_etat'], 
+						logistique_reel: ['depense_logistique_reel', 'recette_logistique_reel', 'logistique_reel_etat'], 
+						pilotage_reel: ['depense_pilotage_reel', 'recette_pilotage_reel', 'pilotage_reel_etat'],
+					};
+					var reference_sc = "0";
+					logistique_total = montant_previsionnel_total = activites_total = pilotage_total = 0;
+					logistique_reel_total = montant_reel_total = activites_reel_total = pilotage_reel_total = 0;
+					for(i=0; i<l; i++){
+						// if reference sousclasse change on crée un nouvel objet d et on le remplit et on change remplace reference sousclasse par le nouveau et on crée un nouveau tableau c
+						if(reference_sc != data.elements[i]["sc_reference"]) 
+						{	
+							logistique = activites = montant_previsionnel = pilotage = 0;
+							logistique_reel = activites_reel = montant_reel = pilotage_reel = 0;
+							d = new Object();
+							d["comptes"] = new Object();
+							for(field in fields_sc){
+								d[fields_sc[field]] = data.elements[i][field];
+							}
+							reference_sc = data.elements[i]["sc_reference"];
+							c = [];
+						}
+
+						// on crée un nouvel objet b où on remplit le compte et on l'ajoute à C
+						b = new Object();
+
+						for (field in fields_co){
+							if(typeof fields_co[field] == 'string') {
+								b[fields_co[field]] = data.elements[i][field];
+							} else if(Array.isArray(fields_co[field])) {
+								var visibilite = data.elements[i][fields_co[field][2]];
+
+								if(data.elements[i][fields_co[field][0]] && data.elements[i][fields_co[field][1]])
+									b[field] = Math.abs(data.elements[i][fields_co[field][0]] - data.elements[i][fields_co[field][1]]).toFixed(2);
+								if(field == "montant_previsionnel" && b[field] != null) {
+									montant_previsionnel = getAddNumber(montant_previsionnel, b[field]);
+								}
+
+								if(visibilite == 1 || field == "montant_reel") {
+									if(field == "activites" && b[field] != null){
+										activites = getAddNumber(activites, b[field]);
+									} else if(field == "logistique" && b[field] != null) {
+										logistique = getAddNumber(logistique, b[field]);
+									} else if(field == "pilotage" && b[field] != null) {
+										pilotage = getAddNumber(pilotage, b[field]);
+									} else if(field =="activites_reel" && b[field] != null) {
+										activites_reel = getAddNumber(activites_reel, b[field]);
+									} else if(field == "montant_reel" && b[field] != null) { 
+										montant_reel = getAddNumber(montant_reel, b[field]);
+									} else if(field == "logistique_reel" && b[field] != null) {
+										logistique_reel = getAddNumber(logistique_reel, b[field]);
+									} else if(field == "pilotage_reel" && b[field] != null) {
+										pilotage_reel = getAddNumber(pilotage_reel, b[field]);
+									}
+								}
+							}
+						}
+
+						if (data.elements[i]["co_reference"]) {
+							c.push(b);
+						}
+
+						// si la reference sousclasse change et que c'est pas le 1er element on met dans l'objet d["comptes"] l'objet c avec tous les comptes et on remplit les montants totaux
+						if((i+1) == l || reference_sc != data.elements[i + 1]["sc_reference"]) {
+							d["comptes"] = c;
+
+							montant_previsionnel_total = getAddNumber(montant_previsionnel_total, montant_previsionnel);
+							_this.montant_previsionnel_total = montant_previsionnel_total;
+
+							activites_total = getAddNumber(activites_total, activites);
+							_this.activites_total = activites_total;
+
+							logistique_total = getAddNumber(logistique_total, logistique);
+							_this.logistique_total = logistique_total;
+
+							pilotage_total = getAddNumber(pilotage_total, pilotage);
+							_this.pilotage_total = pilotage_total;
+
+							montant_reel_total = getAddNumber(montant_reel_total, montant_reel);
+							_this.montant_reel_total = montant_reel_total;
+
+							activites_reel_total = getAddNumber(activites_reel_total, activites_reel);
+							_this.activites_reel_total = activites_reel_total;
+
+							logistique_reel_total = getAddNumber(logistique_reel_total, logistique_reel);
+							_this.logistique_reel_total = logistique_reel_total;
+							
+							pilotage_reel_total = getAddNumber(pilotage_reel_total, pilotage_reel);
+							_this.pilotage_reel_total = pilotage_reel_total;
+							d["montant_previsionnel"] = montant_previsionnel;
+							d["activites"] = activites;
+							d["logistique"] = logistique;
+							d["pilotage"] = pilotage;
+							d["montant_reel"] = montant_reel;
+							d["activites_reel"] = activites_reel;
+							d["logistique_reel"] = logistique_reel;
+							d["pilotage_reel"] = pilotage_reel;
+							_this.elements.push(d);
+						}
+					}
+
+					_this.update();
+					_this.loaded = true;
+					console.log(JSON.stringify(_this.elements));
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}
+		getComptes();
+
+		function getAddNumber(a, b){
+			var d = parseFloat(a) + parseFloat(b);
+			d = d.toFixed(2);
+			return d;
+		}
+
+		loadCharges(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(!$('.btn_charges').hasClass("active")) {
+				$('.btn_charges').addClass("active");
+				$('.btn_produits').removeClass("active");
+			}
+			if($('.export_tableau').attr("value") != "6")
+				getCharges();
+		}
+
+		loadProduits(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(!$('.btn_produits').hasClass("active")) {
+				$('.btn_charges').removeClass("active");
+				$('.btn_produits').addClass("active");
+			}
+			if($('.export_tableau').attr("value") != "7")
+				getProduits();
+		}
+	</script>
+
+</export>

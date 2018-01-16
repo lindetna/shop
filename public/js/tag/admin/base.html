@@ -1,0 +1,158 @@
+<menutop>
+	<header id="top_header" if={ currentModule && currentModule != 'root' && currentModule != 'site_client'}>
+		<div id="navtop">
+			<ul>
+				<li><select class="id_exercice" id="id_exercice" name="id_exercice" onchange={ selectExercice }><option each={ exercices } selected={ id == selectedExercice } value="{ id }">{ nom }{ (is_default == 1) ? ' (par défaut)' : ''}</option></select></li>
+				<li each={ menutop } class="{ ( currentModule == module) ? 'selected' : 'no_selected' }" if={ perm_read > 0 }><a href="{ url }"><!-- <img src="{ img }.png" alt="{ text }"> --><span>{ text }</span></a></li> 
+			<!--<li each={ menutop } class="{ ( currentModule == module) ? 'selected' : 'no_selected' }"><a if={ perm_read > 0 } href="{ url }"><img src="{ img }{ ( currentModule == module) ? '_selected' : '' }.png" alt="{ text }">{ text }</a></li> 
+			<label>Exercice  </label><select class="id_exercice" id="id_exercice" name="id_exercice" onchange={ selectExercice }><option each={ exercices } selected={ id == selectedExercice } value="{ id }">{ nom }{ (is_default == 1) ? ' (par défaut)' : ''}</option></select>-->
+			<!--<li each={ menutop } class="{ selected : ( module === currentModule ) }"><a if={ perm_read > 0 } href="{ url }">{ text }</a><span if={ perm_read <= 0 }>{ text }</span></li> -->
+			</ul>
+			<div class="user_profil ">
+				<div class="img_profil"><p>{ PRENOM } { NOM }</p>
+				</div>
+			</div>
+		</div>
+		<div class="line"></div>
+	</header>
+	<script>
+	var app = opts;
+	this.app = app;
+	var _this = this;
+	var permissions = app.session.permissions;
+	var IS_CE = this.IS_CE = permissions.IS_CE || false;
+	var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	var HOME_READ = this.HOME_READ = permissions.HOME_READ || false;
+	var PERMANENCE_READ = this.PERMANENCE_READ = permissions.PERMANENCE_READ || false;
+	var SALARIES_READ = this.SALARIES_READ = permissions.SALARIES_READ || false;
+	var ACTIVITES_READ = this.ACTIVITES_READ = permissions.ACTIVITES_READ || false;
+	var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+	var SITE_READ = this.SITE_READ = permissions.SITE_READ || false;
+	var utilisateur = app.session.utilisateur;
+	var NOM = this.NOM = utilisateur.nom;
+	var PRENOM = this.PRENOM = utilisateur.prenom;
+	var ENTREPRISE = this.ENTREPRISE = utilisateur.entreprise;
+
+	this.currentModule = 'root';
+	this.currentModuleName = 'Tableau de bord';
+
+	this.thingsToLoad = [ 'exercices', 'E_M' ];
+	this.numToLoad = this.thingsToLoad.length;
+
+	console.log('test : page: ', app.currentPage, 'module: ', app.currentModule);
+
+	if( ! _this.app.session){
+		_this.app.session = {};
+	}
+	if( ! _this.app.session.exercices || ! _this.app.session.exercices.elements || ! _this.app.session.exercices.length  || _this.app.session.exercices.length <= 0){
+		_this.app.session.exercices = {};
+		_this.app.session.exercices.elements = [];
+		_this.app.session.exercices.idElements = {};
+		_this.exercices = _this.app.session.exercices.elements;
+		_this.idExercices = _this.app.session.exercices.idElements;
+		$.getJSON( '/admin/compta/exercices', {}, function(data){
+			if(data && data.elements){
+				var l = data.elements.length;
+				var i, d; 
+				var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', status: 'status',};
+				for(i=0; i<l; i++){
+					d = new Object();
+
+					for(field in fields){
+						d[fields[field]] = data.elements[i][field];
+					}
+					if(d['is_default'] == 1){
+						_this.app.session.exercices.selected = d['id'];
+					}
+					_this.selectedExercice = _this.app.session.exercices.selected;
+					_this.idExercices[d['id']] = i;
+					_this.exercices.push(d);
+				}
+				_this.numToLoad--;
+
+				_this.update();
+			}else{
+
+					// TODO: no data elements, get and manage error!...
+			}
+		});
+	}else{
+		_this.exercices = _this.app.session.exercices.elements;
+console.log('!!! getExercices exercices : ' +  JSON.stringify(_this.app.session));
+		_this.numToLoad--;
+	}
+
+	var typeUtilisateur = 'Adhérents';
+
+	this.menutop = [
+		{ url: '#/', img: '/img/accueil_menu', text: 'Accueil', module: 'root', perm_read: HOME_READ},
+		{ url: '#/inscription', img: '/img/inscriptions_menu', text: (IS_CE ? 'Permanence' : 'Inscription'), module: 'inscription', perm_read: PERMANENCE_READ},
+		{ url: '#/salaries', img: '/img/salarie', text: ( IS_CE ? 'Salariés' : 'Adhérents' ), module: 'salaries', perm_read: SALARIES_READ},
+		{ url: '#/activites', img: '/img/activites_menu', text: 'Activités', module: 'activites', perm_read: ACTIVITES_READ},
+		{ url: '#/compta', img: '/img/activites/compta', text: 'Comptabilité', module: 'compta', perm_read: COMPTA_READ},
+		{ url: '#/site', img: '/img/parametrages' , text: 'Administration', module: 'site', perm_read: SITE_READ}
+	];
+
+	this.idMenutop = {
+		root: 0,
+		inscription: 1,
+		salaries: 2,
+		activites: 3,
+		compta: 4,
+		site: 5,
+	};
+	console.log('!!! dans base.html ');
+	app.on('mount-module', function(module){
+		if(module){
+			console.log('base.html menutop event => mount-module: module:' + module);
+			_this.currentModule = module;
+			_this.currentModuleName = _this.menutop[ _this.idMenutop[ module ] ].text;
+console.log('!!! exercices : ' +  JSON.stringify(_this.app.session));
+			_this.update();
+		}
+	});
+
+	selectExercice(e){
+		app.loadPage({ module:  _this.currentModule, page: app.currentPage, forceReload: true,});
+		// app.loadPage({ module: , page: })
+	}
+
+	app.on('get-exercice', function() {
+		_this.app.session.exercices = {};
+		_this.app.session.exercices.elements = [];
+		_this.app.session.exercices.idElements = {};
+		_this.exercices = _this.app.session.exercices.elements;
+		_this.idExercices = _this.app.session.exercices.idElements;
+		$.getJSON( '/admin/compta/exercices', {}, function(data){
+			console.log('data:', data);
+			if(data && data.elements){
+				var l = data.elements.length;
+				var i, d; 
+				var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', status: 'status',};
+				for(i=0; i<l; i++){
+					d = new Object();
+
+					for(field in fields){
+						d[fields[field]] = data.elements[i][field];
+					}
+					if(d['is_default'] == 1){
+						_this.app.session.exercices.selected = d['id'];
+					}
+					_this.selectedExercice = _this.app.session.exercices.selected;
+					_this.idExercices[d['id']] = i;
+					_this.exercices.push(d);
+				}
+				_this.update();
+			}else{
+					// TODO: no data elements, get and manage error!...
+			}
+		});
+
+	})
+	</script>
+</menutop>
+
+
+
+
+

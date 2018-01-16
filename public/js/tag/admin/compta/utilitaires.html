@@ -1,0 +1,71 @@
+<utilitaires>
+	<div if={ (COMPTA_READ > 0) || (PLA_READ > 0)} class="content with_submenu compta_utilitaires">
+		<div class="block_utilitaires table">
+			<div class="cell association">
+				<h4>Logo { IS_CE ? "du Comité d'Entreprise" : "de l'Association" }</h4>
+				<div class="border">
+					<img src="/img/logo_uti_test.png" width="200">
+				</div>
+			</div>
+			<div class="cell responsable">
+				<h4>Personne responsable du dossier</h4>
+				<div class="border cell_block">
+					<div class="cell_block label">
+						<label for="nom">Nom :</label>
+					</div>
+					<div class="cell_block input">
+						<input type="text" placeholder="Nom" name="nom" id="nom">
+					</div>
+					<div class="cell_block label">
+						<label for="telephone">Téléphone :</label>
+					</div>
+					<div class="cell_block input">
+						<input type="text" placeholder="Téléphone" name="telephone" id="telephone">
+					</div>
+					<div class="cell_block label">
+						<label for="courriel">Courriel :</label>
+					</div>
+					<div class="cell_block input">
+						<input type="text" placeholder="Courriel" name="courriel" id="courriel">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="block_utilitaires_gestion">
+			<h4>Gestion des Exercices Comptables</h4>
+			<div class="border">
+				<label for="exercice">Exercice</label>
+				<select name="exercice" id="exercice">
+					<option value="2016" selected="selected">2016</option>
+					<option value="2017">2017</option>
+					<option value="2018">2018</option>
+					<option value="2019">2019</option>
+					<option value="2020">2020</option>
+					<option value="2021">2021</option>
+					<option value="2022">2022</option>
+					<option value="2023">2023</option>
+					<option value="2024">2024</option>
+				</select>
+				<button>Par Défaut</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var app = opts;
+		this.app = opts;
+	  	var _this = this;
+		var permissions = app.session.permissions;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+	  	app.on('unmount-utilitaires', function(){
+			app.off('unmount-utilitaires');
+			_this.unmount();
+		});
+
+		this.update();
+
+	</script>
+
+</utilitaires>

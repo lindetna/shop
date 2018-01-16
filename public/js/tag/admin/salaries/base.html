@@ -1,0 +1,62 @@
+<submenu>
+	<ul if={ submenu } class="submenu">
+		<li each={ submenu } class="{ selected : ( menuField === currentPage )} icon"><!-- new menutop <div class="triangle"><a href="{ url }" class="{ class }"></a></div>--><span><a href="{url}">{ text }</a></span></li>
+	</ul>
+	<script>
+	var app = opts;
+	var _this = this;
+	var permissions = app.session.permissions;
+	var IS_CE = this.IS_CE = permissions.IS_CE || false;
+	var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	this.currentModule;
+	this.currentPage;
+	this.currentSelected;
+	console.log(this.currentSelected);
+
+	this.submenu = [
+/**************************
+	{ url: '#/salaries', text: 'Tableau de bord', menuField: 'root', class: 'tableau icon_submenu'},
+***************************/
+	{ url: '#/salaries/salaries', text: ( IS_CE ? 'Salariés' : 'Adhérents' ), menuField: 'salaries', class: 'salaries icon_submenu'},
+	{ url: '#/salaries/ayant_droit', text: 'Ayants-droit', menuField: 'ayant_droit', class: 'ayant_droit icon_submenu'},
+	{ url: '#/salaries/validation_documents', text: 'Validation Documents', menuField: 'validation_documents', class: 'validation_documents icon_submenu'},
+	//{ url: '#/salaries/inscription', text: 'Inscription rapide', menuField: 'inscription_r', class: 'inscription_rapide icon_submenu'},
+	{ url: '#/salaries/liste_inscriptions', text: 'Liste des Inscriptions', menuField: 'liste_inscriptions', class: 'l_inscriptions icon_submenu'},
+	{ url: '#/salaries/impressions', text: 'Impressions', menuField: 'impressions', class: 'impressions icon_submenu'},
+	{ url: '#/salaries/parametrages', text: 'Paramétrages', menuField: 'parametrages', class: 'parametrages icon_submenu'},
+	];
+
+	app.on('unmount-submenu', function(){
+		app.off('unmount-submenu');			
+		_this.unmount();
+	});
+
+	app.on('mount-module', function(module){
+		console.log('submenu event => mount-module: module:' + module);
+
+/* delete it when root page come back */
+if(module == 'root'){
+	module = 'salaries';
+}
+/**************************************/
+
+		_this.currentModule = module;
+	});
+
+	app.on('mount-page', function(module, page){
+		console.log('submenu event => mount-page: module: ' + module + ', page: ' + page);
+
+/* delete it when root page come back */
+if(page == 'root'){
+	page = 'salaries';
+}
+/**************************************/
+
+		_this.currentModule = module;
+		_this.currentPage = page;
+		_this.update();
+	});
+
+	this.update();
+	</script>
+</submenu>

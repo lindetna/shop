@@ -1,0 +1,557 @@
+<integration>
+	<div class="actualite_site with_submenu">
+		<div id="add_actualites" class="edit edit_journal hidden">
+			<div class="celladd">
+				<input type="hidden" name="type_element" value="integration">
+				<input type="hidden" id="classe" name="classe" value="">
+			</div>
+			<div class="celladd">
+				<div>
+					<label for="titre" class="label_titre">Titre:</label>
+					<input name="titre" id="titre" class="titre">
+					<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="visible" id="visible" class="integration_visible" title="Visible" value="visible">
+					<div>A la Une
+						<input onclick={ toggleUne } type="image" src="/img/annonces.png" name="la_une" id="la_une" class="visible" title="Pas la Une" value="non">
+					</div>
+				</div>
+			</div>
+			<div class="celladd block">
+				<div>
+					<label for="corps_de_texte">Code d'intégration:</label><br>
+					<textarea id="video" name="video" ></textarea>
+				</div>
+			</div>
+			<div class="celladd add_button">
+				<button name="cancel_submit" class="button annuler cancel_submit pointer" onclick={ cancelIntegration }>Annuler</button>
+				<button name="save_submit" class="button enregistrer save_submit pointer" onclick={ saveIntegration }>Enregistrer</button>
+			</div>
+		</div>
+		<div class="actions action_ajouter_integration" id="actions">
+			<input id="add_actualites_button" type="button" value="Ajouter une intégration" class="ajouter button pointer" name="add_element_button" onclick={ addIntegration}>
+		</div>
+		<div class="actualites_content actualites_edit_content">
+			<div class="corps_actualites">
+				<div class="entete_actualites">
+					<div class=" cell_2">Titre</div>
+					<div class=" cell_3">Video</div>
+					<div class=" oeil_visibilite cell_4">Visibilité</div>
+					<div class=" cell_5">Actions</div>
+				</div>
+				<div each={ integration } id="{ id }" class="actualites_ligne actualites_edit_ligne">
+					<div class="show_infos hide_when_edit">
+						<div class=" cell_2">
+							<h3>{titre}</h3>
+						</div>
+						<div id="text_container" class=" introduction showmore cell_3" >
+							<iframe class="iframe" id="iframe" width=100 height=100 frameborder="0" src="{  video.match(/.*?src=\"([^"]*?)\".*/)[1] }" allowfullscreen></iframe>
+							<button onclick={ popupImage }>zoom</button>
+    					</div>
+    					<div id="agrandissement_image_{ id }" class="hidden agrandissement_image">
+							<div class="center">
+								<iframe class="iframe" id="iframe" width="450" height="400" frameborder="0" src="{  video.match(/.*?src=\"([^"]*?)\".*/)[1] }" allowfullscreen></iframe>
+							</div>
+					  	</div>
+						<div class=" oeil_visibilite cell_4"><input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="visible_{ id }" name="visible_{ id }"></i></div>
+						<div class=" actions cell_5">
+							<div>
+								<p class="modif">
+								<img class="edit_element_img" onclick={ editIntegration } title="Modifier" src="/img/edit.png">
+								</p>
+
+								<p class="modif">
+								<img class="delete_element_img" onclick={ validDeleteIntegration } title="Supprimer" delete_id="{ id }" src="/img/delete.png">
+								</p>
+
+								<p class="modif">
+								<img if={ !image } alt="monter" title="Monter" class="monter_element_img pointer" onclick={ switchUp } src="/img/compta/fleche_haut.png">
+								</p>
+								<p class="modif">
+								<img if={ !last } alt="descendre" title="Descendre" class="pointer descendre_element_img" onclick={ switchDown } src="/img/compta/fleche_bas.png">
+								</p>
+							</div>
+						</div>
+					</div>
+					<div id="{ id }_edit" class="edit edit_actualites hidden" id="edit_integration">
+						<div class="celladd">
+							<div>
+								<label class="label_titre" for="titre">Titre:</label>
+								<input name="titre_{ id }" id="titre_{ id }" class="titre" type="text" value={ titre }>
+								<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="visible_{id}" id="visible_{id}" class="actualites_visible" title="Visible" value="{visible}">
+							</div>
+							<div>A la Une
+								<input onclick={ toggleUne } type="image" src="/img/annonces.png" name="la_une_{id}" id="la_une_{id}" class="visible" title="Pas la Une" value="{la_une || 'non' }">
+							</div>
+						</div>
+						<div class="celladd block">
+							<div>
+								<label for="corps_de_texte">Code d'intégration:</label><br>
+								<textarea id="video_{ id }" name="video_{ id }" >{ video }</textarea>
+								<iframe class="iframe" id="iframe" frameborder="0" src="{  video.match(/.*?src=\"([^"]*?)\".*/)[1] }" allowfullscreen></iframe>
+							</div>
+						</div>
+
+						<div class="celladd add_button">
+							<button name="cancel_submit_{ id }" onclick={ cancelEditActualites } class="pointer button annuler cancel_submit">Annuler</button>
+							<button name="save_submit_{ id }" onclick={ saveEditActualites } class="pointer button enregistrer save_submit">Enregistrer</button>
+						</div>
+					</div> 
+					<div id="{ id }_delete" class="delete hidden" id="deleteCancel">
+						<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" id="delete_{ id }" class="pointer" onclick={ deleteIntegration }>Supprimer</button><button class="pointer" name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteIntegration }>Annuler</button></div>
+					</div>
+				</div>
+					
+			</div>
+		</div>
+	</div>
+	<script>
+
+	var app = opts;
+	var _this = this;
+	this.app = opts;
+	var permissions = app.session.permissions;
+
+	app.on('unmount-integration', function(){
+		app.off('unmount-integration');		
+		_this.unmount();
+	});
+
+	this.loaded = false;
+
+	this.thingsToLoad = [ 'integration', 'E_M' ];
+	this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.integration = [];
+		this.idIntegration = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+		switchUp(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchUp');
+			do_switch(e, -1);
+		}
+
+		switchDown(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchDown');
+			do_switch(e, 1);	
+		}
+
+		function do_switch(e, i) {
+			var item = e.item;
+			var item_id = item.id;
+			var position_in_table;
+			var switch_with_id;
+			console.log(e.item.type);
+			if(item.type == 'integration') {
+				position_in_table =  parseInt(_this.idIntegration[item_id]);
+				if(_this.integration[position_in_table + i]) {
+					switch_element(item_id, position_in_table, position_in_table + i, _this.idIntegration, _this.integration);
+				}
+			}
+		}
+
+		function switch_element(element_id1, element_position1, element_position2, idTable, table){
+			var tmp_element = table[element_position1];
+			var tmp_info;
+			var element_id2 = table[element_position2].id;
+
+			var item_id_reference = table[element_position1].reference;
+			var switch_with_id_reference = table[element_position2].reference;
+
+			idTable[element_id1] = element_position2;
+			idTable[element_id2] = element_position1;
+			table[element_position1] = table[element_position2];
+			table[element_position2] = tmp_element;
+
+			//interchanger ref
+			tmp_info = table[element_position1].reference;
+			table[element_position1].reference = table[element_position2].reference;
+			table[element_position2].reference = tmp_info;
+
+			//interchanger first
+			tmp_info = table[element_position1].first;
+			table[element_position1].first = table[element_position2].first;
+			table[element_position2].first = tmp_info;
+
+			//interchanger last
+			tmp_info = table[element_position1].last;
+			table[element_position1].last = table[element_position2].last;
+			table[element_position2].last = tmp_info;
+
+			updatePosition([
+						{
+							id: element_id1,
+							reference: table[element_position2].reference,
+						},
+						{
+							id: element_id2,
+							reference: table[element_position1].reference,
+						}
+					]);
+		}
+
+		function updatePosition(params){
+			var data = {};
+
+			data.action = "update_reference";
+			data.params = params;
+			$.ajax('/admin/site/actualites', {
+				data : data,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+					_this.update();
+				}
+			}).done(function(){
+				console.log('done!...');
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				tag = null;
+			}); //, 'json'
+		}
+
+		function getIntegration() {
+
+			getElements({
+				tag: _this,
+				url: '/admin/site/integration', 
+				elements: _this.integration,
+				idElements: _this.idIntegration,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', titre: 'titre', la_une: 'la_une', 
+				video: 'video' ,visible: 'visible', first: 'first', last: 'last'},
+				getParameters: { type_element: 'integration'},
+				type: 'integration',
+				end: function(tag){ 
+					tag.loaded = true; 
+					console.log('this.integration: ' + JSON.stringify(_this.integration));
+				},
+
+			});
+		}
+		getIntegration();
+
+		editIntegration(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var id = e.item.id;
+				_this.E_M.editElement({ event: e, hideClass: 'hidden' });
+			}
+		}
+
+		addIntegration(e){
+			$(".actualites_content").hide();
+			$('input[type=text]', '#add_actualites').val('');
+			if(_this.E_M){
+				$("#add_actualites_button").hide();
+				$(".preview").hide();
+				_this.E_M.addElement({event: e, prefixId: 'actualites_', hideClass: 'hidden'});
+			}
+		}
+
+		validDeleteIntegration(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, hideClass: 'hidden',});
+
+			}
+		}
+
+		deleteIntegration(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+
+				_this.E_M.deleteElement({
+					event: e, 
+					tag: _this, 
+					url: '/admin/site/integration', 
+					elements: _this.integration, 
+					idElements: _this.idIntegration, 
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+
+		cancelDeleteIntegration(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, hideClass: 'hidden',});
+			}
+		}
+
+		cancelIntegration(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$('#add_actualites').addClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['titre', 'introduction','corps_de_texte', 'visible', 'la_une' ],
+				});
+			}
+			$(".actualites_content").show();
+			$("#add_actualites_button").show();
+		}
+
+		cancelEditActualites(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$('.edit_actualites').addClass('hidden');
+				_this.E_M.cancelDeleteElement({event: e, hideClass: 'hidden',});
+			}
+		}
+
+		saveIntegration(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/integration', 
+					fields: ['titre', 'video', 'visible', 'la_une' ],
+					tag: _this,
+					elements: _this.integration,
+					idElements: _this.idIntegration,
+					typeElement: 'integration',
+				
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							var max_reference = 0;
+							_this.integration.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && element.id_parent == null
+									&& _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+							})
+							params.element.reference = max_reference + 1;
+							params.element.last = true;
+							if(_this.integration.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (parseInt(a.reference) < parseInt(b.reference)){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			$(".actualites_content").show();
+			$("#add_actualites_button").show();
+			$(".entete_actualites").show();
+		 	$('.show_infos').show();
+		 	$(".actualites_ligne").addClass();
+		 	$(".actualites_content").addClass();
+		 	$("#add_actualites").hide();
+			}
+
+		}
+		
+		saveEditActualites(e){
+			e.stopPropagation();
+			e.preventDefault();
+			console.log(e.item)
+
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/integration', 
+					fields: ['titre', 'video', 'visible', 'la_une' ],
+					tag: _this,
+					elements: _this.integration,
+					idElements: _this.idIntegration,
+					hideClass: 'hidden',
+					beforeSend: function(params){
+
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (parseInt(a.reference) < parseInt(b.reference)){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			}
+		}
+
+		showActualites(e){
+			e.stopPropagation();
+			e.preventDefault();
+			$('#add_actualites_button').removeClass('hidden');
+			var actualitesId = $('#current_actualites').val();
+			$('#current_actualites').val('').addClass('hidden');
+			$('#entete_actualites').removeClass('hidden');
+			$('.actualites').removeClass('hidden');
+			if( _this.currentactualitesReference != '') {
+				$('#add_actualites').slideUp().addClass('hidden');
+			}
+			_this.currentActualitesReference = '';
+		}
+		
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		toggleUne(e) {
+			var node = e.target;
+			if($(node).attr('value') == 'non') {
+				$(node).attr('value', 'oui').attr('title', 'A la Une').attr('src', '/img/annonces_selected.png');
+			} else {
+				$(node).attr('value', 'non').attr('title', 'Pas la Une').attr('src', '/img/annonces.png');
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			console.log(params);
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					console.log('elements: ' + JSON.stringify(tag.actualites))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		popupImage(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+				$('#agrandissement_image_' + e.item.id).modal();
+				console.log('vrai ....');
+		};
+
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+		console.log('mount integration')
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addIntegration = null;
+			editIntegration = null;
+			validDeleteIntegration = null;
+			cancelDeleteIntegration = null;
+			deleteIntegration = null;
+			cancelIntegration = null;
+			cancelEditActualites = null;
+			showContents = null;
+			makeVisible = null;
+			saveIntegration = null;
+			getActualites = null;
+			getElements = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+		</script>
+</integration>

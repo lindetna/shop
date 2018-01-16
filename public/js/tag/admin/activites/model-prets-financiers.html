@@ -1,0 +1,628 @@
+<model-prets-financiers>
+	<!-- début produits ajout -->
+	<div class="billetterie edit_billetterie">
+		<div class="general">
+			<div class="cell_1">
+				<input id="produit_id_categorie{ el ? '_' + el.id : '' }" name="produit_id_categorie{ el ? '_' + el.id : '' }" type="hidden" value="{ parentTag.currentCategorieId }">
+				<input id="produit_id_activite{ el ? '_' + el.id : '' }" name="produit_id_activite{ el ? '_' + el.id : '' }" type="hidden" value="{ parentTag.currentActiviteId }">
+				<input id="produit_id_modele{ el ? '_' + el.id : '' }" name="produit_id_modele{ el ? '_' + el.id : '' }" type="hidden" value="{ parentTag.currentModeleId }">
+				<input id="produit_image_url{ el ? '_' + el.id : '' }" name="produit_image_url{ el ? '_' + el.id : '' }" class="" type="hidden" value="">
+				<img class="img_produits_modif" src="">
+			</div>
+			<div class="cell_2">
+				<p>
+					<label for="produit_categorie{ el ? '_' + el.id : '' }" class="xl-large">Catégorie</label>
+					<input id="produit_categorie{ el ? '_' + el.id : '' }" name="produit_categorie{ el ? '_' + el.id : '' }" type="text" disabled="disabled" value="{ parentTag.currentCategorieLibelle }">
+				</p>
+				<p>
+					<label for="produit_activite{ el ? '_' + el.id : '' }" class="xl-large">Activité</label>
+					<input id="produit_activite{ el ? '_' + el.id : '' }" name="produit_activite{ el ? '_' + el.id : '' }" type="text" disabled="disabled" value="{ parentTag.currentActiviteLibelle }">
+				</p>
+				<p>
+					<label for="produit_libelle{ el ? '_' + el.id : '' }" class="xl-large">Nom</label>
+					<input id="produit_libelle{ el ? '_' + el.id : '' }" name="produit_libelle{ el ? '_' + el.id : '' }" class="" type="text" value="{ element.libelle }">
+				</p>
+			</div>
+			<div class="cell_3">
+				<input onclick={ parentTag.toggleVisible } type="image" class="produit_image_visible" src="/img/btn_{ element && element.visible == 'hidden' ? 'non' : '' }visible.png" title="visible" value="{ element && element.visible ? element.visible : 'visible' }" id="produit_visible{ el ? '_' + el.id : '' }"  name="produit_visible{ el ? '_' + el.id : '' }">
+			</div>
+		</div>
+		<div>
+			<div>
+				<header class="opened titre" onclick="{ showContents }">
+					Informations
+				</header>
+				<div class="informations slide-up table">
+					<div class="row">
+						<div class="cell_1 ">
+							<div class="block_infos">
+								<span class="block_title">Internet</span>
+								<div class="block_infos_content">
+									<input type="checkbox" id="produit_information_internet{ el ? '_' + el.id : '' }" name="produit_information_internet{ el ? '_' + el.id : '' }" checked="{ element.information_internet ? 'checked' : '' }">Information Activité
+									<input type="radio" id="produit_public_internet{ el ? '_' + el.id : '' }" name="produit_public_internet{ el ? '_' + el.id : '' }" value="1" checked="{ element.public_internet == '1' ? 'checked' : '' }">Public
+									<input type="radio" id="produit_prive_internet{ el ? '_' + el.id : '' }" name="produit_public_internet{ el ? '_' + el.id : '' }" value="0" checked="{ element.public_internet == '0' ? 'checked' : '' }">Privé
+								</div>
+							</div>
+						</div>
+						<div class="cell_2 ">
+							<div class="internet_activite_informations">
+								<p><label for="produit_informations{ el ? '_' + el.id : '' }">Informations</label><textarea class="information_info_internet" id="produit_informations{ el ? '_' + el.id : '' }" name="produit_informations{ el ? '_' + el.id : '' }" type="text">{ element.informations }</textarea></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+			<div>
+				<header class="opened titre" onclick="{ showContents }">
+					Tarifs / Conditions
+				</header>
+				<div class="tarifs_conditions slide-up table">
+					<div class="row">
+						<div class="cell_1">
+							<div><label for="produit_tarif{ el ? '_' + el.id : '' }" class="bold">Tarif </label><input type="text" class="l-large bold" id="produit_tarif{ el ? '_' + el.id : '' }" name="produit_tarif{ el ? '_' + el.id : '' }" value="{ element.tarif }"></div>
+							<div class="block_infos block_infos_1">
+								<span class="block_title"><input type="checkbox" id="produit_conditions{ el ? '_' + el.id : '' }" name="produit_conditions{ el ? '_' + el.id : '' }" checked="{ element.conditions ? 'checked' : '' }"> <span>Condition</span></span>
+								<div class="block_infos_content">
+									<div><label for="produit_condition{ el ? '_' + el.id : '' }" class="xl-large bold">Condition</label><select class="xl-large" id="produit_condition{ el ? '_' + el.id : '' }" name="produit_condition{ el ? '_' + el.id : '' }">
+										<option value=""></option>
+										<option value="mois" selected="{ element.condition == 'mois' ? 'selected' : false }">mois</option>
+										<option value="trimestre" selected="{ element.condition == 'trimestre' ? 'selected' : false }">trimestre</option>
+										<option value="semestre" selected="{ element.condition == 'semestre' ? 'selected' : false }">semestre</option>
+										<option value="annee" selected="{ element.condition == 'annee' ? 'selected' : false }">année</option>
+									</select></div>
+									<div><label for="produit_limite_places{ el ? '_' + el.id : '' }" class="xl-large bold">Limite de places</label><input class="xl-large" type="text" id="produit_limite_places{ el ? '_' + el.id : '' }" name="produit_limite_places{ el ? '_' + el.id : '' }" value="{ element.limite_places }"></div>
+								</div>
+							</div>
+							<div class="block_infos block_infos_2">
+								<span class="block_title"><input type="checkbox" id="produit_participation{ el ? '_' + el.id : '' }" name="produit_participation{ el ? '_' + el.id : '' }" checked="{ element.participation ? 'checked' : '' }"> <span>Participation du CE</span></span>
+								<div class="block_infos_content">
+									<input type="radio" id="produit_type_participation{ el ? '_' + el.id : '' }" name="produit_type_participation{ el ? '_' + el.id : '' }" value="montant" checked="{ element.type_participation == 'montant' ? 'checked' : '' }">Montant
+									<input type="radio" id="produit_type_participation_pourcentage{ el ? '_' + el.id : '' }" name="produit_type_participation{ el ? '_' + el.id : '' }" value="pourcentage" checked="{ element.type_participation == 'pourcentage' ? 'checked' : '' }">%
+									<input type="text" id="produit_montant_participation{ el ? '_' + el.id : '' }" name="produit_montant_participation{ el ? '_' + el.id : '' }" value="{ element.montant_participation }">
+								</div>
+							</div>
+						</div>
+						<div class="cell_2">
+							<div><label for="produit_nb_places{ el ? '_' + el.id : '' }" class="bold">Nombre de Places en stocks </label><input type="text" class="xs-large bold center" id="produit_nb_places{ el ? '_' + el.id : '' }" name="produit_nb_places{ el ? '_' + el.id : '' }" value="{ element.nb_places }"></div>
+							<div><label for="produit_stocks_alerte{ el ? '_' + el.id : '' }" class="bold">Stocks d'alerte </label><input type="text" class="xs-large bold center" id="produit_stocks_alerte{ el ? '_' + el.id : '' }" name="produit_stocks_alerte{ el ? '_' + el.id : '' }" value="{ element.stocks_alerte }"></div>
+							<div>
+								<label for="produit_date_validite{ el ? '_' + el.id : '' }" class="bold">Date de Validité </label>
+								<input type="hidden" name="produit_date_validite{ el ? '_' + el.id : '' }" id="produit_date_validite{ el ? '_' + el.id : '' }" value={ ( element && element.date_validite ? element.date_validite : parentTag.getCurrentDateToDB() ) }>
+								<input type="text" id="front_produit_date_validite{ el ? '_' + el.id : '' }" placeholder="jj/mm/aaaa" maxlength="10" field-for-date="produit_date_validite{ el ? '_' + el.id : '' }" required="required" class="date l-large front_date_validite" value="{ convertDateToView(element.date_validite) }" onchange={ formatDateField }>
+							</div>
+							<div class="bareme_formule">
+								<div class="bareme_image" onclick={ toggleBareme }><span>Barème</span> <!--<img src="/img/activites/bareme.png"> --></div>
+								<div class="formule_image" onclick={ toggleFormule }><span>Formule</span> <!-- <img src="/img/activites/formule.png">--> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="formule_container_cout" class="formule_container hidden slide-up table">
+					<p>Coût { IS_CE ? 'salarié' : 'adhérent' }</p>
+					<div class="block_arrondi">
+						<input type="checkbox" id-to-disable="produit_formule_cout_salarie_arrondi{ el ? '_' + el.id : '' }" name="check_arrondi_cout" id="check_arrondi_cout" onclick="{ disableElementById }" checked="{ element.formule_cout_salarie_arrondi ? 'checked' : '' }">
+						<label for="arrondi">Arrondi</label>
+						<input type="number" name="produit_formule_cout_salarie_arrondi{ el ? '_' + el.id : '' }" id="produit_formule_cout_salarie_arrondi{ el ? '_' + el.id : '' }" value="{ element.formule_cout_salarie_arrondi }" disabled="{ element.formule_cout_salarie_arrondi ? '' : 'disabled' }">	
+					</div>
+					<div class="zone_texte">
+						<textarea id="produit_formule_cout_salarie{ el ? '_' + el.id : '' }" name="produit_formule_cout_salarie{ el ? '_' + el.id : '' }" rows="4" cols="50">{ element.formule_cout_salarie }</textarea>
+					</div>
+				</div>
+				<div id="formule_container_participation" class="formule_container hidden slide-up table">
+					<p>Participation { IS_CE ? 'du CE' : 'de l\'association' }</p>
+					<div class="block_arrondi">
+						<input type="checkbox" id-to-disable="produit_formule_participation_arrondi{ el ? '_' + el.id : '' }" name="check_arrondi_participation" id="check_arrondi_participation" onclick="{ disableElementById }" checked="{ element.formule_participation_arrondi ? 'checked' : '' }">
+						<label for="arrondi">Arrondi</label>
+						<input type="number" name="produit_formule_participation_arrondi{ el ? '_' + el.id : '' }" id="produit_formule_participation_arrondi{ el ? '_' + el.id : '' }" value="{ element.formule_participation_arrondi }" disabled="{ element.formule_participation_arrondi ? '' : 'disabled' }">
+					</div>
+					<div class="zone_texte">
+						<textarea id="produit_formule_participation{ el ? '_' + el.id : '' }" name="produit_formule_participation{ el ? '_' + el.id : '' }" rows="4" cols="50">{ element.formule_participation }</textarea>
+					</div>
+				</div>
+				<div id="formule_container_condition" class="formule_container hidden slide-up table">
+					<p>Condition</p>
+					<div class="zone_texte">
+						<textarea id="produit_formule_condition{ el ? '_' + el.id : '' }" name="produit_formule_condition{ el ? '_' + el.id : '' }" rows="4" cols="50">{ element.formule_condition }</textarea>
+					</div>
+				</div>
+			</div>
+			<div>
+				<header class="opened titre" onclick="{ showContents }">
+					Comptabilité
+				</header>
+				<div class="comptabilite slide-up table">
+					<div class="table">
+						<div class="row">
+							<div class="cell_1">
+								<div>
+									<label for="produit_id_compte{ el ? '_' + el.id : '' }" class="bold">Comptes </label>
+									<select id="produit_id_compte{ el ? '_' + el.id : '' }" name="produit_id_compte{ el ? '_' + el.id : '' }">
+										<option value="">-----------------</option>
+										<option each={ comptes } value={ id } selected={ id == element.id_compte ? 'selected' : '' }>{ reference } - { libelle }</option>
+									</select>
+								</div>
+								<div>
+									<label for="produit_id_analytique{ el ? '_' + el.id : '' }" class="bold">Analytique </label>
+									<select id="produit_id_analytique{ el ? '_' + el.id : '' }" name="produit_id_analytique{ el ? '_' + el.id : '' }">
+										<option value="">-----------------</option>
+										<option each={ analytiques } value={ id } selected={ id == element.id_analytique ? 'selected' : '' }>{ libelle }</option>
+									</select>
+								</div>
+								<div>
+									<label for="produit_id_compte_stock{ el ? '_' + el.id : '' }" class="bold">Comptes de stock </label>
+									<select id="produit_id_compte_stock{ el ? '_' + el.id : '' }" name="produit_id_compte_stock{ el ? '_' + el.id : '' }">
+										<option value="">-----------------</option>
+										<option each={ comptes } value={ id } selected={ id == element.id_compte_stock ? 'selected' : '' }>{ reference } - { libelle }</option>
+									</select>
+								</div>
+							</div>
+							<div class="cell_2">
+	<!--
+								<div class="table">
+									<div class="row row_petite_table">
+										<div class="cell_1">
+										</div>
+										<div class="cell_2">
+											Dépenses
+										</div>
+										<div class="cell_3">
+											Recette
+										</div>
+										<div class="cell_4">
+											Solde
+										</div>
+									</div>
+									<div class="row row_petite_table">
+										<div class="cell_1">
+											Année en cours
+										</div>
+										<div class="cell_2">
+											<input type="text" id="produit_depense_annee" name="produit_depense_annee" value="">
+										</div>
+										<div class="cell_3">
+											<input type="text" id="produit_recette_annee" name="produit_recette_annee" value="">
+										</div>
+										<div class="cell_4">
+											<input type="text" id="produit_solde_annee" name="produit_solde_annee" value="">
+										</div>
+									</div>
+									<div class="row row_petite_table">
+										<div class="cell_1">
+											Prévisionnel
+										</div>
+										<div class="cell_2">
+											<input type="text" id="produit_depense_previsionnel" name="produit_depense_previsionnel" value="">
+										</div>
+										<div class="cell_3">
+											<input type="text" id="produit_recette_previsionnel" name="produit_recette_previsionnel" value="">
+										</div>
+										<div class="cell_4">
+											<input type="text" id="produit_solde_previsionnel" name="produit_solde_previsionnel" value="">
+										</div>
+									</div>
+									<div class="row row_petite_table">
+										<div class="cell_1">
+											Année précédent
+										</div>
+										<div class="cell_2">
+											<input type="text" id="produit_depense_pre" name="produit_depense_pre" value="">
+										</div>
+										<div class="cell_3">
+											<input type="text" id="produit_recette_pre" name="produit_recette_pre" value="">
+										</div>
+										<div class="cell_4">
+											<input type="text" id="produit_solde_pre" name="produit_solde_pre" value="">
+										</div>
+									</div>
+								</div>
+								<div class="situation_budget_categ_activite">
+									<p>Situation Budgétaire</p>
+									<div class="progress-bar stripes">
+										<span id="label">80%</span>
+									</div>
+								</div>
+	-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+				<header class="opened titre" onclick="{ showContents }">
+					Questions
+				</header>
+				<div class="questions question_table slide-up table">
+					<div class="table table_questions_categorie_activite">
+						<div class="row_table_questions_categorie_activite">
+							<div class="cell_1">
+								<input type="checkbox" id="produit_is_question_1" name="produit_is_question_1" checked="{ element.question_1 ? 'checked' : '' }">
+							</div>
+							<div class="cell_2">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_1{ el ? '_' + el.id : '' }" name="produit_question_1{ el ? '_' + el.id : '' }" value="{ element.question_1 }">
+							</div>
+							<div class="cell_3">
+								<input type="checkbox" id="produit_is_question_2" name="produit_is_question_2" checked="{ element.question_2 ? 'checked' : '' }">
+							</div>
+							<div class="cell_4">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_2{ el ? '_' + el.id : '' }" name="produit_question_2{ el ? '_' + el.id : '' }" value="{ element.question_2 }">
+							</div>
+							<div class="cell_5">
+								<input type="checkbox" id="produit_is_question_3" name="produit_is_question_3" checked="{ element.question_3 ? 'checked' : '' }">
+							</div>
+							<div class="cell_6">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_3{ el ? '_' + el.id : '' }" name="produit_question_3{ el ? '_' + el.id : '' }" value="{ element.question_3 }">
+							</div>
+						</div>
+						<div class="row_table_questions_categorie_activite">
+							<div class="cell_1">
+								<input type="checkbox" id="produit_is_question_4" name="produit_is_question_4" checked="{ element.question_4 ? 'checked' : '' }">
+							</div>
+							<div class="cell_2">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_4{ el ? '_' + el.id : '' }" name="produit_question_4{ el ? '_' + el.id : '' }" value="{ element.question_4 }">
+							</div>
+							<div class="cell_3">
+								<input type="checkbox" id="produit_is_question_5" name="produit_is_question_5" checked="{ element.question_5 ? 'checked' : '' }">
+							</div>
+							<div class="cell_4">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_5{ el ? '_' + el.id : '' }" name="produit_question_5{ el ? '_' + el.id : '' }" value="{ element.question_5 }">
+							</div>
+							<div class="cell_5">
+								<input type="checkbox" id="produit_is_question_6" name="produit_is_question_6" checked="{ element.question_6 ? 'checked' : '' }">
+							</div>
+							<div class="cell_6">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_6{ el ? '_' + el.id : '' }" name="produit_question_6{ el ? '_' + el.id : '' }" value="{ element.question_6 }">
+							</div>
+						</div>
+						<div class="row_table_questions_categorie_activite">
+							<div class="cell_1">
+								<input type="checkbox" id="produit_is_question_7" name="produit_is_question_7" checked="{ element.question_7 ? 'checked' : '' }">
+							</div>
+							<div class="cell_2">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_7{ el ? '_' + el.id : '' }" name="produit_question_7{ el ? '_' + el.id : '' }" value="{ element.question_7 }">
+							</div>
+							<div class="cell_3">
+								<input type="checkbox" id="produit_is_question_8" name="produit_is_question_8" checked="{ element.question_8 ? 'checked' : '' }">
+							</div>
+							<div class="cell_4">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_8{ el ? '_' + el.id : '' }" name="produit_question_8{ el ? '_' + el.id : '' }" value="{ element.question_8 }">
+							</div>
+							<div class="cell_5">
+								<input type="checkbox" id="produit_is_question_9" name="produit_is_question_9" checked="{ element.question_9 ? 'checked' : '' }">
+							</div>
+							<div class="cell_6">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_9{ el ? '_' + el.id : '' }" name="produit_question_9{ el ? '_' + el.id : '' }" value="{ element.question_9 }">
+							</div>
+						</div>
+						<div class="row_table_questions_categorie_activite">
+							<div class="cell_1">
+								<input type="checkbox" id="produit_is_question_10" name="produit_is_question_10" checked="{ element.question_10 ? 'checked' : '' }">
+							</div>
+							<div class="cell_2">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_10{ el ? '_' + el.id : '' }" name="produit_question_10{ el ? '_' + el.id : '' }" value="{ element.question_10 }">
+							</div>
+							<div class="cell_3">
+								<input type="checkbox" id="produit_is_question_11" name="produit_is_question_11" checked="{ element.question_11 ? 'checked' : '' }">
+							</div>
+							<div class="cell_4">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_11{ el ? '_' + el.id : '' }" name="produit_question_11{ el ? '_' + el.id : '' }" value="{ element.question_11 }">
+							</div>
+							<div class="cell_5">
+								<input type="checkbox" id="produit_is_question_12" name="produit_is_question_12" checked="{ element.question_12 ? 'checked' : '' }">
+							</div>
+							<div class="cell_6">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_12{ el ? '_' + el.id : '' }" name="produit_question_12{ el ? '_' + el.id : '' }" value="{ element.question_12 }">
+							</div>
+						</div>
+						<div class="row_table_questions_categorie_activite">
+							<div class="cell_1">
+								<input type="checkbox" id="produit_is_question_13" name="produit_is_question_13" checked="{ element.question_13 ? 'checked' : '' }">
+							</div>
+							<div class="cell_2">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_13{ el ? '_' + el.id : '' }" name="produit_question_13{ el ? '_' + el.id : '' }" value="{ element.question_13 }">
+							</div>
+							<div class="cell_3">
+								<input type="checkbox" id="produit_is_question_14" name="produit_is_question_14" checked="{ element.question_14 ? 'checked' : '' }">
+							</div>
+							<div class="cell_4">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_14{ el ? '_' + el.id : '' }" name="produit_question_14{ el ? '_' + el.id : '' }" value="{ element.question_14 }">
+							</div>
+							<div class="cell_5">
+								<input type="checkbox" id="produit_is_question_15" name="produit_is_question_15" checked="{ element.question_15 ? 'checked' : '' }">
+							</div>
+							<div class="cell_6">
+								<input class="cell_questions_categorie_activite" type="text" id="produit_question_15{ el ? '_' + el.id : '' }" name="produit_question_15{ el ? '_' + el.id : '' }" value="{ element.question_15 }">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+				<header class="opened titre" onclick="{ showContents }">
+					Lettres
+				</header>
+				<div class="lettres categorie_table_lettres_activite slide-up table">
+					<div class="left_right_lettres">
+						<div class="left_block_lettres">
+							<div class="titre_lettres">
+								<span>Lettre</span>
+								<div class="lettres_left_categ_act">
+									<input type="checkbox" id="produit_gestion_lettre{ el ? '_' + el.id : '' }" name="produit_gestion_lettre{ el ? '_' + el.id : '' }" checked="{ element.gestion_lettre ? 'checked' : '' }">Gestion Lettre
+									<input type="checkbox" id="produit_impression_automatique{ el ? '_' + el.id : '' }" name="produit_impression_automatique{ el ? '_' + el.id : '' }" checked="{ element.impression_automatique ? 'checked' : '' }">Impression Automatique
+								</div>
+							</div>
+						</div>
+						<div class="right_block_lettres">
+							<select class="select_right_block_lettres" id="produit_lettre_fields{ el ? '_' + el.id : '' }" name="produit_lettre_fields{ el ? '_' + el.id : '' }">
+								<option value="numero_salarie">N° { IS_CE ? 'Salarié' : 'Adhérent' }</option>
+								<option value="titre">TItre</option>
+								<option value="nom">Nom</option>
+								<option value="prenom">Prénom</option>
+								<option value="voie">N° et Voie</option>
+								<option value="appartement_etage">N° Appartement ou Etage</option>
+								<option value="entree_batiment">Entrée, Batiment</option>
+								<option value="boite_postale">Lieu Dit, Boite Postale</option>
+								<option value="code_postal">Code Postal</option>
+								<option value="ville">Ville</option>
+								<option value="pays">Pays</option>
+								<option value="nom_naissance">Nom de Naissance</option>
+								<option value="date_naissance">Date de Naissance</option>
+								<option value="situation_familiale">Situation Familiale</option>
+								<option value="tel">Téléphone</option>
+								<option value="portable">Portable</option>
+								<option value="email_perso">E-mail Personnel</option>
+								<option value="email_pro">E-mail Professionel</option>
+								<option value="id_internet">Identifiant Internet</option>
+								<option value="pass">Mot de Passe</option>
+								<option value="option_1">Option 1</option>
+								<option value="option_2">Option 2</option>
+							</select>
+						</div>
+					</div>
+					<div class="lettre">
+						<textarea id="lettre{ el ? '_' + el.id : '' }"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="save_produit">
+			<button class="button annuler cancel_submit" onclick={ cancelProduit }>Annuler</button> 
+			<button class="button enregistrer save_submit" onclick={ saveProduit }>Enregistrer</button>
+		</div>
+	</div>
+	<script>
+		var _this = this;
+		var app = opts.app;
+		this.app = opts.app;
+		this.parentTag = opts.parentTag;
+		this.el = this.element = opts.element;
+		this.loaded = false;
+		var permissions = app.session.permissions;
+		var ACTIVITES_READ = this.ACTIVITES_READ = permissions.ACTIVITES_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+            if(_this.parentTag.E_M){
+                _this.parentTag.E_M.showContents(e, { toggleClass: 'hidden', });
+            }
+		}
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			getParams.visible = 'visible';
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					var invisible_nb = 0;
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] === 'visible') {
+							d = new Object();
+
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idComptes[d['id']] = i - invisible_nb;
+							_this.comptes.push(d);
+						} else {
+							invisible_nb += 1;
+						}
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+		this.analytiques = [];
+		this.idAnalytiques = {};
+
+		function getAnalytiques(){
+			var getParams = { type_element: 'analytique', visible: 'visible'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/budgets', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idAnalytiques[d['id']] = i;
+						_this.analytiques.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		getAnalytiques();
+
+		saveProduit(e){
+			e.fields = [
+				'id_activite',
+				'id_modele',
+				'image_url',
+				'libelle',
+				'visible',
+				'information_internet',
+				'public_internet',
+				'informations',
+				'tarif',
+				'conditions',
+				'condition',
+				'limite_places',
+				'participation',
+				'type_participation',
+				'montant_participation',
+				'nb_places',
+				'stocks_alerte',
+				'date_validite',
+				'formule_cout_salarie_arrondi',
+				'formule_cout_salarie',
+				'formule_participation_arrondi',
+				'formule_participation',
+				'formule_condition',
+				'id_compte',
+				'id_analytique',
+				'id_compte_stock',
+				'question_1',
+				'question_2',
+				'question_3',
+				'question_4',
+				'question_5',
+				'question_6',
+				'question_7',
+				'question_8',
+				'question_9',
+				'question_10',
+				'question_11',
+				'question_12',
+				'question_13',
+				'question_14',
+				'question_15',
+				'gestion_lettre',
+				'impression_automatique',
+			];
+
+			e.typeModele = 'prets_financiers';
+
+			if( _this.element ){
+				e.item = _this.element;
+			}
+
+			_this.parentTag.saveProduit(e);
+		    _this.unmount();
+		}
+
+		cancelProduit(e){
+			if(_this.element){
+				e.item = _this.element;
+			}
+			_this.parentTag.cancelProduit(e);
+		    _this.unmount();
+		}
+
+		disableElementById(e) {
+		    _this.parentTag.E_M.disableElementById(e);
+		}
+
+		toggleFormule(e){
+			$('#formule_container_cout').slideToggle();
+			$('#formule_container_participation').slideToggle();
+			$('#formule_container_condition').slideToggle();
+		}
+
+		formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.parentTag.E_M){
+				_this.parentTag.E_M.formatDateField({
+					event: e
+				});
+			}
+        }
+
+        this.convertDateToDb = function convertDateToDb(date){
+			if( _this.parentTag.E_M ){
+				return _this.parentTag.E_M.convertDateToDb(date);
+			}else{
+				return false;
+			}
+        }
+
+        this.convertDateToView = function convertDateToView(date){
+			if( _this.parentTag.E_M ){
+				return _this.parentTag.E_M.convertDateToView(date);
+			}else{
+				return false;
+			}
+        }
+
+		function loadDateTemplate() {
+			var $date = $('.front_date_validite');
+			if($date) {
+				$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				$date.datepicker({
+			      dateFormat: 'dd/mm/yy',
+			    });
+				if($date.val() == ''){
+			    	$date.datepicker( "setDate", new Date() );
+				}
+			}
+		}
+
+		this.on('mount', function(){
+			if(_this.parentTag.E_M){
+
+			}
+
+			if(_this.parentTag.tinyMCE){
+				tinyMCE.init({ 
+					selector:'#lettre' + ( _this.element && _this.element.id ? '_' + _this.element.id : '' ),
+					theme: "modern",
+					language: 'fr_FR',
+				    width: '98%',
+				    height: 100,
+					plugins: "textcolor link print",
+	  				toolbar: ["forecolor | fontsizeselect | undo redo | bold italic underline | image | alignleft aligncenter alignright | link | print"],
+					valid_elements: "@[class],p[style],span[style],h3,h4,h5,h6,a[href|target],strong/b,div[align],br",
+					setup: function (editor) {
+	        			editor.on('change', function () {
+	            			editor.save();
+	        			});
+	    			}
+				});
+			}
+
+			loadDateTemplate();
+		});
+	</script>
+</model-prets-financiers>

@@ -1,0 +1,1993 @@
+<comptes>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> -->
+	<div if={ COMPTA_READ || PLA_READ } class="content with_submenu">
+		<div class="compta compta_comptes">
+			<div id="loader" class="loader hidden">
+        	</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/journaux">Journaux</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage comptes block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+					Comptes
+				</header>
+				<div class="slide-up">
+				<!-- Describe Add Classes -->
+					<div class="line-separator"></div>
+					<div class="compta_content">
+						<div id="add_classe" class="edit edit_classe hidden">
+							<div class="row">
+								<div class="cell_1">
+									<input type="hidden" name="type_element" value="classe">
+								</div>
+								<div class="cell_2">
+									<div>
+										<label for="classe_reference">Classe : </label>
+										<input type="text" id="classe_reference" name="classe_reference" required="required" size="1" maxlength="1" class="one_char" value="">
+									</div>
+								</div>
+								<div class="cell_3">
+									<div>
+										<label for="classe_libelle">Libellé : </label>
+										<input type="text" id="classe_libelle" name="classe_libelle" required="required" size="80" maxlength="80" class="c80" value="">
+									</div>
+								</div>
+								<div class="cell_4">
+									<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" title="Visible" id="classe_visible" name="classe_visible" value="visible">
+								</div>
+								<div class="cell_5">
+									<div id="save_classe" class="hidden center">
+										<button class="button enregistrer save_submit inline_block" onclick={ saveClasse }>Enregistrer</button><!--
+									 --><button class="button annuler cancel_submit inline_block" onclick={ cancelClasse }>Annuler</button>
+									</div>
+								</div>
+							</div>
+							
+
+						</div>
+			<!-- /End Describe Add Classes -->
+			<!-- Describe Add Sous_Classes -->
+						<div id="add_sous_classe" class="edit edit_sous_classe hidden">
+							<div class="row">
+								<div class="cell_1">
+									<input type="hidden" name="type_element" value="sous_classe">
+									<input type="hidden" name="sous_classe_id_classe" id="sous_classe_id_classe" value="">
+								</div>
+								<div class="cell_2">
+									<div>
+										<label for="suffix_sous_classe_reference">Sous Classe : { currentClasseReference }</label>
+										<input type="text" id="suffix_sous_classe_reference" name="suffix_sous_classe_reference" required="required" size="1" maxlength="1" class="one_char" value="">
+										<input type="hidden" id="sous_classe_reference" name="sous_classe_reference" maxlength="2" value="">
+									</div>
+								</div>
+								<div class="cell_3">
+									<div>
+										<label for="sous_classe_libelle">Libellé : </label>
+										<input type="text" name="sous_classe_libelle" id="sous_classe_libelle" class="c80" value="" size="80" maxlength="80">
+									</div>
+								</div>
+								<div class="cell_4">
+									<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" title="Visible" name="sous_classe_visible" id="sous_classe_visible" value="visible">					
+								</div>
+								<div class="cell_5">
+									<div id="save_sous_classe" class="hidden">
+										<button class="button enregistrer save_submit" onclick={ saveSousClasse }>Enregistrer</button><!--
+									 --><button class="button annuler cancel_submit" onclick={ cancelSousClasse }>Annuler</button> 
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /End Describe Add Sous_Classes -->
+						<!-- Describe Add Comptes -->
+						<div id="add_compte" class="edit edit_compte hidden">
+							<div>
+								<div class="compte_block">
+									<div class="">
+										<input type="hidden" name="type_element" value="compte">
+										<input type="hidden" name="compte_id_classe" id="compte_id_classe" value="">
+										<input type="hidden" name="compte_id_sous_classe" id="compte_id_sous_classe" value="">
+									</div>
+									<div class="cell_block">
+										<label for="suffix_compte_reference" class="l-large compte">N° Compte { currentSousClasseReference }</label>
+										<input type="text" id="suffix_compte_reference" name="suffix_compte_reference" size="6" maxlength="6" class="xl-large" value="">
+										<input type="hidden" id="compte_reference" name="compte_reference" maxlength="8" value="">
+									</div>
+									<div class="cell_block">
+										<label for="compte_libelle" class="s-large">Libellé </label>
+										<input type="text" name="compte_libelle" id="compte_libelle" class="c80" value="" size="80" maxlength="80">
+									</div>
+									<input onclick={ toggleVisible } class="visible" type="image" src="/img/btn_visible.png" title="Visible" id="compte_visible" name="compte_visible" value="visible">
+								</div><!-- /inline_block -->
+								<div class="block_reel_prev">
+									<div class="budget_PLA_previsionnel cell { hidden: ! isCompteResultat }"><!-- if classe in [6-7] -->
+										<div class="table c100">
+											<div class="row">
+												<h1 class="cell c49">Prévisionnel</h1>
+											</div>
+										</div>
+										<div class="previsionnel">
+											<div class="budget_prev table">
+												<div class="row">
+													<div class="cell c_1"></div>
+													<div class="cell c_2">Débit</div>
+													<div class="cell c_3">Crédit</div>
+													<div class="cell c_4">Solde</div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 bold">N</div>
+													<div class="cell c_2"><input type="text" value="" name="compte_debit_n_prev" id="compte_debit_n_prev" disabled={ currentClasseReference == "7" }></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_credit_n_prev" id="compte_credit_n_prev" disabled={ currentClasseReference == "6" }></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_solde_n_prev" id="compte_solde_n_prev" class="bold" disabled="disabled"></div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 bold">N-1</div>
+													<div class="cell c_2"><input type="text" value="" name="compte_debit_n_1_prev" id="compte_debit_n_1_prev" disabled={ currentClasseReference == "7" }></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_credit_n_1_prev" id="compte_credit_n_1_prev" disabled={ currentClasseReference == "6" }></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_solde_n_1_prev" id="compte_solde_n_1_prev" class="bold" disabled="disabled"></div>
+												</div>
+											</div>
+											<div if={ PLA_READ } class="PLA_prev table c100">
+												<div class="row">
+													<div class="cell c_1 pla_head_row bold size-up text-pla">P.L.A</div>
+													<div class="cell c_2 pla_head_col">
+														<input value="1" type="checkbox" name="compte_pilotage_prev" id="compte_pilotage_prev" onchange={ OnChangeCheckBox } checked=checked info-type='pilotage'>
+														Pilotage
+													</div>
+													<div class="cell c_3 pla_head_col">
+														<input value="1" type="checkbox" name="compte_logistique_prev" id="compte_logistique_prev" onchange={ OnChangeCheckBox } checked=checked info-type='logistique'>
+														Logistique
+													</div>
+													<div class="cell c_4 pla_head_col">
+														<input value="1" type="checkbox" name="compte_activite_prev" id="compte_activite_prev" onchange={ OnChangeCheckBox } checked=checked info-type='activite'>
+														Activité
+													</div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 pla_head_row">Recette</div>
+													<div class="cell c_2 pla_pilotage"><input type="text" value="" name="compte_recette_pilotage_prev" id="compte_recette_pilotage_prev" disabled={ currentClasseReference == "6" } info-type='recette-pilotage'></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_recette_logistique_prev" id="compte_recette_logistique_prev" disabled={ currentClasseReference == "6" } info-type='recette-logistique'></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_recette_activite_prev" id="compte_recette_activite_prev" disabled={ currentClasseReference == "6" } info-type='recette-activite'></div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 pla_head_row">Dépense</div>
+													<div class="cell c_2 pla_pilotage"><input type="text" value="" name="compte_depense_pilotage_prev" id="compte_depense_pilotage_prev" disabled={ currentClasseReference == "7" } info-type='depense-pilotage'></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_depense_logistique_prev" id="compte_depense_logistique_prev" disabled={ currentClasseReference == "7" } info-type='depense-logistique'></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_depense_activite_prev" id="compte_depense_activite_prev" disabled={ currentClasseReference == "7" } info-type='depense-activite'></div>
+												</div>
+											</div><!-- PLA_prev table -->
+										</div><!-- /previsionnel -->
+									</div><!-- /budget_PLA_previsionnel -->
+									<div class="budget_PLA_reel cell { hidden: ! isCompteResultat }"><!-- if classe in [6-7] -->
+										<div class="table c100">
+											<div class="row">
+												<h1 class="cell c49">Réel</h1>
+											</div>
+										</div>
+										<div class="reel">
+											<div class="budget_reel table">
+												<div class="row">
+													<div class="cell c_1"></div>
+													<div class="cell c_2">Débit</div>
+													<div class="cell c_3">Crédit</div>
+													<div class="cell c_4">Solde</div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 bold">N</div>
+													<div class="cell c_2"><input type="text" value="" name="compte_debit_n_1_reel" id="compte_debit_n_1_reel" disabled></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_credit_n_1_reel" id="compte_credit_n_1_reel" disabled></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_solde_n_1_reel" id="compte_solde_n_1_reel" class="bold" disabled="disabled"></div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 bold">N-1</div>
+													<div class="cell c_2"><input type="text" value="" name="compte_debit_n_2_reel" id="compte_debit_n_2_reel" disabled></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_credit_n_2_reel" id="compte_credit_n_2_reel" disabled></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_solde_n_2_reel" id="compte_solde_n_2_reel" class="bold" disabled="disabled"></div>
+												</div>
+											</div>
+											<div if={ PLA_READ } class="PLA_reel table c100">
+												<div class="row">
+													<div class="cell c_1 pla_head_row bold size-up text-pla">P.L.A</div>
+													<div class="cell c_2 pla_head_col">
+														<input type="checkbox" value="1" name="compte_pilotage_reel" id="compte_pilotage_reel" checked=checked>
+														Pilotage
+													</div>
+													<div class="cell c_3 pla_head_col">
+														<input type="checkbox" value="1" name="compte_logistique_reel" id="compte_logistique_reel" checked=checked>
+														Logistique
+													</div>
+													<div class="cell c_4 pla_head_col">
+														<input type="checkbox" value="1" name="compte_activite_reel" id="compte_activite_reel" checked=checked>
+														Activité
+													</div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 pla_head_row">Recette</div>
+													<div class="cell c_2 pla_pilotage"><input type="text" value="" name="compte_recette_pilotage_reel" id="compte_recette_pilotage_reel"></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_recette_logistique_reel" id="compte_recette_logistique_reel"></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_recette_activite_reel" id="compte_recette_activite_reel"></div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 pla_head_row">Dépense</div>
+													<div class="cell c_2 pla_pilotage"><input type="text" value="" name="compte_depense_pilotage_reel" id="compte_depense_pilotage_reel"></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_depense_logistique_reel" id="compte_depense_logistique_reel"></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_depense_activite_reel" id="compte_depense_activite_reel"></div>
+												</div>
+											</div><!-- PLA_reel table -->
+										</div><!-- /reel -->
+									</div><!-- /budget_PLA_reel -->
+								</div>
+								<div if={ COMPTA_READ } class="bilan_resultat">
+										<div class="bilan { hidden: ! isBilan }"><!-- if classe in [1-5] -->
+											<label for="compte_id_bilan_debit" class="xl-large">Chapitre de bilan débit </label>
+											<select id="compte_id_bilan_debit" name="compte_id_bilan_debit" onchange={ bilanDebit } class="xxxl-large">
+												<option value=""></option>
+												<optgroup label="Chapitres bilan actif" class="actif">
+													<option each={ chapitres.bilan_actif } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+												</optgroup>
+												<optgroup label="Chapitres bilan passif">
+													<option each={ chapitres.bilan_passif } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+												</optgroup>
+											</select>
+											<select class="brut_amort hidden xl-large" id="compte_categorie_bilan_debit" name="compte_categorie_bilan_debit"><!-- if actif -->
+												<option value="brut" selected={ categorie_bilan_debit === 'brut' }>Brut</option>
+												<option value="amortissement" selected={ categorie_bilan_debit === 'amortissement' }>Amortissement/Provision</option>
+											</select>
+											<div if={ currentClasseReference == 5} class="inline_block">
+												<label for="compte_rapprochement_bancaire"> Rapprochement Bancaire</label><input type="checkbox" id="compte_rapprochement_bancaire" name="compte_rapprochement_bancaire" value="1">
+											</div>
+										</div><!-- bilan -->
+										<div class="bilan { hidden: ! isBilan }"><!-- if classe in [1-5] -->
+											<label for="compte_id_bilan_credit" class="xl-large">Chapitre de bilan crédit </label>
+											<select id="compte_id_bilan_credit" name="compte_id_bilan_credit" onchange={ bilanCredit } class="xxxl-large">
+												<option value=""></option>
+												<optgroup label="Chapitres bilan actif" class="actif">
+													<option each={ chapitres.bilan_actif } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+												</optgroup>
+												<optgroup label="Chapitres bilan passif">
+													<option each={ chapitres.bilan_passif } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+												</optgroup>
+											</select>
+											<select class="brut_amort hidden xl-large" id="compte_categorie_bilan_credit" name="compte_categorie_bilan_credit"><!-- if actif -->
+												<option value="brut" selected={ categorie_bilan_credit === 'brut' }>Brut</option>
+												<option value="amortissement" selected={ categorie_bilan_credit === 'amortissement' }>Amortissement/Provision</option>
+											</select>
+										</div><!-- bilan -->
+										<div class="compte_resultat { hidden: ! isCompteResultat }"><!-- if classe in [6-7] -->
+											<label for="compte_id_compte_resultat" class="l-large">Compte de résultat </label>
+											<select id="compte_id_compte_resultat" name="compte_id_compte_resultat" class="">
+												<option value=""></option>
+												<option each={ chapitres.compte_resultat } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)}>{ libelle }</option>
+											</select>
+										</div><!-- /compte resultat -->
+									</div><!-- /bilan_resultat -->
+								</div>
+								<div id="save_compte" class="hidden">
+									<button class="button annuler cancel_submit" onclick={ cancelCompte }>Annuler</button>
+								    <button class="button enregistrer save_submit" onclick={ saveCompte }>Enregistrer</button>
+								</div>
+							<!-- budget PLA REEL-->
+							<!-- BUDGET PLA PREVI-->
+						</div><!-- /add_compte -->
+						<!-- /End Describe Add Comptes -->
+						<div class="actions_container">
+							<div class="location">
+								<button id="root_classes" class="button btn_nav action_button_size" value="" onclick={ showClasses }>Classes</button>
+								<button id="current_classe" class="button btn_nav hidden action_button_size" value="" onclick={ showSousClasses }></button>
+								<button id="current_sous_classe" class="button btn_nav hidden action_button_size" value=""></button>
+							</div>
+							<div id="actions" class="actions">
+								<!--<button id="print_element_button" class="orange">Impressions</button>
+								<button id="delete_element_button" class="red">Supprimer</button>-->
+								<button id="add_classe_button" onclick={ addClasse } class="button ajouter action_button_size">Ajouter une classe</button>
+								<button id="add_sous_classe_button" onclick={ addSousClasse } class="button ajouter hidden action_button_size">Ajouter une sous-classe</button>
+								<button id="add_compte_button" onclick={ addCompte } class="button ajouter hidden action_button_size">Ajouter un compte</button>
+							</div>
+							<!--<div id="save_classe" class="hidden">
+								<button class="red cancel_submit" onclick={ cancelClasse }>Annuler</button>
+								<button class="blue save_submit" onclick={ saveClasse }>Enregistrer</button>
+							</div>
+							<div id="save_sous_classe" class="hidden">
+								<button class="red cancel_submit" onclick={ cancelSousClasse }>Annuler</button> 
+								<button class="blue save_submit" onclick={ saveSousClasse }>Enregistrer</button>
+							</div>
+							<div id="save_compte" class="hidden">
+								<button class="red cancel_submit" onclick={ cancelCompte }>Annuler</button> 
+								<button class="blue save_submit" onclick={ saveCompte }>Enregistrer</button>
+							</div>-->
+						</div>
+						<div id="entete_classe" class="entete-tableau">
+							<div class="cell_1"></div>
+							<div class="cell_2">
+								<p class="small">Classe</p>
+							</div>
+							<div class="cell_3">
+								<p class="small">Libellé</p>
+							</div>
+			
+							<div class="cell_4">
+								<p class="small">Nbre S/Classe</p>
+							</div>
+							<div class="cell_5">
+								<p class="small">Nbre Comptes</p>
+							</div>
+			
+							<div class="cell_6">
+								<p class="small">Visibilité</p>
+							</div>
+							<div class="cell_7">
+								<p class="small">Actions</p>
+							</div>
+						</div>
+			<!-- Describe the Classes -->
+						<div each={ classes } id="classe_{ id }" class="classe">
+							<div class="show_infos" onclick={ showSousClasses }>
+								<div class="cell_1">
+									<!--<input type="checkbox" name="action[]">-->
+								</div>
+								<div class="cell_2">
+									<p class="" title="Classe { reference }">{ reference }</p>
+								</div>
+								<div class="cell_3">
+									<p class="title">{ libelle }</p>
+								</div>
+								<div class="cell_4">
+									<p class="title" title="nb_sousclasses"><span class="">{ nb_sousclasses }</span></p>
+								</div>
+								<div class="cell_5">
+									<p class="title" title="nb_comptes"><span class="">{ nb_comptes }</span></p>
+								</div>
+								<div class="cell_6">
+									<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+								</div>
+
+								<div class="cell_7">
+									<div>
+										<p class="modif"><img class="edit_element_img" onclick={ editClasse } alt="Modifier" title="Modifier" src="/img/edit.png"><img if={ nb_sousclasses == 0 && nb_comptes == 0 || !nb_sousclasses } alt="Supprimer" title="Supprimer" class="delete_element_img" onclick={ validDeleteClasse } src="/img/delete.png"><!--<img title="Afficher les sous-classes" alt="Afficher les sous-classes" onclick={ showSousClasses } class="enlarge_sous_classes_img enlarge_element_img" src="/img/enlarge.png">--></p>
+									</div>
+								</div>
+							</div>
+							<div id="classe_{ id }_edit" class="edit edit_classe hidden">
+								<div class="cell_1">
+								</div>
+								<div class="cell_2">
+									<div>
+										<label class="small s-large" for="classe_reference_{ id }">Classe : </label>
+										<input id="classe_reference_{ id }" name="classe_reference_{ id }" type="text" maxlength="1" class="one_char" value="{ reference }">
+									</div>
+								</div>
+								<div class="cell_3">
+									<div>
+										<label class="small s-large" for="classe_libelle_{ id }">Libellé : </label>
+										<input id="classe_libelle_{ id }" name="classe_libelle_{ id }" type="text" class="title width-80-edit" value="{ libelle }" size="80" maxlength="80">
+									</div>
+								</div>
+								<div class="cell_4">
+									<p class="title" title="nb_sousclasses"><span class="">{ nb_sousclasses }</span></p>
+								</div>
+								<div class="cell_5">
+									<p class="title" title="nb_comptes"><span class="">{ nb_comptes }</span></p>
+								</div>
+								<div class="cell_6">
+                                    <input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="classe_visible_{ id }"  name="classe_visible_{ id }">
+								</div>
+								<div class="cell_7">
+									<button onclick={ saveClasse } class="button enregistrer save_submit">Enregistrer</button><!--
+								 --><button onclick={ cancelClasse } class="button annuler cancel_submit">Annuler</button>
+								</div>
+							</div>
+							<div id="classe_{ id }_delete" class="delete hidden">
+								<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button onclick={ deleteClasse }>Supprimer</button><button onclick={ cancelDeleteClasse }>Annuler</button></div>
+							</div>
+			<!-- /End Describe the Classes -->
+			<!-- Describe the Sous-classes -->
+							<div class="sous_classes hidden">
+								<div class="entete-tableau  entete_sous_classe">
+									<div class="cell_1"></div>
+									<div class="cell_2">
+										<p class="small">Sous-classe</p>
+									</div>
+									<div class="cell_3">
+										<p class="small">Libellé</p>
+									</div>
+		
+									<div class="cell_4">
+										<p class="small">Nbre Comptes</p>
+									</div>
+				<!--				<div class="cell_5">
+										<p class="small">Brouillard</p>
+									</div>
+			-->
+									<div class="cell_6">
+										<p class="small">Visibilité</p>
+									</div>
+									<div class="cell_7">
+										<p class="small">Actions</p>
+									</div>
+								</div>
+								<div each={ sous_classes } id="sous_classe_{ id }"  class="sous_classe">
+									<div class="show_infos" onclick={ showComptes }>
+										<div class="cell_1">
+											<!--<input type="checkbox" name="action[]">-->
+										</div>
+										<div class="cell_2">
+											<p class="" title="Sous-classe { reference }">{ reference }</p>
+										</div>
+										<div class="cell_3">
+											<p class="title">{ libelle }</p>
+										</div>
+										<div class="cell_4">
+											<p class="title" title="nbre_comptes"><span class="">{ nb_comptes }</span></p>
+										</div>
+			<!--							
+										<div class="cell_5">
+											<p class="small" title="Brouillard"><span class="blue_text">{ brouillards }</span></p>
+										</div>
+			-->
+										<div class="cell_6">
+											<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+										</div>
+										<div class="cell_7">
+											<div>
+												<p class="modif"><img class="edit_element_img" alt="Editer" onclick={ editSousClasse } src="/img/edit.png"><img if={ nb_comptes == 0 || !nb_comptes } alt="Supprimer" class="delete_element_img" onclick={ validDeleteSousClasse } src="/img/delete.png"><!--<img alt="Afficher les comptes" class="enlarge_element_img" onclick={ showComptes } src="/img/enlarge.png">--></p>
+											</div>
+										</div>
+									</div>
+									<div id="sous_classe_{ id }_edit" class="edit edit_sous_classe hidden">
+										<div class="cell_1">
+											<input type="hidden" id="sous_classe_id_classe_{ id }" name="sous_classe_id_classe_{ id }" value="{ id_classe }">
+										</div>
+										<div class="cell_2">
+										  <div>
+										  	<label class="small m-large" for="suffix_sous_classe_reference_{ id }">Sous-classe : { parent.reference }</label>
+										  	<input id="suffix_sous_classe_reference_{ id }" name="suffix_sous_classe_reference_{ id }" type="text" size="1" maxlength="1" class="one_char" value="">
+											<input id="sous_classe_reference_{ id }" name="sous_classe_reference_{ id }" type="hidden" maxlength="2" value="{ reference }"></div>
+										</div>
+										<div class="cell_3">
+											<div>
+												<label class="small m-large" for="sous_classe_libelle_{ id }">Libellé : </label>
+												<input id="sous_classe_libelle_{ id }" name="sous_classe_libelle_{ id }" type="text" class="title width-80-edit" value="{ libelle }" size="80" maxlength="80">
+											</div>
+										</div>
+										<div class="cell_4">
+											<p class="title" title="nbre_comptes"><span class="">{ nb_comptes }</span></p>
+										</div>
+										<div class="cell_6">
+											<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" name="sous_classe_visible_{ id }" id="sous_classe_visible_{ id }">
+										</div>
+										<div class="cell_7">
+											<button onclick={ saveSousClasse } class="button enregistrer save_submit">Enregistrer</button><!--
+										 --><button onclick={ cancelSousClasse } class="button annuler cancel_submit">Annuler</button>										
+										</div>
+									</div>
+									<div id="sous_classe_{ id }_delete" class="delete hidden">
+										<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button onclick={ deleteSousClasse }>Supprimer</button><button onclick={ cancelDeleteSousClasse }>Annuler</button></div>
+									</div>
+			<!-- /End Describe the Sous-classes -->
+			<!-- Describe the Comptes -->
+									<div class="comptes hidden">
+										<div class="entete-tableau entete_compte">
+											<div class="cell_1"></div>
+											<div class="cell_2">
+												<p class="small">Compte</p>
+											</div>
+											<div class="cell_3">
+												<p class="small">Libellé</p>
+											</div>
+			<!--
+											<div class="cell_4">
+												<p class="small">Ecritures</p>
+											</div>
+											<div class="cell_5">
+												<p class="small">Brouillard</p>
+											</div>
+			-->
+											<div class="cell_6">
+												<p class="small">Visibilité</p>
+											</div>
+											<div class="cell_7">
+												<p class="small">Actions</p>
+											</div>
+										</div>
+										<div each={ comptes } id="compte_{ id }"  class="compte">
+											<div class="show_infos">
+												<div class="cell_1">
+													<!--<input type="checkbox" name="action[]">-->
+												</div>
+												<div class="cell_2">
+													<p class="" title="Compte { reference }">{ reference }</p>
+												</div>
+												<div class="cell_3">
+													<p class="title">{ libelle }</p>
+												</div>
+			<!--
+												<div class="cell_4">
+													<p class="small" title="Ecritures"><span class="blue_text">{ ecritures }</span></p>
+												</div>
+												<div class="cell_5">
+													<p class="small" title="Brouillard"><span class="blue_text">{ brouillards }</span></p>
+												</div>
+			-->
+												<div class="cell_6">
+													<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" >
+												</div>
+												<div class="cell_7">
+													<div>
+														<p class="modif"><img class="edit_element_img" onclick={ editCompte } alt="Editer" src="/img/edit.png"><img alt="Supprimer" class="delete_element_img" onclick={ validDeleteCompte } src="/img/delete.png"></p>
+													</div>
+												</div>
+											</div>
+											<div id="compte_{ id }_edit" class="edit edit_compte hidden">
+												<div class="edit_compte_block">
+													<div class="hidden">
+														<input type="hidden" id="compte_id_classe_{ id }" name="compte_id_classe_{ id }" value="{ parent.parent.id }">
+														<input type="hidden" id="compte_id_sous_classe_{ id }" name="compte_id_sous_classe_{ id }" value="{ id_sous_classe }">
+													</div>
+													<div class="cell_block">
+														<label class="l-large" for="suffix_compte_reference_{ id }">Compte : { parent.reference }</label>
+														<input type="text" id="suffix_compte_reference_{ id }" name="suffix_compte_reference_{ id }" maxlength="6" size="6" class="six_char" value="">
+														<input type="hidden" id="compte_reference_{ id }" name="compte_reference_{ id }" maxlength="6" value="{ reference }">
+													</div>
+													<div class="cell_block">
+														<label class="s-large" for="compte_libelle_{ id }">Libellé : </label>
+														<input id="compte_libelle_{ id }" name="compte_libelle_{ id }" type="text" class="title xl-large width-80-edit" value="{ libelle }" size="80" maxlength="80">
+													</div>
+													<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" name="compte_visible_{ id }" id="compte_visible_{ id }" class="visible">
+												</div>
+												<div class="inline_block">
+													<div class="budget_PLA_previsionnel c45 { ! isCompteResultat ? 'hidden' : 'inline-block' }">
+														<div class="table c100">
+															<div class="row">
+																<h1 class="cell c49">Prévisionnel</h1>
+															</div>
+														</div>
+														<div class="previsionnel">
+															<div class="">
+																<div class="budget_prev table">
+																	<div class="row">
+																		<div class="cell c_1">
+																		</div>
+																		<div class="cell c_2">Débit
+																		</div>
+																		<div class="cell c_3">Crédit
+																		</div>
+																		<div class="cell c_4">Solde
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="cell c_1 bold">N
+																		</div>
+																		<div class="cell c_2"><input type="text" value="{ setFixed(debit_n_prev) }" name="compte_debit_n_prev_{ id }" id="compte_debit_n_prev_{ id }" info-type="debit" disabled={ currentClasseReference == "7" }>
+																		</div>
+																		<div class="cell c_3"><input type="text" value="{ setFixed(credit_n_prev) }" name="compte_credit_n_prev_{ id }" id="compte_credit_n_prev_{ id }" info-type="credit" disabled={ currentClasseReference == "6" }>
+																		</div>
+																		<div class="cell c_4"><input type="text" value="{ getSolde(debit_n_prev, credit_n_prev) }" name="compte_solde_n_prev_{ id }" id="compte_solde_n_prev_{ id }" class="bold solde" disabled="disabled" info-type="solde">
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="cell c_1 bold">N-1
+																		</div>
+																		<div class="cell c_2"><input type="text" value="{ setFixed(debit_n_1_prev) }" name="compte_debit_n_1_prev_{ id }" id="compte_debit_n_1_prev_{ id }" info-type="debit" disabled={ currentClasseReference == "7" }>
+																		</div>
+																		<div class="cell c_3"><input type="text" value="{ setFixed(credit_n_1_prev) }" name="compte_credit_n_1_prev_{ id }" id="compte_credit_n_1_prev_{ id }" info-type="credit" disabled={ currentClasseReference == "6" }>
+																		</div>
+																		<div class="cell c_4"><input type="text" value="{ getSolde(debit_n_1_prev, credit_n_1_prev) }" name="compte_solde_n_1_prev_{ id }" id="compte_solde_n_1_prev_{ id }" class="bold solde" disabled="disabled" info-type="solde">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="">
+																<div if={ PLA_READ } class="PLA_prev table">
+																	<div class="row">
+																		<div class="cell c_1 pla_head_row bold size-up text-pla">P.L.A</div>
+																		<div class="cell c_2 pla_head_col">
+																			<input type="checkbox" checked="{ pilotage_prev == '1' }" value="1" name="compte_pilotage_prev_{ id }" id="compte_pilotage_prev_{ id }" info-type="pilotage" onchange={ OnChangeCheckBox }>
+																			Pilotage
+																		</div>
+																		<div class="cell c_3 pla_head_col">
+																			<input type="checkbox" checked="{ logistique_prev == '1' }" value="1" name="compte_logistique_prev_{ id }" id="compte_logistique_prev_{ id }" info-type="logistique" onchange={ OnChangeCheckBox }>
+																			Logistique
+																		</div>
+																		<div class="cell c_4 pla_head_col">
+																			<input type="checkbox" checked="{ activite_prev == '1' }" value="1" name="compte_activite_prev_{ id }" id="compte_activite_prev_{ id }" info-type="activite" onchange={ OnChangeCheckBox }>
+																			Activité
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="cell c_1 pla_head_row">Recette</div>
+																		<div class="cell c_2 pla_pilotage"><input type="text" value="{ setFixed(recette_pilotage_prev) }" name="compte_recette_pilotage_prev_{ id }" id="compte_recette_pilotage_prev_{ id }" info-type="recette-pilotage" disabled={ pilotage_prev == 0 || currentClasseReference == "6" }>
+																		</div>
+																		<div class="cell c_3"><input type="text" value="{ setFixed(recette_logistique_prev) }" name="compte_recette_logistique_prev_{ id }" id="compte_recette_logistique_prev_{ id }" info-type="recette-logistique" disabled={ logistique_prev == 0 || currentClasseReference == "6" }>
+																		</div>
+																		<div class="cell c_4"><input type="text" value="{ setFixed(recette_activite_prev) }" name="compte_recette_activite_prev_{ id }" id="compte_recette_activite_prev_{ id }" info-type="recette-activite" disabled={ activite_prev == 0 || currentClasseReference == "6" }>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="cell c_1 pla_head_row">Dépense</div>
+																		<div class="cell c_2 pla_pilotage"><input type="text" value="{ setFixed(depense_pilotage_prev) }" name="compte_depense_pilotage_prev_{ id }" id="compte_depense_pilotage_prev_{ id }" info-type="depense-pilotage" disabled={ pilotage_prev == 0 || currentClasseReference == "7" }>
+																		</div>
+																		<div class="cell c_3"><input type="text" value="{ setFixed(depense_logistique_prev) }" name="compte_depense_logistique_prev_{ id }" id="compte_depense_logistique_prev_{ id }" info-type="depense-logistique" disabled={ logistique_prev == 0 || currentClasseReference == "7" }>
+																		</div>
+																		<div class="cell c_4"><input type="text" value="{ setFixed(depense_activite_prev) }" name="compte_depense_activite_prev_{ id }" id="compte_depense_activite_prev_{ id }" info-type="depense-activite" disabled={ activite_prev == 0 || currentClasseReference == "7" }>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div><!-- /budget_PLA_previsionnel -->
+													<div class="budget_PLA_reel c45 { ! isCompteResultat ? 'hidden' : 'inline-block' }"><!-- if classe in [6-7] -->
+														<div class="table c100">
+															<div class="row">
+																<h1 class="cell c49">Réel</h1>
+															</div>
+														</div>
+														<div class="reel">
+															<div class="budget_reel table">
+																<div class="row">
+																	<div class="cell c_1"></div>
+																	<div class="cell c_2">Débit</div>
+																	<div class="cell c_3">Crédit</div>
+																	<div class="cell c_4">Solde</div>
+																</div>
+																<div class="row">
+																	<div class="cell c_1 bold">N</div>
+																	<div class="cell c_2"><input type="text" value="{ setFixed(debit_n_1_reel) }" name="compte_debit_n_1_reel_{ id }" id="compte_debit_n_1_reel_{ id }" type="debit" disabled></div>
+																	<div class="cell c_3"><input type="text" value="{ setFixed(credit_n_1_reel) }" name="compte_credit_n_1_reel_{ id }" id="compte_credit_n_1_reel_{ id }" type="credit" disabled></div>
+																	<div class="cell c_4"><input type="text" value="{ getSolde(debit_n_1_reel, credit_n_1_reel) }" name="compte_solde_n_1_reel_{ id }" id="compte_solde_n_1_reel_{ id }" class="bold solde" disabled="disabled"></div>
+																</div>
+																<div class="row">
+																	<div class="cell c_1 bold">N-1</div>
+																	<div class="cell c_2"><input type="text" value="{ setFixed(debit_n_2_reel) }" name="compte_debit_n_2_reel_{ id }" id="compte_debit_n_2_reel_{ id }" type="debit" disabled></div>
+																	<div class="cell c_3"><input type="text" value="{ setFixed(credit_n_2_reel) }" name="compte_credit_n_2_reel_{ id }" id="compte_credit_n_2_reel_{ id }" type="credit" disabled></div>
+																	<div class="cell c_4"><input type="text" value="{ getSolde(debit_n_2_reel, credit_n_2_reel) }" name="compte_solde_n_2_reel_{ id }" id="compte_solde_n_2_reel_{ id }" class="bold solde" disabled="disabled"></div>
+																</div>
+															</div>
+															<div if={ PLA_READ } class="PLA_reel table">
+																<div class="row">
+																	<div class="cell c_1 pla_head_row bold size-up text-pla">P.L.A</div>
+																	<div class="cell c_2 pla_head_col">
+																		<input type="checkbox" value="1" checked="{ pilotage_reel == '1' }" name="compte_pilotage_reel_{ id }" id="compte_pilotage_reel_{ id }">
+																		Pilotage
+																	</div>
+																	<div class="cell c_3 pla_head_col">
+																		<input type="checkbox" value="1" checked="{ logistique_reel == '1' }" name="compte_logistique_reel_{ id }" id="compte_logistique_reel_{ id }">
+																		Logistique
+																	</div>
+																	<div class="cell c_4 pla_head_col">
+																		<input type="checkbox" value="1" checked="{ activite_reel == '1' }" name="compte_activite_reel_{ id }" id="compte_activite_reel_{ id }">
+																		Activité
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="cell c_1 pla_head_row">Recette</div>
+																	<div class="cell c_2 pla_pilotage"><input type="text" value="{ setFixed(recette_pilotage_reel) }" name="compte_recette_pilotage_reel_{ id }" id="compte_recette_pilotage_reel_{ id }"></div>
+																	<div class="cell c_3"><input type="text" value="{ setFixed(recette_logistique_reel) }" name="compte_recette_logistique_reel_{ id }" id="compte_recette_logistique_reel_{ id }"></div>
+																	<div class="cell c_4"><input type="text" value="{ setFixed(recette_activite_reel) }" name="compte_recette_activite_reel_{ id }" id="compte_recette_activite_reel_{ id }"></div>
+																</div>
+																<div class="row">
+																	<div class="cell c_1 pla_head_row">Dépense</div>
+																	<div class="cell c_2 pla_pilotage"><input type="text" value="{ setFixed(depense_pilotage_reel) }" name="compte_depense_pilotage_reel_{ id }" id="compte_depense_pilotage_reel_{ id }"></div>
+																	<div class="cell c_3"><input type="text" value="{ setFixed(depense_logistique_reel) }" name="compte_depense_logistique_reel_{ id }" id="compte_depense_logistique_reel_{ id }"></div>
+																	<div class="cell c_4"><input type="text" value="{ setFixed(depense_activite_reel) }" name="compte_depense_activite_reel_{ id }" id="compte_depense_activite_reel_{ id }"></div>
+																</div>
+															</div><!-- PLA_reel table -->
+														</div><!-- /reel -->
+													</div><!-- /budget_PLA_reel -->
+												</div><!-- /inline_block -->
+												<div class="block-actions">
+													<button onclick={ cancelCompte } class="button annuler cancel_submit">Annuler</button>
+													<button onclick={ saveCompte } class="button enregistrer save_submit">Enregistrer</button>
+												</div>
+												<div if={ COMPTA_READ } class="block_bilan_resultat_edit">
+													<div class="table">
+														<div class="bilan { hidden: ! isBilan }"><!-- if classe in [1-5] -->
+															<label class="xl-large" for="compte_id_bilan_debit_{ id }">Chapitre de bilan débit</label>
+															<select id="compte_id_bilan_debit_{ id }" name="compte_id_bilan_debit_{ id }" onchange={ bilanDebit } class="xxxl-large">
+																<option value=""></option>
+																<optgroup if={ chapitres.bilan_actif } label="Chapitres bilan actif" class="actif">
+																	<option each={ chapitres.bilan_actif } selected={ id_bilan_debit === id } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+																</optgroup>
+																<optgroup if={ chapitres.bilan_passif } label="Chapitres bilan passif">
+																	<option each={ chapitres.bilan_passif } selected={ id_bilan_debit === id } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+																</optgroup>
+															</select>
+															<select class="brut_amort xl-large { hidden: ! categorie_bilan_debit }" id="compte_categorie_bilan_debit_{ id }" name="compte_categorie_bilan_debit_{ id }" disabled={ actif === 0 ? 'disabled' : false }><!-- if actif -->
+																<option value=""></option>
+																<option value="brut" selected={ categorie_bilan_debit === 'brut' }>Brut</option>
+																<option value="amortissement" selected={ categorie_bilan_debit === 'amortissement' }>Amortissement/Provision</option>
+															</select>
+															<div if={ currentClasseReference == 5} class="inline_block">
+																<label for="compte_rapprochement_bancaire_{ id }"> Rapprochement Bancaire</label><input type="checkbox" id="compte_rapprochement_bancaire_{ id }" name="compte_rapprochement_bancaire_{ id }" value="{ rapprochement_bancaire }" checked="{ checked : rapprochement_bancaire == 1 }">
+															</div>
+														</div>
+														<div class="bilan { hidden: ! isBilan }"><!-- if classe in [1-5] -->
+															<label class="xl-large" for="compte_id_bilan_credit_{ id }">Chapitre de bilan crédit</label>
+															<select id="compte_id_bilan_credit_{ id }" name="compte_id_bilan_credit_{ id }" onchange={ bilanCredit } class="xxxl-large">
+																<option value=""></option>
+																<optgroup if={ chapitres.bilan_actif } label="Chapitres bilan actif" class="actif">
+																	<option each={ chapitres.bilan_actif } selected={ id_bilan_credit === id } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+																</optgroup>
+																<optgroup if={ chapitres.bilan_passif } label="Chapitres bilan passif">
+																	<option each={ chapitres.bilan_passif } selected={ id_bilan_credit === id } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)} disabled={ childs != 0 }>{ libelle }</option>
+																</optgroup>
+															</select>
+															<select class="brut_amort xl-large { hidden: ! categorie_bilan_credit }" id="compte_categorie_bilan_credit_{ id }" name="compte_categorie_bilan_credit_{ id }" disabled={ actif === 0 ? 'disabled' : false }><!-- if actif -->
+																<option value=""></option>
+																<option value="brut" selected={ categorie_bilan_credit === 'brut' }>Brut</option>
+																<option value="amortissement" selected={ categorie_bilan_credit === 'amortissement' }>Amortissement/Provision</option>
+															</select>
+														</div>
+														<div class="compte_resultat { hidden: ! isCompteResultat }"><!-- if classe in [6-7] -->
+															<label for="compte_id_compte_resultat_{ id }">Compte de résultat</label>
+															<select id="compte_id_compte_resultat_{ id }" name="compte_id_compte_resultat_{ id }" class="">
+																<option value=""></option>
+																<option each={ chapitres.compte_resultat } selected={ id_compte_resultat === id } value="{ id }" class={ tab_level0 : (level == '0'), tab_level1 : (level == '1'), tab_level2 : (level == '2'), chapitre_has_childs: (childs != 0)}>{ libelle }</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div><!-- /compte_id_edit -->
+											<div id="compte_{ id }_delete" class="delete hidden">
+												<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" onclick={ deleteCompte }>Supprimer</button><button name="cancel_{ id }" onclick={ cancelDeleteCompte }>Annuler</button></div>
+											</div>
+										</div>
+									</div>
+			<!-- /End Describe the Comptes -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/budgets">
+						Budgets
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/cle_repartition">
+						Clé de répartition
+					</a>
+				</header>
+			</div> -->
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/chapitres">
+						Chapitres Bilan et Compte de Résultat
+					</a>
+				</header class="closed">
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/parametres">
+						Paramètres Comptables	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/mode_paiement">Mode de Paiement</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/exercices">
+						Exercices	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/tableau_de_bord">
+						Tableau de Bord	
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/utilitaires">
+						Utilitaires
+					</a>
+				</header>
+			</div> -->
+		</div>
+	</div>
+	<script>
+	  	var _this = this;
+		var app = opts;
+		this.app = opts;
+		var permissions = app.session.permissions;
+
+
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+		app.on('unmount-comptes', function(){
+			app.off('unmount-comptes');		
+			_this.unmount();
+		});
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+		this.chapitres = { bilan_actif: undefined, bilan_passif: undefined, compte_resultat: undefined };
+		this.loaded = false;
+
+		this.thingsToLoad = ['bilan_actif', 'bilan_passif', 'compte_resultat', 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! app.session.exercices){
+			app.session.exercices = {};
+			app.session.exercices.elements = [];
+			app.session.exercices.idElements = {};
+			_this.exercices = app.session.exercices.elements;
+			_this.idExercices = app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		if( COMPTA_READ ){
+			$.getJSON( '/admin/compta/chapitres', { get_all_by_classe: true, classe: 'bilan_actif'}, function(data){
+				_this.chapitres.bilan_actif = data.elements;
+				_this.numToLoad--;
+			})
+			$.getJSON( '/admin/compta/chapitres', { get_all_by_classe: true, classe: 'bilan_passif'}, function(data){
+				_this.chapitres.bilan_passif = data.elements;
+				_this.numToLoad--;
+			})
+			$.getJSON( '/admin/compta/chapitres', { get_all_by_classe: true, classe: 'compte_resultat'}, function(data){
+				_this.chapitres.compte_resultat = data.elements;
+				_this.numToLoad--;
+			})
+		}
+/*************************************************************************
+		this.classes = [
+			{ id: 555, reference: 1, libelle: 'Comptes de capitaux', ecritures: 29, brouillards: 3, visible: 'visible', idSousClasses: {}, sous_classes:
+				[
+					{ id: 551, id_classe: 555, reference: 10, libelle: 'Capital et réserves', ecritures: 29, brouillards: 3, visible: 'visible', idComptes: {}, comptes:
+						[
+							{ id: 1, id_sous_classe: 551, reference: 101, libelle: 'Capital', ecritures: 29, brouillards: 3, visible: 'visible'},
+						]
+					},
+				]
+			},
+		];
+****************************************************************************/
+		this.classes = [];
+		this.idClasses = {};
+		this.currentClasseId = '';
+		this.currentClasseReference = '';
+		this.currentClasseLibelle = '';
+		this.isBilan = false;
+		this.isCompteResultat = false;
+		this.sousClasses = [];
+		this.idSousClasses = {};
+		this.currentSousClasseId = '';
+		this.currentSousClasseReference = '';
+		this.currentSousClasseLibelle = '';
+		this.comptes = [];
+		this.idComptes = {};
+
+		app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			_this.numToLoad--;
+			if( _this.loaded ){
+			}
+		});
+
+		function hideAddLayers(){
+			$('.filtres').addClass('table').removeClass('hidden');
+			$('#add_classe').addClass('hidden').removeClass('table');
+			$('#add_sous_classe').addClass('hidden').removeClass('table');
+			$('#add_compte').addClass('hidden').removeClass('table');
+			$('#save_classe').addClass('hidden').removeClass('inline_block');
+			$('#save_sous_classe').addClass('hidden').removeClass('inline_block');
+			$('#save_compte').addClass('hidden').removeClass('inline_block');
+			$('#actions').addClass('inline_block').removeClass('hidden');
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		editClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e, prefixId: 'classe_', hideClass: 'hidden', });
+			}
+		}
+
+		editSousClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(e.item){
+				var item = e.item;
+				$('#suffix_sous_classe_reference_' + item.id).val(item.reference.substr(1));
+			}else{
+				
+			}
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e, prefixId: 'sous_classe_', hideClass: 'hidden', });
+			}
+		}
+
+		editCompte(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(e.item){
+				var item = e.item;
+				$('#suffix_compte_reference_' + item.id).val(item.reference.substr(2));				
+			}else{
+				
+			}
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e, prefixId: 'compte_', hideClass: 'hidden', });
+			}
+		}
+
+		bilanDebit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var $brutAmort;
+			if(e.item){
+				var item = e.item;
+				var itemId = item.id;
+				$categorie = $('#compte_categorie_bilan_debit_' + itemId);
+			}else{
+				$categorie = $('#compte_categorie_bilan_debit');
+			}
+
+			if($('option:selected', e.currentTarget).parent('optgroup').hasClass('actif')){
+				$categorie.prop('disabled',false);
+				$categorie.removeClass('hidden');
+			}else{
+				$categorie.prop('disabled',true).val('');
+				$categorie.addClass('hidden');
+			}
+		}
+
+		bilanCredit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var $brutAmort;
+			if(e.item){
+				var item = e.item;
+				var itemId = item.id;
+				$categorie = $('#compte_categorie_bilan_credit_' + itemId);
+			}else{
+				$categorie = $('#compte_categorie_bilan_credit');
+			}
+
+			if($('option:selected', e.currentTarget).parent('optgroup').hasClass('actif')){
+				$categorie.prop('disabled',false);
+				$categorie.removeClass('hidden');
+			}else{
+				$categorie.prop('disabled',true).val('');
+				$categorie.addClass('hidden');
+			}
+		}
+
+		showClasses(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			hideAddLayers();
+
+			$('#add_classe_button').removeClass('hidden').addClass('inline_block');
+			$('#add_sous_classe_button').removeClass('inline_block').addClass('hidden');
+			$('#add_compte_button').removeClass('inline_block').addClass('hidden');
+
+			var classeId = _this.currentClasseId;
+
+			$('.show_infos', $('#classe_' + classeId)).show();
+
+			$('#current_classe').hide();
+			_this.currentClasseId = '';
+			_this.currentClasseReference = '';
+			_this.currentClasseLibelle = '';
+			_this.isBilan = false;
+			_this.isCompteResultat = false;
+
+
+			$('#current_sous_classe').hide();
+			_this.currentSousClasseId = '';
+			_this.currentSousClasseReference = '';
+			_this.currentSousClasseLibelle = '';
+
+			$('#entete_classe').show();
+			$('.entete_sous_classe', $('#classe_' + classeId)).hide();
+			$('.classe').slideDown();
+			$('.sous_classe').slideUp();
+		}
+		
+		loadSousClasses(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+console.log('_this.filtre_classes: ' + _this.filtre_classes);
+			if( _this.filtre_classes.value != ''){
+				_this.currentClasseId = _this.filtre_classes.value ;
+				_this.currentClasseReference = _this.classes[ _this.idClasses[ _this.currentClasseId ] ].reference;
+				_this.currentClasseLibelle = _this.classes[ _this.idClasses[ _this.currentClasseId ] ].libelle;
+				
+				var $classeId = $('#classe_' + _this.currentClasseId);
+				$('#current_classe').text('Classe : ' + _this.currentClasseReference).attr('title', _this.currentClasseLibelle).show();
+				$classeId.slideDown();
+				$('.sous_classes', $classeId).toggleClass('hidden');
+
+				_this.showSousClasses(e);
+			}else{
+				_this.showClasses(e);
+			}
+		}
+
+		showSousClasses(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			var item;
+			var itemId;
+			if(e.item){
+				item = e.item;
+				itemId = item.id;
+			}else{
+
+				itemId = _this.currentClasseId;
+
+			}
+			var htmlId = 'classe_' + itemId;
+			var $item = $('#' + htmlId);
+
+			_this.classes[_this.idClasses[itemId]]['sous_classes'] = [];
+			_this.classes[_this.idClasses[itemId]]['idSousClasses'] = {};
+
+			var elements = _this.classes[_this.idClasses[itemId]]['sous_classes'];
+			var idElements = _this.classes[_this.idClasses[itemId]]['idSousClasses'];
+			// get sous_classes and dispatch them
+			getElements({
+				tag: _this,
+				url: '/admin/compta/comptes', 
+				elements: elements,
+				idElements: idElements,
+				fields: {id: 'id', id_classe: 'id_classe', id_entreprise: 'id_entreprise', reference: 'reference', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', nb_comptes: 'nb_comptes'},
+				getParameters: { type_element: 'sous_classe', id_classe: itemId},
+				childsName: 'comptes',
+				idChildsName: 'idComptes',
+				end: function(tag){
+					$('.sous_classes', $item).removeClass('hidden');
+				},
+			});
+
+			_this['sous_classe_id_classe'].value = itemId;
+
+			document.getElementById('sous_classe_id_classe').value = itemId;
+			//$('#sous_classe_id_classe').value = itemId;
+
+			$('#entete_classe').hide();
+			$('.entete_sous_classe', $item).show();
+			$('.entete_compte', $item).hide();
+			$('.compte', $item).hide();
+			if(item){
+
+				$('#current_classe').text('Classe : ' + item.reference + ' - ' + item.libelle).attr('title', item.libelle).show();
+				_this.currentClasseId = itemId;
+				_this.currentClasseReference = item.reference;
+				_this.currentClasseLibelle = item.libelle;
+				_this.isBilan = (item.reference != '6' && item.reference != '7') ? true : false;
+				_this.isCompteResultat = (item.reference == '6' || item.reference == '7') ? true : false;
+			}
+			$('.classe').each(function(index){
+				if(this.id !== htmlId){
+					$(this).hide();
+				}else{
+					$('.show_infos', $(this)).hide();
+				}
+			});
+
+			hideAddLayers();
+
+			$('#add_classe_button').removeClass('inline_block').addClass('hidden');
+			$('#add_sous_classe_button').removeClass('hidden').addClass('inline_block');
+			$('#add_compte_button').removeClass('inline_block').addClass('hidden');
+
+			$('#current_sous_classe').hide();
+			_this.currentSousClasseId = '';
+			_this.currentSousClasseReference = '';
+			_this.currentSousClasseLibelle = '';
+
+		}
+
+		hideSousClasses(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item = e.item;
+			var itemId = item.id;
+			var $item = $('#classe_' + itemId);
+			$('.sous_classes', $item).slideUp();
+
+			$('#current_classe').text('').attr('title', '').hide();
+
+			_this.currentClasseId = '';
+			_this.currentClasseReference = '';
+			_this.currentClasseLibelle = '';
+			_this.isBilan = false;
+			_this.isCompteResultat = false;
+
+
+			$('.classe').each(function(index){
+				$(this).show();
+			});
+
+			$('#add_classe_button').removeClass('hidden').addClass('inline_block');
+			$('#add_sous_classe_button').removeClass('inline_block').addClass('hidden');
+			$('#add_compte_button').removeClass('inline_block').addClass('hidden');
+		}
+
+		loadComptes(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			if( _this.filtre_sous_classes.value ){
+
+				_this.currentClasseId = _this.sousClasses[ _this.idSousClasses[ _this.filtre_sous_classes.value ] ].id_classe;
+				_this.currentClasseReference = _this.classes[ _this.idClasses[ _this.currentClasseId ] ].reference;
+				_this.currentClasseLibelle = _this.classes[ _this.idClasses[ _this.currentClasseId ] ].libelle;
+				_this.currentSousClasseId = _this.filtre_sous_classes.value;
+				_this.currentSousClasseReference = _this.sousClasses[ _this.idSousClasses[ _this.filtre_sous_classes.value ] ].reference;
+				_this.currentSousClasseLibelle = _this.sousClasses[ _this.idSousClasses[ _this.filtre_sous_classes.value ] ].libelle;
+				_this.isBilan = (_this.currentClasseReference != '6' && _this.currentClasseReference != '7') ? true : false;
+				_this.isCompteResultat = (_this.currentClasseReference == '6' || _this.currentClasseReference == '7') ? true : false;
+				var classe = _this.classes[_this.idClasses[_this.currentClasseId]];
+				var classeHtmlId = 'classe_' + _this.currentClasseId;
+				var $classe = $('#' + classeHtmlId);
+				var sousClasseHtmlId = 'sous_classe_' + _this.currentSousClasseId;
+				var $sousClasse = $('#' + sousClasseHtmlId);
+
+				$('#current_classe').value = _this.currentClasseId;
+				$('#current_classe').text('Classe : ' + _this.currentClasseReference).attr('title', _this.currentClasseLibelle).show();
+
+				$('#entete_classe').hide();
+				$('.entete_sous_classe', $sousClasse).show();
+				$('.entete_compte', $classe).hide();
+				$('.classe').each(function(index){
+					if(this.id !== classeHtmlId){
+						$(this).hide();
+					}else{
+						$('.show_infos', $(this)).hide();
+					}
+				});
+				$('.sous_classes', $classe).removeClass('hidden');
+				$('.comptes', $sousClasse).show();
+
+				var sousClasses = classe['sous_classes'];
+				var idSousClasses = classe['idSousClasses'];
+
+				if( ! classe['idSousClasses'][_this.currentSousClasseId] ){
+					// get sous_classes and dispatch them
+					getElements({
+						tag: _this,
+						url: '/admin/compta/comptes', 
+						elements: sousClasses,
+						idElements: idSousClasses,
+						fields: {id: 'id', id_classe: 'id_classe', id_entreprise: 'id_entreprise', reference: 'reference', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible'},
+						getParameters: { type_element: 'sous_classe', id_classe: _this.currentClasseId},
+						childsName: 'comptes',
+						idChildsName: 'idComptes',
+						end: function(tag){
+							$('.sous_classes', $('#sous_classe_' + tag.currentSousClasseId)).slideDown();
+							tag.showComptes(e);
+						},
+					});
+				}
+			}else{
+				_this.loadSousClasses(e);
+			}
+
+		}
+
+		loadCompte(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+		}
+
+		showComptes(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item;
+			var itemId;
+			var classeId;
+
+			if(e.item){
+				item = e.item;
+				itemId = item.id;
+				classeId = item.id_classe;
+			}else{
+				classeId = _this.currentClasseId;
+				itemId = _this.currentSousClasseId;
+			}
+
+			var htmlId = 'sous_classe_' + itemId;
+			var $parent = $('#classe_' + classeId);
+			var $item = $('#' + htmlId);
+
+			var classe = _this.classes[_this.idClasses[classeId]];
+			var ssClasse = classe['sous_classes'][classe['idSousClasses'][itemId]]
+			ssClasse['comptes'] = [];
+			ssClasse['idComptes'] = {};
+			var elements = ssClasse['comptes'];
+			var idElements = ssClasse['idComptes'];
+
+			var fields = { id: 'id', id_sous_classe: 'id_sous_classe', id_entreprise: 'id_entreprise', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit',categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', id_exercice: 'id_exercice', visible: 'visible', rapprochement_bancaire: 'rapprochement_bancaire'};
+
+			var pla_reel_fields = { debit_n_1_reel: 'debit_n_1_reel', credit_n_1_reel: 'credit_n_1_reel', solde_n_1_reel: 'solde_n_1_reel', pilotage_reel: 'pilotage_reel', logistique_reel: 'logistique_reel', activite_reel: 'activite_reel', recette_pilotage_reel: 'recette_pilotage_reel', recette_logistique_reel: 'recette_logistique_reel', recette_activite_reel: 'recette_activite_reel', depense_pilotage_reel: 'depense_pilotage_reel', depense_logistique_reel: 'depense_logistique_reel', depense_activite_reel: 'depense_activite_reel', };
+
+			var pla_prev_fields = { debit_n_prev: 'debit_n_prev', credit_n_prev: 'credit_n_prev', solde_n_prev: 'solde_n_prev', debit_n_1_prev: 'debit_n_1_prev', credit_n_1_prev: 'credit_n_1_prev', solde_n_1_prev: 'solde_n_1_prev', pilotage_prev: 'pilotage_prev', logistique_prev: 'logistique_prev', activite_prev: 'activite_prev', recette_pilotage_prev: 'recette_pilotage_prev', recette_logistique_prev: 'recette_logistique_prev', recette_activite_prev: 'recette_activite_prev', depense_pilotage_prev: 'depense_pilotage_prev', depense_logistique_prev: 'depense_logistique_prev', depense_activite_prev: 'depense_activite_prev', };
+
+			if( PLA_READ ){
+				for(var key in pla_reel_fields){ fields[key] = pla_reel_fields[key];}
+				for(var key in pla_prev_fields){ fields[key] = pla_prev_fields[key];}
+			}
+			// get comptes and dispatch them
+			getElements({
+				tag: _this,
+				url: '/admin/compta/comptes', 
+				elements: elements,
+				idElements: idElements,
+				fields: fields,
+				getParameters: { type_element: 'compte', id_sous_classe: itemId},
+				end: function(tag){
+					$('.comptes', $item).removeClass('hidden');
+				},
+			});
+
+			_this['compte_id_classe'].value = classeId;
+			_this['compte_id_sous_classe'].value = itemId;
+
+
+			$('.entete_sous_classe', $parent).hide();
+			$('.entete_compte', $item).show();
+
+			if( item ){
+				$('#current_sous_classe').text('Sous-classe : ' + item.reference + ' - ' + item.libelle).attr('title', item.libelle).show();
+				_this.currentSousClasseReference = item.reference;
+				_this.currentSousClasseId = itemId;
+			}else{
+				$('#current_sous_classe').text('Sous-classe : ' + _this.currentSousClasseReference).attr('title', _this.currentSousClasseLibelle).show();
+				
+			}
+
+			$('.sous_classe', $parent).each(function(index){
+				if(this.id !== htmlId){
+					$(this).hide();
+				}else{
+					$('.show_infos', $(this)).hide();
+				}
+			});
+
+			hideAddLayers();
+
+			$('#add_classe_button').removeClass('inline_block').addClass('hidden');
+			$('#add_sous_classe_button').removeClass('inline_block').addClass('hidden');
+			$('#add_compte_button').removeClass('hidden').addClass('inline_block');
+		}
+
+		hideComptes(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item = e.item;
+			var itemId = item.id;
+			var $item = $('#sous_classe_' + itemId);
+			var $parent = $('#classe_' + item.id_classe);
+			$('.comptes', $item).slideUp();
+
+			$('#current_sous_classe').text('').attr('title', '').hide();
+			_this.currentSousClasseId = '';
+			_this.currentSousClasseReference = '';
+
+			$('.sous_classe', $parent).each(function(index){
+				$(this).show();
+			});
+			$('#add_classe_button').removeClass('inline_block').addClass('hidden');
+			$('#add_sous_classe_button').removeClass('hidden').addClass('inline_block');
+			$('#add_compte_button').removeClass('inline_block').addClass('hidden');
+		}
+
+		addClasse(e){
+			if(_this.E_M){
+				$('#save_classe').addClass('inline_block').removeClass('hidden');
+				$('#actions').addClass('hidden').removeClass('inline_block');
+				$('input[type=text]', '#add_classe').val('');
+				_this.E_M.addElement({
+					event: e, 
+					prefixId: 'classe_',
+					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		addSousClasse(e){
+			if(_this.E_M){
+				$('#save_sous_classe').addClass('inline_block').removeClass('hidden');
+				$('#actions').addClass('hidden').removeClass('inline_block');
+				$('input[type=text]', '#add_sous_classe').val('');
+				_this.E_M.addElement({
+					event: e, 
+					prefixId: 'sous_classe_',
+ 					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		addCompte(e){
+			if(_this.E_M){
+				$('#save_compte').addClass('inline_block').removeClass('hidden');
+				$('#actions').addClass('hidden').removeClass('inline_block');
+				$('input[type=text]', '#add_compte').val('');
+				_this.E_M.addElement({
+					event: e, 
+					prefixId: 'compte_',
+ 					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		validDeleteClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'classe_',});
+			}
+		}
+
+		validDeleteSousClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'sous_classe_',});
+			}
+		}
+
+		validDeleteCompte(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'compte_',});
+			}
+		}
+
+		cancelDeleteClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'classe_',});
+			}
+		}
+
+		deleteClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/comptes', elements: _this.classes, idElements: _this.idClasses, type_element: 'classe',});
+			}
+		}
+		
+		cancelDeleteSousClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'sous_classe_',});
+			}
+		}
+
+		deleteSousClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var item = e.item;
+				var classeId = item.id_classe;
+				var elements =  _this.classes[_this.idClasses[classeId]]['sous_classes'];
+				var idElements = _this.classes[_this.idClasses[classeId]]['idSousClasses'];
+				
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/comptes', elements: elements, idElements: idElements, type_element: 'sous_classe',});
+			}
+		}
+		
+		cancelDeleteCompte(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'compte_',});
+			}
+		}
+
+		deleteCompte(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var item = e.item;
+				var itemId = item.id;
+				var ssClasseId = item.id_sous_classe;
+
+				var classeId = _this.currentClasseId;
+
+				var classe = _this.classes[_this.idClasses[classeId]];
+				var ssClasse = classe['sous_classes'][classe['idSousClasses'][ssClasseId]]
+				var elements = ssClasse['comptes'];
+				var idElements = ssClasse['idComptes'];
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/comptes', elements: elements, idElements: idElements, type_element: 'compte',});
+			}
+		}
+
+		deleteElements(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$('#save_classe').addClass('hidden').removeClass('inline_block');
+				$('#actions').addClass('inline_block').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'reference', 'visible', ],
+					prefixId: 'classe_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		cancelSousClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$('#save_sous_classe').addClass('hidden').removeClass('inline_block');
+				$('#actions').addClass('inline_block').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'reference', 'visible', ],
+					prefixId: 'sous_classe_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		cancelCompte(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$('#save_compte').addClass('hidden').removeClass('inline_block');
+				$('#actions').addClass('inline_block').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'reference', 'visible', ],
+					prefixId: 'compte_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		saveClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			if(_this.E_M){
+				var reference_check = parseInt($('#classe_reference').val());
+				var exist = checkIfExist("classe", reference_check);
+				
+				if (e.item) {
+					var item = e.item;
+					var itemId = item.id;
+					reference = $('#classe_reference_' + itemId ).val();
+					var exist_item = checkIfExist("classe", reference, itemId);
+				}
+
+				if( ! e.item && Number.isInteger(reference_check) && !exist){
+					$('#save_classe').removeClass('inline_block').addClass('hidden');
+					$('#actions').removeClass('hidden').addClass('inline_block');
+				}
+				if (e.item && !exist_item || ! e.item && Number.isInteger(reference_check) && !exist)
+				{	
+					_this.E_M.saveElement({
+						loader: true,
+						event: e, 
+						url: '/admin/compta/comptes', 
+						fields: ['libelle', 'reference', 'visible', ],
+						tag: _this,
+						elements: _this.classes,
+						idElements: _this.idClasses,
+						typeElement: 'classe',
+						suffixId: 'classe',
+						prefixFields: 'classe_',
+						prefixId: 'classe_',
+						hideClass: 'hidden',
+						beforeUpdate: function(params){
+							params.elements.sort(function (a, b) {
+								if (a.reference > b.reference){
+									return 1;
+								}else if (a.reference < b.reference){
+									return -1;
+								}else{
+								// a doit être égale à b 
+									return 0;
+								}
+							});
+						},
+						end: function(p){
+						},
+					});
+				}
+			}
+		}
+
+		function checkIfExist(type, reference, id) {
+			if(type == "classe")
+				var Liste = _this.classes;
+			else if (type == "sous_classe") 
+				var Liste = getSousClasses();
+			else if (type == "compte")
+				var Liste = getComptes();
+
+			for(var x = 0, l = Liste.length; x < l; x++) {
+				if(type == 'classe' && Liste[x]['reference'] == reference && Liste[x]['id'] != id) {
+					return true;
+				}
+				if(type == 'sous_classe' && Liste[x]['reference'] == reference && Liste[x]['id'] != id) {
+					return true;
+				}
+				if(type == 'compte' && Liste[x]['reference'] == reference && Liste[x]['id'] != id) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		saveSousClasse(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+
+				var idClasse;
+				var reference;
+
+				var classeId = getCurrentClasse(); 
+
+				var reference_check = classeId['reference'] + $('#suffix_sous_classe_reference').val();
+				reference_check = parseInt(reference_check);
+				var exist = checkIfExist("sous_classe", reference_check);
+
+				if(e.item){
+					var item = e.item;
+					var itemId = item.id;
+					idClasse = item.id_classe;
+					reference = _this.currentClasseReference + $('#suffix_sous_classe_reference_' + itemId ).val(); 
+					$('#sous_classe_reference_' + itemId ).val(reference);
+					var exist_item = checkIfExist("sous_classe", reference, itemId);
+				}else{
+					idClasse = _this.currentClasseId;
+					reference = _this.currentClasseReference + $('#suffix_sous_classe_reference').val();
+					$('#sous_classe_reference').val(reference);
+				}
+
+				if( ! e.item && Number.isInteger(reference_check) && !exist){
+					$('#save_sous_classe').removeClass('inline_block').addClass('hidden');
+					$('#actions').removeClass('hidden').addClass('inline_block');
+				}
+
+				if (e.item && !exist_item || ! e.item && Number.isInteger(reference_check) && !exist)
+				{
+					var elements = _this.classes[_this.idClasses[idClasse]]['sous_classes'];
+					var idElements = _this.classes[_this.idClasses[idClasse]]['idSousClasses']
+					_this.E_M.saveElement({
+						loader: true,
+						event: e, 
+						url: '/admin/compta/comptes', 
+						fields: ['libelle', 'reference', 'id_classe', 'visible', ],
+						tag: _this,
+						elements: elements,
+						idElements: idElements,
+						typeElement: 'sous_classe',
+						suffixId: 'sous_classe',
+						prefixFields: 'sous_classe_',
+						prefixId: 'sous_classe_',
+						hideClass: 'hidden',
+						beforeUpdate: function(params){
+							params.elements.sort(function (a, b) {
+								if (a.reference > b.reference){
+									return 1;
+								}else if (a.reference < b.reference){
+									return -1;
+								}else{
+								// a doit être égale à b 
+									return 0;
+								}
+							});
+						},
+					});
+				}
+			}
+		}
+
+		function getCurrentClasse() {
+			var classe = _this.classes[ _this.idClasses[ _this.currentClasseId ]]; 
+			return classe;
+		}
+
+		function getSousClasses() {
+			var classe = getCurrentClasse();
+			return classe.sous_classes;
+		}
+
+		function getCurrentSousClasse() {
+			var classe = getCurrentClasse();
+			return classe.sous_classes[ classe.idSousClasses[ _this.currentSousClasseId ]];
+		}
+
+		function getComptes() {
+			var sous_classe = getCurrentSousClasse();
+			return sous_classe.comptes;
+		}
+
+		OnChangeCheckBox(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			var classe = getCurrentClasse(); 
+			if(!e.target.checked) {
+				if(classe["reference"] == '7') {
+					$('input[info-type=recette-'+ $(e.target).attr('info-type') +']', e.target.parentNode.parentNode.parentNode).attr('disabled', 'disabled').addClass('input-disabled').val('0.00');
+				} else if (classe["reference"] == '6') {
+					$('input[info-type=depense-'+ $(e.target).attr('info-type') +']', e.target.parentNode.parentNode.parentNode).attr('disabled', 'disabled').addClass('input-disabled').val('0.00');
+				}
+			} else {
+				if(classe["reference"] == '7') {
+					$('input[info-type=recette-'+ $(e.target).attr('info-type') +']', e.target.parentNode.parentNode.parentNode).removeAttr('disabled').removeClass('input-disabled');
+				} else if(classe["reference"] == '6') {
+					$('input[info-type=depense-'+ $(e.target).attr('info-type') +']', e.target.parentNode.parentNode.parentNode).removeAttr('disabled').removeClass('input-disabled');
+				}
+			}
+		}
+
+		saveCompte(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var reference;
+
+				var classeId = $('label[for=suffix_compte_reference]').text().substr($('label[for=suffix_compte_reference]').text().length - 2, 2);
+				var reference_check = classeId + $('#suffix_compte_reference').val();
+				reference_check = parseInt(reference_check);
+				var exist = checkIfExist("compte", reference_check);
+
+				if(e.item){
+					var item = e.item;
+					var itemId = item.id;
+					var ssClasseId = item.id_sous_classe;
+
+					reference = _this.currentSousClasseReference + $('#suffix_compte_reference_' + itemId ).val();
+					$('#compte_reference_' + itemId ).val(reference);
+					var classeId = _this.currentClasseId;
+					var exist_item = checkIfExist("compte", reference, itemId);
+				}else{
+					var ssClasseId = _this.currentSousClasseId;
+					var classeId = _this.currentClasseId;
+					reference = _this.currentSousClasseReference + $('#suffix_compte_reference').val();
+					$('#compte_reference').val(reference);
+				}
+
+				if( ! e.item && Number.isInteger(reference_check) && !exist){
+					$('#save_compte').removeClass('inline_block').addClass('hidden');
+					$('#actions').removeClass('hidden').addClass('inline_block');
+				}
+
+				if (e.item && !exist_item || ! e.item && Number.isInteger(reference_check) && !exist){
+					var classe = _this.classes[_this.idClasses[classeId]];
+					var ssClasse = classe['sous_classes'][classe['idSousClasses'][ssClasseId]]
+					var elements = ssClasse['comptes'];
+					var idElements = ssClasse['idComptes'];
+
+					var base_fields = ['libelle', 'reference', 'id_sous_classe', 'visible', 'id_bilan_debit', 'id_bilan_credit', 'categorie_bilan_debit', 'categorie_bilan_credit', 'id_compte_resultat', 'rapprochement_bancaire'];
+
+					var pla_reel_fields = [ 'debit_n_1_reel', 'credit_n_1_reel', 'solde_n_1_reel', 'pilotage_reel', 'logistique_reel', 'activite_reel', 'recette_pilotage_reel', 'recette_logistique_reel', 'recette_activite_reel', 'depense_pilotage_reel', 'depense_logistique_reel', 'depense_activite_reel', ];
+
+					var pla_prev_fields = [ 'debit_n_prev', 'credit_n_prev', 'solde_n_prev', 'debit_n_1_prev', 'credit_n_1_prev', 'solde_n_1_prev', 'pilotage_prev', 'logistique_prev', 'activite_prev', 'recette_pilotage_prev', 'recette_logistique_prev', 'recette_activite_prev', 'depense_pilotage_prev', 'depense_logistique_prev', 'depense_activite_prev', ];
+
+					if( PLA_READ ){
+						var fields = base_fields.concat(pla_reel_fields, pla_prev_fields);
+					}else{
+						var fields = base_fields;
+					}
+
+
+					_this.E_M.saveElement({
+						event: e, 
+						loader: true,
+						url: '/admin/compta/comptes',
+						fields: fields,
+						tag: _this,
+						elements: elements,
+						idElements: idElements,
+						suffixId: 'compte',
+						typeElement: 'compte',
+						prefixFields: 'compte_',
+						prefixId: 'compte_',
+						hideClass: 'hidden',
+						beforeSend: function(params){
+							params.element.reference = (params.element.reference + '00000000').substr(0, 8);
+						},
+						beforeUpdate: function(params){
+							params.elements.sort(function (a, b) {
+								if (a.reference > b.reference){
+									return 1;
+								}else if (a.reference < b.reference){
+									return -1;
+								}else{
+								// a doit être égale à b 
+									return 0;
+								}
+							});
+						},
+					});
+				}
+			}
+		}
+
+		makeVisible(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.makeVisible({event: e});
+			}
+		}
+
+		makeInvisible(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.makeInvisible({event: e});
+			}
+		}
+
+		this.getSolde = function getSolde(a, b) {
+			var c;
+			if(a && b) {
+				c = Math.abs(a - b).toFixed(2);
+				return (c);
+			} else {
+				return (null);
+			}
+		}
+
+		this.setFixed = function setFixed(a) {
+			if (a) {
+				return(parseFloat(a).toFixed(2));
+			} else {
+				return(null);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			if( _this.selectedExercice ){
+				getParameters.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParameters.id_exercice = document.getElementById('id_exercice').value;
+			}
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+
+						if( typeof idElements[d['id']] === 'undefined'){
+							idElements[d['id']] = i;
+							elements.push(d);
+						}else{
+							elements[ idElements[d['id']] ] = d;
+						}
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}
+					tag.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		edit_compte(htmlId){
+			var ids = htmlId.split('_');
+			var id = parseInt(ids[1], 10);
+			if(id !== NaN){
+				document.getElementById('filtre_sous_classes').value = id;
+				_this.filtre_sous_classes.value = id;
+
+				_this.loadComptes( new MouseEvent('click'));
+			}
+		}
+
+		this.on('mount', function(){
+			getElements({
+				tag: _this,
+				url: '/admin/compta/comptes', 
+				elements: _this.classes, 
+				idElements: _this.idClasses,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', reference: 'reference', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', nb_sousclasses: 'nb_sousclasses', nb_comptes: 'nb_comptes'},
+				getParameters: { type_element: 'classe', },
+				childsName: 'sous_classes',
+				idChildsName: 'idSousClasses',
+				end: function(tag){ 
+					tag.loaded = true;
+					tag.numToLoad--; 
+					/********************************************* 
+					TODO:
+					better to run it from a generic function => app.loadThings() ...
+					test if every dependancie is loaded
+					and then run the dependant functions ...
+					maybe some pile of callback functions to run when each list of dependancies are loaded
+					**********************************************/
+				},
+			});
+			getElements({
+				tag: _this,
+				url: '/admin/compta/comptes', 
+				elements: _this.sousClasses,
+				idElements: _this.idSousClasses,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', id_classe: 'id_classe', reference: 'reference', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', nb_comptes: 'nb_comptes'},
+				getParameters: { type_element: 'sous_classe', },
+				childsName: 'sous_classes',
+				idChildsName: 'idSousClasses',
+				end: function(tag){ 
+				},
+			});
+			getElements({
+				tag: _this,
+				url: '/admin/compta/comptes', 
+				elements: _this.comptes,
+				idElements: _this.idComptes,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', rapprochement_bancaire: 'rapprochement_bancaire'},
+				getParameters: { type_element: 'compte', },
+				end: function(tag){ 
+				},
+			});
+			if( app.currentPageAnchor ){
+				if( app.currentPageCallback &&  app.currentPageCallback === 'edit_compte' ){
+					//_this[app.getPageCallback( app.currentModule, app.currentPage, app.currentPageCallback)](app.currentPageAnchor);
+					_this.edit_compte(app.currentPageAnchor);
+					app.currentPageCallback = undefined;
+				}
+				if(_this.E_M){
+					_this.E_M.scrollToId( app.currentPageAnchor );
+				}
+				app.currentPageAnchor = undefined;
+			}
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			editClasse = null;
+			editSousClasse = null;
+			editCompte = null;
+			showContents = null;
+			showClasses = null;
+			showSousClasses = null;
+			hideSousClasses = null;
+			showComptes = null;
+			hideComptes = null;
+			addClasse = null;
+			addSousClasse = null;
+			addCompte = null;
+			validDeleteClasse = null;
+			validDeleteSousClasse = null;
+			validDeleteCompte = null;
+			cancelDeleteClasse = null;
+			deleteClasse = null;
+			cancelDeleteSousClasse = null;
+			deleteSousClasse = null;
+			cancelDeleteCompte = null;
+			deleteCompte = null;
+			deleteElements = null;
+			cancelClasse = null;
+			cancelSousClasse = null;
+			cancelCompte = null;
+			saveClasse = null;
+			saveSousClasse = null;
+			saveCompte = null;
+			makeVisible = null;
+			makeInvisible = null;
+			getElements = null;
+			toggleVisible = null;			
+		});
+	</script>
+</comptes>

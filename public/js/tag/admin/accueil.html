@@ -1,0 +1,367 @@
+<accueil-admin>
+	<div class="background">
+	</div>
+
+	<div class="content accueil_content">
+
+		<div if={ ((! COMPTA_READ) && PLA_READ ) }>
+			<div class="logo hidden">
+				<img src="/img/logo-alloc.png">
+			</div>
+
+			<div class="widget">
+				<h1 class="b_title color-compta"><a href="#/compta">Comptabilité P.L.A.</a></h1>
+				<div class="w_content">
+					<a href="#/compta"><img src="/img/compta.png"></a>
+				</div>
+				
+			</div>
+
+			<div class="widget">
+				<h1 class="b_title color-export"><a href="#/compta/export_comptes">Export du P.L.A.</a></h1>
+				<div class="w_content">
+					<a href="#/compta/export_comptes"><img src="/img/export.png"></a>
+				</div>
+			</div>
+			<div class="widget">
+				<h1 class="b_title color-parametrage"><a href="#/compta/comptes">Parametrage</a></h1>
+				<div class="w_content">
+					<a href="#/compta/comptes"><img src="/img/parametrage.png"></a>
+				</div>
+				
+			</div>
+			<div class="widget info pla">
+				<p> 
+					<span class="wi_title"> Informations / Plateforme Premium</span>
+				</p>
+				<div class="table center">
+					<div class="cell">
+						<img src="/img/temporaire.png">
+					</div>
+					<div class="cell text"> Espace de stockage <br/> <span class="sizeup"><span class="bold">16 Mo</span> / 100 Mo</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="" if={ ! PLA_READ }>
+		<div class="container_utlisateur_menu container_utlisateur_alertes">
+					<p class="block_utilisateur">Utilisateur</p>
+					<p class="block_menu">Menu</p>
+				</div>
+			<div class="border_accueil border_accueil_nouveau">
+				<div class="block_menu_entete">
+					<div class="widgets_utilisateur">
+						<div class="widget inscriptions widgets_block_inscription">
+							<div class="w_content">
+								<div id='image_upload'>
+									<input type='file' value="choisir une image" id="photo_upload" name="image_1" class="photo_upload photo_add pointer" onchange={readURL} />
+									<select class="membre" name=""> 
+                            		<!-- <option value="" disabled selected></option> -->
+                            		<option value="hurr">Administrateur</option>
+                            		<!-- <option value="hurr">Durr</option> -->
+                            	</select>
+									<div class="image_position">
+						    			<img class="preview" src="#"/>
+									</div>
+									<button id="reset_image" onclick={resetImage}>X</button>
+						    		<input class="hidden" type="text" name="image_1" id="image">
+								</div>
+								
+							</div>
+							<button class="button_file" onclick="{ savePhoto }">Enregistrez</button>
+							<!-- <h1 class="b_title color-inscriptions"><a id="lien_inscription" class="permanance" href="#/inscriptions">{ ( IS_CE ? "Permanence" : "Inscriptions" ) }</a></h1 -->
+							<!-- <h2 class="w_info">132 Inscriptions</h2> -->
+						</div>
+
+					</div>
+					<div class="widgets">
+						<div class="widget inscriptions">
+							<div class="w_content">
+								<a href="#/inscription"><img src="/img/permanence_1.png"></a>
+							</div>
+							<h1 class="b_title color-inscriptions"><a id="lien_inscription" class="permanance" href="#/inscriptions">{ ( IS_CE ? "Permanence" : "Inscriptions" ) }</a></h1>
+							<!-- <h2 class="w_info">132 Inscriptions</h2> -->
+						</div>
+						<div class="widget salaries">
+							<div class="w_content">
+								<a href="#/salaries"><img src="/img/salaries_1.png"></a>
+							</div>
+							<h1 class="b_title color-salaries"><a href="#/salaries">{ ( IS_CE ? "Salariés" : "Adhérents" ) }</a></h1>
+						</div>
+						<div class="widget activites">
+							<div class="w_content">
+								<a href="#/activites"><img src="/img/activite_1.png"></a>
+							</div>
+							<h1 class="b_title color-activites"><a class="lien_activites" href="#/activites">Activités</a></h1>
+							
+						</div>
+						<div class="widget comptabilite">
+							<div class="w_content">
+								<a href="#/compta"><img src="/img/comptabilite_1.png"></a>
+							</div>
+							<h1 class="b_title color-compta"><a class="lien_compta" href="#/compta">Comptabilité</a></h1>
+							
+						</div>
+						<div class="widget site">
+							<div class="w_content">
+								<a href="#/site"><img src="/img/administration_1.png"></a>
+							</div>
+							<h1 class="b_title color-admin">Administration</h1>
+							
+						</div>
+					</div>
+				</div>
+				<!-- <div class="alertes">
+					<h2>Les Alertes</h2>
+				</div>  -->
+				<!-- BLOCK VUE ACCUEIL -->
+				<div class="container_utlisateur_menu container_utlisateur_alertes">
+					<p class="block_utilisateur">Comité d'entreprise</p>
+					<p class="block_menu">Les alertes</p>
+				</div>
+				<div class="container_block_alert">
+					<div class="widgets_utilisateur">
+						<div class="widget inscriptions widgets_block_inscription">
+							<div class="w_content">
+								<div id='image_upload' >
+									<input type='file' value="choisir une image" id="photos_uploads" class="photo_upload photo_add pointer" onchange={readURLFile} />
+									<button id="reset_image" onclick={resetImages}>X</button>
+									<div class="image_position image_upload">
+						    			<img class="preview_1" src="#"/>
+									</div>
+									
+						    		<input class="hidden" type="text" name="image_2" id="image_2">
+								</div> 
+
+							</div>
+							<button class="button_files" onclick="{ savePhotos }">Enregistrez</button>
+							<!-- <h2 class="w_info">132 Inscriptions</h2> -->
+						</div>
+					</div>
+					<div class="widgets" id="widgets">
+						<div class="widget inscriptions">
+							<div class="w_content">
+								<a href="#/inscription"><img src="/img/salaries_1.png"></a>
+							</div>
+							<h1 class="b_title color-inscriptions"><a id="lien_inscription" class="permanance" href="#/inscriptions">Dette salariés <span class="color_masquer">Dette salariés</span></a></h1>
+							<!-- <h2 class="w_info">132 Inscriptions</h2> -->
+						</div>
+						<div class="widget salaries">
+							<div class="w_content">
+								<a href="#/salaries"><img src="/img/reservation_online_1.png"></a>
+							</div>
+							<h1 class="b_title color-salaries"><a href="#/salaries">Reservations en ligne</a></h1>
+						</div>
+						<div class="widget activites">
+							<div class="w_content">
+								<a href="#/activites"><img src="/img/validations_documents_1.png"></a>
+							</div>
+							<h1 class="b_title color-activites"><a class="lien_activites" href="#/activites">Validation documents</a></h1>
+							
+						</div>
+						<div class="widget comptabilite">
+							<div class="w_content">
+								<a href="#/compta"><img src="/img/comptabilite_1.png"></a>
+							</div>
+							<h1 class="b_title color-compta"><a class="lien_compta" href="#/compta">Paiement en attente</a></h1>
+							
+						</div>
+						<div class="widget site">
+							<div class="w_content">
+								<a href="#/site"><img src="/img/stocks_1.png"></a>
+							</div>
+							<h1 class="b_title color-admin">Stocks <span class="color_masquer">Dettesalariés</span></h1>
+							
+						</div>
+						<div class="widget site">
+							<div class="w_content">
+								<a href="#/site"><img src="/img/dette_fournisseurs_1.png"></a>
+							</div>
+							<h1 class="b_title color-admin">Dette fournisseurs</h1>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var app = opts;
+	  	var _this = this;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+		var utilisateur = app.session.utilisateur;
+		var NOM = this.NOM = utilisateur.nom;
+		var PRENOM = this.PRENOM = utilisateur.prenom;
+		var ENTREPRISE = this.ENTREPRISE = utilisateur.entreprise;
+	  	app.on('unmount-accueil-admin', function(){
+			console.log('admin/accueil on unmount-* fired');
+			app.off('unmount-accueil-admin');
+			_this.unmount();
+		});
+
+	  	app.on('mount', function(){
+	  	});
+
+		this.update();
+
+		toggleUserActions(e){
+			$('.user_actions', $("#desc_user")).slideToggle();
+		}
+	  
+
+	  	readURL(input) {
+			console.log('upload button clicked!');
+            if (input.path[0].files) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('#photo_upload')[0].files[0].name);
+	                reader.onload = function (input) {
+	                    $('.preview')
+	                        .attr('src', input.target.result)
+	                        .width(120)
+	                        .height(120);
+	                };
+	                $(".preview").show();
+	                $("#image").val($('#photo_upload')[0].files[0].name);
+	                reader.readAsDataURL($('#photo_upload')[0].files[0]);
+            }    
+        }
+
+        resetImage(){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview").attr('src','#');
+        	$(".preview").hide();
+        	$('#photo_upload').val("");
+			$('#photo_upload').type = '';
+			$('#photo_upload').type = 'file';
+			$('.button_file').removeClass('hidden');
+        }
+        
+
+        savePhoto(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var data = new FormData();
+			console.log('dt', data)
+			data.append("imageA", $('#photo_upload')[0].files[0],  $('#photo_upload')[0].files[0].name);
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('post', '/admin/accueil/accueil?action=add_image', true);
+			var image = $('#photo_upload')[0].files[0].name;
+			console.log('bakary test ' , image)
+			xhr.send(data);
+			console.log('xhr data ;;;; ', JSON.stringify(data));
+			var image_1 = $('#image').val();
+			console.log('data ', image_1)
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/accueil/accueil', 
+					fields: ['image_1'],
+					tag: _this,
+					elements: _this.photo,
+					idElements: _this.idPhoto,
+					typeElement: 'accueil',
+					hideClass: 'hidden',
+				});
+			}
+			console.log('enregistrement');
+			$('.button_file').addClass('hidden');
+		}
+
+		readURLFile(input) {
+			console.log('upload button clicked!');
+            if (input.path[0].files) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('#photos_uploads')[0].files[0].name);
+	                reader.onload = function (input) {
+	                    $('.preview_1')
+	                        .attr('src', input.target.result)
+	                        .width(140)
+	                        .height(140);
+	                };
+	                $(".preview_1").show();
+	                $("#image_2").val($('#photos_uploads')[0].files[0].name);
+	                reader.readAsDataURL($('#photos_uploads')[0].files[0]);
+            }    
+        }
+        resetImages(){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview_1").attr('src','#');
+        	$(".preview_1").hide();
+        	$('#photo_uploads').val("");
+			$('#photo_uploads').type = '';
+			$('#photo_uploads').type = 'file';
+			/*$('.button_files').addClass('hidden');*/
+        }
+
+		savePhotos(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var data = new FormData();
+			console.log('dt_1', data)
+			data.append("imageA", $('#photos_uploads')[0].files[0],  $('#photos_uploads')[0].files[0].name);
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('post', '/admin/accueil/accueil?action=add_image', true);
+			var image = $('#photos_uploads')[0].files[0].name;
+			console.log('bakary test_1 ' , image)
+			xhr.send(data);
+			var image_2 = $('#image').val();
+			console.log('data ', image)
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/accueil/accueil', 
+					fields: ['image_2'],
+					tag: _this,
+					elements: _this.photo,
+					idElements: _this.idPhoto,
+					typeElement: 'accueil',
+					hideClass: 'hidden',
+				});
+			}
+			console.log('enregistrement');
+			$('.button_files').addClass('hidden');
+		}
+
+		this.idAccueil = {};
+        this.accueil = [];
+        function getPhoto() {
+           var getParams ={ type_element: 'accueil'};
+            $.getJSON('/admin/accueil/accueil', getParams, function (data){ 
+                //console.log('getphoto data :: ' + JSON.stringify(data));
+                if(data && data.elements){
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var fields = { id: 'id', id_entreprise: 'id_entreprise', image_1: 'image_1',image_2: 'image_2',};
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                        }
+                        _this.idPhoto[d['id']] = i;
+                        _this.photo.push(d);
+                    }
+                    _this.update();
+                }
+            });
+        }
+        getPhoto();
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			savePhoto = null;
+			
+		});
+	</script>
+</accueil-admin>

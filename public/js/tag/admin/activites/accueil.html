@@ -1,0 +1,171 @@
+<accueil-activites>
+	<div class="accueil_activites content_b with_submenu left">
+		<div class="accueil_title left">
+			<!--<h1>Tableau de Bord - Activités</h1>-->
+			<div class="block center">
+				<div class="block_img">
+					<img src="/img/salarie_accueil.png">
+				</div><div class="block_info">
+					{ total_inscription }<br> Inscription<span if={ total_inscription > 0 }>s</span>
+				</div><div class="block_content left">
+					<h2>catégories d'activités</h2>
+					<div each={ categories } class="situation_ville_activites">
+						<p>{ libelle }</p>
+						<div class="progress-bar stripes">
+                                <span class="label" style="width: { pourcentage > 100 ? 100 : pourcentage }%;">{ pourcentage > 15 ? pourcentage + '%' : '' }</span>
+                                <span class="num_pourcentage" if={ pourcentage <= 15 }> { pourcentage }%</span>
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="alertes accueil">
+				<h1>Les Alertes</h1>
+				<div class="widget_activites">
+					<div class="widget_cell_activites">
+						<div class="vignette_cell_1">
+						</div>
+						<div class="widget_alertes_activites dette">
+							<!-- <p class="quantite rouge">17</p> -->
+						</div>
+						<p class="center">{ IS_CE ? "Dette Salariés" : "Dette Adhérents" }</p>
+					</div>
+					<div class="widget_cell_activites">
+						<div class="vignette_cell_2">
+						</div>
+						<div class="widget_alertes_activites reservation">
+							<!-- <p class="quantite rouge">03</p> -->
+						</div>
+						<p class="center">Réservations en Ligne</p>
+					</div>
+					<div class="widget_cell_activites">
+						<div class="vignette_cell_3">
+						</div>
+						<div class="widget_alertes_activites valid_doc">
+							<!-- <p class="quantite vert">00</p> -->
+						</div>
+						<p class="center">Validation Documents</p>
+					</div>
+				</div>				
+			</div>
+		</div>
+	</div>
+	<script>
+
+		var app = opts;
+	  	var _this = this;
+	  	var permissions = app.session.permissions;
+	  	var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	  	app.on('unmount-accueil-activites', function(){
+			console.log('unmount-accueil-activites fired');
+			app.off('unmount-accueil-activites');
+			console.log('before unmount-accueil-activites, ' + _this.tagName);
+			_this.unmount();
+			console.log('after unmount-accueil-activites');
+		});
+
+	  	this.total_inscription = 0;
+
+		this.update();
+        this.ma_var
+		 function getParametresActivites(){
+		 
+			var getParams = { };
+			if( _this.selectedExercice ){
+		 		getParams.id_exercice = _this.selectedExercice;
+		 	}else if(document.getElementById('id_exercice')){
+		 		getParams.id_exercice = document.getElementById('id_exercice').value;
+		 	}
+
+		 	$.getJSON( '/admin/activites/parametrages', getParams, function(data){
+		
+				console.log('data:', data);
+				if(data && data.elements){
+					
+					var i, d; 
+		 			var fields = {id_categorie_1: 'id_categorie_1', id_categorie_2: 'id_categorie_2', id_categorie_3: 'id_categorie_3', id_categorie_4: 'id_categorie_4',
+		 				id_categorie_5: 'id_categorie_5', id_categorie_6: 'id_categorie_6'};
+		 			var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+		 		    		_this[fields[field]] = data.elements[i][field];
+						}	
+						
+					}
+				_this.update();
+				console.log('_this.id_categorie_1: ' + _this.id_categorie_1, '_this.id_categorie_2: ' + _this.id_categorie_2, '_this.id_categorie_3: ' + _this.id_categorie_3, '_this.id_categorie_4 ' + _this.id_categorie_4, '_this.id_categorie_5: ' + _this.id_categorie_5, '_this.id_categorie_6: ' + _this.id_categorie_6);
+				
+				getCategorieNbInscriptions();
+		
+			
+			}
+
+		});
+	}
+
+		getParametresActivites();
+
+
+     this.Inscription = [] ;
+     this.idInscription = {} ;
+	 function getAllInscription() {
+       var getParams = { getAllInscription: true };
+         if( this.selectedExercice)
+         {
+            getParams.id_exercice = this.selectedExercice;
+           
+		  }else if(document.getElementById('id_exercice')){
+	 	 		getParams.id_exercice = document.getElementById('id_exercice').value;
+	 	}
+
+		$.getJSON( '/admin/activites/accueil', getParams, function(data){
+		
+			console.log('data:', data);
+			 if(data && data.elements){
+			 	_this.total_inscription = data.elements[0].total_inscription;
+			 	_this.update();
+			 	}
+
+		});
+		
+		
+	}
+	 getAllInscription();
+
+	 this.categories = [];
+
+	 function getCategorieNbInscriptions() {
+       var getParams = { id_categorie_1: _this.id_categorie_1, id_categorie_2: _this.id_categorie_2, id_categorie_3: _this.id_categorie_3, id_categorie_4: _this.id_categorie_4, id_categorie_5: _this.id_categorie_5, id_categorie_6: _this.id_categorie_6 };
+         if( this.selectedExercice)
+         {
+            getParams.id_exercice = this.selectedExercice;
+           
+		  }else if(document.getElementById('id_exercice')){
+	 	 		getParams.id_exercice = document.getElementById('id_exercice').value;
+	 	}
+
+		$.getJSON( '/admin/activites/accueil', getParams, function(data){
+		
+			console.log('datafindzertyuio:'+  JSON.stringify(data));
+			if(data && data.elements){
+			 	var i, field, d;
+                var l = data.elements.length;
+                for(i=0; i<l; i++){
+                   	d = new Object();
+                    d['id'] = data.elements[i].id;
+                    d['libelle'] = data.elements[i].libelle;
+                    d['nb_inscription'] = data.elements[i].nb_inscription;
+                    d['pourcentage'] = (data.elements[i].nb_inscription / _this.total_inscription)*100
+                    
+                    _this.categories.push(d);
+		 		}
+			}
+			_this.update();
+		});
+		
+		
+	}
+
+	</script>
+</accueil-activites>

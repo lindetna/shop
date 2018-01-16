@@ -1,0 +1,98 @@
+.edit, .delete {
+	border: 2px solid red;
+	padding: 10px;
+}
+
+.edit_element_img, .delete_element_img {
+	width: 20px;
+	height: 20px;
+}
+
+#add_element {
+	padding: 10px;
+	border: 2px solid red;
+	margin-bottom: 10px;
+}
+
+.title_add {
+	font-size: 20px;
+	padding: 10px 0;
+	text-decoration: underline;
+}
+
+/* NEW */
+
+.actions {
+    margin: 0.5em 0;
+    text-align: right;
+    vertical-align: top;
+}
+
+.button.ajouter {
+	padding: 10px;
+	background-color: #666666;
+	border: 1px solid black;
+	color: white;
+}
+
+.loader {
+    border: 12px solid #f3f3f3; /* Light grey */
+    border-top: 12px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    z-index:200;
+    left: 54%;
+    top: 40%;
+    animation: spin 2s linear infinite;
+    opacity: 0.7;
+}
+
+/*
+ * cell
+ */
+
+.edit .cell_1 {
+	width: 20%;
+}
+
+.edit .cell_2 {
+	width: 20%;
+}
+
+.edit .cell_3 {
+	width: 20%;
+}
+
+.edit .cell_4 {
+	width: 20%;
+}
+
+.edit .cell_5 {
+	width: 20%;
+}
+
+.cell_1 {
+	width: 25%;
+}
+
+.cell_2 {
+	width: 15%;
+}
+
+.cell_3 {
+	width: 15%;
+}
+
+.cell_4 {
+	width: 15%;
+}
+
+.cell_5 {
+	width: 10%;
+}
+
+.cell_6 {
+	width: 15%;
+}

@@ -1,0 +1,3010 @@
+<inscription>
+	<!--<div id="titre_page"><h1>Inscription</h1></div>-->
+	<div id="print" class="hidden">
+		<span id="entreprisePrint"></span>
+		<header id="entete_print"></header>
+		<div id="vertical_print">
+			<span class="" id="entrepriseName"></span>
+		    <div class="impression_letf_right">
+		        <div class="title_impression">
+		        	<img class="hidden" id="logo_entreprise" src="">
+		        	<!-- <div id="date_releve">{ date_releve }</div> -->
+		        	<span id="titre_print" class="">Relevé de Compte</span>
+		    	</div>
+			</div>
+		</div>
+		<div class="info_salarie">
+			<div>{ currentSalarie.titre } { currentSalarie.nom } { currentSalarie.prenom }</div>
+			<div>{ currentSalarie.numero_et_voie }</div>
+			<div>{ currentSalarie.code_postal } { currentSalarie.ville }</div>
+		</div>
+	</div>
+		<!--<div class="divTable">
+			<div class="divTableBody">
+				<div class="divTableRow colorPrint">
+					<div class="divTableCell color">Nom du Titulaire</div>
+					<div class="divTableCell color">Banque</div>
+					<div class="divTableCell color">Numéro de Chéque</div>
+					<div class="divTableCell color">Montant</div>
+				</div>
+				<div class="divTableRow" each={ remisePrint } id='remisePrint_{ id }'>
+					<div class="divTableCell">{ titulairePrint }</div>
+					<div class="divTableCell">{ banquePrint }</div>
+					<div class="divTableCell">{ nu_chequePrint }</div>
+					<div class="divTableCell">{ montantPrint }</div>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div id="num_cheque">{nb_cheques}</div>
+			<div id="table_print">
+				<div class="divTableCell">TOTAL</div>
+				<div id="total_remise_print" class="divTableCell">{total_remise}</div>
+			</div>
+		</div>-->
+	<div id="loader" class="loader hidden">
+    </div> 
+	<div class="block_inscription">
+		<div class="block_superieur table c100">
+			<div class="cell_1 c40">
+				<div class="recherche">
+					<div class="recherche-salarie">
+						<label for="recherche_numero">{ IS_CE ? "Matricule - Nom du salarié" : "Numéro Adhérent - Nom de l'adhérent " }</label>
+						<div class="control-group">
+							<select id="select-to" class="contacts" placeholder=""></select>
+						</div>
+						<input type="checkbox" if={ currentSalarie.nom } onchange={ selectAyantsDroit } id="checkbox">
+					</div>
+					<div class="block_ayants_droit" if={ currentSalarie.nom }>
+						<label for="recherche_activite">Ayants-droit</label>
+						<div class="scroll_ayants_droit">
+							<div each={ ayants_droit } class="ayant_droit" onclick={ selectAyantsDroit } value="{ id }">
+								{ titre } { nom } { prenom }<span class="capitalize" if={ lien }> - { lien }</span><span if={ lien === 'enfant'}> - { age } { age > 1 ? 'Ans' : 'An' }	</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="cell_2 c55"> 
+				<div class="informations">
+					<div class="table c100">
+						<div class="c45 cell information_generale">
+							<div class="table imprim_releve_compte">
+								<div class="cell photo"  if={ currentSalarie.nom }>
+									<img src="{ currentSalarie.src || '/img/avatarsmall.png' }">
+								</div>
+								<div class="cell salarie"  if={ currentSalarie.nom }>
+									<p class="bold">{ currentSalarie.titre } { currentSalarie.nom } { currentSalarie.prenom }</p>
+									<div class="table">
+										<div class="row">
+											<div class="cell_3 center">Quotient</div><div class="cell_4 left"> { currentSalarie.quotient }</div>
+										</div>
+										<div class="row">
+											<div class="cell_3 center">Ville</div><div class="cell_4 left"> { currentSalarie.ville }</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="action"  if={ currentSalarie.nom }>
+								<input type="image" src="/img/retour-compte.png" onclick={ backCompte }> Compte
+							</diV>
+						</div>
+						<div class="c55 cell information_payement right">
+							<div if={ currentSalarie.nom }>
+								<div class="input">
+									<label for="info_montant">Montant</label> <input type="text" class="right" value="{ currentSalarie.montant || '0.00' }" disabled>
+								</div>
+								<div class="input">
+									<label for="info_participation_salarie">Participation { IS_CE ? "Salarié" : "Adhérent" }</label> <input type="text" class="right" value="{ currentSalarie.participation_adherent || '0.00'}" disabled>
+								</div>
+								<div class="input">
+									<label for="info_participation_association">Participation { IS_CE ? "CE" : "Association" }</label> <input type="text" class="right" value="{ currentSalarie.participation_association || '0.00' }" disabled>
+								</div>
+								<div class="input">
+									<label for="info_reglement">Règlement</label> <input type="text" class="right" value="{ currentSalarie.reglement || '0.00' }" disabled>
+								</div>
+								<div class="input">
+									<label for="info_solde">Montant à régler</label> <input type="text" class="right < { montant_a_regler : currentSalarie.solde > 0 }" value="{ currentSalarie.solde || '0.00' }" disabled>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="actions" if={ currentSalarie.nom && ! categorieActive || is_reglement === true }>
+						<div class="cell left c60">
+								<button class="btn impression" onclick={ lanceImpression }>Impression<br/>Relevé de Compte</button>
+								<button class="btn btn_reglement" onclick={ setReglement }>Règlement</button>
+								<button class="btn desinscrire" onclick={ openModalDeleteElement }>Désinscrire</button>
+								<!-- <button class="button btn_export">Export Excel</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="block_inferieur table c100">
+			<div class="cell_1 c40">
+				<div class="tableau-activite entete-tableau c100">
+					<label for="recherche_activite">Activité</label >
+					<input type="text" name="recherche_activite" id="recherche_activite" class="input-recherche" onchange={ showActivitesBySearch }>
+				</div>
+				<div class="table c100 categorie" each={ categories } onclick={ showActivites } value={ id }>
+					<div class="cell_1">
+						<img src="{ image_url ? '/img/uploads/activites/' + image_url : '/img/cat_danse.png'}">
+					</div>
+					<div class="cell_2">
+						<p>{ libelle }</p>
+					</div>
+					<div class="cell_3 center">
+						<!-- <p class="">{ nb_places }</p> -->
+					</div>
+					<div class="cell_4 center">
+						<!-- <p class="">{ inscris }</p> -->
+					</div>
+					<div class="cell_5 center">
+						<!-- <p class="">{ places_restantes }</p> -->
+					</div>
+				</div>
+			</div>
+			<div class="cell_2 c55">
+				<div  id="block_gestion" class="gestion" if={ currentSalarie.nom && !categorieActive && is_reglement === false }>
+					<div each={ inscriptions } class="nav_compta_parametrage block-slider { type_modele }">
+						<header class="comptes-title center opened capitalize" onclick= { showContents }>
+							{ type_modele }
+						</header>
+						<div class="slide-up">
+							<div class="line-separator"></div>
+							<div class="block_categorie_inscription">
+								<!-- ajout d'un nv template pour les inscriptions -->
+								<div class="entete-tableau { billetterie: (type_modele == 'billetterie') }{ cheques_vacances: (type_modele == 'cheques_vacances') }{ bons_achats: (type_modele == 'bons_achats') }" if={ type_modele == 'billetterie' || type_modele == 'cheques_vacances' || type_modele == 'bons_achats' }>
+									<div class="cell_0">
+									</div>
+									<div class="cell_1">
+										<p>Date Inscription</p>
+									</div>
+									<div class="cell_2">
+										<p class="">Produits</p>
+									</div>
+									<div class="cell_3">
+										<p class="">Qté</p>
+									</div>
+									<div class="cell_4">
+										<p class="">Montant</p>
+									</div>
+									<div class="cell_5">
+										<p class="">Part.CE</p>
+									</div>
+									<div class="cell_6">
+										<p class="">Règlement</p>
+									</div>
+									<div class="cell_7">
+										<p>A Payer</p>
+									</div>
+								</div>
+								<div class="entete-tableau remboursement" if={ type_modele == 'remboursement' }>
+									<div class="cell_0">
+									</div>
+									<div class="cell_1">
+										<p>Date Inscription</p>
+									</div>
+									<div class="cell_2">
+										<p class="">Produits</p>
+									</div>
+								<!-- 	<div class="cell_3">
+										<p class=""></p>
+									</div> -->
+									<div class="cell_4">
+										<p class="">Montant</p>
+									</div>
+									<div class="cell_5">
+										<p class="">Part.CE</p>
+									</div>
+									<div class="cell_6">
+										<p class="">Mode de paiement</p>
+									</div>
+									<div class="cell_7">
+										<p>N° cheques</p>
+									</div>
+								</div>
+								<div class="entete-tableau { divers: (type_modele == 'divers') }{voyages: (type_modele == 'voyages')}" if={ type_modele == 'divers' || type_modele == 'voyages' }>
+									<div class="cell_0">
+									</div>
+									<div class="cell_1">
+										<p>Date Inscription</p>
+									</div>
+									<div class="cell_2">
+										<p class="">Produits</p>
+									</div>
+								<!-- 	<div class="cell_3">
+										<p class=""></p>
+									</div> -->
+									<div class="cell_4">
+										<p class="">Montant</p>
+									</div>
+									<div class="cell_5">
+										<p class=""></p>
+									</div>
+									<div class="cell_6">
+										<p class=""></p>
+									</div>
+									<div class="cell_7">
+										<p></p>
+									</div>
+								</div>
+								<div class="inscription" id="inscription_{ id }" each={ inscriptions } id_produit={ id_produit }>
+									<div class="table c100">
+										<div class="cell_0">											
+											<input type="checkbox" class="checkbox_inscriptions" id="{ id }" value="{ id }" type_modele={ type_modele }>
+										</div>
+										<div class="cell_1">
+											<p class="date_inscription" value={ date_inscription }>{ convertDateToView(date_inscription) }</p>
+										</div>
+										<div class="cell_2">
+											<p class="libelle" value={ libelle }>{ libelle }</p>
+										</div>
+										<div class="cell_3" if={ type_modele == 'billetterie' || type_modele == 'cheques_vacances' || type_modele == 'bons_achats'}>
+											<p class="quantite" value={ quantite }>{ quantite }</p>
+										</div>
+										<div class="cell_4">
+											<p class="montant" value={ type_modele == 'remboursement' ? montant_facture : montant }>{ type_modele == 'remboursement' ? montant_facture : montant }</p>
+										</div>
+										<div class="cell_5">
+											<p class="participation_ce" value={ participation_ce }>{ participation_ce }</p>
+										</div>
+										<div class="cell_6">
+											<p class="reglement" value={ reglement } if={ reglement }>{ reglement }</p>
+											<p class="mode_paiement" value={ libelle_paiement } if={ libelle_paiement }>{ libelle_paiement }</p>
+										</div>
+										<div class="cell_7">
+											<p class="solde" value={ solde } if={ solde }>{ solde }</p>
+											<p class="solde" value={ numero_cheque } if={ numero_cheque }>{ numero_cheque }</p>
+										</div>
+										<div class="hidden">
+											<p class="participation_salarie" value={ participation_salarie }></p>
+										</div>
+									</div>
+									<div class="table c100">
+										<div class="cell_0">
+										</div>
+										<div class="cell">
+											<p>
+												<span if={ id_ayant_droit }>{ this.ayants_droit[this.idAyants_droit[id_ayant_droit]].prenom } { this.ayants_droit[this.idAyants_droit[id_ayant_droit]].nom }</span>
+												<span if={ ! id_ayant_droit }>{ currentSalarie.prenom } { currentSalarie.nom }</span>
+												<span if={ id_ayant_droit }>{ this.ayants_droit[this.idAyants_droit[id_ayant_droit]].lien } </span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="nav_compta_parametrage block-slider block_reglements" if={ reglements.length > 0 }>
+						<header class="comptes-title center opened" onclick= { showContents }>
+							Règlements 
+						</header>
+						<div class="slide-up">
+							<div class="line-separator"></div>
+							<div class="block_reglement">
+								<div class="entete-tableau">
+									<div class="cell_1">
+										<p>Date Reglement</p>
+									</div>
+									<div class="cell_2">
+										<p class="">Mode de paiement</p>
+									</div>
+									<!-- <div class="cell_3">
+										<p class="">Salarie</p>
+									</div> -->
+									<div class="cell_4">
+										<p class="">N° cheque</p>
+									</div>
+									<div class="cell_5">
+										<p class="">Remis</p>
+									</div>
+									<div class="cell_6">
+										<p class="">Montant</p>
+									</div>
+									<div class="cell_7">
+										<p class="">Action</p>
+									</div>
+								</div>
+								<div each={ reglements } class="reglement">
+									<div class="cell_1">
+										<p>{ convertDateToView(date_reglement) }</p>
+									</div>
+									<div class="cell_2">
+										<p class="">{ type }</p>
+									</div>
+									<!-- <div class="cell_3">{ getE(id, 'salarie').nom }
+										<p class="">{ salarie.prenom + ' ' + salarie.nom }</p>
+									</div> -->
+									<div class="cell_4">
+										<p class="">{ numero_cheque }</p>
+									</div>
+									<div class="cell_5">
+										<p class="" if={ type != 'especes' }>{ remis ? 'oui' : 'non' }</p>
+									</div>
+									<div class="cell_6">
+										<p class="">{ montant }</p>
+									</div>
+									<div class="cell_7">
+										<p class="" if={ type == 'cheques' } onclick={ infoReglement }>i</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="activites { categorieActive && is_reglement === false ? '' : 'hidden' }">
+					<!-- <div each={ activites } id='categorie_{ id }' class="nav_compta_parametrage block-slider">
+						<header class="comptes-title center opened modeltitle" onclick= { showContents }>
+							{ type }
+						</header>
+						<div class="slide-up">
+							<div class="line-separator"></div>
+							<div class="block_activites"> -->
+								<!-- DEBUT Billetterie -->
+								<!-- <div if={ type.toLowerCase() == 'billetterie' }> -->
+									<div each={ activites } id='activite_{ id }' class="nav_compta_parametrage block-slider">
+										<header class="comptes-title center opened" onclick= { showContents }>
+											{ libelle }
+										</header>
+										<div class="slide-up">
+											<div class="line-separator"></div>
+
+											<!-- ajout d'un nouveau template de modele dans l'affichage des categories -->
+											<div if={ type_modele == 'billetterie' || type_modele == 'cheques_vacances' || type_modele == 'bons_achats' }>
+												<div class="block_activite { activite_billetterie: (type_modele == 'billetterie') }{ activite_cheques_vacances: (type_modele == 'cheques_vacances') }{ activite_bons_achats: (type_modele == 'bons_achats') }">
+													<div class="entete-tableau">
+														<div class="cell_1">
+															<p>Produit</p>
+														</div>
+														<div class="cell_2">
+															<p class="">Stocks</p>
+														</div>
+														<div class="cell_3">
+															<p class="">Date de Validité</p>
+														</div>
+														<div class="cell_4">
+															<p>Tarif</p>
+														</div>
+														<div class="cell_5">
+															<p class="">Commande</p>
+														</div>
+														<div class="cell_6">
+															<p>Montant</p>
+														</div>
+														<div class="cell_7">
+															<p class="">Part.CE</p>
+														</div>
+														<div class="cell_8">
+															<p class="">Part.Salarié</p>										
+														</div>
+													</div>
+													<div class="produit" type="{ billetterie: (type_modele == 'billetterie') }{ cheques_vacances: (type_modele == 'vacances') }{ bons_achats: (type_modele == 'bons_achats') }" each={ produits } id="produit_{ id }" db_id={ id } if={ id }>
+														<div class="cell_1">
+															<input type="hidden" id="type_modele_{ id }" value="{ billetterie: (type_modele == 'billetterie') }{ cheques_vacances: (type_modele == 'cheques_vacances') }{ bons_achats: (type_modele == 'bons_achats') }">
+															<p id="libelle_{ id }" value={ libelle }>{ libelle }</p>
+														</div>
+														<div class="cell_2">
+															<p class="" id="nb_places_{ id }" value={ nb_places }>{ nb_places }</p>
+														</div>
+														<div class="cell_3">
+															<p class="" id="date_validite_{ id }" value={ date_validite }>{ convertDateToView(date_validite) }</p>
+														</div>
+														<div class="cell_4">
+															<p>{ tarif }</p>
+														</div>
+														<div class="cell_5">
+					                                        <div class="cell">
+					                                            <button onclick="{ decrement }">-</button>
+					                                        </div>
+					                                        <div class="cell">
+					                                            <input type="text" name="quantite_{ id }" val-num="{ tarif }" placeholder="0" value="0" disabled="disabled" id="quantite_{ id }" class="input_quantite">
+					                                        </div>
+					                                        <div class="cell">
+					                                            <button onclick="{ increment }">+</button>
+					                                        </div>
+														</div>
+														<div class="cell_6">
+															<p id="tarif_{ id }" value={ tarif ? parseFloat(tarif).toFixed(2) : '0.00' }>{ tarif ? parseFloat(tarif * ($('#quantite_' + id).val()) || 0 ).toFixed(2) : '0.00'}</p>
+														</div>
+														<div class="cell_7">
+															<p id="participation_ce_{ id }" class="" value-unite={ montant_participation }>0.00</p>
+														</div>
+														<div class="cell_8">
+															<p id="participation_salarie_{ id }" class="">{ parseFloat(tarif - montant_participation).toFixed(2) }</p>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div if={ type_modele == 'cheques vacances' }>
+												<div class="block_activite activite_cheques_vacances">
+													<div class="entete-tableau">
+														<div class="cell_1">
+															<p>img</p>
+														</div>
+														<div class="cell_2">
+															<p>Produit</p>
+														</div>
+														<div class="cell_3">
+															<p class="">Commande</p>
+														</div>
+														<div class="cell_4">
+															<p class="">Part.CE</p>
+														</div>
+														<div class="cell_5">
+															<p class="">Part.Salarié</p>										
+														</div>
+													</div>
+													<div class="produit" type="cheques_vacances" each={ produits } id="produit_{ id }" db_id={ id } if={ id }>
+														<div class="cell_1">
+															<input type="hidden" id="type_modele_{ id }" value="cheques_vacances">
+															<p>img</p>
+														</div>
+														<div class="cell_2">
+															<p id="libelle_{ id }" value={ libelle }>{ libelle }</p>
+														</div>
+														<div class="cell_3">
+															<p id="tarif_{ id }" value={ tarif }>{ tarif }</p>
+														</div>
+														<div class="cell_4">
+															<p id="participation_ce_{ id }" class="" value-unite={ montant_participation }>{ montant_participation }</p>
+														</div>
+														<div class="cell_5">
+															<p id="participation_salarie_{ id }" class="">{ parseFloat(tarif - montant_participation).toFixed(2) }</p>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div if={ type_modele == 'remboursement' }>
+												<div class="block_activite activite_remboursement">
+													<div class="entete-tableau">
+														<div class="cell_1">
+															<p>Produit</p>
+														</div>
+														<div class="cell_2">
+															<p class="">Montant de la facture</p>
+														</div>
+														<div class="cell_3">
+															<p class="">Montant du remboursement</p>
+														</div>
+													</div>
+													<div class="produit" type="remboursement" each={ produits } id="produit_{ id }" db_id={ id } if={ id }>
+														<div class="table c100">
+															<!-- <div class="row"> -->
+																<div class="cell_1">
+																	<input type="hidden" id="type_modele_{ id }" value="remboursement">
+																	<p id="libelle_{ id }" value={ libelle }>{ libelle }</p>
+																</div>
+																<div class="cell_2">
+																	 <input type="text" id="montant_facture_{ id }" class="input_tarif right" value="0.00" onchange={ setQuantiteParticipationRemboursement } disabled="{ disabled : !currentSalarie.nom }">
+																</div>
+																<div class="cell_3">
+																	<p id="participation_ce_{ id }">0.00</p>
+																</div>
+															<!-- </div> -->
+														</div>
+														<div class="table c100">
+															<div class="row">
+																<div class="cell left remboursement">
+																	<label for="select_remboursement_{ id }" class="label_remboursement">Mode de remboursement</label>
+																	<select id="select_remboursement_{ id }" onchange={ changeRemboursement	 } disabled="{ disabled : !currentSalarie.nom }">
+																		<option value=""></option>
+																		<option value="{ id }" each={ mode_paiement } if={ fournisseur == 1 } type={ type }>{ libelle }</option>
+																	</select>
+																</div>
+																<div class="cell remboursement">
+<!-- 																	<label for="numero_cheque_{ id }" class="hidden label remboursement">N° Chèque</label>
+																	<input type="text" id="numero_cheque_{ id }" class="right hidden input remboursement" disabled="{ disabled : !currentSalarie.nom }">
+																	<label for="iban_{ id }" class="hidden label remboursement">IBAN</label>
+																	<input type="text" id="iban_{ id }" class="right hidden input remboursement" disabled="disabled" value="{ currentSalarie.iban }"> -->
+																</div>
+															</div>
+															<div class="row">
+																<div class="cell remboursement left">
+																	<label for="date_inscription_{ id }" class="date_inscription">Date Inscription</label>
+																	<input type="text" id="date_inscription_{ id }" class="remboursement_date_inscription" disabled="{ disabled : !currentSalarie.nom }">
+																</div>
+																<div class="cell remboursement right">
+																	<div class="remboursement_inscription { currentSalarie.nom && categorieActive && activites.length != 0 ? '' : 'hidden' }">
+																		<button class="button enregistrer" onclick={ saveElement } >Inscription</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div>
+															<div id="information_cheque" if={ type_remboursement == 'cheques' }>
+																<label for="numero_cheque_{ id }" class="label remboursement">N° Chèque</label>
+																<input type="text" id="numero_cheque_{ id }" class="right input remboursement" disabled="{ disabled : !currentSalarie.nom }">
+															</div>
+															<div id="information_virement" if={ type_remboursement == 'virement' } class="table c100">
+																<div class="row">
+																	<div class="cell c20">
+																		<label >Banque</label>
+																	</div>
+																	<div class="cell c30">
+																		<input type="text"  class="banque" value="{ currentSalarie.banque }" disabled>
+																	</div>
+																	<div class="cell c20">
+																		<label class="label remboursement">Titulaire</label>
+																	</div>
+																	<div class="cell c30">
+																		<input type="text" class="right input remboursement" disabled="disabled" value="{ currentSalarie.titulaire }">
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="cell c20">
+																		<label class="label remboursement">R.I.B</label>
+																	</div>
+																	<div class="cell c30">
+																		<input type="text" class="right input remboursement" disabled="disabled" value="{ currentSalarie.rib }">
+																	</div>
+																	<div class="cell c20">
+																		<label for="iban_{ id }" class="label remboursement">IBAN</label>
+																	</div>
+																	<div class="cell c30">
+																		<input type="text" id="iban_{ id }" class="right input remboursement" disabled="disabled" value="{ currentSalarie.iban }">
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="cell c20">
+																		<label class="label remboursement">BIC</label>
+																	</div>
+																	<div class="cell c30">
+																		<input type="text" class="right input remboursement" disabled="disabled" value="{ currentSalarie.bic }">
+																	</div>
+																	<div class="cell c20">
+																	</div>
+																	<div class="cell c30">
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div if={ type_modele == 'divers' || type_modele == 'voyages' }>
+
+												<div class="block_activite { activite_divers : (type_modele == 'divers') }{ activite_voyages : (type_modele == 'voyages') }">
+													<div class="entete-tableau">
+														<div class="cell_1">
+															<p></p>
+														</div>
+														<div class="cell_2">
+															<p>Produit</p>
+														</div>
+														<div class="cell_3">
+															<p class="">Montant</p>
+														</div>
+														<div class="cell_4">
+															<p class="">Montant participation</p>
+														</div>
+														<div class="cell_5">
+															<p class=""></p>										
+														</div>
+													</div>
+													<div class="produit" type="{ divers : (type_modele == 'divers') }{ voyages : (type_modele == 'voyages') }" each={ produits } id="produit_{ id }" db_id={ id } if={ id }>
+														<div class="cell_1">
+															<input type="hidden" id="type_modele_{ id }" value="{ divers : (type_modele == 'divers') }{ voyages : (type_modele == 'voyages') }">
+															<input type="hidden" id="quantite_{ id }" value="1">
+															<input type="hidden" id="participation_ce_{ id }" value="{ participation_ce }">
+															<input type="hidden" id="participation_salarie_{ id }" value="{ participation_salarie }">
+															<input type="hidden" id="date_validite_{ id }" value="{ date_validite }">
+															<p></p>
+														</div>
+														<div class="cell_2">
+															<p id="libelle_{ id }" value={ libelle }>{ libelle }</p>
+														</div>
+														<div class="cell_3">
+															<input id="montant_{ id }" type="text" class="right input { divers : (type_modele == 'divers') }{ voyages : (type_modele == 'voyages') }" value="" onchange="{ setQuantiteParticipationDiversVoyages }">
+														</div>
+														<div class="cell_4">
+															<p id="participation_ce_{ id }">{ montant_participation }</p>
+														</div>
+														<div class="cell_5">
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								<!-- </div> -->
+								<!-- FIN Billetterie -->
+								<!-- DEBUT Cheques Vacances -->
+								<!-- <div if={ type.toLowerCase() == 'cheques vacances' }> -->
+									<!-- <div each={ activites } id='activite_{ id }' class="nav_compta_parametrage block-slider">
+										<header class="comptes-title center opened" onclick= { showContents }>
+											{ libelle }
+										</header>
+										<div class="slide-up">
+											<div class="line-separator"></div>
+											<div class="block_activite activite_cheques_vacances">
+												<div class="entete-tableau">
+													<div class="cell_1">
+														<p>img</p>
+													</div>
+													<div class="cell_2">
+														<p>Produit</p>
+													</div>
+													<div class="cell_3">
+														<p class="">Commande</p>
+													</div>
+													<div class="cell_4">
+														<p class="">Part.CE</p>
+													</div>
+													<div class="cell_5">
+														<p class="">Part.Salarié</p>										
+													</div>
+												</div>
+												<div class="produit" type='cheques_vacances' each={ produits } id="produit_{ id }" db_id={ id } if={ id }>
+													<div class="cell_1">
+														<p>img</p>
+													</div>
+													<div class="cell_2">
+														<p id="libelle_{ id }" value={ libelle }>{ libelle }</p>
+													</div>
+													<div class="cell_3">
+														<p id="tarif_{ id }" value={ tarif }>{ tarif }</p>
+													</div>
+													<div class="cell_4">
+														<p id="participation_ce_{ id }" class="" value={ montant_participation }>{ montant_participation }</p>
+													</div>
+													<div class="cell_5">
+														<p id="participation_salarie_{ id }" class="">{ parseFloat(tarif - montant_participation).toFixed(2) }</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div> -->
+								<!-- </div> -->
+								<!-- FIN Cheques Vacances -->
+								<!-- DEBUT Remboursement -->
+								<!-- <div if={ type.toLowerCase() == 'remboursement' }> -->
+									<!-- <div each={ activites } id='activite_{ id }' class="nav_compta_parametrage block-slider">
+										<header class="comptes-title center opened" onclick= { showContents }>
+											{ libelle }
+										</header>
+										<div class="slide-up">
+											<div class="line-separator"></div>
+											<div class="block_activite activite_remboursement">
+												<div class="entete-tableau">
+													<div class="cell_1">
+														<p>Produit</p>
+													</div>
+													<div class="cell_2">
+														<p class="">Montant de la facture</p>
+													</div>
+													<div class="cell_3">
+														<p class="">Montant du remboursement</p>
+													</div>
+												</div>
+												<div class="produit" type='remboursement' each={ produits } id="produit_{ id }" db_id={ id } if={ id }>
+													<div class="row">
+														<div class="cell_1">
+															<p id="libelle_{ id }" value={ libelle }>{ libelle }</p>
+														</div>
+														<div class="cell_2">
+															 <input type="text" id="montant_{ id }" class="input_tarif right" value="0.00" onchange={ setQuantiteParticipationRemboursement }>
+														</div>
+														<div class="cell_3">
+															<p id="participation_ce_{ id }">0.00</p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="cell_1 right">
+															<label for="select_remboursement_{ id }" class="label_remboursement">Mode de remboursement</label>
+															<select id="select_remboursement_{ id }" onchange={ changeRemboursement	 }>
+																<option value=""></option>
+																<option value="{ id }" each={ mode_paiement } if={ fournisseur == 1 } type={ type }>{ libelle }</option>
+															</select>
+														</div>
+														<div class="cell_2">
+															 <input type="text" id="numero_cheque_{ id }" class="right">
+														</div>
+														<div class="cell_3">
+														</div>
+													</div>
+													<div class="row">
+														<div class="cell_1 right">
+															<label for="date_inscription_{ id }" class="date_inscription">Date Inscription</label>
+						
+														</div>
+														<div class="cell_2">
+															<input type="text" id="date_inscription_{ id }" class="remboursement_date_inscription">
+														</div>
+														<div class="cell_3">
+															<button class="button enregistrer" onclick={ saveElement }>Inscription</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div> -->
+								<!-- </div> -->
+								<!-- FIN Remboursement -->
+					<!-- 		</div>
+						</div>
+					</div> -->
+					<div class="right { currentSalarie.nom && categorieActive && activites.length != 0 && currentCategorie != 'remboursement' ? '' : 'hidden' }">
+						<label for="id_date_inscription" class="date_inscription">Date Inscription</label><input type="text" id="id_date_inscription">
+						<button class="button enregistrer" onclick={ saveElement }>Inscription</button>
+					</div>
+				</div>
+				<div id="block_reglement" class="gestion" if={ is_reglement === true }>
+					<div class="entete-tableau">
+						<div class="cell_0">
+							<input type="checkbox" class="checkbox_reglements_all" onchange={ checkAllReglements } checked disabled={ disabled : type_paiement !== '' }>
+						</div>
+						<div class="cell_1">
+							<p>Date Inscription</p>
+						</div>
+						<div class="cell_2">
+							<p class="">Produits</p>
+						</div>
+						<div class="cell_3">
+							<p class="">Qté</p>
+						</div>
+						<div class="cell_4">
+							<p class="">Montant</p>
+						</div>
+						<div class="cell_5">
+							<p class="">Part.CE</p>
+						</div>
+						<div class="cell_6">
+							<p class="">Règlement</p>
+						</div>
+						<div class="cell_7">
+							<p>A Payer</p>
+						</div>
+					</div>
+					<div each={ inscriptions } if={ type_modele == 'billetterie' || type_modele == 'cheques_vacances' || type_modele == 'bons_achats' }>
+						<div class="inscription" id="paiement_{ id }" each={ inscriptions } if={ solde > 0 }>
+							<div class="cell_0">
+								<input type="checkbox" class="checkbox_reglements" value="{ id }" onchange={ selectReglementPaiement } checked disabled={ disabled : type_paiement !== '' } type_modele={ type_modele }>
+							</div>
+							<div class="cell_1">
+								<p class="date_inscription" value={ date_inscription }>{ convertDateToView(date_inscription) }</p>
+							</div>
+							<div class="cell_2">
+								<p class="libelle" value={ libelle }>{ libelle }</p>
+							</div>
+							<div class="cell_3">
+								<p class="quantite" value={ quantite }>{ quantite }</p>
+							</div>
+							<div class="cell_4">
+								<p class="montant" value={ montant }>{ montant }</p>
+							</div>
+							<div class="cell_5">
+								<p class="participation_ce" value={ participation_ce }>{ participation_ce }</p>
+							</div>
+							<div class="cell_6">
+								<p class="reglement" value={ reglement }>{ reglement }</p>
+							</div>
+							<div class="cell_7">
+								<p class="solde" value={ solde }>{ solde }</p>
+							</div>
+							<div class="hidden">
+								<p class="participation_salarie" value={ participation_salarie }></p>
+							</div>
+						</div>
+					</div>
+					<div id="paiement">
+						<div class="table c100">
+							<div class="row">
+								<div class="cell_1">
+									<p>
+										<label for="select_paiement">Mode de Paiement</label>
+									</p>
+									<select id="select_paiement" onchange={ changePaiement }>
+										<option value=""></option>
+										<option value="{ id }" each={ mode_paiement } if={ permanence == 1 } type={ type }>{ libelle }</option>
+									</select>
+								</div>
+								<div class="cell_2" if={ type_paiement === '' }>
+									
+								</div>
+								<div class="cell_2" if={ type_paiement === 'especes' || type_paiement === 'carte_bleue' }>
+									<p>
+										<label for="date_reglement">Date de Reglement</label>
+									</p>
+									<input type="text" id="date_reglement">
+								</div>
+								<div class="cell_2" if={ type_paiement === 'cheques' }>
+									<p>
+										<label for="titulaire_paiement">Titulaire du Paiement</label>
+									</p>
+									<input type="text" id="titulaire_paiement">
+								</div>
+								<div class="cell_2" if={ type_paiement === 'virement' }>
+									<label for="date_previsionnelle">Date de remise en Banque</label><input type="text" id="date_previsionnelle" class="l-large date_remise">
+								</div>
+								<div class="cell_3">
+									<label for="select_paiement">Montant</label>
+									<input type="text" id="montant_a_regler" class="right" value="{ montant_paiement ? montant_paiement : 0.00 }" onchange={ toFixed }>
+								</div>
+							</div>
+							<div class="row" if={ type_paiement === 'cheques' }>
+								<div class="cell_1">
+									<p>
+										<label for="domiciliation">Banque</label>
+									</p>
+									<input type="text" id="domiciliation">
+								</div>
+								<div class="cell_2">
+									<p>
+										<label for="nb_cheques">Nombre de Chèque(s)</label>
+									</p>
+									<input type="text" id="nb_cheques" value="1" class="xxs-large right" onchange={ changeEtalonnement }>
+								</div>
+								<div class="cell_3">
+									<p>
+										<label for="date_reglement">Date de Reglement</label>
+									</p>
+									<input type="text" class="" id="date_reglement">				
+								</div>
+							</div>
+							<div class="row" if={ type_paiement === 'virement' }> 
+								<div class="cell_1">
+									<p>
+										<label for="titulaire_paiement">Titulaire du Paiement</label>
+									</p>
+									<input type="text" class="" id="titulaire_paiement" value={ currentSalarie.titulaire } disabled>
+								</div>
+								<div class="cell_2">
+									<p>
+										<label >Banque</label>
+									</p>
+									<input type="text"  class="banque" value="{ currentSalarie.banque }" disabled>
+								</div>
+								<div class="cell_3">
+									<p>
+										<label class="label remboursement">R.I.B</label>
+									</p>
+									<input type="text" class="right remboursement" disabled="disabled" value="{ currentSalarie.rib }">
+								</div>
+							</div>
+							<div class="row" if={ type_paiement === 'virement' }>
+								<div class="cell_1">
+									<p>
+										<label for="iban_{ id }" class="label remboursement">IBAN</label>
+									</p>
+									<input type="text" id="iban_{ id }" class="right remboursement" disabled="disabled" value="{ currentSalarie.iban }">
+								</div>
+								<div class="cell_2">
+									<p>
+										<label class="label remboursement">BIC</label>
+									</p>
+									<input type="text" class="right remboursement" disabled="disabled" value="{ currentSalarie.bic }">
+								</div>
+								<div class="cell_3">
+									<p>
+										<label for="date_reglement">Date de Reglement</label>
+									</p>
+									<input type="text" class="" id="date_reglement">
+								</div>
+							</div>
+
+						</div>
+						<div id="block_etalonnement" class="" if={ type_paiement === 'cheques' }>
+							<div each={ etalonnement } id="etalonnement_{ id }" index={ id } class="etalonnement">
+								<label for="date_previsionnelle_{ id }">Date de remise en Banque</label><input type="text" id="date_previsionnelle_{ id }" class="l-large date_remise">
+								<label for="numero_cheque_{ id }">N° Chèque</label><input type="text" id="numero_cheque_{ id }" class="l-large">
+								<label for="montant_{ id }">Montant</label><input type="text" id="montant_{ id }" class="s-large montant right" onchange={ toFixed } value= { montant }>
+							</div>
+						</div>
+					</div>
+					<div class="right">
+						<button class="button annuler" onclick={ unsetReglement }>Annuler</button>
+						<button class="button enregistrer { grey : type_paiement === '' }" onclick={ saveReglement } >Enregistrer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="modal_desincription_remboursement" class="hidden">
+			<header class="banderole_modal center">
+				Désinscription Remboursement
+			</header>
+			<div class="block_modal">
+				<div class="block1 table c100">
+					<div class="row">
+						<div class="cell_1 c50">
+							<div class="block_remboursement">
+								<label for="modal_montant" class="right_space">Montant du remboursement</label>
+							</div>
+						</div>
+						<div class="cell_2 c50">
+							<input type="text" id="modal_montant" class="right" value={ modal_montant } disabled>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 c50">
+							<div class="block_date">
+								<label for="modal_date" class="right_space">Date du remboursement</label>
+							</div>
+						</div>
+						<div class="cell_2 c50">
+							<input type="text" id="modal_date" class="right">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="cell_1 c50">
+							<div class="block_date">
+								<label for="modal_reglement" class="right_space">Mode de règlement</label>
+							</div>
+						</div>
+						<div class="cell_2 c50">
+							<!-- <input type="text" id="modal_reglement" class="right"> -->
+							<select id="modal_reglement" class="" onchange={ setTypeRemboursement }>
+								<option value=""></option>
+								<option value="{ id }" each={ mode_paiement } if={ fournisseur == 1 } type={ type }>{ libelle }</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="row" if={ modal_type == 'cheques' }>
+						<div class="cell_1 c50">
+							<div class="block_date">
+								<label for="modal_numero_cheque" class="right_space">Numero de chèque</label>
+							</div>
+						</div>
+						<div class="cell_2 c50">
+							<input type="text" id="modal_numero_cheque" class="right">
+						</div>
+					</div>
+				</div>
+				<div class="modal_actions right">
+		    		<button class="button annuler cancelModal" onclick={ cancelModal }>Annuler</button>
+		    		<button class="button enregistrer cancelModal" onclick={ deleteRemboursement }>Enregistrer</button>
+		    	</div>
+		    </div>
+	  	</div>
+		<div id="validation_suppression" class="hidden">
+			<p class="center">Etes-vous sûr de vouloir supprimer cette inscription ?</p>
+			<div class="center">
+	    		<button class="button annuler" onclick={ cancelModal }>Annuler</button><button class="button enregistrer" onclick={ deleteInscription }>Valider</button>
+	    	</div>
+	  	</div>
+	  	<div id="msg_erreur" class="hidden">
+			<p class="msg center">{ msg }</p>
+			<div class="center">
+	    		<button class="button cancelModal annuler" onclick={ cancelModal }>Retour</button>
+	    	</div>
+	  	</div>
+	  	<div id="infoReglement" class="hidden">
+	  		<div class="block">
+		  		<p class="title">Informations supplémentaires</p>	
+		  		<p>Titulaire: { this.info_reglement['titulaire_paiement'] } / { currentSalarie.prenom } { currentSalarie.nom }</p>
+		  		<p>Banque: { this.info_reglement['domiciliation'] }</p>
+		  		<p><label for="modal_date_previsionnelle">Date Prévisionnelle</label> <input id="modal_date_previsionnelle" disabled={ "disabled" : this.info_reglement['remis'] }></p>
+		  		<p if={ this.info_reglement['remis'] }>Date de remise: { convertDateToView(this.info_reglement['parent_date_remise']) }</p>
+		  	</div>
+			<div class="center">
+	    		<button class="button cancelModal annuler" onclick={ cancelModal }>{ this.info_reglement['remis'] ? 'Retour' : 'Annuler' }</button>
+	    		<button class="button cancelModal enregistrer" onclick={ saveDatePrevisionnelle } if={ !this.info_reglement['remis'] }>Enregistrer</button>
+	    	</div>
+	  	</div>
+	</div>
+	<script>
+		var app = opts;
+	  	var _this = this;
+	  	this.app = opts;
+	  	var permissions = app.session.permissions;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var PERMANENCE_READ = this.PERMANENCE_READ = permissions.PERMANENCE_READ || false;
+		this.is_reglement = false;
+		this.type_paiement = '';
+		this.montant_paiement = "0.00";
+		this.etalonnement = [ { id: 0 } ];
+		this.modal_montant = '0.00';
+		this.msg_erreur = {
+			ErrVirement: 'Il manque des informations sur le compte du salarié pour valider le virement',
+			PaiementInconnu: 'Veuillez choisir un mode de paiement',
+		}
+		this.num_msg = { 1: 'ErrVirement', 2: 'PaiementInconnu' };
+
+		//action
+		this.stateSaveReglement = false;
+
+		this.currentCategorie = '';
+
+	  	app.on('unmount-inscription', function(){
+			console.log('unmount-inscription fired');
+			app.off('unmount-inscription');
+			console.log('before unmount-inscription, ' + _this.tagName);
+			$('.jquery-modal, .modal').remove();
+			_this.unmount();
+			console.log('after unmount-inscription');
+		});
+
+		this.thingsToLoad = [ 'getSalarie', 'selectize', 'exercices' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					if(_this.numToLoad <= 0) {
+		        		loadSelectize(); 
+		    		}
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+			if(_this.numToLoad <= 0) {
+        		loadSelectize(); 
+    		}
+		}
+
+		changeRemboursement(e) {
+			let val = $(e.currentTarget).val();
+			_this.type_remboursement = $('option[value=' + val + ']',e.currentTarget).attr('type');
+		}
+
+		setTypeRemboursement(e) {
+			var val = $(e.currentTarget).val();
+			if(val == '') {
+				_this.modal_type = '';
+			} else {
+				_this.modal_type = _this.mode_paiement[_this.idMode_paiement[val]].type;
+			}
+		}
+
+	    function conditionLimiteRemboursement(produit) {
+	    	let qtt_remboursement = 0;
+	    	let qtt_montant_remboursement = 0;
+	    	var remboursement_inscriptions = [];
+	    	const conditionElements = getConditionTimeInterval();
+	    	if(_this.inscriptions[_this.idInscriptions['remboursement']]) {
+	    		remboursement_inscriptions = _this.inscriptions[_this.idInscriptions['remboursement']].inscriptions;
+			}
+
+	    	for(let index_i in remboursement_inscriptions) {
+				if(remboursement_inscriptions[index_i].id_produit == produit.id) {
+					qtt_remboursement += getValueByCondition(produit.condition_quantite, remboursement_inscriptions[index_i].date_inscription);
+					qtt_montant_remboursement += getValueByCondition(produit.condition_montant, remboursement_inscriptions[index_i].date_inscription);
+				}
+	    	}
+	    	produit.limite_quantite_reel = produit.limite_quantite - qtt_remboursement;
+	    	produit.limite_montant_reel = produit.limite_montant - qtt_montant_remboursement;
+			if(produit.limite_quantite_reel < 0) {
+				produit.limite_quantite_reel = 0;
+			}
+			if(produit.limite_montant_reel < 0) {
+				produit.limite_montant_reel = 0;
+			}
+	    }
+
+		setQuantiteParticipationRemboursement(e) {
+console.log('setQuantiteParticipationRemboursement');
+			const item = e.item;
+			const conditions = e.item.conditions;
+			const montant = $('#montant_facture_' + item.id).val();
+			if(!isNaN($(e.currentTarget).val()) && $(e.currentTarget).val() != '') {
+				$(e.currentTarget).val(parseFloat($(e.currentTarget).val()).toFixed(2));
+			} else {
+				$(e.currentTarget).val('0.00');
+			}
+			if(! item.limite_montant_reel || ! item.limite_quantite_reel) {
+				conditionLimiteRemboursement(item);
+			}
+			// lancer condition limite remboursement pour update limite qtt et limite remboursement
+			if(montant != 0) {
+				if(item.type_participation === 'pourcentage') {
+					if(item.limite_quantite_reel >= 0 || conditions == 0 || (conditions == 1 && (item.condition_quantite || item.limite_quantite_reel))) {
+						let participation = parseFloat((montant * item.montant_participation) / 100).toFixed(2);
+						if(item.condition_montant && item.limite_montant && participation > item.limite_montant_reel && conditions == 1) {
+							participation = parseFloat(item.limite_montant_reel).toFixed(2);
+						}
+						$('#participation_ce_' + item.id).val(participation).text(participation);
+					}
+
+				} else if(item.type_participation === 'montant') {
+					if(item.limite_quantite_reel > 0 || conditions == 0 || (conditions == 1 && (item.condition_quantite || item.limite_quantite_reel))) {
+						let participation = parseFloat(item.montant_participation).toFixed(2);
+						// TODO:  || conditions == 0  BUG ???
+						if(item.condition_montant && item.limite_montant && participation >= item.limite_montant_reel || conditions == 0) {
+							participation = parseFloat(item.limite_montant_reel).toFixed(2);
+						}
+						$('#participation_ce_' + item.id).val(participation).text(participation);
+					}
+				} else if(item.formule_participation_ce && item.formule_participation_ce != ''){
+					// TODO: formule :D
+				}
+			} else {
+				$('#participation_ce_' + item.id).val('0.00').text('0.00');
+			}
+		}
+
+		toFixed(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if($(e.currentSalarie).attr('type') == 'checkbox')
+			{
+				var montant = parseFloat($(e.currentTarget).val())
+				if(!isNaN(montant)) {
+					_this.montant_paiement = montant.toFixed(2);
+					_this.update();
+				}
+			} else {
+				$(e.currentTarget).val(parseFloat($(e.currentTarget).val()).toFixed(2));
+				if($(e.currentTarget).attr('id') == 'montant_a_regler')
+					_this.montant_paiement = $(e.currentTarget).val();
+				_this.update();
+			}
+		}
+
+		cancelModal(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+        	$.modal.close();
+		}
+
+		selectReglementPaiement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M) {
+				let montant = 0;
+				const params = _this.E_M.checkElement({ selector: '.checkbox_reglements', checkAllSelector: '.checkbox_reglements_all', montant: montant,
+					checked: function(params) {
+	        			const type = $(params.this).attr('type_modele');
+	        			const inscription_type_modele = _this.inscriptions[_this.idInscriptions[type]];
+	        			const inscription = inscription_type_modele.inscriptions[inscription_type_modele.idInscriptions[$(params.this).val()]];
+						params.parent.montant += parseFloat(inscription.solde);
+					}
+				});
+
+				montant = params.montant;
+				_this.montant_paiement = parseFloat(montant).toFixed(2);
+				_this.etalonnement = [{ id: 0, montant: _this.montant_paiement }];
+				_this.update();
+			}
+		}
+
+		checkAllReglements(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			
+			if(_this.E_M) {
+				let montant = 0;
+				const params = _this.E_M.toggleCheckAllElement({ event: e, selector: '.checkbox_reglements', montant: montant,
+				checked: function(params) {
+        			const type = $(params.this).attr('type_modele');
+        			const inscription_type_modele = _this.inscriptions[_this.idInscriptions[type]];
+        			const inscription = inscription_type_modele.inscriptions[inscription_type_modele.idInscriptions[$(params.this).val()]];
+					params.parent.montant += parseFloat(inscription.solde);
+				},
+				unchecked: function(params) {
+					params.parent.montant = 0
+				}});
+
+				montant = params.montant;
+
+				_this.montant_paiement = isNaN(montant) ? '0.00' : parseFloat(montant).toFixed(2);
+				_this.etalonnement = [{ id: 0, montant: _this.montant_paiement }];
+				_this.update();
+			}
+		}
+
+
+		changePaiement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			const val = $(e.currentTarget).val();
+			if( val != '') {
+				let type = _this.mode_paiement[_this.idMode_paiement[$(e.currentTarget).val()]].type;
+				_this.type_paiement = type;
+			} else {
+				_this.type_paiement = '';
+			}
+			_this.update();	
+			if($(e.currentTarget).val() != "") {
+				var $date = $('#date_reglement, #date_previsionnelle_0');
+				$date.datepicker({
+					dateFormat: 'dd/mm/yy'
+				});
+				$date.datepicker( "setDate", new Date() );
+				$('.date_remise').datepicker({
+			 		dateFormat: 'dd/mm/yy'
+				});
+			}
+		}
+
+		this.entreprise = [];
+		this.idEntreprise = {}
+
+		function getEntreprise(){
+			console.log("getEntreprise")
+			var getParams = { type_element: 'entreprise' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			var logo = "";
+			var nom = "";
+			$.getJSON( '/admin/site/parametres_entreprise', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d;
+					var fields = {logo: 'logo', nom: 'nom'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							if (field == "logo") {
+								logo = data.elements[i][field];
+								$("#logo_entreprise").attr("src", "/img/uploads/entreprise/" + logo + "")
+							}
+							if (field == "nom") {
+								nom = data.elements[i][field];
+								_this.nom =	data.elements[i][field];
+							}
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idEntreprise[d['id']] = i;
+						_this.entreprise.push(d);
+					}
+					//_this.numToLoad--;
+														//_this.update();
+					}else{
+						// TODO: no data elements, get and manage error!...
+					}
+
+					_this.entreprise = data.elements;
+					//_this.numToLoad--;
+				})
+		}
+		getEntreprise();
+
+		function checkCheques() {
+			var montant = 0;
+			$('.montant', $('#block_etalonnement')).each(function() {
+				montant += parseFloat($(this).val());
+			})
+			if(montant == _this.montant_paiement) {
+				return(1);
+			} else { 
+				return(0);
+			}
+		}
+
+		function openModal(selector, msg) {
+			_this.msg = _this.msg_erreur[[msg]];
+			$(selector).modal();
+			_this.update();
+		}
+
+		saveReglement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.stateSaveReglement == false) {
+				_this.stateSaveReglement = true;
+				if(checkCheques() == 0 && _this.type_paiement === 'cheques') {
+					openModal('#msg_erreur', 'Les montants ne correspondent pas.');	
+					return(0);
+				}
+				var getParams = { action: 'reglement' };
+				var object, id_inscription, element, montant, id_mode_paiement, mode_paiement, err, id_exercice;
+				var titulaire_paiement, domiciliation, nb_cheques, date_reglement;
+
+				err = 0;
+
+				if(document.getElementById('id_exercice')){
+					id_exercice = document.getElementById('id_exercice').value;
+				} else if( _this.app.session.exercices.selected ){
+					id_exercice = _this.app.session.exercices.selected;
+				}
+
+				if($('#montant_a_regler').val() != 0 && $('#select_paiement').val() != "") {
+					getParams.reglements = [];
+
+					montant = $('#montant_a_regler').val();
+					id_mode_paiement = $('#select_paiement').val();
+
+					mode_paiement = _this.mode_paiement[_this.idMode_paiement[$('#select_paiement').val()]];
+					if(_this.E_M) {
+						date_reglement = _this.E_M.convertDateToDb($('#date_reglement').val());
+					}
+					// Paiement un reglement parent qui prend la somme totale total + des sous reglements
+					if(mode_paiement.type == 'virement') {
+						err = checkVirement();
+					}
+					if(mode_paiement.type == 'especes' || (mode_paiement.type == 'virement' && err == 0 ) || mode_paiement.type == 'carte_bleue') {
+						object = { id_exercice: id_exercice };
+					 	object.montant = montant;
+					 	object.id_mode_paiement = id_mode_paiement;
+					 	object.mode_paiement = mode_paiement;
+					 	object.id_salarie = _this.currentSalarie.id;
+						object.date_reglement = date_reglement;
+						if(mode_paiement.type == 'virement') {
+							object.date_previsionnelle = _this.E_M.convertDateToDb($('#date_previsionnelle').val());
+						}
+						
+					 	getParams.reglements.push(object);
+					 	$('.inscription').each(function() {
+					 		if($('input[type=checkbox]', this).is(':checked')) {
+					 			id_inscription = $('input[type=checkbox]', this).val();
+					 			const type = $('input[type=checkbox]', this).attr('type_modele');
+			        			const inscription_type_modele = _this.inscriptions[_this.idInscriptions[type]];
+			        			element = inscription_type_modele.inscriptions[inscription_type_modele.idInscriptions[id_inscription]];
+					 			// element = _this.inscriptions[_this.idInscriptions[id_inscription]];
+					 			if(element.solde != 0) {
+									object = { id_exercice: id_exercice };
+						 			if(parseFloat(montant) > parseFloat(element.solde)) {
+						 				object.montant = element.solde;
+						 				montant = montant - element.solde;
+						 			} else {
+						 				object.montant = parseFloat(montant).toFixed(2);
+						 				montant = 0;
+						 			}
+						 			object.id_mode_paiement = id_mode_paiement;
+						 			object.mode_paiement = mode_paiement;
+						 			object.id_salarie = _this.currentSalarie.id;
+						 			object.id_inscription = id_inscription;
+						 			object.date_reglement = date_reglement;
+						 			if(mode_paiement.type == 'virement') {
+										object.date_previsionnelle = _this.E_M.convertDateToDb($('#date_previsionnelle').val());
+									}
+						 			getParams.reglements.push(object);
+					 			}
+					 		}
+					 	})
+					// Plusieurs Reglements et sous reglements en fonction du nb de cheques
+					} else if(mode_paiement.type == 'cheques') {
+						var montant_etalonnement = 0;
+
+						$('.montant', $('#block_etalonnement')).each(function () {
+							montant_etalonnement += parseFloat($(this).val());
+						})
+						if(montant_etalonnement == $('#montant_a_regler').val()) {
+							domiciliation = $('#domiciliation').val();
+							titulaire_paiement = $('#titulaire_paiement').val();
+							nb_cheques = $('#nb_cheques').val();
+							var i = 0;
+
+							montant = $('#montant_' + i).val();
+							object = { id_exercice: id_exercice };
+
+						 	object.montant = montant; // Montant de l'étalonnement i
+
+						 	object.id_mode_paiement = id_mode_paiement; 
+						 	object.mode_paiement = mode_paiement;
+						 	object.id_salarie = _this.currentSalarie.id;
+						 	object.titulaire_paiement = titulaire_paiement;
+						 	object.domiciliation = domiciliation;
+							object.date_previsionnelle = _this.E_M.convertDateToDb($('#date_previsionnelle_' + i).val());
+						 	object.date_reglement = date_reglement;
+						 	object.numero_cheque = $('#numero_cheque_' + i).val();
+						 	getParams.reglements.push(object);
+
+							$('.inscription').each(function() {
+								if($('input[type=checkbox]', this).is(':checked')) { // si l'inscription est check
+									id_inscription = $('input[type=checkbox]', this).val();
+						 			const type = $('input[type=checkbox]', this).attr('type_modele');
+				        			const inscription_type_modele = _this.inscriptions[_this.idInscriptions[type]];
+				        			element = inscription_type_modele.inscriptions[inscription_type_modele.idInscriptions[id_inscription]];
+						 			//element = _this.inscriptions[_this.idInscriptions[id_inscription]]; // on recupere les infos de l'inscription
+									if(element.solde != 0) { // si le solde de l'inscription n'est pas nul
+										object = { id_exercice: id_exercice };
+							 			if(parseFloat(montant) > parseFloat(element.solde)) { // si le montant du cheque est superieur a celui de l'inscription
+							 				object.montant = element.solde; // on crée un reglement avec un montant equivalent au solde de l'inscription
+							 				montant = montant - element.solde; // on soustrait le solde au montant pour avoir ce qui reste
+							 			} else {
+							 				object.montant = parseFloat(montant).toFixed(2); // le montant est inferieur au solde donc le cheque est payé dans la totalité
+							 				var solde_restant = element.solde - montant; // on retire le montant du cheque au solde
+							 				montant = 0; 
+							 			}
+							 			object.id_mode_paiement = id_mode_paiement;
+							 			object.mode_paiement = mode_paiement;
+							 			object.id_salarie = _this.currentSalarie.id;
+							 			object.id_inscription = id_inscription;
+							 			object.titulaire_paiement = titulaire_paiement;
+							 			object.domiciliation = domiciliation;
+										object.date_previsionnelle = _this.E_M.convertDateToDb($('#date_previsionnelle_' + i).val());
+							 			object.numero_cheque = $('#numero_cheque_' + i).val();
+						 				object.date_reglement = date_reglement;
+							 			getParams.reglements.push(object); // on push le premier cheque
+
+							 			while(montant == 0 && (i + 1) < nb_cheques) {
+							 				i++;
+							 				object = { id_exercice: id_exercice };
+
+							 				montant = $('#montant_' + i).val();
+										 	object.montant = montant;
+										 	object.id_mode_paiement = id_mode_paiement;
+										 	object.mode_paiement = mode_paiement;
+										 	object.id_salarie = _this.currentSalarie.id;
+										 	object.titulaire_paiement = titulaire_paiement;
+										 	object.domiciliation = domiciliation;
+											object.date_previsionnelle = _this.E_M.convertDateToDb($('#date_previsionnelle_' + i).val());
+							 				object.numero_cheque = $('#numero_cheque_' + i).val();
+						 					object.date_reglement = date_reglement;
+										 	getParams.reglements.push(object);
+
+											object = { id_exercice: id_exercice };
+
+											if(parseFloat(montant) > parseFloat(solde_restant)) {
+								 				object.montant = parseFloat(solde_restant).toFixed(2);
+								 				montant = montant - solde_restant;
+								 			} else {
+								 				object.montant = parseFloat(montant).toFixed(2);
+								 				solde_restant = solde_restant - montant;
+								 				montant = 0;
+								 			}
+								 			object.id_mode_paiement = id_mode_paiement;
+								 			object.mode_paiement = mode_paiement;
+								 			object.id_salarie = _this.currentSalarie.id;
+								 			object.id_inscription = id_inscription;
+								 			object.titulaire_paiement = titulaire_paiement;
+								 			object.domiciliation = domiciliation;
+											object.date_previsionnelle = _this.E_M.convertDateToDb($('#date_previsionnelle_' + i).val());
+								 			object.numero_cheque = $('#numero_cheque_' + i).val();
+						 					object.date_reglement = date_reglement;
+								 			getParams.reglements.push(object);
+							 			}
+								 	}
+								}
+							})
+						} else {
+							err = 2;
+						}
+					}
+				 	if(err == 0) {
+						_this.showLoader();
+
+				 		var url = "/admin/compta/reglement";
+				 		$.ajax(url, {
+							data : getParams,
+							type : 'POST',
+							dataType: 'json',
+							success: function (result, textStatus, jqXHR){
+								_this.removeLoader({time: 1000})
+								_this.categorieActive = false;
+								getInscription(_this.currentSalarie.id);
+								updateSalarie(_this.currentSalarie.id);
+								getReglementSalarie(_this.currentSalarie.id);
+								_this.is_reglement = false;
+								clearReglement();
+								_this.update();
+				 				_this.stateSaveReglement = false;
+							}
+						}).done(function(){
+							console.log('done!...');
+							tag = null;
+						}).fail(function(){
+							console.log('fail!...');
+							tag = null;
+						});
+
+				 	} else {
+				 		_this.stateSaveReglement = false;
+						 openModal('#msg_erreur', _this.num_msg[[err]]);
+				 	}
+				
+				}
+			}
+		}
+		_this.etalonnement = [{ id: 0, montant: '0.00'}];
+
+		changeEtalonnement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var nb = $(e.currentTarget).val();
+			calculEtalonnement(nb);
+		}
+
+		function checkVirement() {
+			if(!_this.currentSalarie.iban || !_this.currentSalarie.banque || !_this.currentSalarie.bic ||
+			 !_this.currentSalarie.rib || !_this.currentSalarie.titulaire) {
+				return (1);
+			} else {
+				return (0);
+			}
+		}
+
+		infoReglement(e) {
+			openModal('#infoReglement', '');
+			_this.info_reglement = e.item;
+			$('#modal_date_previsionnelle').datepicker({
+		 		dateFormat: 'dd/mm/yy'
+			});
+			$('#modal_date_previsionnelle').datepicker( "setDate", _this.convertDateToView(e.item.date_previsionnelle) );
+		}
+
+		saveDatePrevisionnelle(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var url = '/admin/compta/reglement';
+			var data = { action: 'update_reglement', date_previsionnelle: _this.E_M.convertDateToDb($("#modal_date_previsionnelle").val()), id: _this.info_reglement.id };
+			_this.E_M.showLoader();
+
+			$.ajax(url, {
+				data : data,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+					//getReglements();
+					getReglementSalarie(_this.currentSalarie.id);
+					$.modal.close();
+					_this.E_M.removeLoader({time: 1000})
+					_this.update();
+				}
+			}).done(function(){
+				console.log('done!...');
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				tag = null;
+			});
+		}
+
+		function calculEtalonnement(nb) {
+
+			_this.etalonnement = [];
+			var montant, montant1, montant2, reste, i;
+			var montant_paiement = _this.montant_paiement;
+
+			if(nb == 1) {
+				_this.etalonnement.push({ id: 0, montant: montant_paiement });
+				_this.update();	
+				$('.date_remise').datepicker({
+			 		dateFormat: 'dd/mm/yy'
+				});
+				return(0);
+			}
+			if(montant_paiement % 1 == 0) {
+				montant = montant_paiement / nb;
+			} else {
+				var reste_montant = montant_paiement % 1;
+				montant = Math.floor(montant_paiement) / nb;
+			}
+
+			if(montant_paiement % 1 == 0 && montant % 1 == 0) {
+				for(i = 0; i < nb; i++) {
+					_this.etalonnement.push({ id: i, montant: (montant).toFixed(2) });
+				}
+			} else {
+				reste = montant % 1;
+				montant2 = Math.floor(montant);
+				if((montant2 * (nb - 1)) + Math.ceil(montant + (reste * (nb - 1))) == Math.floor(montant_paiement)) {
+					 montant1 = Math.ceil(montant + (reste * (nb - 1))) + (reste_montant || 0);
+				} else {
+					montant1 = Math.floor(montant + (reste * (nb - 1))) + (reste_montant || 0);
+				}
+
+				for(i = 0; i < nb; i++) {
+					if( i == 0 ) {
+						_this.etalonnement.push({ id: i, montant: (montant1).toFixed(2) });
+					} else {
+						_this.etalonnement.push({ id: i, montant: (montant2).toFixed(2) });
+					}
+				}
+			}
+
+			_this.update();
+			for(i = 0; i < nb; i++) {
+				var $date = $('#date_previsionnelle_' + i);
+				$date.datepicker({
+			 		dateFormat: 'dd/mm/yy'
+				});
+				var tmp = new Date();
+				tmp.setMonth(tmp.getMonth()+i);
+				$date.datepicker( "setDate", tmp);
+			}
+			$('.date_remise').datepicker({
+		 		dateFormat: 'dd/mm/yy'
+			});
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		this.showLoader = function showLoader(){
+			if(_this.E_M){
+				_this.E_M.showLoader();
+			}
+		}
+
+		this.removeLoader = function removeLoader(params){
+			if(_this.E_M){
+				_this.E_M.removeLoader(params);
+			}
+		}
+
+		this.parametresCompte = {};
+
+		function getParametresComptes(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON( '/admin/compta/parametres', getParams, function(data){
+				if(data && data.elements){
+					_this.parametresCompte = data.elements[0];
+					_this.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			})
+		}
+		getParametresComptes();
+		
+		function formatName(item) {
+		    return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+		};
+
+		function loadSelectize () {
+			var $selectTo = $('#select-to');
+
+			if( typeof $selectTo.selectize === 'function' ){
+				var $select = $selectTo.selectize({
+					maxItems: 1,
+					valueField: 'id',
+					labelField: 'name',
+					searchField: ['prenom', 'nom', 'numero_salarie'],
+					sortField: [
+						/* {field: 'prenom', direction: 'asc'}, */
+						{field: 'nom', direction: 'asc'}
+					],
+					options: _this.salaries,
+					persist: false,
+					openOnFocus: false,
+					closeAfterSelect: true,
+					onType: function (str) {
+						if (str === "") {
+							this.close();
+						}
+					},
+					onFocus: function () {
+						this.clear();
+						_this.update();
+					},
+					render: {
+						item: function(item, escape) {
+							var name = formatName(item);
+							return '<div>' +
+								(name ? '<span class="name">' + escape(name) + '</span>' : '') +
+								(item.numero_salarie ? '<span class="email">' + escape(item.numero_salarie) + '</span>' : '') +
+							'</div>';
+						},
+						option: function(item, escape) {
+							var name = formatName(item);
+							var label = name || item.numero_salarie;
+							var caption = name ? item.numero_salarie : null;
+							return '<div>' +
+								'<span class="label">' + escape(label) + '</span>' +
+								(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+							'</div>';
+						}
+					},
+					onChange: function(value) {
+						getReglementSalarie(value);
+						updateSalarie(value);
+						getInscription(value);
+						if(value) {
+							_this.selectedAyantDroit = { id: value, type: 'salarie' };
+							if($('#checkbox').length) {
+								$('#checkbox').prop('checked');
+							} else {
+								checkbox();
+							}
+						} else {
+							_this.selectedAyantDroit = { id: null, type: '' };
+						}
+						$('.ayant_droit').removeClass('active');
+						_this.ayants_droit = [];
+						_this.idAyants_droit = { }
+						_this.is_reglement = false;
+						clearReglement();
+						_this.categorieActive = false;
+						_this.update();
+						getAyantsDroit(value);
+					}
+				});
+
+				var selectize = $select[0].selectize;
+
+				var hackToClose = false;
+				selectize.on('item_remove', function(value, $item) {
+					hackToClose = true;
+				});
+				selectize.on('dropdown_open', function($dropdown) {
+					if ( hackToClose )
+						selectize.close();
+
+					hackToClose = false;
+				});
+			}
+        }
+
+        function checkbox() {
+        	if($('#checkbox').length) {
+				$('#checkbox').attr('checked', true);
+        	} else {
+        		setTimeout(function(){ checkbox() }, 100)
+        	}
+        }
+
+         _this.app.loadScript('/js/admin/selectize.min.js','selectize_js',
+         	function () {
+         		_this.numToLoad--;
+         		if(_this.numToLoad <= 0) {
+		        	loadSelectize();
+		    	}
+		    }
+		);
+
+        _this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		this.currentCategorieId = null;
+		this.categorieActive = false;
+		this.currentSalarie = {};
+
+		this.salaries = [];
+		this.idSalaries = {};
+
+		this.ayants_droit = [];
+		this.idAyants_droit = { };
+
+		this.inscriptions = [];
+		this.idInscriptions = { };
+
+		setReglement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			_this.montant_paiement = _this.currentSalarie.solde;
+			_this.etalonnement = [{ id: 0, montant: _this.montant_paiement }];
+			_this.is_reglement = true;
+			_this.update();
+			$('.entete-tableau input[type=checkbox], .inscription input[type=checkbox]',$('#block_reglement')).prop('checked', true);
+		}
+
+		unsetReglement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			_this.is_reglement = false;
+			clearReglement();
+			_this.update();
+		}
+
+		function getInscription(id) {
+			var getParams = { id_salarie : id };
+
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+			$.getJSON('/admin/inscription/inscription', getParams, function (data){ 
+				if(data && data.elements){
+					_this.inscriptions = [];
+					_this.idInscriptions = { };
+					var i, field, d, y, o, x;
+					var l = data.elements.length;
+					var fields = { id: 'id', id_salarie: 'id_salarie', id_activite: 'id_activite', quantite: 'quantite', date_inscription: 'date_inscription',
+					 date_validite: 'date_validite', participation_ce: 'participation_ce', id_produit: 'id_produit', montant: 'montant', participation_salarie: 'participation_salarie',
+					  solde: 'solde', libelle: 'libelle', reglement: 'reglement', type_modele: 'type_modele', id_mode_paiement: 'id_mode_paiement',
+					   numero_cheque: 'numero_cheque', id_ayant_droit: 'id_ayant_droit', montant_facture: 'montant_facture' };
+					var current_modele = '';
+					for(i=0, y=0; i<l; i++){
+						if(current_modele != data.elements[i]['type_modele']) {
+							if(i != 0) {
+								_this.idInscriptions[d['type_modele']] = y;
+								_this.inscriptions.push(d);
+								y++;
+							}
+							d = { };
+							d.inscriptions = [];
+							d.idInscriptions = {};
+							d.type_modele = data.elements[i]['type_modele'];
+							current_modele = data.elements[i]['type_modele']
+							x = 0;
+						}
+						o = { }
+						for(field in fields){
+							o[fields[field]] = data.elements[i][field];
+						}
+						if(current_modele == 'remboursement') {
+							var id_mode_paiement = data.elements[i]['id_mode_paiement'];
+							o['reglement'] = null;
+							o['type_paiement'] = _this.mode_paiement[_this.idMode_paiement[id_mode_paiement]].type;
+							o['libelle_paiement'] = _this.mode_paiement[_this.idMode_paiement[id_mode_paiement]].libelle;							
+						}
+						d.inscriptions.push(o);
+						d.idInscriptions[o['id']] = x;
+						x++;
+					}
+					if(i > 0) {
+						_this.idInscriptions[d['type_modele']] = y;
+						_this.inscriptions.push(d);
+					}
+					y++;
+					_this.update();
+				}
+
+			});
+		}
+
+		function getCurrentSalarie(id) {
+			var getParams = { id: id };
+
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+			$.getJSON('/admin/salaries/salaries', getParams, function (data){
+				if(data && data.elements){
+					_this.currentSalarie = {} ;
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', visible: 'visible', montant: 'montant'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.currentSalarie = d;
+					}
+					_this.montant_paiement = _this.currentSalarie.solde;
+				}
+				_this.update();
+			})
+		}
+
+		function getSalaries(){
+			var getParams = {};
+
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+			$.getJSON('/admin/salaries/salaries', getParams, function (data){
+				if(data && data.elements){
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idSalaries[d['id']] = i;
+						_this.salaries.push(d);
+					}
+					_this.update();
+
+					_this.loaded = true;
+
+					_this.numToLoad--;
+		        	if(_this.numToLoad <= 0) {
+		        		loadSelectize(); 
+		    		}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}
+		getSalaries();
+
+		this.selectedAyantDroit = '';
+
+		selectAyantsDroit(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if ($(e.currentTarget).is('input')) {
+				$('.ayant_droit').removeClass('active');
+				if($(e.currentTarget).is(':checked')) {
+					_this.selectedAyantDroit.id = $('.selectize-dropdown-content .selected').attr('data-value');
+					_this.selectedAyantDroit.type = 'salarie';
+				} else {
+					_this.selectedAyantDroit = { id: null, type: '' };
+				}
+			} else {
+				$('#checkbox').attr('checked', false);
+				$('.ayant_droit').removeClass('active');
+				$(e.currentTarget).addClass('active');
+				_this.selectedAyantDroit.id = $(e.currentTarget).attr('value');
+				_this.selectedAyantDroit.type = 'ayantdroit';
+
+			}
+		}
+
+		cancelAdhesion(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.salarie[0].index != 0) {
+				$('.cour', "#cour_" + e.item.id).toggleClass('hidden');
+				$('.block_adhesion', "#cour_" + e.item.id).toggleClass('hidden');
+				$('#cour_' + e.item.id).removeClass('selected');
+			}
+		}
+
+		validateAdhesion(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.salarie[0].index != 0) {
+				$('.cour', "#cour_" + e.item.id).toggleClass('hidden');
+				$('.block_adhesion', "#cour_" + e.item.id).toggleClass('hidden');
+				$('#cour_' + e.item.id).removeClass('selected');
+			}
+		}
+
+		addAdhesion(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.salarie[0].index != 0) {
+				$('.cour', "#cour_" + e.item.id).toggleClass('hidden');
+				$('.block_adhesion', "#cour_" + e.item.id).toggleClass('hidden');
+				$('#cour_' + e.item.id).addClass('selected');
+			}
+		}
+
+		saveElement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.selectedAyantDroit.id != null) {
+
+				var url = '/admin/inscription/inscription';
+				var data = { action: 'add' };
+				var produits = [];
+				var err = 0;
+				if(document.getElementById('id_exercice')){
+					var id_exercice = document.getElementById('id_exercice').value;
+				} else if( _this.app.session.exercices.selected ){
+					var id_exercice = _this.app.session.exercices.selected;
+				}
+				var produit, id;
+				var fields = { quantite: 'quantite', date_validite: 'date_validite', participation_ce: 'participation_ce', participation_salarie: 'participation_salarie', solde: 'participation_salarie', libelle: 'libelle'}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TODO: for divers & CO. convert fields from getActiviteProduit to => fields inscriptions + ecritures in DB
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				if( ! e.item) { // pas dans remboursement
+					var date = _this.E_M.convertDateToDb($('#id_date_inscription').val());
+					$('.produit').each(function(){
+						produit = {};
+						id = $(this).attr('db_id');
+						produit.date_inscription = date//yyyy + '-' + mm + '-' + dd;
+						produit.id_produit = id;						
+						if(_this.selectedAyantDroit.type == 'salarie') {
+							produit.id_salarie = _this.selectedAyantDroit.id;
+						} else if (_this.selectedAyantDroit.type == 'ayantdroit') {
+							produit.id_salarie = _this.currentSalarie.id;
+							produit.id_ayant_droit = _this.selectedAyantDroit.id;
+						}
+						produit.id_exercice = id_exercice;
+						produit.type_modele = $(this).attr('type');
+						
+						if( (produit.type_modele != 'remboursement') ){
+							if( (
+									(produit.type_modele == 'billetterie' || produit.type_modele == 'cheques_vacances' || produit.type_modele == 'bons_achats') 
+								&& $('.input_quantite', this).val() > 0) 
+								|| (produit.type_modele == 'divers' && produit.type_modele == 'voyages')) {
+							// element spe à billetterie
+								for(var field in fields) {
+									produit[field] = $('#' + fields[field] + '_' + id, this).val();
+								}
+								if(produit.type_modele == 'divers' && produit.type_modele == 'voyages'){
+									var montant = parseFloat($('#montant_' + id).val());
+									produit.montant = montant ? montant.toFixed(2) : '0.00';
+								}else{
+									produit.montant = ($('#quantite_' + id).val() * parseFloat($('#quantite_' + id).attr('val-num'))).toFixed(2);
+								}
+								produits.push(produit);
+							}
+						}
+console.log('inscriptions produit: ' + JSON.stringify(produit));
+					})
+				} else {
+					let id = e.item.id;
+					let val = $('#select_remboursement_' + id).val();
+					if(val != '') {
+						let type = $('option[value=' + val + ']', $('#select_remboursement_' + id)).attr('type');
+						if(type == 'virement') {
+							err = checkVirement();
+						}
+						produit = {};
+						produit.date_inscription = _this.E_M.convertDateToDb($('#date_inscription_' + id).val());
+						produit.id_produit = id;						
+						if(_this.selectedAyantDroit.type == 'salarie') {
+							produit.id_salarie = _this.selectedAyantDroit.id;
+						} else if (_this.selectedAyantDroit.type == 'ayantdroit') {
+							produit.id_salarie = _this.currentSalarie.id;
+							produit.id_ayant_droit = _this.selectedAyantDroit.id;
+						}
+						produit.id_exercice = id_exercice;
+						produit.libelle = $('#libelle_' + id).val();
+						produit.montant_facture = $('#montant_facture_' + id).val();
+						produit.montant = $('#participation_ce_'  + id).val()
+						produit.participation_ce = $('#participation_ce_'  + id).val();
+						produit.id_mode_paiement = $('#select_remboursement_' + id).val();
+						produit.type_paiement = type;
+						produit.type_modele = 'remboursement';
+						if(type == 'cheques') {
+							produit.numero_cheque = $('#numero_cheque_' + id).val();
+							if(produit.montant != 0 && produit.numero_cheque_ != '' ) { 
+								produits.push(produit);
+							}
+						} else if(produit.montant != 0 && produit.id_mode_paiement != '') {
+							produits.push(produit);
+						}
+					} else if(val == '') {
+						err = 2;
+					}
+				}
+				data.produits = produits;
+console.log('saveElement inscriptions data: ' + JSON.stringify(data));
+				if(data.produits.length > 0 && err == 0) {
+					_this.showLoader();
+					$.ajax(url, {
+						data : data,
+						type : 'POST',
+						dataType: 'json',
+						success: function (result, textStatus, jqXHR){
+console.log('saveElement inscriptions result: ' + JSON.stringify(result));
+							_this.removeLoader({time: 1000})
+							_this.categorieActive = false;
+							getInscription(_this.currentSalarie.id);
+							updateSalarie(_this.currentSalarie.id);
+							$('.input_quantite').val(0);
+							_this.update();
+						}
+					}).done(function(){
+						console.log('done!...');
+						tag = null;
+					}).fail(function(){
+						console.log('fail!...');
+						tag = null;
+					});
+				} else {
+					openModal('#msg_erreur', _this.num_msg[[err]]);
+				}
+			}			
+		}
+
+		voirParticipants(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			$('.participants', "#cour_" + e.item.id).toggleClass('hidden');
+		}
+
+		_this.activites = [];
+		_this.idActivites = {};
+
+		showActivites(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			$('.participants').addClass('hidden');
+			_this.categorieActive = true;
+			_this.activites = [];
+			_this.idActivites = {};
+			var type_modele = _this.modeles[_this.idModeles[e.item.id_modele]].type;
+			getActiviteProduit({ id_categorie : e.item.id, type_modele: type_modele });
+		}
+
+		increment(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+	    	if(_this.currentSalarie.nom) {
+	    		setQuantiteMontantParticipation('increment', e);
+	    	}
+	    }
+	    
+	    decrement(e) {
+	    	e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.currentSalarie.nom) {
+	    		setQuantiteMontantParticipation('decrement', e);
+	    	}
+	    }
+
+	    function getConditionTimeInterval() {
+	    	var date = new Date();
+			var mm = date.getMonth()+1; //January is 0!
+			var yyyy = date.getFullYear();
+
+			var semestre_1, semestre_2, trimestre_1, trimestre_2;
+
+			if(mm <= 6) {
+				semestre_1 = 1;
+				semestre_2 = 6;
+			} else {
+				semestre_1 = 7;
+				semestre_2 = 12;
+			}
+
+			if(mm <= 4) {
+				trimestre_1 = 1;
+				trimestre_2 = 4
+			} else if(mm > 4 && mm <= 8) {
+				trimestre_1 = 5;
+				trimestre_2 = 8;
+			} else {
+				trimestre_1 = 9;
+				trimestre_2 = 12;
+			}
+
+			if(mm<10) {
+			    mm='0'+mm
+			} 
+
+			return { semestre_1, semestre_2, trimestre_1, trimestre_2, mm, yyyy };
+	    }
+
+		
+		function getValueByCondition(condition, date, options){
+	    	const conditionElements = getConditionTimeInterval();
+			options = options || {};
+			var quantite = options.quantite || 1;
+			var date_inscription = new Date(date);
+			var date_month = date_inscription.getMonth() + 1;
+			var value = 0;
+			if(condition === 'annee' && conditionElements.yyyy === date_inscription.getFullYear()){
+				value = quantite;
+			}else if(condition === 'semestre' && date_month >= conditionElements.semestre_1 && date_month <= conditionElements.semestre_2){
+				value = quantite;
+			}else if(condition === 'trimestre' && date_month >= conditionElements.trimestre_1 && date_month <= conditionElements.trimestre_2){
+				value = quantite;
+			}else if(condition ===  'mois' && conditionElements.mm == date_month) {
+				value = quantite;
+			}
+
+			return quantite;
+		}
+
+		function conditionLimitePlaces(e) {
+console.log('conditionLimitePlaces');
+console.log('conditionLimitePlaces item: ' + JSON.stringify(e.item));
+			var a_qtt_deduire = 0;
+	    	var a_mtt_deduire = 0;
+	    	var p_qtt_deduire = 0;
+	    	var p_mtt_deduire = 0;
+	    	var inscriptions = [];
+			var produit = e.item;
+
+			if(_this.inscriptions[_this.idInscriptions[produit.type_modele]]) {
+				inscriptions = _this.inscriptions[_this.idInscriptions[produit.type_modele]].inscriptions;
+			}
+
+			var produit = e.item;
+			var activite = _this.activites[_this.idActivites[produit.a_id]];
+			for(var index_i in inscriptions) {
+				if(inscriptions[index_i].id_activite == produit.a_id) {
+					a_qtt_deduire += getValueByCondition(activite.condition_quantite, inscriptions[index_i].date_inscription, {quantite: parseFloat(inscriptions[index_i].quantite),});
+					if( inscriptions[index_i].id_produit == produit.id ){
+						p_qtt_deduire += getValueByCondition(produit.condition_quantite, inscriptions[index_i].date_inscription, {quantite: parseFloat(inscriptions[index_i].quantite),});
+					}
+
+					a_mtt_deduire += getValueByCondition(activite.condition_montant, inscriptions[index_i].date_inscription, {quantite: parseFloat(inscriptions[index_i].participation_ce),});
+					if( inscriptions[index_i].id_produit == produit.id ){
+						p_mtt_deduire += getValueByCondition(produit.condition_montant, inscriptions[index_i].date_inscription, {quantite: parseFloat(inscriptions[index_i].participation_ce),});
+					}
+					// TODO: participation_ce => formule
+				}
+			}
+			
+			var a_qtt_reel = activite.limite_quantite - a_qtt_deduire;
+			var p_qtt_reel = produit.limite_quantite - p_qtt_deduire;
+			var a_mtt_reel = activite.limite_montant - a_mtt_deduire;
+			var p_mtt_reel = produit.limite_montant - p_mtt_deduire;
+			produit.limite_quantite_reel = a_qtt_reel < p_qtt_reel && activite.conditions == 1 && activite.condition_quantite ? a_qtt_reel : p_qtt_reel;
+			produit.limite_montant_reel = a_mtt_reel < p_mtt_reel && activite.conditions == 1 && activite.condition_montant ? a_mtt_reel : p_mtt_reel;
+			if(produit.limite_quantite_reel && produit.limite_quantite_reel < 0) {
+				produit.limite_quantite_reel = 0;
+			}
+			if(produit.limite_montant_reel && produit.limite_montant_reel < 0) {
+				produit.limite_montant_reel = 0;
+			}
+	    }
+
+	    function conditionCommande(e) {
+console.log('conditionCommande');
+	    	var p_quantite_deduire = 0;
+	    	var a_quantite_deduire = 0;
+	    	var inscriptions = [];
+	    	const conditionTimeInterval = getConditionTimeInterval();
+
+			var produit = e.item;
+			
+			var activite = _this.activites[_this.idActivites[produit.a_id]];
+			var type_modele = activite.type_modele;
+
+			if(_this.inscriptions[_this.idInscriptions[type_modele]]) {
+				inscriptions = _this.inscriptions[_this.idInscriptions[type_modele]].inscriptions;
+			}
+
+			for(var index_i in inscriptions) {
+				if(inscriptions[index_i].id_activite == produit.a_id) {
+					a_quantite_deduire += getValueByCondition(activite.condition_commande, inscriptions[index_i].date_inscription, {quantite: parseFloat(inscriptions[index_i].quantite),});
+					if(inscriptions[index_i].id_produit == produit.id){
+						p_quantite_deduire += getValueByCondition(produit.condition_commande, inscriptions[index_i].date_inscription, {quantite: parseFloat(inscriptions[index_i].quantite),});
+					}
+				}
+			}
+
+			var a_cmd_reel = activite.limite_commande - a_quantite_deduire;
+			var p_cmd_reel = produit.limite_commande - p_quantite_deduire;
+			produit.limite_commande_reel = (a_cmd_reel < p_cmd_reel && activite.conditions_commande == 1 && activite.condition_commande) ? a_cmd_reel : p_cmd_reel;
+			
+			if(produit.limite_commande_reel && produit.limite_commande_reel < 0) {
+				produit.limite_commande_reel = 0;
+			}
+	    }
+
+	    function setQuantiteMontantParticipation(type, e) {
+			// test quantite & montant & participation for billetterie and likes
+console.log('setQuantiteMontantParticipation item: ' + JSON.stringify(e.item));
+			var produit = e.item;
+	    	var id = produit.id;
+	        var $quantite = $('#quantite_' + id);
+
+			var quantite_val = parseFloat($quantite.val()) - (type === 'increment' ? -1 : 1);
+			var activite = _this.activites[_this.idActivites[produit.a_id]];
+	        if(quantite_val > produit.nb_places && produit.stock) {
+	        	quantite_val -= 1;
+	        }
+
+			if(
+				(activite.conditions_commande == 1 && (activite.limite_commande && ! produit.limite_commande_reel)) 
+				|| (produit.conditions_commande == 1 && (produit.limite_commande && ! produit.limite_commande_reel))
+			) {
+				// pour savoir combien il a le droit de commander, par max 5 pas mois
+				// si conditions & limites && si produit.limite_commande_reel n'a pas déjà été initialisé
+	        	conditionCommande(e);
+	        }
+
+	        if (
+				(quantite_val >= 0 && type === 'decrement') || (type === 'increment')
+			) {
+				if(
+					(activite.conditions == 1 && 
+						(
+							(activite.limite_quantite && ! produit.limite_quantite_reel)
+							 || (activite.limite_montant && ! produit.limite_montant_reel)
+						)
+					) 
+					|| 
+					(produit.conditions == 1 && 
+						(
+							(produit.limite_quantite && ! produit.limite_quantite_reel)
+							 || (produit.limite_montant && ! produit.limite_montant_reel)
+						)
+					)
+				) {
+					// si conditions & limites && si produit.limite_commande_reel  || si produit.limite_quantite_reel n'a pas déjà été initialisé				
+					// calcule le nombre de places où il y aura une participation_ce
+		        	conditionLimitePlaces(e);
+		        }
+				
+				if (type === 'increment' && produit.condition_commande && produit.limite_commande && quantite_val > produit.limite_commande_reel) {
+					quantite_val--;
+	       		}
+		        $quantite.val(quantite_val);
+	       		var $participation_ce = $('#participation_ce_' + id);
+		        var value_participation_ce = $participation_ce.attr('value-unite');
+				// calcule la participation du ce pour cette quantite
+				var total_ce; 
+				// teste si la participation est au dessus de la valeur de la quantié choisie
+		        if(produit.conditions == 1 && produit.condition_quantite && produit.limite_quantite && quantite_val > produit.limite_quantite_reel) {
+					total_ce = parseFloat(value_participation_ce) * produit.limite_quantite_reel;
+		        }else{
+					total_ce = parseFloat(value_participation_ce) * quantite_val;
+				}
+	        	if(produit.conditions == 1 && produit.condition_montant && produit.limite_montant && total_ce > produit.limite_montant_reel) {
+					total_ce = produit.limite_montant_reel;
+				}
+		        $participation_ce.text(! isNaN(total_ce) ? total_ce.toFixed(2) : '0.00');
+		        $participation_ce.val(! isNaN(total_ce) ? total_ce.toFixed(2) : '0.00');
+
+		        var $div_salarie = $('#participation_salarie_' + id);
+		        var tarif = $quantite.attr('val-num');
+		        var total = parseFloat(tarif) * quantite_val;
+		        var total_salarie = total - total_ce;
+
+		        $div_salarie.text(! isNaN(total_salarie) ? total_salarie.toFixed(2): '0.00');
+		        $div_salarie.val(! isNaN(total_salarie) ? total_salarie.toFixed(2): '0.00');
+
+	        }
+			/***********************************************************
+			else if (type === 'increment' && produit.condition_commande && produit.limite_commande && quantite_val > produit.limite_commande_reel) {
+
+	        } else {
+	           	var quantite_val = $quantite.val(0);
+	        }
+			*************************************************/
+	        _this.update();
+	    }
+
+		setQuantiteParticipationDiversVoyages(e){
+console.log('setQuantiteParticipationDiversVoyages');
+		}
+
+	    function clearReglement() {
+	    	var $div = $('#paiement');
+	    	$('input[type=text]', $div).val('');
+	    	$('#select_paiement').val('');
+	    	_this.montant_paiement = '0.00';
+	    	$('#nb_cheques').val(1);
+			_this.etalonnement = [{ id: 0, montant: _this.montant_paiement }];
+	    	_this.type_paiement = '';
+	    	_this.update();
+	    }
+
+		showActivitesBySearch(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			$('.participants').addClass('hidden');
+			_this.categorieActive = true;
+			_this.activites = [];
+			_this.idActivites = {};
+			if($(e.currentTarget).val().length > 0) {
+				getActiviteProduit({ libelle: $(e.currentTarget).val(), type_modele: 'billetterie' })
+			}
+
+			_this.update();
+		}
+
+		backCompte(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			_this.categorieActive = false;
+			_this.update();
+		}
+
+		this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+        }
+
+        openModalDeleteElement(e) {
+	        var montant = 0;
+
+        	if($('.checkbox_inscriptions').is(':checked')) {
+	        	let is_reglement = false;
+	        	$('.checkbox_inscriptions').each(function() {
+	        		if($(this).is(':checked')) {
+	        			const id = $(this).val();
+	        			const type = $(this).attr('type_modele');
+	        			// const inscription = _this.inscriptions[_this.idInscriptions[type]].inscriptions[_this.inscriptions[_this.idInscriptions[type]].idInscriptions[id]];
+	        			const inscription_type_modele = _this.inscriptions[_this.idInscriptions[type]];
+	        			const inscription = inscription_type_modele.inscriptions[inscription_type_modele.idInscriptions[id]];
+	        			if(inscription.reglement > 0) {
+	        				montant += parseFloat(inscription.reglement);
+	        				is_reglement = true;
+	        			}
+	        		}
+	        	})
+
+	        	if(is_reglement == false) {
+					$('#validation_suppression').modal();
+	        	} else {
+	        		_this.modal_montant = montant.toFixed(2);
+	        		$('#modal_desincription_remboursement').modal();
+	        	}
+	        }
+	    }
+
+        cancelDeleteElement(e) {
+        	$.modal.close();
+        }
+
+        deleteInscription(e){
+        	deleteElement(e, 'delete');
+        }
+
+        deleteRemboursement(e) {
+        	deleteElement(e, 'remboursement')
+        }
+
+		function deleteElement(e, type) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.is_reglement === false) {
+				if(document.getElementById('id_exercice')){
+					var id_exercice = document.getElementById('id_exercice').value;
+				} else if( _this.app.session.exercices.selected ){
+					var id_exercice = _this.app.session.exercices.selected;
+				}
+				var id = [];
+				var elements = [];
+				var data = { action: 'delete'}
+				$('.inscription').each(function() {
+					if($('.checkbox_inscriptions',this).is(':checked')) {
+						var produit = new Object();
+						produit.id = $('.checkbox_inscriptions', this).val();
+						produit.type_modele = $('.checkbox_inscriptions', this).attr('type_modele');
+						if(produit.type_modele == 'remboursement') {
+							const id = $('.checkbox_inscriptions', this).val();
+		        			const type = $('.checkbox_inscriptions', this).attr('type_modele');
+		        			const inscription_type_modele = _this.inscriptions[_this.idInscriptions[type]];
+		        			const inscription = inscription_type_modele.inscriptions[inscription_type_modele.idInscriptions[id]];
+		        			produit.id_mode_paiement = inscription.id_mode_paiement;
+							produit.participation_ce = $('.participation_ce', this).val();
+						} else {
+							produit.quantite = $('.quantite', this).val();
+							produit.participation_salarie = $('.participation_salarie', this).val();
+						}
+						produit.id_produit = $(this).attr('id_produit');
+						produit.libelle = $('.libelle', this).val();
+						produit.id_salarie = _this.currentSalarie.id;
+						produit.id_exercice = id_exercice;
+						elements.push(produit);
+					}
+				})
+				//var id = [6,7];
+
+				if(type === 'remboursement') {
+					var remboursement = { };
+					remboursement.montant = _this.modal_montant;
+					remboursement.date = _this.E_M.convertDateToDb($('#modal_date').val());
+					remboursement.id_mode_paiement = $('#modal_reglement').val();
+					remboursement.type = _this.mode_paiement[_this.idMode_paiement[$('#modal_reglement').val()]].type;
+					if(remboursement.type === "cheques") {
+						remboursement.numero_cheque = $('#modal_numero_cheque').val();
+					}
+					remboursement.id_salarie = _this.currentSalarie.id; 
+				}
+
+				var data = { action: 'delete', produits: elements }
+				if(type === 'remboursement') {
+					data.remboursement = remboursement;
+				}
+
+				if(elements.length > 0 && 
+					( type != 'remboursement' || 
+					  (type == 'remboursement' && remboursement.mode_paiement != 'especes') ||
+					  (type == 'remboursement' && remboursement.mode_paiement == 'cheques' && remboursement.numero_cheque != '') )) {
+					_this.showLoader();
+					$.ajax('/admin/inscription/inscription', {
+						data : data,
+						type : 'POST',
+						dataType: 'json',
+						success: function (result, textStatus, jqXHR){
+							_this.removeLoader({time: 1000})
+							getInscription(_this.currentSalarie.id);
+							updateSalarie(_this.currentSalarie.id);
+        					$.modal.close();
+        					if(type === remboursement) {
+        						let $date = $('#modal_date');
+
+								$date.datepicker( "setDate", new Date() );
+								_this.modal_montant = '0.00';
+								$('#modal_reglement').val('');
+								$('#modal_numero_cheque').val('');
+        					}
+							_this.update();
+							tag = null;
+						}
+					}).done(function(){
+						console.log('done!...');
+						// free reference to permit garbage collect the tag when it will be unmounted
+						tag = null;
+					}).fail(function(){
+						console.log('fail!...');
+						// free reference to permit garbage collect the tag when it will be unmounted
+						tag = null;
+					});
+				} 
+			}
+		}
+
+		this.reglements = [];
+		this.idReglements = {};
+
+		function getReglementSalarie(id) {
+			var url = '/admin/compta/reglement';
+			var getParameters = { reglementSalarie: 1, id_salarie: id };
+			if( _this.selectedExercice ){
+				getParameters.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParameters.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					_this.reglements = [];
+					_this.idReglements = {};
+					var i, d;
+					var fields = { id: 'id', id_inscription: 'id_inscription', id_salarie: 'id_salarie', montant: 'montant', nom: 'nom',
+									numero_cheque: 'numero_cheque', date_reglement: 'date_reglement', id_remise: 'id_remise', id_mode_paiement: 'id_mode_paiement', remis: 'remis', date_previsionnelle: 'date_previsionnelle', titulaire_paiement: 'titulaire_paiement', domiciliation: 'domiciliation', date_remise: 'date_remise', parent_date_remise: 'parent_date_remise'};
+					/*var fields_id = [
+						{
+							content: _this.salaries,
+							idContent: _this.idSalaries,
+							db: 'id_salarie',
+							front: 'salarie',
+						},
+						{
+							content: _this.reglements,
+							idContent: _this.idReglements,
+							db: 'id_reglement',
+							front: 'reglement',
+						}
+					];*/
+					var l = data.elements.length;
+					for(i=0, y=0; i<l; i++){
+						d = {};
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						d['type'] = _this.mode_paiement[_this.idMode_paiement[d['id_mode_paiement']]].type;
+						/*for(field in fields_id) {
+							d[fields_id[field].front] = fields_id[field].content[fields_id[field].idContent[data.elements[i][fields_id[field].db]]];
+						}*/
+						_this.reglements.push(d);
+						_this.idReglements[d['id']] = i;
+					}
+					_this.update();
+				}
+			});
+
+		}
+
+		this.getE = function getE(id, type) {
+			if(_this.E_M) {
+				_this.E_M.getE(id, type, _this);
+
+			}
+		} 
+
+		function updateSalarie(id) {
+			_this.salarie = [];
+
+			if(id.length > 0) {
+				// _this.currentSalarie = _this.salaries[_this.idSalaries[id]];
+				getCurrentSalarie(id);
+			} else {
+				_this.currentSalarie = {};
+			}
+
+			_this.update();
+		}
+		
+		this.categories = [];
+		this.idCategories = {};
+
+		_this.activites = [];
+		_this.idActivites = {};
+
+		function getActiviteProduit(params) {
+			var url = '/admin/activites/activites';
+			var fields_activites = { a_id: 'id', a_libelle: 'libelle', p_type_modele: 'type_modele', a_limite_montant: 'limite_montant', a_limite_quantite : 'limite_quantite', a_condition_quantite: 'condition_quantite', a_condition_montant: 'condition_montant', a_participation: 'participation', a_type_participation: 'type_participation', a_conditions: 'conditions', a_conditions_commande: 'conditions_commande', a_limite_commande: 'limite_commande', a_condition_commande: 'condition_commande'};
+			var fields_produits = [ 
+/* billetterie */		{ a_id: 'a_id', p_id: 'id', p_libelle: 'libelle', b_id: 'b_id', tarif: 'tarif', nb_places: 'nb_places', date_validite: 'date_validite', /*montant_participation: 'montant_participation',*/ conditions : 'conditions', participation: 'participation', /* type_participation: 'type_participation'*//*stock_restant: 'stock_restant', stock_permanence: 'stock_permanence',*/ limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_commande: 'limite_commande', condition_commande: 'condition_commande', limite_montant: 'limite_montant', condition_montant: 'condition_montant', conditions_commande: 'conditions_commande', stock: 'stock' } , 
+/* bons_achats */		{ a_id: 'a_id', p_id: 'id', p_libelle: 'libelle', b_id: 'b_id', tarif: 'tarif', nb_places: 'nb_places', date_validite: 'date_validite', /*montant_participation: 'montant_participation',*/ conditions : 'conditions', participation: 'participation', /* type_participation: 'type_participation'*//*stock_restant: 'stock_restant', stock_permanence: 'stock_permanence',*/ limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_commande: 'limite_commande', condition_commande: 'condition_commande', limite_montant: 'limite_montant', condition_montant: 'condition_montant', conditions_commande: 'conditions_commande', stock: 'stock' } , 
+/* remboursement */		{ p_id: 'id', p_libelle: 'libelle', b_id: 'b_id', tarif: 'tarif', limite_montant: 'limite_montant',  limite_quantite : 'limite_quantite', condition_quantite: 'condition_quantite', condition_montant: 'condition_montant', type_participation: 'type_participation', conditions: 'conditions'},
+/* cheques_vacances */	{ a_id: 'a_id', p_id: 'id', p_libelle: 'libelle', b_id: 'b_id', tarif: 'tarif', nb_places: 'nb_places', date_validite: 'date_validite', /*montant_participation: 'montant_participation',*/ conditions : 'conditions', participation: 'participation', /* type_participation: 'type_participation'*//*stock_restant: 'stock_restant', stock_permanence: 'stock_permanence',*/ limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_commande: 'limite_commande', condition_commande: 'condition_commande', limite_montant: 'limite_montant', condition_montant: 'condition_montant', conditions_commande: 'conditions_commande', stock: 'stock' } , 
+/* voyages */			{ a_id: 'a_id', p_id: 'id', p_libelle: 'libelle', b_id: 'b_id', tarif: 'tarif', nb_places: 'nb_places', date_validite: 'date_validite', /*montant_participation: 'montant_participation',*/ conditions : 'conditions', participation: 'participation', /* type_participation: 'type_participation'*//*stock_restant: 'stock_restant', stock_permanence: 'stock_permanence',*/ limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_commande: 'limite_commande', condition_commande: 'condition_commande', limite_montant: 'limite_montant', condition_montant: 'condition_montant', conditions_commande: 'conditions_commande', stock: 'stock' } , 
+/* prets_financiers */	{ a_id: 'a_id', p_id: 'id', p_libelle: 'libelle', b_id: 'b_id', tarif: 'tarif', nb_places: 'nb_places', date_validite: 'date_validite', /*montant_participation: 'montant_participation',*/ conditions : 'conditions', participation: 'participation', /* type_participation: 'type_participation'*//*stock_restant: 'stock_restant', stock_permanence: 'stock_permanence',*/ limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_commande: 'limite_commande', condition_commande: 'condition_commande', limite_montant: 'limite_montant', condition_montant: 'condition_montant', conditions_commande: 'conditions_commande', stock: 'stock' } , 
+/* axsso */				{ a_id: 'a_id', p_id: 'id', p_libelle: 'libelle', b_id: 'b_id', tarif: 'tarif', nb_places: 'nb_places', date_validite: 'date_validite', /*montant_participation: 'montant_participation',*/ conditions : 'conditions', participation: 'participation', /* type_participation: 'type_participation'*//*stock_restant: 'stock_restant', stock_permanence: 'stock_permanence',*/ limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_commande: 'limite_commande', condition_commande: 'condition_commande', limite_montant: 'limite_montant', condition_montant: 'condition_montant', conditions_commande: 'conditions_commande', stock: 'stock' } , 
+/* divers */			{ a_id: 'a_id', p_id: 'id', p_libelle: 'libelle', id_compte: 'id_compte', id_analytique: 'id_analytique', participation: 'participation', type_participation: 'type_participation', montant_participation: 'montant_participation', formule_participation_ce: 'formule_participation_ce',}
+			];
+			var produitsIndex = { "billetterie": 0, "bons_achats": 1, "remboursement": 2, "cheques_vacances": 3, "voyages": 4, "prets_financiers": 5, "axsso": 6, "divers": 7 };
+
+			var getParameters = { activite_produit: true };
+			if( _this.selectedExercice ){
+				getParameters.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParameters.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(params.id_categorie) {
+				getParameters.id_categorie = params.id_categorie
+			}
+			if(params.libelle) {
+				getParameters.libelle = params.libelle
+			}
+			if(params.type_modele){
+				getParameters.type_modele = params.type_modele;
+			}
+			$.getJSON( url, getParameters, function(data){
+console.log('getActiviteProduit: data: ' + JSON.stringify(data));
+				if(data && data.elements){
+					_this.currentCategorie = '';
+					var i, y, nb_type,field, d, a, child;
+					var l = data.elements.length;
+					var currentId = 0;
+					var currentType = '';
+					nb_type = 0;
+					for(i=0, y=0; i<l; i++){
+						if(currentId != data.elements[i]['a_id']) {
+							if(i != 0) {
+								_this.activites.push(d);
+								_this.idActivites[d['id']] = y;
+								y++;
+							}	
+							currentType = data.elements[i]['p_type_modele'];
+							d = new Object();
+							d.produits = [];
+							for(field in fields_activites){
+								d[fields_activites[field]] = data.elements[i][field];
+							}
+							currentId = data.elements[i]['a_id'];
+						}
+						child = new Object();
+console.log('getActiviteProduit: i: ' + i + ', fields_produits[produitsIndex[' + currentType + ']]: ' + JSON.stringify(fields_produits[produitsIndex[currentType]]));
+
+						for(field in fields_produits[produitsIndex[currentType]]){
+							child[fields_produits[produitsIndex[currentType]][field]] = data.elements[i][field];
+						}
+
+						//formule de calcul à gérer si bool_participation 0
+						if(currentType === 'billetterie' || currentType === 'cheques_vacances' || currentType === 'bons_achats') {
+							if(data.elements[i]['stock'] == 0) {
+								child['nb_places'] = "X";
+							} else if(data.elements[i]['status_stock_permanence'] == 1) {
+								child['nb_places'] = data.elements[i]['stock_permanence'];
+							} else if(!data.elements[i]['status_stock_permanence'] || data.elements[i]['status_stock_permanence'] == 0) {
+								child['nb_places'] = data.elements[i]['stock_restant'];
+							}
+						}
+
+						if(data.elements[i]['participation'] == 1) {
+							if(data.elements[i]['type_participation'] == 'montant') {
+								if(data.elements[i]['montant_participation'] > data.elements[i]['tarif']) {
+									child['montant_participation'] = data.elements[i]['tarif'];
+								} else {
+									child['montant_participation'] = data.elements[i]['montant_participation'];
+								}
+							} else if(currentType == 'remboursement') {
+								if(data.elements[i]['montant_participation'] > data.elements[i]['tarif']) {
+									child['montant_participation'] = data.elements[i]['tarif'];
+								} else {
+									child['montant_participation'] = data.elements[i]['montant_participation'];
+								}
+							} else if (data.elements[i]['type_participation'] == 'pourcentage') {
+								if((data.elements[i]['tarif'] * data.elements[i]['montant_participation'] / 100) > data.elements[i]['tarif']) {
+									child['montant_participation'] = data.elements[i]['tarif'];
+								} else {
+									child['montant_participation'] = (data.elements[i]['tarif'] * data.elements[i]['montant_participation'] / 100).toFixed(2);
+								}
+							} else if (data.elements[i]['formule_participation_ce'] && data.elements[i]['formule_participation_ce'] != '') {
+								// TODO: formule
+							}
+						} else {
+							child['montant_participation'] = '0.00';
+						}
+
+						if(data.elements[i]['a_participation'] == 1) {
+							if(data.elements[i]['a_type_participation'] == 'montant') {
+								child['montant_participation'] = data.elements[i]['a_montant_participation'];
+							} else if(currentType == 'remboursement') {
+								child['montant_participation'] = data.elements[i]['a_montant_participation'];
+							} else if (data.elements[i]['a_type_participation'] == 'pourcentage') {
+								child['montant_participation'] = (data.elements[i]['tarif'] * data.elements[i]['a_montant_participation'] / 100).toFixed(2);
+							}
+						}
+
+						child.type_modele = currentType;
+
+						d.produits.push(child);
+					}
+					if(typeof d != 'undefined') {
+						_this.activites.push(d);
+						_this.idActivites[d['id']] = y;
+					}	
+				}
+				_this.currentCategorie = currentType;
+				_this.type_remboursement = '';
+
+				_this.update();
+				if(params.type_modele == 'remboursement') {
+					var $date = $('.remboursement_date_inscription');
+					$date.datepicker({
+						dateFormat: 'dd/mm/yy'
+					});
+					$date.datepicker( "setDate", new Date() );
+				}
+console.log('getActiviteProduit: activites AFTER: ' + JSON.stringify(_this.activites));
+
+			});
+		}
+
+		function getAyantsDroit(id) {
+			var url = '/admin/salaries/ayant_droit';
+			var fields = { id: 'id', nom: 'nom', prenom: 'prenom', /*titre_ayant_droit: 'titre',*/ lien: 'lien', date_de_naissance: 'date'};
+			var titre = { monsieur: 'M', madame: 'Mme'};
+			var getParameters = { id_salarie: id, type_element: 'ayant_droit' };
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					var i, y, field, d, child;
+					var l = data.elements.length;
+					var currentId = 0;
+					for(i=0, y=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(data.elements[i]['titre'] != null) {
+							d['titre'] = titre[data.elements[i]['titre']];
+						}
+						if(d['date'] != null) {
+							var date = d['date'];
+							var year = date.substr(0, 4);
+							var month = date.substr(5,2);
+							var day = date.substr(8,2);
+							var todayDate = new Date();
+							var todayYear = todayDate.getFullYear();
+							var todayMonth = todayDate.getMonth();
+							var todayDay = todayDate.getDate();
+							var age = todayYear - year;
+
+							if( (todayMonth < month - 1) || (month - 1 == todayMonth && todayDay < day) ){
+								age --;
+							}
+							/**************
+							if(todayMonth < month - 1){
+							age --;
+							}
+							// if todayMonth < month - 1 AND month - 1 == todayMonth && todayDay < day THEN age = age - 2 ...
+							if(month - 1 == todayMonth && todayDay < day){
+							age --;
+							}
+							*****************/
+							d['age'] = age;
+						}
+						_this.ayants_droit.push(d);
+						_this.idAyants_droit[d['id']] = i;
+					}
+				}
+				_this.update();
+			});
+		}
+
+		lanceImpression(e) {
+			document.title = $("#entreprisePrint").text();
+			window.print();
+		}
+
+
+		//getActiviteProduit();
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+
+						if( typeof idElements[d['id']] === 'undefined'){
+							idElements[d['id']] = i;
+							elements.push(d);
+						}else{
+							elements[ idElements[d['id']] ] = d;
+						}
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}
+					tag.update();
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		this.categories = [];
+		this.idCategories = {};
+		getElements({
+			tag: _this,
+			url: '/admin/activites/activites',
+			elements: _this.categories,
+			idElements: _this.idCategories,
+			fields: {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', image_url: 'image_url', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations', id_modele: 'id_modele', },
+			getParameters: { type_element: 'categorie', visible: true },
+			end: function(tag){
+				tag.loaded = true;
+				//tag.numToLoad--;
+				/*********************************************
+				TODO:
+				better to run it from a generic function => app.loadThings() ...
+				test if every dependancie is loaded
+				and then run the dependant functions ...
+				maybe some pile of callback functions to run when each list of dependancies are loaded
+				**********************************************/
+			},
+		});
+
+		this.mode_paiement = [];
+		this.idMode_paiement = {};
+
+		function getModePaiement(){
+			var getParams = {};
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON('/admin/compta/mode_paiement', getParams, function (data){
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+											
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', fournisseur: 'fournisseur', permanence: 'permanence', id_journal: 'id_journal', type: 'type', id_exercice: 'id_exercice', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idMode_paiement[d['id']] = i;
+						_this.mode_paiement.push(d);
+					}
+
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			});
+		}
+		getModePaiement();
+
+		this.modeles = [
+			{ 
+				id: 1, 
+				libelle: 'Billetterie', 
+				type: 'billetterie', 
+			},
+			{ 
+				id: 2, 
+				libelle: 'Bons d\'achats', 
+				type: 'bons_achats', 
+			},
+			{ 
+				id: 3, 
+				libelle: 'Remboursements', 
+				type: 'remboursement', 
+			},
+			{ 
+				id: 4, 
+				libelle: 'Chèques vacances', 
+				type: 'cheques_vacances', 
+			},
+			{ 
+				id: 5, 
+				libelle: 'Voyages', 
+				type: 'voyages', 
+			},
+			{ 
+				id: 6, 
+				libelle: 'Prêts financiers', 
+				type: 'prets_financiers', 
+			},
+			{ 
+				id: 7, 
+				libelle: 'Axsso', 
+				type: 'axsso', 
+			},
+			{ 
+				id: 8, 
+				libelle: 'Divers', 
+				type: 'divers', 
+			},
+		];
+
+		this.idModeles = {
+			1: 0,
+			2: 1,
+			3: 2,
+			4: 3,
+			5: 4,
+			6: 5,
+			7: 6,
+			8: 7,
+		};
+
+		this.on('mount', function(){
+			let $date = $('#id_date_inscription, #modal_date');
+
+			$date.datepicker({
+			 	dateFormat: 'dd/mm/yy'
+			});
+			$date.datepicker( "setDate", new Date() );
+
+		});
+
+		$('#date_releve').datepicker({
+        	dateFormat: 'dd/mm/yy'
+        });
+		$('#date_releve').datepicker( "setDate", new Date() );
+
+	</script>
+</inscription>

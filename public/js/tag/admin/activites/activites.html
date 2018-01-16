@@ -1,0 +1,2340 @@
+<activites>
+	<div if={ ACTIVITES_READ } class="content with_submenu">
+		<div class="activites page_activites">
+			<!-- Describe Categorie add -->
+			<div id="add_categorie" class="edit edit_categorie hidden">
+				<div class="general">
+					<div class="cell_1 activite_image">
+						<div id="image_upload">
+							<label for="photo">Photo:</label>	
+							<input type='file' value="choisir une image" id="categorie_photo_upload" name="categorie_photo_upload" input-target="categorie_image_url" img-target="categorie_preview" class="photo_upload photo_add pointer" onchange={ readURL } />
+							<div class="image_position">
+								<img id="categorie_preview" src="/img/uploads/activtes/{ image_url }"/>
+							</div>
+							<button id="reset_image" onclick={ resetImage }>X</button>
+						</div>
+						<input id="categorie_image_url" name="categorie_image_url" class="" type="hidden" value="">
+						<img class="img_activites_modif" src="">
+					</div>
+					<div class="cell_2 activite_nom">
+						<p>
+							<label for="categorie_libelle" class="xl-large">Catégorie</label>
+							<input id="categorie_libelle" name="categorie_libelle" type="text" value="">
+						</p>
+						<p>
+							<label for="categorie_id_modele" class="xl-large">Modèle</label>
+							<select name="categorie_id_modele" id="categorie_id_modele">
+								<option each="{ modeles }" value="{ id }" selected="{ id_modele == id }" >{ libelle }</option>
+							</select>
+						</p>
+					</div>
+					<div class="cell_4 activite_information">
+						<input onclick={ toggleVisible } type="image" class="categorie_image_visible" src="/img/btn_visible.png" title="visible" value="visible" id="categorie_visible"  name="categorie_visible">
+					</div>
+				</div>
+				<div>
+					<header class="opened titre" onclick="{ showContents }">
+						Informations
+					</header>
+					<div class="informations slide-up">
+						<div class="table">
+							<div class="cell_1">
+								<div class="block_infos">
+									<span>Internet</span>
+									<div class="information_act1">
+										<input type="checkbox" id="categorie_information_internet" name="categorie_information_internet" value="1">Information Activité
+										<input type="radio" id="categorie_public_internet" name="categorie_public_internet" value="1">Public
+										<input type="radio" id="categorie_prive_internet" name="categorie_public_internet" value="0">Privé
+									</div>
+								</div>
+							</div>
+							<div class="cell_2">
+								<div class="internet_activite_informations">
+									<span><i>Informations</i></span>
+									<p><textarea class="information_info_internet" id="categorie_informations" name="categorie_informations"></textarea></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+<!--
+				<div>
+					<header class="opened titre" onclick="{ showContents }">
+						Conditions
+					</header>
+						<div class="tarifs_conditions slide-up">
+							<div class="table">
+								<div class="cell cell_1 bloc_tarif_condition">
+									<div class="block_infos block_infos_1">
+										<span class="block_title">
+											<input type="checkbox" id="categorie_conditions{ isEdit ? '_' + el.id : '' }" name="categorie_conditions{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions == 1 ? 'checked' : '' }"> <span>Condition</span>
+										</span>
+										<div class="block_infos_content">
+											<div class="condition_billet">
+												<label for="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" class="bold xl-large">Limite de billets</label>
+												<input class="right block_infos1_input" type="text" id="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" name="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" value="{ element.limite_quantite }">
+												<select class="" id="categorie_condition_quantite{ isEdit ? '_' + el.id : '' }" name="categorie_condition_quantite{ isEdit ? '_' + el.id : '' }">
+													<option value=""></option>
+													<option value="mois" selected="{ element.condition_quantite == 'mois' ? 'selected' : false }">mois</option>
+													<option value="trimestre" selected="{ element.condition_quantite == 'trimestre' ? 'selected' : false }">trimestre</option>
+													<option value="semestre" selected="{ element.condition_quantite == 'semestre' ? 'selected' : false }">semestre</option>
+													<option value="annee" selected="{ element.condition_quantite == 'annee' ? 'selected' : false }">année</option>
+												</select>
+											</div>
+										</div>
+										<div class="block_infos_content">
+											<div class="condition_billet">
+												<label for="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" class=" bold xl-large">Limite de montant</label>
+												<input class="right block_infos1_input" type="text" id="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" name="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" value="{ element.limite_montant }">
+												<select class="" id="categorie_condition_montant{ isEdit ? '_' + el.id : '' }" name="categorie_condition_montant{ isEdit ? '_' + el.id : '' }">
+													<option value=""></option>
+													<option value="mois" selected="{ element.condition_montant == 'mois' ? 'selected' : false }">mois</option>
+													<option value="trimestre" selected="{ element.condition_montant == 'trimestre' ? 'selected' : false }">trimestre</option>
+													<option value="semestre" selected="{ element.condition_montant == 'semestre' ? 'selected' : false }">semestre</option>
+													<option value="annee" selected="{ element.condition_montant == 'annee' ? 'selected' : false }">année</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="block_infos block_infos_2">
+										<span class="block_title"><input type="checkbox" id="categorie_participation{ isEdit ? '_' + el.id : '' }" name="categorie_participation{ isEdit ? '_' + el.id : '' }" checked="{ element.participation ? 'checked' : '' }"> <span>Participation du CE</span></span>
+										<div class="block_infos_content">
+											<input type="radio" id="categorie_type_participation{ isEdit ? '_' + el.id : '' }" name="categorie_type_participation{ isEdit ? '_' + el.id : '' }" value="montant" checked="{ element.type_participation == 'montant' ? 'checked' : '' }">Montant
+											<input type="radio" id="categorie_type_participation_pourcentage{ isEdit ? '_' + el.id : '' }" name="categorie_type_participation{ isEdit ? '_' + el.id : '' }" value="pourcentage" checked="{ element.type_participation == 'pourcentage' ? 'checked' : '' }">%
+											<input class="input_montant right" type="text" id="categorie_montant_participation{ isEdit ? '_' + el.id : '' }" name="categorie_montant_participation{ isEdit ? '_' + el.id : '' }" value="{ element.montant_participation }">
+										</div>
+									</div>
+								</div>
+								<div class="cell cell_2 block_conditions_commande">
+									<div class="block_infos block_infos_1">
+										<span class="block_title">
+												<input type="checkbox" id="categorie_conditions_commande{ isEdit ? '_' + el.id : '' }" name="categorie_conditions_commande{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions_commande == 1 ? 'checked' : '' }"> <span>Condition commande</span>
+										</span>
+										<div class="block_infos_content">
+											<div class="condition_billet">
+												<label for="categorie_limite_commande{ isEdit ? '_' + el.id : '' }" class="xl-large bold">Limite de billets</label>
+												<input class="right block_infos2_condition" type="text" id="categorie_limite_commande{ isEdit ? '_' + el.id : '' }" name="categorie_limite_commande{ isEdit ? '_' + el.id : '' }" value="{ element.limite_commande }">
+												<select class="" id="categorie_condition_commande{ isEdit ? '_' + el.id : '' }" name="categorie_condition_commande{ isEdit ? '_' + el.id : '' }">
+													<option value=""></option>
+													<option value="mois" selected="{ element.condition_commande == 'mois' ? 'selected' : false }">mois</option>
+													<option value="trimestre" selected="{ element.condition_commande == 'trimestre' ? 'selected' : false }">trimestre</option>
+													<option value="semestre" selected="{ element.condition_commande == 'semestre' ? 'selected' : false }">semestre</option>
+													<option value="annee" selected="{ element.condition_commande == 'annee' ? 'selected' : false }">année</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+
+-->
+				<div id="save_categorie" class="hidden save_categorie">
+					<button class="button annuler cancel_submit" onclick={ cancelCategorie }>Annuler</button>
+					<button class="button enregistrer save_submit" onclick={ saveCategorie }>Enregistrer</button>
+				</div>
+			</div>
+			<!-- /End Describe catégorie add -->
+			<!-- Describe Add activite -->
+			<div id="add_activite" class="edit edit_activite hidden">
+				<div class="general">
+						<input id="activite_id_categorie" name="activite_id_categorie" type="hidden" value="{ currentCategorieId }">
+						<!-- <div class="cell_1 activite_image">
+						<input id="activite_image_url" name="activite_image_url" class="" type="hidden" value="">
+						<img class="img_activites_modif" src="">
+					</div> -->
+					<div class="cell_2 activite_nom">
+						<p>
+							<label for="activite_categorie" class="xl-large">Catégorie</label>
+							<input id="activite_categorie" name="activite_categorie" type="text" disabled="disabled" value="{ currentCategorieLibelle }">
+						</p>
+						<p>
+							<label for="activite_libelle" class="xl-large">Nom</label>
+							<input id="activite_libelle" name="activite_libelle" class="" type="text" value="">
+						</p>
+					</div>
+					<div class="cell_3 activite_information">
+						<input onclick={ toggleVisible } type="image" class="activite_image_visible" src="/img/btn_visible.png" title="visible" value="visible" id="activite_visible"  name="activite_visible">
+					</div>
+				</div>
+				<div>
+					<header class="opened titre" onclick="{ showContents }">
+					Informations
+					</header>
+					<div class="informations slide-up">
+						<div class="table">
+							<div class="cell_1">
+								<div class="block_infos">
+									<span>Internet</span>
+									<div class="information_act1">
+										<input type="checkbox" name="activite_information_internet" id="activite_information_internet" checked="checked">Information Activité
+										<input type="radio" id="activite_public_internet" name="activite_public_internet" value="1" checked="checked">Public
+										<input type="radio" id="activite_prive_internet" name="activite_public_internet" value="0" checked="checked">Privé
+									</div>
+								</div>
+							</div>
+							<div class="cell_2">
+								<div class="internet_activite_informations" if={ currentModele != 'remboursement' }>
+									<span><i>Informations</i></span>
+									<p><textarea class="information_info_internet" id="activite_informations" name="activite_informations"></textarea></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div>
+					<header class="opened titre" onclick="{ showContents }">
+						Conditions
+					</header>
+					<div class="tarifs_conditions slide-up">
+						<div class="table">
+							<div class="cell_1 bloc_tarif_condition">
+								<div class="block_infos block_infos_1">
+									<span class="block_title">
+										<input type="checkbox" id="activite_conditions{ isEdit ? '_' + el.id : '' }" name="activite_conditions{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions == 1 ? 'checked' : '' }"> <span>Condition</span>
+									</span>
+									<div class="block_infos_content">
+										<div class="condition_billet">
+											<label for="activite_limite_quantite{ isEdit ? '_' + el.id : '' }" class="bold l-large">Limite de billets</label>
+											<input class="right block_infos1_input" type="text" id="activite_limite_quantite{ isEdit ? '_' + el.id : '' }" name="activite_limite_quantite{ isEdit ? '_' + el.id : '' }" value="{ element.limite_quantite }">
+											<select class="" id="activite_condition_quantite{ isEdit ? '_' + el.id : '' }" name="activite_condition_quantite{ isEdit ? '_' + el.id : '' }">
+												<option value=""></option>
+												<option value="mois" selected="{ element.condition_quantite == 'mois' ? 'selected' : false }">mois</option>
+												<option value="trimestre" selected="{ element.condition_quantite == 'trimestre' ? 'selected' : false }">trimestre</option>
+												<option value="semestre" selected="{ element.condition_quantite == 'semestre' ? 'selected' : false }">semestre</option>
+												<option value="annee" selected="{ element.condition_quantite == 'annee' ? 'selected' : false }">année</option>
+											</select>
+										</div>
+									</div>
+									<div class="block_infos_content">
+										<div class="condition_billet">
+											<label for="activite_limite_montant{ isEdit ? '_' + el.id : '' }" class=" bold l-large">Limite de montant</label>
+											<input class="right block_infos1_input" type="text" id="activite_limite_montant{ isEdit ? '_' + el.id : '' }" name="activite_limite_montant{ isEdit ? '_' + el.id : '' }" value="{ element.limite_montant }">
+											<select class="" id="activite_condition_montant{ isEdit ? '_' + el.id : '' }" name="activite_condition_montant{ isEdit ? '_' + el.id : '' }">
+												<option value=""></option>
+												<option value="mois" selected="{ element.condition_montant == 'mois' ? 'selected' : false }">mois</option>
+												<option value="trimestre" selected="{ element.condition_montant == 'trimestre' ? 'selected' : false }">trimestre</option>
+												<option value="semestre" selected="{ element.condition_montant == 'semestre' ? 'selected' : false }">semestre</option>
+												<option value="annee" selected="{ element.condition_montant == 'annee' ? 'selected' : false }">année</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="block_infos block_infos_2">
+									<span class="block_title"><input type="checkbox" id="activite_participation{ isEdit ? '_' + el.id : '' }" name="activite_participation{ isEdit ? '_' + el.id : '' }" checked="{ element.participation ? 'checked' : '' }"> <span>Participation du CE</span></span>
+									<div class="block_infos_content">
+										<input type="radio" id="activite_type_participation{ isEdit ? '_' + el.id : '' }" name="activite_type_participation{ isEdit ? '_' + el.id : '' }" value="montant" checked="{ element.type_participation == 'montant' ? 'checked' : '' }">Montant
+										<input type="radio" id="activite_type_participation_pourcentage{ isEdit ? '_' + el.id : '' }" name="activite_type_participation{ isEdit ? '_' + el.id : '' }" value="pourcentage" checked="{ element.type_participation == 'pourcentage' ? 'checked' : '' }">%
+										<input class="input_montant right" type="text" id="activite_montant_participation{ isEdit ? '_' + el.id : '' }" name="activite_montant_participation{ isEdit ? '_' + el.id : '' }" value="{ element.montant_participation }">
+									</div>
+								</div>
+							</div>
+							<div class="cell cell_2 block_conditions_commande">
+								<div class="block_infos block_infos_1">
+									<span class="block_title">
+											<input type="checkbox" id="activite_conditions_commande{ isEdit ? '_' + el.id : '' }" name="activite_conditions_commande{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions_commande == 1 ? 'checked' : '' }"> <span>Condition commande</span>
+									</span>
+									<div class="block_infos_content">
+										<div class="condition_billet">
+											<label for="activite_limite_commande{ isEdit ? '_' + el.id : '' }" class="l-large bold">Limite de billets</label>
+											<input class="right block_infos2_condition" type="text" id="activite_limite_commande{ isEdit ? '_' + el.id : '' }" name="activite_limite_commande{ isEdit ? '_' + el.id : '' }" value="{ element.limite_commande }">
+											<select class="condition_commande" id="activite_condition_commande{ isEdit ? '_' + el.id : '' }" name="activite_condition_commande{ isEdit ? '_' + el.id : '' }">
+												<option value=""></option>
+												<option value="mois" selected="{ element.condition_commande == 'mois' ? 'selected' : false }">mois</option>
+												<option value="trimestre" selected="{ element.condition_commande == 'trimestre' ? 'selected' : false }">trimestre</option>
+												<option value="semestre" selected="{ element.condition_commande == 'semestre' ? 'selected' : false }">semestre</option>
+												<option value="annee" selected="{ element.condition_commande == 'annee' ? 'selected' : false }">année</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="save_activite" class="hidden save_activite">
+					<button class="button annuler cancel_submit" onclick={ cancelActivite }>Annuler</button> 
+					<button class="button enregistrer save_submit" onclick={ saveActivite }>Enregistrer</button>
+				</div>
+			</div>
+			<!-- /End Describe activite add -->
+			<!-- Describe Add Produit -->
+			<div id="add_produit" class="edit edit_produit hidden">
+				<!-- <div id="add_produit_tag"></div> -->
+			</div>
+			<!-- /End Describe produit add -->
+			<!-- removed class : hide_when_edit_activite -->
+			<div class="actions_container hide_when_edit hide_when_edit_categorie hide_when_edit_produit hide_when_add hide_when_add_categorie hide_when_add_activite hide_when_add_produit">
+				<div class="location">
+					<button id="root_categories" class="button btn_nav action_button_size" value="" onclick={ showCategories }>Categories</button>
+					<button id="current_categorie" class="button btn_nav hidden action_button_size" value="" onclick={ showActivites }></button>
+					<button id="current_activite" class="button btn_nav hidden action_button_size" value=""></button>
+				</div>
+				<div id="actions" class="actions">
+					<!--<button id="print_element_button" class="orange">Impressions</button>
+					<button id="delete_element_button" class="red">Supprimer</button>-->
+					<button id="add_categorie_button" onclick={ addCategorie } class="button btn_nav action_button_size">Ajouter une catégorie</button>
+					<button id="add_activite_button" onclick={ addActivite } class="button btn_nav hidden action_button_size">Ajouter une activité</button>
+				</div>
+			</div>
+			<div class="categories">
+				<div id="entete_categorie" class="entete-tableau hide_when_edit_categorie hide_when_add_categorie">
+					<div class="cell_1"></div>
+					<div class="cell_2">
+						<p class="small">Image</p>
+					</div>
+					<div class="cell_3">
+						<p class="small">Catégorie</p>
+					</div>
+					<div class="cell_4">
+						<p class="small">Visible</p>
+					</div>
+					<div class="cell_5">
+						<p class="small">Actions</p>
+					</div>
+				</div>
+				<div each={ categories } id="categorie_{ id }" class="categorie hide_when_add_categorie">
+					<div class="show_infos hide_when_edit_categorie hide_when_add_categorie" onclick={ showActivites }>
+						<div class="cell_1">
+							<!-- <input type="checkbox" name="action[]">  -->
+						</div>
+						<div class="cell_2">
+							<img class="img_activites" src="/img/uploads/activites/{ image_url }">
+						</div>
+						<div class="cell_3">
+							<p class="small nature">{ libelle }</p>
+						</div>
+						<div class="cell_4">
+							<p class="small nature"><img src="{ visible == 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png'}" ></p>
+						</div>
+						<div class="cell_5">
+							<p class="modif"><img class="edit_element_img" onclick={ editCategorie } title="Modifier" src="/img/edit.png">
+							<img class="delete_element_img" onclick={ validDeleteCategorie } title="Supprimer" delete_id="{ id }" src="/img/delete.png">
+							</p>
+						</div>
+					</div><!-- /.show_infos -->
+					<!-- Début Catégorie Activité Modifie -->
+					<div id="categorie_{ id }_edit" class="edit edit_categorie hidden">
+						<div class="general">
+							<div class="cell_1 activite_image">
+								<div id="image_upload">
+									<label for="photo">Photo:</label>	
+									<input type='file' value="choisir une image" id="categorie_photo_upload_{ id }" name="categorie_photo_upload_{ id }" input-target="categorie_image_url_{ id }" img-target="categorie_preview_{ id }" class="photo_upload photo_add pointer" onchange={ readURL } />
+									<div class="image_position">
+										<img id="categorie_preview_{ id }" src="/img/uploads/activites/{ image_url }"/>
+									</div>
+									<button id="reset_image" onclick={resetImage}>X</button>
+									<input class="hidden" type="text" name="categorie_image_url_{ id }" id="categorie_image_url_{ id }">
+								</div>
+							</div>
+							<div class="cell_2 activite_nom">
+								<p>
+									<label for="categorie_libelle_{ id }" class="xl-large">Catégorie</label>
+									<input id="categorie_libelle_{ id }" name="categorie_libelle_{ id }" class="" type="text" value="{ libelle }">
+								</p>
+								<p>
+									<label for="categorie_id_modele_{ id }" class="xl-large">Modèle</label>
+									<select name="categorie_id_modele_{ id }" id="categorie_id_modele_{ id }">
+										<option each="{ modeles }" value="{ id }" selected="{ id_modele == id }" >{ libelle }</option>
+									</select>
+								</p>
+							</div>
+							<div class="cell_3 activite_information">
+                                <input onclick={ toggleVisible } type="image" class="categorie_image_visible" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="categorie_visible_{ id }"  name="categorie_visible_{ id }">
+							</div>
+						</div>
+						<div>
+							<header class="closed titre" onclick="{ showContents }">
+								Informations
+							</header>
+							<div class="informations slide-up hidden">
+								<div class="table">
+									<div class="cell_1">
+										<div class="block_infos">
+											<span>Internet</span>
+											<div class="information_act1">
+												<input type="checkbox" name="categorie_information_internet_{ id }" id="categorie_information_internet_{ id }" checked={ information_internet == 1 }>Information Activité
+												<input type="radio" id="categorie_public_internet_{ id }" name="categorie_public_internet_{ id }" value="1" checked={ public_internet == 1 }>Public
+												<input type="radio" id="categorie_prive_internet_{ id }" name="categorie_public_internet_{ id }" value="0" checked={ public_internet == 0 }>Privé
+											</div>
+										</div>
+									</div>
+									<div class="cell_2">
+										<div class="internet_activite_informations" if={ currentModele != 'remboursement' }>
+											<span><i>Informations</i></span>
+											<p><textarea class="information_info_internet" id="categorie_informations_{ id }" name="categorie_informations_{ id }">{ informations }</textarea></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div if={ currentModele != 'remboursement' }>
+							<header class="opened titre" onclick="{ showContents }">
+								Conditions
+							</header>
+							<div class="tarifs_conditions slide-up">
+								<div class="table">
+									<div class="cell_1 bloc_tarif_condition">
+										<div class="block_infos block_infos_1">
+											<span class="block_title">
+												<input type="checkbox" id="categorie_conditions{ isEdit ? '_' + el.id : '' }" name="categorie_conditions{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions == 1 ? 'checked' : '' }"> <span>Condition</span>
+											</span>
+											<div class="block_infos_content">
+												<div class="condition_billet">
+													<label for="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" class="bold l-large">Limite de billets</label>
+													<input class="right block_infos1_input" type="text" id="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" name="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" value="{ element.limite_quantite }">
+													<select class="" id="categorie_condition_quantite{ isEdit ? '_' + el.id : '' }" name="categorie_condition_quantite{ isEdit ? '_' + el.id : '' }">
+														<option value=""></option>
+														<option value="mois" selected="{ element.condition_quantite == 'mois' ? 'selected' : false }">mois</option>
+														<option value="trimestre" selected="{ element.condition_quantite == 'trimestre' ? 'selected' : false }">trimestre</option>
+														<option value="semestre" selected="{ element.condition_quantite == 'semestre' ? 'selected' : false }">semestre</option>
+														<option value="annee" selected="{ element.condition_quantite == 'annee' ? 'selected' : false }">année</option>
+													</select>
+												</div>
+											</div>
+											<div class="block_infos_content">
+												<div class="condition_billet">
+													<label for="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" class=" bold l-large">Limite de montant</label>
+													<input class="right block_infos1_input" type="text" id="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" name="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" value="{ element.limite_montant }">
+													<select class="" id="categorie_condition_montant{ isEdit ? '_' + el.id : '' }" name="categorie_condition_montant{ isEdit ? '_' + el.id : '' }">
+														<option value=""></option>
+														<option value="mois" selected="{ element.condition_montant == 'mois' ? 'selected' : false }">mois</option>
+														<option value="trimestre" selected="{ element.condition_montant == 'trimestre' ? 'selected' : false }">trimestre</option>
+														<option value="semestre" selected="{ element.condition_montant == 'semestre' ? 'selected' : false }">semestre</option>
+														<option value="annee" selected="{ element.condition_montant == 'annee' ? 'selected' : false }">année</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="block_infos block_infos_2">
+											<span class="block_title"><input type="checkbox" id="categorie_participation{ isEdit ? '_' + el.id : '' }" name="categorie_participation{ isEdit ? '_' + el.id : '' }" checked="{ element.participation ? 'checked' : '' }"> <span>Participation du CE</span></span>
+											<div class="block_infos_content">
+												<input type="radio" id="categorie_type_participation{ isEdit ? '_' + el.id : '' }" name="categorie_type_participation{ isEdit ? '_' + el.id : '' }" value="montant" checked="{ element.type_participation == 'montant' ? 'checked' : '' }">Montant
+												<input type="radio" id="categorie_type_participation_pourcentage{ isEdit ? '_' + el.id : '' }" name="categorie_type_participation{ isEdit ? '_' + el.id : '' }" value="pourcentage" checked="{ element.type_participation == 'pourcentage' ? 'checked' : '' }">%
+												<input class="input_montant right" type="text" id="categorie_montant_participation{ isEdit ? '_' + el.id : '' }" name="categorie_montant_participation{ isEdit ? '_' + el.id : '' }" value="{ element.montant_participation }">
+											</div>
+										</div>
+									</div>
+									<div class="cell cell_2 block_conditions_commande">
+										<div class="block_infos block_infos_1">
+											<span class="block_title">
+													<input type="checkbox" id="categorie_conditions_commande{ isEdit ? '_' + el.id : '' }" name="categorie_conditions_commande{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions_commande == 1 ? 'checked' : '' }"> <span>Condition commande</span>
+											</span>
+											<div class="block_infos_content">
+												<div class="condition_billet">
+													<label for="categorie_limite_commande{ isEdit ? '_' + el.id : '' }" class="l-large bold">Limite de billets</label>
+													<input class="right block_infos2_condition" type="text" id="categorie_limite_commande{ isEdit ? '_' + el.id : '' }" name="categorie_limite_commande{ isEdit ? '_' + el.id : '' }" value="{ element.limite_commande }">
+													<select class="" id="categorie_condition_commande{ isEdit ? '_' + el.id : '' }" name="categorie_condition_commande{ isEdit ? '_' + el.id : '' }">
+														<option value=""></option>
+														<option value="mois" selected="{ element.condition_commande == 'mois' ? 'selected' : false }">mois</option>
+														<option value="trimestre" selected="{ element.condition_commande == 'trimestre' ? 'selected' : false }">trimestre</option>
+														<option value="semestre" selected="{ element.condition_commande == 'semestre' ? 'selected' : false }">semestre</option>
+														<option value="annee" selected="{ element.condition_commande == 'annee' ? 'selected' : false }">année</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div if={ currentModele == 'remboursement' }>
+							<header class="opened titre" onclick="{ showContents }">
+								Tarifs / Conditions
+							</header>
+							<div class="tarifs_conditions slide-up table">
+								<div class="row">
+									<div class="cell_1">
+										<div class="block_infos block_infos_1 condition_pce">
+											<span class="block_title"  id="block_title"><input type="checkbox" id="categorie_conditions{ isEdit ? '_' + el.id : '' }" name="categorie_conditions{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions == 1 ? 'checked' : '' }"> <span>Condition PCE</span></span>
+											<div class="block_infos_content">
+												<div class="sous_block_1">
+													<label class="nombre">Nombre</label>
+													<input class="right input_nbre" type="text" id="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" name="categorie_limite_quantite{ isEdit ? '_' + el.id : '' }" value={ element.limite_quantite }>
+													<select class="select_date"  id="categorie_condition_quantite{ isEdit ? '_' + el.id : '' }" name="categorie_condition_quantite{ isEdit ? '_' + el.id : '' }">
+														<option></option>
+														<option value="mois" selected="{ 'selected': element.condition_quantite == 'mois' }">mois</option>
+														<option value="trimestre" selected="{ 'selected': element.condition_quantite == 'trimestre' }">trimestre</option>
+														<option value="semestre" selected="{ 'selected': element.condition_quantite == 'semestre' }">semestre</option>
+														<option value="annee" selected="{ 'selected': element.condition_quantite == 'annee' }">année</option>
+													</select>
+												</div>
+												<div>
+													<label for="categorie_limite_places{ isEdit ? '_' + el.id : '' }">Limite montant</label>
+													<input class="right input_nbre"  type="text" id="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" name="categorie_limite_montant{ isEdit ? '_' + el.id : '' }" value="{ element.limite_montant }">
+													<select class="select_date" class=" select_montant_limite" id="categorie_condition_montant{ isEdit ? '_' + el.id : '' }" name="categorie_condition_montant{ isEdit ? '_' + el.id : '' }">
+														<option></option>
+														<option value="mois" selected="{ 'selected': element.condition_montant == 'mois' }">mois</option>
+														<option value="trimestre" selected="{ 'selected': element.condition_montant == 'trimestre' }">trimestre</option>
+														<option value="semestre" selected="{ 'selected': element.condition_montant == 'semestre' }">semestre</option>
+														<option value="annee" selected="{ 'selected': element.condition_montant == 'annee' }">année</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="cell_2">
+										<div class="block_infos block_infos_2">
+											<span class="block_title"  id="block_title"><input type="checkbox" id="categorie_participation{ isEdit ? '_' + el.id : '' }" name="categorie_participation{ isEdit ? '_' + el.id : '' }" checked="{ element.participation == 1 ? 'checked' : '' }"> <span>Participation du CE</span></span>
+											<div class="block_infos_content">
+												<input type="radio" id="categorie_type_participation{ isEdit ? '_' + el.id : '' }" name="categorie_type_participation{ isEdit ? '_' + el.id : '' }" value="montant" checked="{ element.type_participation == 'montant' ? 'checked' : '' }">Montant
+												<input type="radio" id="categorie_type_participation_pourcentage{ isEdit ? '_' + el.id : '' }" name="categorie_type_participation{ isEdit ? '_' + el.id : '' }" value="pourcentage" checked="{ element.type_participation == 'pourcentage' ? 'checked' : '' }">%
+												<input type="text" class="input" id="categorie_montant_participation{ isEdit ? '_' + el.id : '' }" name="categorie_montant_participation{ isEdit ? '_' + el.id : '' }" value="{ element.montant_participation }">
+											</div>
+										</div>
+									</div>
+									<div class="cell_3">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="save_categorie">
+							<button class="button annuler cancel_submit" onclick={ cancelCategorie }>Annuler</button>
+							<button class="button enregistrer save_submit" onclick={ saveCategorie }>Enregistrer</button>
+						</div>
+					</div><!-- /.edit_categorie -->
+					<!-- Fin Catégorie Activité Modifie -->
+					<div id="categorie_{ id }_delete" class="delete hidden">
+						<div>
+							<p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p>
+							<button class="button enregistrer" name="categorie_delete_{ id }" onclick={ deleteCategorie }>Supprimer</button>
+							<button class="button annuler" name="cancel_{ id }" onclick={ cancelDeleteCategorie }>Annuler</button>
+						</div>
+					</div>
+					<!-- Begin Activites_activites -->
+					<div class="activites_activites hidden">
+						<div class="entete-tableau entete_activite hide_when_edit_activite hide_when_add_activite">
+							<div class="cell_1"></div>
+							<!-- <div class="cell_2">
+								<p class="">Image</p>
+							</div> -->
+							<div class="cell_3">
+								<p class="small_activites_cell_3">Activités</p>
+							</div>
+							<div class="cell_4">
+								<p class="">Visible</p>
+							</div>
+							<div class="cell_5">
+								<p class="">Actions</p>
+							</div>
+						</div>
+						<div each={ activites } id="activite_{ id }" class="activites_activite">
+							<div class="show_infos hide_when_edit_activite hide_when_add_activite" onclick={ editActivite }>
+								<div class="cell_1">
+									<input id="activite_id_categorie_{ id }" name="activite_id_categorie_{ id }" type="hidden" value="{ id_categorie }">
+									<!-- <input type="checkbox" name="action[]"> -->
+								</div>
+								<!-- <div class="cell_2">
+									<img class="img_activites" src="{ image_url }">
+								</div> -->
+								<div class="cell_3">
+									<p class="small nature">{ libelle }</p>
+								</div>
+								<div class="cell_4">
+									<p class="small nature"><img src="{ visible == 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png'}" ></p>
+								</div>
+								<div class="cell_5"><!--  onclick= showProduits  -->
+									<p class="modif"><img class="edit_element_img" onclick={ editActivite } title="Modifier" src="/img/edit.png"> <img class="delete_element_img" onclick={ validDeleteActivite } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+								</div>
+							</div>
+							<div id="activite_{ id }_edit" class="edit edit_activite hidden">
+								<div class="general">
+									<div class="row hide_when_edit_produit hide_when_add_produit">
+										<!-- <div class="cell_1 activite_image">
+											<input id="activite_image_url_{ id }" name="activite_image_url_{ id }" class="" type="hidden" value="{ image_url }">
+											<img class="img_activites_modif" id="activite_image_url" name="activite_image_url" src="{ image_url }">
+										</div> -->
+										<div class="cell_2 activite_nom">
+											<p>
+												<label for="activite_categorie_{ id }" class="xl-large">Catégorie</label>
+												<input id="activite_categorie_{ id }" name="activite_categorie_{ id }" type="text" disabled="disabled" value="{ parent.libelle }">
+											</p>
+											<p>
+												<label for="activite_libelle_{ id }" class="xl-large">Nom</label>
+												<input id="activite_libelle_{ id }" name="activite_libelle_{ id }" class="" type="text" value="{ libelle }">
+											</p>
+										</div>
+										<div class="cell_3 activite_information">
+											<input onclick={ toggleVisible } type="image" class="activite_image_visible" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="activite_visible_{ id }"  name="activite_visible_{ id }">
+										</div>
+									</div>
+								</div>
+								<div>
+									<header class="closed titre hide_when_edit_produit hide_when_add_produit" onclick="{ showContents }">
+										Informations
+									</header>
+									<div class="informations slide-up hide_when_edit_produit hide_when_add_produit hidden">
+										<div class="table">
+											<div class="cell_1">
+												<div class="block_infos">
+													<span>Internet</span>
+													<div class="information_act1">
+														<input type="checkbox" name="activite_information_internet_{ id }" id="activite_information_internet_{ id }" checked={ information_internet == 1 }>Information Activité
+														<input type="radio" id="activite_public_internet_{ id }" name="activite_public_internet_{ id }" value="1" checked={ public_internet == 1 }>Public
+														<input type="radio" id="activite_prive_internet_{ id }" name="activite_public_internet_{ id }" value="0" checked={ public_internet == 0 }>Privé
+													</div>
+												</div>
+											</div>
+											<div class="cell_2">
+												<div class="internet_activite_informations" if={ currentModele != 'remboursement' }>
+													<span><i>Informations</i></span>
+													<p><textarea class="information_info_internet" id="activite_informations_{ id }" name="activite_informations_{ id }">{ informations }</textarea></p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div if={ currentModele != 'remboursement' }>
+									<header class="opened titre hide_when_edit_produit hide_when_add_produit">
+										Conditions
+									</header>
+									<div class="slide-up tarifs_conditions hide_when_edit_produit hide_when_add_produit">
+										<div class="table">
+											<div class="cell_1 bloc_tarif_condition">
+												<div class="block_infos block_infos_1">
+													<span class="block_title">
+														<input type="checkbox" id="activite_conditions_{ id }" name="activite_conditions_{ id }" checked="{ conditions == 1 ? 'checked' : '' }"> <span>Condition</span>
+													</span>
+													<div class="block_infos_content">
+														<div class="condition_billet">
+															<label for="activite_limite_quantite_{ id }" class="limit_billet bold l-large">Limite de billets</label>
+															<input class="right block_infos1_input" type="text" id="activite_limite_quantite_{ id }" name="activite_limite_quantite_{ id }" value="{ limite_quantite }">
+															<select class="" id="activite_condition_quantite_{ id }" name="activite_condition_quantite_{ id }">
+																<option value=""></option>
+																<option value="mois" selected="{ condition_quantite == 'mois' ? 'selected' : false }">mois</option>
+																<option value="trimestre" selected="{ condition_quantite == 'trimestre' ? 'selected' : false }">trimestre</option>
+																<option value="semestre" selected="{ condition_quantite == 'semestre' ? 'selected' : false }">semestre</option>
+																<option value="annee" selected="{ condition_quantite == 'annee' ? 'selected' : false }">année</option>
+															</select>
+														</div>
+													</div>
+													<div class="block_infos_content">
+														<div class="condition_billet">
+															<label for="activite_limite_montant_{ id }" class=" bold l-large">Limite de montant</label>
+															<input class="right block_infos1_input" type="text" id="activite_limite_montant_{ id }" name="activite_limite_montant_{ id }" value="{ limite_montant }">
+															<select class="" id="activite_condition_montant_{ id }" name="activite_condition_montant_{ id }">
+																<option value=""></option>
+																<option value="mois" selected="{ condition_montant == 'mois' ? 'selected' : false }">mois</option>
+																<option value="trimestre" selected="{ condition_montant == 'trimestre' ? 'selected' : false }">trimestre</option>
+																<option value="semestre" selected="{ condition_montant == 'semestre' ? 'selected' : false }">semestre</option>
+																<option value="annee" selected="{ condition_montant == 'annee' ? 'selected' : false }">année</option>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="block_infos block_infos_2">
+													<span class="block_title"><input type="checkbox" id="activite_participation_{ id }" name="activite_participation_{ id }" checked="{ participation == 1 ? 'checked' : '' }"> <span>Participation du CE</span></span>
+													<div class="block_infos_content">
+														<input type="radio" id="activite_type_participation_{ id }" name="activite_type_participation_{ id }" value="montant" checked="{ type_participation == 'montant' ? 'checked' : '' }">Montant
+														<input type="radio" id="activite_type_participation_pourcentage_{ id }" name="activite_type_participation_{ id }" value="pourcentage" checked="{ type_participation == 'pourcentage' ? 'checked' : '' }">%
+														<input class="input_montant right" type="text" id="activite_montant_participation_{ id }" name="activite_montant_participation_{ id }" value="{ montant_participation }">
+													</div>
+												</div>
+											</div>
+											<div class="cell cell_2 block_conditions_commande">
+												<div class="block_infos block_infos_1">
+													<span class="block_title">
+															<input type="checkbox" id="activite_conditions_commande_{ id }" name="activite_conditions_commande_{ id }" checked="{ conditions_commande == 1 ? 'checked' : '' }"> <span>Condition commande</span>
+													</span>
+													<div class="block_infos_content">
+														<div class="condition_billet">
+															<label for="activite_limite_commande_{ id }" class="limit_billet bold">Limite de billets</label>
+															<input class="right block_infos2_condition" type="text" id="activite_limite_commande_{ id }" name="activite_limite_commande_{ id }" value="{ limite_commande }">
+															<select class="condition_commande" id="activite_condition_commande_{ id }" name="activite_condition_commande_{ id }">
+																<option value=""></option>
+																<option value="mois" selected="{ condition_commande == 'mois' ? 'selected' : false }">mois</option>
+																<option value="trimestre" selected="{ condition_commande == 'trimestre' ? 'selected' : false }">trimestre</option>
+																<option value="semestre" selected="{ condition_commande == 'semestre' ? 'selected' : false }">semestre</option>
+																<option value="annee" selected="{ condition_commande == 'annee' ? 'selected' : false }">année</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div if={ currentModele == 'remboursement' }>
+									<header class="opened titre" onclick="{ showContents }">
+										Tarifs / Conditions
+									</header>
+									<div class="tarifs_conditions slide-up table">
+										<div class="row">
+											<div class="cell_1">
+												<div class="block_infos block_infos_1 condition_pce">
+													<span class="block_title"  id="block_title"><input type="checkbox" id="activite_conditions{ isEdit ? '_' + el.id : '' }" name="activite_conditions{ isEdit ? '_' + el.id : '' }" checked="{ element.conditions == 1 ? 'checked' : '' }"> <span>Condition PCE</span></span>
+													<div class="block_infos_content">
+														<div class="sous_block_1">
+															<label class="nombre">Nombre</label>
+															<input class="right input_nbre" type="text" id="activite_limite_quantite{ isEdit ? '_' + el.id : '' }" name="activite_limite_quantite{ isEdit ? '_' + el.id : '' }" value={ element.limite_quantite }>
+															<select class="select_date"  id="activite_condition_quantite{ isEdit ? '_' + el.id : '' }" name="activite_condition_quantite{ isEdit ? '_' + el.id : '' }">
+																<option></option>
+																<option value="mois" selected="{ 'selected': element.condition_quantite == 'mois' }">mois</option>
+																<option value="trimestre" selected="{ 'selected': element.condition_quantite == 'trimestre' }">trimestre</option>
+																<option value="semestre" selected="{ 'selected': element.condition_quantite == 'semestre' }">semestre</option>
+																<option value="annee" selected="{ 'selected': element.condition_quantite == 'annee' }">année</option>
+															</select>
+														</div>
+														<div>
+															<label for="activite_limite_places{ isEdit ? '_' + el.id : '' }">Limite montant</label>
+															<input class="right input_nbre"  type="text" id="activite_limite_montant{ isEdit ? '_' + el.id : '' }" name="activite_limite_montant{ isEdit ? '_' + el.id : '' }" value="{ element.limite_montant }">
+															<select class="select_date" class=" select_montant_limite" id="activite_condition_montant{ isEdit ? '_' + el.id : '' }" name="activite_condition_montant{ isEdit ? '_' + el.id : '' }">
+																<option></option>
+																<option value="mois" selected="{ 'selected': element.condition_montant == 'mois' }">mois</option>
+																<option value="trimestre" selected="{ 'selected': element.condition_montant == 'trimestre' }">trimestre</option>
+																<option value="semestre" selected="{ 'selected': element.condition_montant == 'semestre' }">semestre</option>
+																<option value="annee" selected="{ 'selected': element.condition_montant == 'annee' }">année</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="cell_2">
+												<div class="block_infos block_infos_2">
+													<span class="block_title"  id="block_title"><input type="checkbox" id="activite_participation{ isEdit ? '_' + el.id : '' }" name="activite_participation{ isEdit ? '_' + el.id : '' }" checked="{ element.participation == 1 ? 'checked' : '' }"> <span>Participation du CE</span></span>
+													<div class="block_infos_content">
+														<input type="radio" id="activite_type_participation{ isEdit ? '_' + el.id : '' }" name="activite_type_participation{ isEdit ? '_' + el.id : '' }" value="montant" checked="{ element.type_participation == 'montant' ? 'checked' : '' }">Montant
+														<input type="radio" id="activite_type_participation_pourcentage{ isEdit ? '_' + el.id : '' }" name="activite_type_participation{ isEdit ? '_' + el.id : '' }" value="pourcentage" checked="{ element.type_participation == 'pourcentage' ? 'checked' : '' }">%
+														<input type="text" class="input" id="activite_montant_participation{ isEdit ? '_' + el.id : '' }" name="activite_montant_participation{ isEdit ? '_' + el.id : '' }" value="{ element.montant_participation }">
+													</div>
+												</div>
+											</div>
+											<div class="cell_3">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="titre hide_when_edit_produit hide_when_add_produit">
+									Liste des { libelle }(s)
+								</div>
+								<div class="add_produit hide_when_edit_produit hide_when_add_produit">
+									<button id="add_produit_button" onclick={ addProduit } class="button btn_nav action_button_size">Ajouter un { libelle }</button>
+								</div>
+								<div class="activites_produits">
+									<div class="entete-tableau entete_produit hide_when_edit_produit hide_when_add_produit">
+										<div class="cell_1"></div>
+										<!-- <div class="cell_2">
+											<p class="">Image</p>
+										</div> -->
+										<div class="cell_3">
+											<p class="small_produits_cell_3">Libellé</p>
+										</div>
+										<div class="cell_4">
+											<p class="">Nb.billets</p>
+										</div>
+										<div class="cell_5">
+											<p class="">Date de validité</p>
+										</div>
+										<div class="cell_6">
+											<p class="">Visible</p>
+										</div>
+										<div class="cell_7">
+											<p class="">Actions</p>
+										</div>
+									</div>
+									<div each={ produits } id="produit_{ id }" class="activites_produit">
+										<div class="show_infos hide_when_edit hide_when_edit_produit hide_when_add_produit">
+											<div class="cell_1">
+												<!-- <input type="checkbox" name="action[]"> -->
+											</div>
+											<!-- <div class="cell_2">
+												<img class="img_produits img_activites" src="/img/uploads/activites/{ image_url }">
+											</div> -->
+											<div class="cell_3">
+												<p class="small nature">{ libelle }</p>
+											</div>
+											<div class="cell_4">
+												<p class="small nature">{ nb_places }</p>
+											</div>
+											<div class="cell_5">
+												<p class="small nature">{ convertDateToView(date_validite) }</p>
+											</div>
+											<div class="cell_6">
+												<p class="small nature"><img src="{ visible == 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png'}" ></p>
+											</div>
+											<div class="cell_7"><!--  onclick= showProduits  -->
+												<p class="modif"><img class="edit_element_img" onclick={ editProduit } title="Modifier." src="/img/edit.png"> <img class="delete_element_img" onclick={ validDeleteProduit } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+											</div>
+										</div>
+										<div id="produit_{ id }_edit" class="edit edit_produit hidden">
+											<!-- modele tags mount here -->
+										</div>
+										<div id="produit_{ id }_delete" class="delete hidden">
+											<div>
+												<p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p>
+												<button class="button enregistrer" name="delete_{ id }" onclick={ deleteProduit }>Supprimer</button>
+												<button class="button annuler" name="cancel_{ id }" onclick={ cancelDeleteProduit }>Annuler</button>
+											</div>
+										</div>
+									</div><!-- /End .activites_produit -->
+								</div><!-- /End .activites_produits -->
+								<div class="save_activite hide_when_edit_produit hide_when_add_produit">
+									<button class="button annuler cancel_submit" onclick={ cancelActivite }>Annuler</button>
+									<button class="button enregistrer save_submit" onclick={ saveActivite }>Enregistrer</button>
+								</div>
+							</div><!-- /end .edit_activite -->
+							<div id="activite_{ id }_delete" class="delete hidden">
+								<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button class="button enregistrer" name="activite_delete_{ id }" onclick={ deleteActivite }>Supprimer</button><button class="button annuler" name="activite_cancel_delete_{ id }" onclick={ cancelDeleteActivite }>Annuler</button></div>
+							</div>
+						</div><!-- /End .activites_activite -->
+					</div><!-- /End .activites_activites -->
+				</div><!-- /End .categorie -->
+			</div><!-- /End .categories /tableau-container -->
+		</div><!-- /End .activites -->
+	</div><!-- /End .content -->
+	<script>
+		var _this = this;
+		var app = opts;
+		this.app = opts;
+		this.loaded = false;
+		var permissions = app.session.permissions;
+		var ACTIVITES_READ = this.ACTIVITES_READ = permissions.ACTIVITES_READ || false;
+
+		if( ! _this.app.session.activites){
+			_this.app.session.activites = {};
+		}
+
+		app.on('unmount-activites', function(){
+			_this.app.off('unmount-activites');
+		    _this.unmount();
+        });
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+		this.tinyMCE;
+		this.loaded = false;
+      	this.champs = {};
+
+		this.thingsToLoad = ['exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		this.modeles = [
+			{ 
+				id: 1, 
+				libelle: 'Billetterie', 
+				type: 'billetterie', 
+				file: 'model-billetterie.html', 
+				tag: 'model-billetterie',
+				fields: {
+					id_activite: "id_activite",
+					id_modele: "id_modele",
+					tarif: "tarif",
+					conditions: "conditions",
+					stock_alerte: "stock_alerte",
+
+					date_validite: "date_validite",
+					id_compte: "id_compte",
+					id_analytique: "id_analytique",
+					id_compte_stock: "id_compte_stock",
+					question_1: "question_1",
+
+					question_2: "question_2",
+					question_3: "question_3",
+					question_4: "question_4",
+					question_5: "question_5",
+					question_6: "question_6",
+
+					question_7: "question_7",
+					question_8: "question_8",
+					question_9: "question_9",
+					question_10: "question_10",
+					question_11: "question_11",
+
+					question_12: "question_12",
+					question_13: "question_13",
+					question_14: "question_14",
+					question_15: "question_15",
+					gestion_lettre: "gestion_lettre",
+
+					lettre: "lettre",
+					participation: "participation",
+					type_participation: "type_participation",
+					montant_participation: "montant_participation",
+					stock: "stock",
+
+					nombre_billets: "nombre_billets",
+					stock_restant: "stock_restant",
+					stock_alerte: "stock_alerte",
+					stock_permanence: "stock_permanence",
+					alerte_permanence: "alerte_permanence",
+
+					formule_participation_salarie: "formule_participation_salarie",
+					formule_participation_ce: "formule_participation_ce",
+					formule_condition: "formule_condition",
+					limite_quantite: "limite_quantite",
+					condition_quantite: "condition_quantite",
+
+					limite_commande: "limite_commande",
+					condition_commande: "condition_commande",
+					limite_montant: "limite_montant",
+					condition_montant: "condition_montant",
+					conditions_commande: "conditions_commande",
+
+					stock_vendu: "stock_vendu",
+					impression_automatique: "impression_automatique",
+					status_stock_permanence: "status_stock_permanence",
+					composition_famille: 'composition_famille'
+ 				},
+			},
+			{ 
+				id: 2, 
+				libelle: 'Bons d\'achats', 
+				type: 'bons_achats', 
+				file: 'model-bons-achats.html', 
+				tag: 'model-bons-achats',
+				fields: {
+					id_activite: "id_activite",
+					id_modele: "id_modele",
+					tarif: "tarif",
+					conditions: "conditions",
+					stock_alerte: "stock_alerte",
+
+					date_validite: "date_validite",
+					id_compte: "id_compte",
+					id_analytique: "id_analytique",
+					id_compte_stock: "id_compte_stock",
+					question_1: "question_1",
+
+					question_2: "question_2",
+					question_3: "question_3",
+					question_4: "question_4",
+					question_5: "question_5",
+					question_6: "question_6",
+
+					question_7: "question_7",
+					question_8: "question_8",
+					question_9: "question_9",
+					question_10: "question_10",
+					question_11: "question_11",
+
+					question_12: "question_12",
+					question_13: "question_13",
+					question_14: "question_14",
+					question_15: "question_15",
+					gestion_lettre: "gestion_lettre",
+
+					lettre: "lettre",
+					participation: "participation",
+					type_participation: "type_participation",
+					montant_participation: "montant_participation",
+					stock: "stock",
+
+					nombre_billets: "nombre_billets",
+					stock_restant: "stock_restant",
+					stock_alerte: "stock_alerte",
+					stock_permanence: "stock_permanence",
+					alerte_permanence: "alerte_permanence",
+
+					formule_participation_salarie: "formule_participation_salarie",
+					formule_participation_ce: "formule_participation_ce",
+					formule_condition: "formule_condition",
+					limite_quantite: "limite_quantite",
+					condition_quantite: "condition_quantite",
+
+					limite_commande: "limite_commande",
+					condition_commande: "condition_commande",
+					limite_montant: "limite_montant",
+					condition_montant: "condition_montant",
+					conditions_commande: "conditions_commande",
+
+					stock_vendu: "stock_vendu",
+					impression_automatique: "impression_automatique",
+					status_stock_permanence: "status_stock_permanence",
+				},
+			},
+			{ 
+				id: 3, 
+				libelle: 'Remboursements', 
+				type: 'remboursement', 
+				file: 'model-remboursements.html', 
+				tag: 'model-remboursements',
+				fields: {
+					id_modele: "id_modele",
+					conditions: "conditions",
+					limite_montant: "limite_montant",
+					limite_quantite: "limite_quantite",
+					participation: "participation",
+
+					type_participation: "type_participation",
+					montant_participation: "montant_participation",
+					formule_plafond: "formule_plafond",
+					formule_participation_ce: "formule_participation_ce",
+					id_compte: "id_compte",
+
+					id_analytique: "id_analytique",
+					id_compte_stock: "id_compte_stock",
+					question_1: "question_1",
+					question_2: "question_2",
+					question_3: "question_3",
+
+					question_4: "question_4",
+					question_5: "question_5",
+					question_6: "question_6",
+					question_7: "question_7",
+					question_8: "question_8",
+
+					question_9: "question_9",
+					question_10: "question_10",
+					question_11: "question_11",
+					question_12: "question_12",
+					question_13: "question_13",
+
+					question_14: "question_14",
+					question_15: "question_15",
+					gestion_lettre: "gestion_lettre",
+					condition_quantite: "condition_quantite",
+					condition_montant: "condition_montant",
+
+					impression_automatique: "impression_automatique",
+					lettre: "lettre",
+					condition_famille: 'condition_famille',
+ 				},
+			},
+			{ 
+				id: 4, 
+				libelle: 'Chèques vacances', 
+				type: 'cheques_vacances', 
+				file: 'model-cheques-vacances.html', 
+				tag: 'model-cheques-vacances',
+				fields: {
+					id_activite: "id_activite",
+					id_modele: "id_modele",
+					tarif: "tarif",
+					conditions: "conditions",
+					stock_alerte: "stock_alerte",
+
+					date_validite: "date_validite",
+					id_compte: "id_compte",
+					id_analytique: "id_analytique",
+					id_compte_stock: "id_compte_stock",
+					question_1: "question_1",
+
+					question_2: "question_2",
+					question_3: "question_3",
+					question_4: "question_4",
+					question_5: "question_5",
+					question_6: "question_6",
+
+					question_7: "question_7",
+					question_8: "question_8",
+					question_9: "question_9",
+					question_10: "question_10",
+					question_11: "question_11",
+
+					question_12: "question_12",
+					question_13: "question_13",
+					question_14: "question_14",
+					question_15: "question_15",
+					gestion_lettre: "gestion_lettre",
+
+					lettre: "lettre",
+					participation: "participation",
+					type_participation: "type_participation",
+					montant_participation: "montant_participation",
+					stock: "stock",
+
+					nombre_billets: "nombre_billets",
+					stock_restant: "stock_restant",
+					stock_alerte: "stock_alerte",
+					stock_permanence: "stock_permanence",
+					alerte_permanence: "alerte_permanence",
+
+					formule_participation_salarie: "formule_participation_salarie",
+					formule_participation_ce: "formule_participation_ce",
+					formule_condition: "formule_condition",
+					limite_quantite: "limite_quantite",
+					condition_quantite: "condition_quantite",
+
+					limite_commande: "limite_commande",
+					condition_commande: "condition_commande",
+					limite_montant: "limite_montant",
+					condition_montant: "condition_montant",
+					conditions_commande: "conditions_commande",
+
+					stock_vendu: "stock_vendu",
+					impression_automatique: "impression_automatique",
+					status_stock_permanence: "status_stock_permanence",
+ 				},
+			},
+			{ 
+				id: 5, 
+				libelle: 'Voyages', 
+				type: 'voyages', 
+				file: 'model-voyages.html', 
+				tag: 'model-voyages',
+				fields: {
+				  tarif: "tarif",
+				  conditions: "conditions",
+				  condition: "condition",
+				  limite_places: "limite_places",
+				  participation: "participation",
+				  type_participation: "type_participation",
+				  montant_participation: "montant_participation",
+				  nb_places: "nb_places",
+				  stocks_alerte: "stocks_alerte",
+				  date_validite: "date_validite",
+				  formule_cout_salarie_arrondi: "formule_cout_salarie_arrondi",
+				  formule_cout_salarie: "formule_cout_salarie",
+				  formule_participation_arrondi: "formule_participation_arrondi",
+				  formule_participation: "formule_participation",
+				  formule_condition_arrondi: "formule_condition_arrondi",
+				  formule_condition: "formule_condition",
+				  id_compte: "id_compte",
+				  id_analytique: "id_analytique",
+				  id_compte_stock: "id_compte_stock",
+				  question_1: "question_1",
+				  question_2: "question_2",
+				  question_3: "question_3",
+				  question_4: "question_4",
+				  question_5: "question_5",
+				  question_6: "question_6",
+				  question_7: "question_7",
+				  question_8: "question_8",
+				  question_9: "question_9",
+				  question_10: "question_10",
+				  question_11: "question_11",
+				  question_12: "question_12",
+				  question_13: "question_13",
+				  question_14: "question_14",
+				  question_15: "question_15",
+				  gestion_lettre: "gestion_lettre",
+				  impression_automatique: "impression_automatique",
+ 				},
+			},
+			{ 
+				id: 6, 
+				libelle: 'Prêts financiers', 
+				type: 'prets_financiers', 
+				file: 'model-prets-financiers.html', 
+				tag: 'model-prets-financiers',
+				fields: {
+				  tarif: "tarif",
+				  conditions: "conditions",
+				  condition: "condition",
+				  limite_places: "limite_places",
+				  participation: "participation",
+				  type_participation: "type_participation",
+				  montant_participation: "montant_participation",
+				  nb_places: "nb_places",
+				  stocks_alerte: "stocks_alerte",
+				  date_validite: "date_validite",
+				  formule_cout_salarie_arrondi: "formule_cout_salarie_arrondi",
+				  formule_cout_salarie: "formule_cout_salarie",
+				  formule_participation_arrondi: "formule_participation_arrondi",
+				  formule_participation: "formule_participation",
+				  formule_condition_arrondi: "formule_condition_arrondi",
+				  formule_condition: "formule_condition",
+				  id_compte: "id_compte",
+				  id_analytique: "id_analytique",
+				  id_compte_stock: "id_compte_stock",
+				  question_1: "question_1",
+				  question_2: "question_2",
+				  question_3: "question_3",
+				  question_4: "question_4",
+				  question_5: "question_5",
+				  question_6: "question_6",
+				  question_7: "question_7",
+				  question_8: "question_8",
+				  question_9: "question_9",
+				  question_10: "question_10",
+				  question_11: "question_11",
+				  question_12: "question_12",
+				  question_13: "question_13",
+				  question_14: "question_14",
+				  question_15: "question_15",
+				  gestion_lettre: "gestion_lettre",
+				  impression_automatique: "impression_automatique",
+ 				},
+			},
+			{ 
+				id: 7, 
+				libelle: 'Axsso', 
+				type: 'axsso', 
+				file: 'model-axsso.html', 
+				tag: 'model-axsso',
+				fields: {
+				  tarif: "tarif",
+				  conditions: "conditions",
+				  condition: "condition",
+				  limite_places: "limite_places",
+				  participation: "participation",
+				  type_participation: "type_participation",
+				  montant_participation: "montant_participation",
+				  nb_places: "nb_places",
+				  stocks_alerte: "stocks_alerte",
+				  date_validite: "date_validite",
+				  formule_cout_salarie_arrondi: "formule_cout_salarie_arrondi",
+				  formule_cout_salarie: "formule_cout_salarie",
+				  formule_participation_arrondi: "formule_participation_arrondi",
+				  formule_participation: "formule_participation",
+				  formule_condition_arrondi: "formule_condition_arrondi",
+				  formule_condition: "formule_condition",
+				  id_compte: "id_compte",
+				  id_analytique: "id_analytique",
+				  id_compte_stock: "id_compte_stock",
+				  question_1: "question_1",
+				  question_2: "question_2",
+				  question_3: "question_3",
+				  question_4: "question_4",
+				  question_5: "question_5",
+				  question_6: "question_6",
+				  question_7: "question_7",
+				  question_8: "question_8",
+				  question_9: "question_9",
+				  question_10: "question_10",
+				  question_11: "question_11",
+				  question_12: "question_12",
+				  question_13: "question_13",
+				  question_14: "question_14",
+				  question_15: "question_15",
+				  gestion_lettre: "gestion_lettre",
+				  impression_automatique: "impression_automatique",
+ 				},
+			},
+			{ 
+				id: 8, 
+				libelle: 'Divers', 
+				type: 'divers', 
+				file: 'model-divers.html', 
+				tag: 'model-divers',
+				fields: {
+					id_activite: "id_activite",
+					id_modele: "id_modele",
+					id_compte: "id_compte",
+					id_analytique: "id_analytique",
+					participation: "participation",
+					type_participation: "type_participation",
+					montant_participation: "montant_participation",
+					formule_participation_ce: "formule_participation_ce",
+ 				},
+			},
+		];
+
+		this.idModeles = {
+			1: 0,
+			2: 1,
+			3: 2,
+			4: 3,
+			5: 4,
+			6: 5,
+			7: 6,
+			8: 7,
+		};
+
+		this.urlToModeles = "/js/tag/admin/activites/";
+
+		if( ! app.session.exercices){
+			app.session.exercices = {};
+			app.session.exercices.elements = [];
+			app.session.exercices.idElements = {};
+			_this.exercices = app.session.exercices.elements;
+			_this.idExercices = app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d;
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+/*************************************************************************
+		this.categories = [
+			{ id: 555, libelle: 'Comptes de capitaux', ecritures: 29, brouillards: 3, visible: 'visible', idActivites: {}, activites:
+				[
+					{ id: 551, id_categorie: 555, libelle: 'Capital et réserves', ecritures: 29, brouillards: 3, visible: 'visible', idProduits: {}, produits:
+						[
+							{ id: 1, id_activite: 551, libelle: 'Capital', ecritures: 29, brouillards: 3, visible: 'visible'},
+						]
+					},
+				]
+			},
+		];
+****************************************************************************/
+		this.currentCategorieId = '';
+		this.currentCategorieLibelle = '';
+		this.currentActiviteId = '';
+		this.currentActiviteLibelle = '';
+		this.currentModele = undefined;
+		this.currentModeleId = undefined;
+
+		this.categories = [];
+		this.idCategories = {};
+		this.activites = [];
+		this.idActivites = {};
+		this.produits = [];
+		this.idProduits = {};
+
+		app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			_this.numToLoad--;
+			if( _this.loaded ){
+			}
+		});
+
+		_this.app.loadScript('/js/admin/tinymce/tinymce.min.js', 'tinymce_js', function tinymce() {
+			_this.tinyMCE = true;
+
+		});
+
+
+		function hideAddLayers(){
+			$('.filtres').addClass('table').removeClass('hidden');
+			$('#add_categorie').addClass('hidden').removeClass('table');
+			$('#add_activite').addClass('hidden').removeClass('table');
+			$('#add_produit').addClass('hidden').removeClass('table');
+			$('#save_categorie').addClass('hidden').removeClass('inline_block');
+			$('#save_activite').addClass('hidden').removeClass('inline_block');
+			$('#save_produit').addClass('hidden').removeClass('inline_block');
+			$('#actions').addClass('inline_block').removeClass('hidden');
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			$(".slide-up", e.target).slideToggle("slow");
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		readURL(e) {
+            if ($(e.currentTarget)[0].files) {
+				var id = e.item ? 'categorie_photo_upload_' + e.item.id : 'categorie_photo_upload';
+				var $preview = $('#' + e.currentTarget.getAttribute('img-target'));
+				var $input = $('#' + e.currentTarget.getAttribute('input-target'));
+				$input.val($('#' + id)[0].files[0].name);
+            	var reader = new FileReader();
+				reader.onload = function (e) {
+					$preview
+						.attr('src', e.currentTarget.result)
+						.width(200)
+						.height(200);
+				};
+	
+	            reader.readAsDataURL($('#' + id)[0].files[0]);
+            }    
+        }
+
+        resetImage(e){
+			var id = e.item ? '_' + e.item.id : '';
+			var $preview = $('#' + $('#categorie_photo_upload' + id).getAttribute('img-target'))
+			var $input = $('#' + $('#categorie_photo_upload' + id).getAttribute('input-target'));
+        	$preview.attr('src','#');
+        	$preview.hide();
+        	$('#categorie_photo_upload' + id).val("");
+        }
+
+		editCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.currentModele = _this.modeles[_this.idModeles[e.item.id_modele]].type;
+				_this.currentModeleId = e.item.id_modele;
+		 		$(".hide_when_edit_categorie").addClass('hidden');
+				_this.E_M.editElement({ event: e, prefixId: 'categorie_', hideClass: 'hidden', });
+			}
+		}
+
+		editActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var activite = getCurrentActivite(e.item.id);
+				_this.currentActiviteId = activite.id;
+				_this.currentActiviteLibelle = activite.libelle;
+				_this.showProduits(e);
+
+		 		$(".hide_when_edit_activite").addClass('hidden');
+				_this.E_M.editElement({ event: e, prefixId: 'activite_', hideClass: 'hidden', });
+			}
+		}
+
+		editProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+		 		$(".hide_when_edit_produit").addClass('hidden');
+
+				var modele = getCurrentModele();
+				var mounted;
+				var element, idElements, currentActivite, id, idMountTag, idActivite, mountTag, tagContainer;
+				if( e.item ){
+					id = e.item.id;
+
+					idMountTag = 'produit_edit_tag_' + id;
+					tagContainer = document.getElementById('produit_' + id + '_edit');
+					mountTag = document.createElement('div');
+					mountTag.setAttribute('id', idMountTag);
+					tagContainer.appendChild(mountTag);
+					element = e.item;
+console.log('editProduit element: ' + JSON.stringify(element));
+					currentActivite = getCurrentActivite();
+					idActivite = currentActivite.id;
+					idElements = currentActivite.idProduits; 
+					$('.hide_when_edit_produit', $('#activite_' + idActivite)).addClass('hidden');
+					if( modele && modele.file && modele.tag ){
+						riot.compile( _this.urlToModeles + modele.file, function() {
+							mounted = riot.mount( '#' + idMountTag, modele.tag, { app: _this.app, element: element, idElements: idElements, parentTag: _this,});
+						});
+
+					}else{
+						// TODO: no modele found ...
+					}
+				}
+				
+				_this.E_M.editElement({ event: e, prefixId: 'produit_', hideClass: 'hidden', });
+			}
+		}
+
+		showCategories(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			hideAddLayers();
+
+			_this.currentModele = undefined;
+			_this.currentModeleId = undefined;
+			$('#add_categorie_button').removeClass('hidden').addClass('inline_block');
+			$('#add_activite_button').removeClass('inline_block').addClass('hidden');
+			$('#add_produit_button').removeClass('inline_block').addClass('hidden');
+
+			var categorieId = _this.currentCategorieId;
+
+			$('.show_infos', $('#categorie_' + categorieId)).removeClass('hidden');
+
+			$('#current_categorie').hide();
+			_this.currentCategorieId = '';
+			_this.currentCategorieLibelle = '';
+
+			$('#current_activite').hide();
+			_this.currentActiviteId = '';
+			_this.currentActiviteLibelle = '';
+
+			$('#entete_categorie').removeClass('hidden');
+			$('.entete_activite', $('#categorie_' + categorieId)).addClass('hidden');
+			$('.categorie').removeClass('hidden');
+			$('.activites_activite').addClass('hidden');
+		}
+
+		loadActivites(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			if( _this.filtre_categories.value != ''){
+				_this.currentCategorieId = _this.filtre_categories.value ;
+				_this.currentCategorieLibelle = _this.categories[ _this.idCategories[ _this.currentCategorieId ] ].libelle;
+
+				var $categorieId = $('#categorie_' + _this.currentCategorieId);
+				$('#current_categorie').text('Categorie').attr('title', _this.currentCategorieLibelle).show();
+				$categorieId.slideDown();
+				$('.activites', $categorieId).toggleClass('hidden');
+
+				_this.showActivites(e);
+			}else{
+				_this.showCategories(e);
+			}
+		}
+
+		showActivites(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			var item;
+			var itemId;
+			if(e.item){
+				item = e.item;
+				itemId = item.id;
+			}else{
+
+				itemId = _this.currentCategorieId;
+
+			}
+			var htmlId = 'categorie_' + itemId;
+			var $categorie = $('#' + htmlId);
+
+			_this.categories[_this.idCategories[itemId]]['activites'] = [];
+			_this.categories[_this.idCategories[itemId]]['idActivites'] = {};
+
+			_this.currentModele = _this.modeles[ _this.idModeles[ _this.categories[ _this.idCategories[ itemId ] ].id_modele ] ].type;
+			_this.currentModeleId = _this.categories[ _this.idCategories[ itemId ] ].id_modele;
+
+			var elements = _this.categories[_this.idCategories[itemId]]['activites'];
+			var idElements = _this.categories[_this.idCategories[itemId]]['idActivites'];
+
+			// get activites and dispatch them
+			getElements({
+				tag: _this,
+				url: '/admin/activites/activites',
+				elements: elements,
+				idElements: idElements,
+				fields: {id: 'id', id_categorie: 'id_categorie', id_entreprise: 'id_entreprise', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations',
+				conditions: 'conditions', limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_montant: 'limite_montant', condition_montant: 'condition_montant', participation: 'participation', type_participation: 'type_participation', montant_participation: 'montant_participation', conditions_commande: 'conditions_commande', limite_commande: 'limite_commande', condition_commande: 'condition_commande'},
+				getParameters: { type_element: 'activite', id_categorie: itemId},
+				childsName: 'produits',
+				idChildsName: 'idProduits',
+				end: function(tag){
+					$('.activites_activites', $categorie).removeClass('hidden');
+				},
+			});
+
+			$('#entete_categorie').addClass('hidden').removeClass('table');
+			$('.entete_activite', $categorie).removeClass('hidden').addClass('table');
+			$('.entete_produit', $categorie).addClass('hidden').removeClass('table');
+			$('.produit', $categorie).addClass('hidden').removeClass('table');
+			if(item){
+				$('#current_categorie').text('Categorie : ' + item.libelle).attr('title', item.libelle).show();
+				_this.currentCategorieId = itemId;
+				_this.currentCategorieLibelle = item.libelle;
+			}
+			$('.categorie').each(function(index){
+				if(this.id !== htmlId){
+					$(this).addClass('hidden');
+				}else{
+					$('.show_infos', $(this)).addClass('hidden');
+				}
+			});
+
+			hideAddLayers();
+
+			$('#add_categorie_button').removeClass('inline_block').addClass('hidden');
+			$('#add_activite_button').removeClass('hidden').addClass('inline_block');
+			$('#add_produit_button').removeClass('inline_block').addClass('hidden');
+
+			$('#current_activite').hide();
+			_this.currentActiviteId = '';
+			_this.currentActiviteLibelle = '';
+		}
+
+		hideActivites(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item = e.item;
+			var itemId = item.id;
+			var $item = $('#categorie_' + itemId);
+
+			$('.activites', $item).removeClass('table').addClass('hidden');
+
+			$('#current_categorie').text('').attr('title', '').hide();
+
+			_this.currentCategorieId = '';
+			_this.currentCategorieLibelle = '';
+
+
+			$('.categorie').each(function(index){
+				$(this).removeClass('hidden');
+			});
+
+			$('#add_categorie_button').removeClass('hidden').addClass('inline_block');
+			$('#add_activite_button').removeClass('inline_block').addClass('hidden');
+			$('#add_produit_button').removeClass('inline_block').addClass('hidden');
+		}
+
+		showProduits(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item;
+			var itemId;
+			var categorieId;
+
+			if(e.item){
+				item = e.item;
+				itemId = item.id;
+				categorieId = item.id_categorie;
+			}else{
+				categorieId = _this.currentCategorieId;
+				itemId = _this.currentActiviteId;
+			}
+
+			var htmlId = 'activite_' + itemId;
+			var $parent = $('#categorie_' + categorieId);
+			var $item = $('#' + htmlId);
+
+			var categorie = _this.categories[_this.idCategories[categorieId]];
+
+			var activite = categorie['activites'][categorie['idActivites'][itemId]]
+			activite['produits'] = [];
+			activite['idProduits'] = {};
+			var elements = activite['produits'];
+			var idElements = activite['idProduits'];
+			var modele = getCurrentModele();
+			var typeModele = modele.type;
+
+			var fields = { id: 'id', id_activite: 'id_activite', id_modele: 'id_modele', id_entreprise: 'id_entreprise', libelle: 'libelle', public_internet: 'public_internet', information_internet: 'information_internet', informations: 'informations', type_modele: 'type_modele', id_exercice: 'id_exercice', visible: 'visible'};
+
+			if(modele.fields){
+				var m_f = modele.fields;
+				for(var key in m_f){ 
+					fields[key] = m_f[key];
+				}
+			}
+			// get produits and dispatch them
+			getElements({
+				tag: _this,
+				url: '/admin/activites/activites',
+				elements: elements,
+				idElements: idElements,
+				fields: fields,
+				getParameters: { type_element: 'produit', type_modele: typeModele, id_activite: itemId},
+				beforeUpdate: function(tag){
+				},
+				end: function(tag){
+					$('.produits', $item).removeClass('hidden');
+				},
+			});
+
+			$('.entete_activite', $parent).addClass('hidden');
+			$('.entete_produit', $item).removeClass('hidden');
+
+			if( item ){
+				$('#current_activite').text('Activité : ' + item.libelle).attr('title', item.libelle).show();
+				_this.currentActiviteId = itemId;
+			}else{
+				$('#current_activite').text('Activité').attr('title', _this.currentActiviteLibelle).show();
+
+			}
+
+			$('.activite', $parent).each(function(index){
+				if(this.id !== htmlId){
+					$(this).addClass('hidden');
+				}else{
+					$('.show_infos', $(this)).addClass('hidden');
+				}
+			});
+
+			hideAddLayers();
+
+			$('#add_categorie_button').removeClass('inline_block').addClass('hidden');
+			$('#add_activite_button').removeClass('inline_block').addClass('hidden');
+			$('#add_produit_button').removeClass('hidden').addClass('inline_block');
+		}
+
+		hideProduits(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item = e.item;
+			var itemId = item.id;
+			var $item = $('#activite_' + itemId);
+			var $parent = $('#categorie_' + item.id_categorie);
+
+			$('.produits', $item).addClass('hidden');
+
+			$('#current_activite').text('').attr('title', '').hide();
+			_this.currentActiviteId = '';
+
+			$('.activite', $parent).each(function(index){
+				$(this).removeClass('hidden');
+			});
+			$('#add_categorie_button').removeClass('inline_block').addClass('hidden');
+			$('#add_activite_button').removeClass('hidden').addClass('inline_block');
+			$('#add_produit_button').removeClass('inline_block').addClass('hidden');
+		}
+
+		addCategorie(e){
+			if(_this.E_M){
+				$(".hide_when_add_categorie").addClass('hidden');
+				$('#save_categorie').addClass('inline_block').removeClass('hidden');
+				$('#actions').addClass('hidden').removeClass('inline_block');
+				$('input[type=text]', '#add_categorie').val('');
+				_this.E_M.addElement({
+					event: e,
+					prefixId: 'categorie_',
+					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		addActivite(e){
+			if(_this.E_M){
+				$(".hide_when_add_activite").addClass('hidden');
+				$('#save_activite').addClass('inline_block').removeClass('hidden');
+				$('#actions').addClass('hidden').removeClass('inline_block');
+				$('input[type=text]', '#add_activite').val('');
+
+				$('#activite_categorie').val(_this.currentCategorieLibelle);
+
+				_this.E_M.addElement({
+					event: e,
+					prefixId: 'activite_',
+ 					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		addProduit(e){
+			if(_this.E_M){
+				$(".hide_when_add_produit").addClass('hidden');
+				$('#save_produit').addClass('inline_block').removeClass('hidden');
+				$('#actions').addClass('hidden').removeClass('inline_block');
+				$('input[type=text]', '#add_produit').val('');
+
+				idMountTag = 'add_produit_tag';
+				tagContainer = document.getElementById('add_produit');
+				mountTag = document.createElement('div');
+				mountTag.setAttribute('id', idMountTag);
+				tagContainer.appendChild(mountTag);
+
+				var modele = getCurrentModele();
+				var mounted;
+				if( modele && modele.file && modele.tag ){
+					riot.compile( _this.urlToModeles + modele.file, function() {
+						mounted = riot.mount('#' + idMountTag, modele.tag, { app: _this.app, element: null, idElements: null, parentTag: _this, });
+					});
+					
+				}else{
+					// TODO: no modele found ...
+				}
+				
+				_this.E_M.addElement({
+					event: e,
+					prefixId: 'produit_',
+ 					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		validDeleteCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'categorie_', hideClass: 'hidden', });
+			}
+		}
+
+		validDeleteActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'activite_', hideClass: 'hidden',});
+			}
+		}
+
+		validDeleteProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'produit_', hideClass: 'hidden',});
+			}
+		}
+
+		cancelDeleteCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'categorie_', hideClass: 'hidden',});
+			}
+		}
+
+		deleteCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/activites/activites', elements: _this.categories, idElements: _this.idCategories, type_element: 'categorie', hideClass: 'hidden',});
+			}
+		}
+
+		cancelDeleteActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'activite_', hideClass: 'hidden',});
+			}
+		}
+
+		deleteActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var item = e.item;
+				var categorieId = item.id_categorie;
+				var elements =  _this.categories[_this.idCategories[categorieId]]['activites'];
+				var idElements = _this.categories[_this.idCategories[categorieId]]['idActivites'];
+
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/activites/activites', elements: elements, idElements: idElements, type_element: 'activite', hideClass: 'hidden',});
+			}
+		}
+
+		cancelDeleteProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'produit_', hideClass: 'hidden',});
+			}
+		}
+
+		deleteProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var item = e.item;
+				var itemId = item.id;
+				var modele = getCurrentModele();
+				var idModele = modele.id;
+
+				var type_modele = modele.type
+				var activiteId = item.id_activite;
+
+				var categorieId = _this.currentCategorieId;
+
+				var categorie = _this.categories[_this.idCategories[categorieId]];
+				var activite = categorie['activites'][categorie['idActivites'][activiteId]]
+				var elements = activite['produits'];
+				var idElements = activite['idProduits'];
+				_this.E_M.deleteElement({
+					event: e, 
+					tag: _this, 
+					url: '/admin/activites/activites', 
+					elements: elements, 
+					idElements: idElements, 
+					type_element: 'produit',
+					prefixId: 'produit_',
+					idsToDelete: { 'id_modele': idModele, type_modele: type_modele, },
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		cancelCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				if(e.item){
+					$('.entete_activite', $('#categorie_' + e.item.id)).addClass('hidden');
+					$(".hide_when_edit_categorie").removeClass('hidden');
+				}else{
+					$(".hide_when_add_categorie").removeClass('hidden');
+				}
+				$('#save_categorie').addClass('hidden').removeClass('inline_block');
+				$('#actions').addClass('inline_block').removeClass('hidden');
+				$('#current_activite').text('').attr('title', '').hide();
+				$('#current_').text('').attr('title', '').hide();
+				$('.actions_container').show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'visible', ],
+					prefixId: 'categorie_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+				_this.currentModele = undefined;
+				_this.currentModeleId = undefined;
+			}
+		}
+
+		cancelActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+
+				var categorie = getCurrentCategorie();
+				var idCategorie = categorie.id;
+
+				if(e.item){
+					$(".hide_when_edit_activite", $('#categorie_' + idCategorie )).removeClass('hidden');
+					// $(".hide_when_edit_activite", $('.activites_activites', $('#categorie_' + e.item.id_categorie ))).removeClass('hidden');
+				}else{
+					//$(".hide_when_edit_categorie", $('.activites_activites', $('#categorie_' + idCategorie ))).removeClass('hidden');
+					$(".hide_when_add_activite", $('#categorie_' + idCategorie )).removeClass('hidden');
+				}
+
+				$('#save_activite').addClass('hidden').removeClass('inline_block');
+				$('#actions').removeClass('hidden');
+				$('#add_activite_button').removeClass('inline_block').addClass('hidden');
+				$('#current_activite').text('').attr('title', '').hide();
+				$('.entete_activite', $('#categorie_' + idCategorie)).removeClass('hidden');
+				$('.actions_container').removeClass('hidden');
+				$('#add_activite_button').removeClass('hidden'); //.addClass('inline_block');
+
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'visible', ],
+					prefixId: 'activite_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		this.cancelProduit = function cancelProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				if(e.item){
+					var idActivite = e.item.id_activite;
+					var id = e.item.id;
+					$('.hide_when_edit_produit', $('#activite_' + idActivite)).removeClass('hidden');
+					$(".hide_when_edit", $('#activite_' + idActivite + '_edit')).removeClass('hidden');
+				}else{
+					var idActivite = _this.currentActiviteId;
+					//var categorieId = _this.currentCategorieId;
+					$(".hide_when_add_produit", $('#activite_' + idActivite  + '_edit')).removeClass('hidden');
+				}
+				$('#save_produit').addClass('hidden').removeClass('inline_block');
+				$('#actions').removeClass('hidden');
+
+/*
+				$('#save_activite').addClass('hidden').removeClass('inline_block');
+				$('#actions').removeClass('hidden');
+				$('#add_activite_button').removeClass('inline_block').addClass('hidden');
+				$('#current_activite').text('').attr('title', '').hide();
+				$('.actions_container').removeClass('hidden');
+				$('#add_activite_button').removeClass('hidden').addClass('inline_block');
+*/
+
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'visible', ],
+					prefixId: 'produit_',
+					hideClass: 'hidden',
+					showClass: 'table',
+				});
+			}
+		}
+
+		saveCategorie(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var data = new FormData();
+
+			var id = e.item ? e.item.id : '';
+			var htmlId = e.item ? 'categorie_photo_upload_' + e.item.id : 'categorie_photo_upload';
+			$htmlId = $('#' + htmlId);
+            if ($htmlId && $htmlId[0] && $htmlId[0].files && $htmlId[0].files[0]) {
+				data.append("image", $htmlId[0].files[0],  $htmlId[0].files[0].name);
+
+				var xhr = new XMLHttpRequest();
+
+				xhr.open('post', '/admin/activites/activites?action=add_image', true);
+
+				xhr.onreadystatechange = function() {//Call a function when the state changes.
+					if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						// Request finished. Do processing here.
+					}
+				}
+
+				xhr.onload = function () {
+				  // Request finished. Do processing here.
+
+				};
+
+				xhr.send(data);
+				$("#categorie_image_url" + (id ? '_' + id : '')).val($htmlId[0].files[0].name);
+			}
+
+			if(_this.E_M){
+
+				$('#save_categorie').removeClass('inline_block').addClass('hidden');
+				$('#actions').removeClass('hidden').addClass('inline_block');
+				if(e.item){
+					//$('.entete_activite', $('#categorie_' + e.item.id)).addClass('hidden');
+			 		$(".hide_when_edit_categorie").removeClass('hidden');
+				}else{
+			 		$(".hide_when_add_categorie").removeClass('hidden');
+				}
+
+				var fields = ['libelle', 'image_url', 'id_modele', 'informations', 'public_internet', 'information_internet', 'visible', 'conditions', 'limite_quantite', 'condition_quantite', 'limite_montant', 'condition_montant', 'participation', 'type_participation', 'montant_participation',];
+				if(_this.currentModele != 'remboursement'){
+					fields = fields.concat(['conditions_commande','limite_commande','condition_commande',]);
+				}
+
+				_this.E_M.saveElement({
+					event: e,
+					url: '/admin/activites/activites',
+					fields: fields,
+					tag: _this,
+					elements: _this.categories,
+					idElements: _this.idCategories,
+					typeElement: 'categorie',
+					suffixId: 'categorie',
+					prefixFields: 'categorie_',
+					prefixId: 'categorie_',
+					hideClass: 'hidden',
+				});
+				_this.currentModele = undefined;
+				_this.currentModeleId = undefined;
+			}
+
+			_this.update();
+		}
+
+		saveActivite(e){
+			e.stopPropagation();
+			e.preventDefault();
+// 			var data = new FormData();
+
+// 			var id = e.item ? e.item.id : '';
+// 			var htmlId = e.item ? 'activite_photo_upload_' + e.item.id : 'activite_photo_upload';
+// 			var $htmlId = $('#' + htmlId);
+//             if ($htmlId && $htmlId[0] && $htmlId[0].files) {
+// 				data.append("image", $htmlId[0].files[0], $htmlId[0].files[0].name);
+
+// 				var xhr = new XMLHttpRequest();
+
+// 				xhr.open('post', '/admin/activites/activites', true);
+
+// 				xhr.onreadystatechange = function() {//Call a function when the state changes.
+// 					if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+// 						// Request finished. Do processing here.
+// 					}
+// 				}
+
+// 				xhr.onload = function () {
+// 				  // Request finished. Do processing here.
+
+// 				};
+
+// 				xhr.send(data);
+// 				$("#produit_image_url" + (id ? '_' + id : '')).val($htmlId[0].files[0].name);
+// console.log('$("#produit_image_url_{ id }"' + $("#produit_image_url" + (id ? '_' + id : '')).val());
+// 			}
+
+
+			// data.append("image", $('.photo_add')[0].files[0],  $('.photo_add')[0].files[0].name);
+
+			// var xhr = new XMLHttpRequest();
+
+			// xhr.open('post', '/admin/activites/activites', true);
+			// var image = $('.photo_add')[0].files[0].name;
+			// xhr.send(data);
+			if(_this.E_M){
+				var categorie = getCurrentCategorie();
+				var idCategorie = categorie.id;
+console.log('saveActivite categorie : ' + JSON.stringify(categorie));
+				$('.entete_activite', $('#categorie_' + idCategorie)).removeClass('hidden');
+				$('.actions_container').removeClass('hidden');
+				$('#add_activite_button').removeClass('hidden');
+				$('#save_activite').removeClass('inline_block').addClass('hidden');
+				$('#actions').removeClass('hidden').addClass('inline_block');
+				$(".hide_when_add_activite", $('#categorie_' + idCategorie )).removeClass('hidden');
+
+				if(e.item){
+				}else{
+				}
+
+
+				var elements = categorie['activites'];
+				var idElements = categorie['idActivites'];
+				_this.E_M.saveElement({
+					event: e,
+					url: '/admin/activites/activites',
+					fields: ['libelle', 'id_categorie', 'visible', 'information_internet', 'public_internet', 'informations', 
+					'conditions', 'limite_quantite', 'condition_quantite', 'limite_montant', 'condition_montant', 'participation', 'type_participation',
+					'montant_participation', 'conditions_commande', 'limite_commande', 'condition_commande' ],
+					tag: _this,
+					elements: elements,
+					idElements: idElements,
+					typeElement: 'activite',
+					suffixId: 'activite',
+					prefixFields: 'activite_',
+					prefixId: 'activite_',
+					hideClass: 'hidden',
+					end: function({ tag: _this, }){
+					},
+				});
+			}
+		}
+
+		function getCurrentCategorie() {
+			return _this.categories[ _this.idCategories[ _this.currentCategorieId ]];
+		}
+
+		function getActivites() {
+			var categorie = getCurrentCategorie();
+			return categorie.activites;
+		}
+
+		function getCurrentActivite(activiteId) {
+			var categorie = getCurrentCategorie();
+			var id;
+			if(activiteId){
+				id = activiteId;
+			}else{
+				id = _this.currentActiviteId;
+			}
+
+			return categorie.activites[ categorie.idActivites[ id ]];
+		}
+
+		function getProduits() {
+			var activite = getCurrentActivite();
+			return activite.produits;
+		}
+
+		function getCurrentModele() {
+console.log('getCurrentModele: _this.currentModeleId: ' + _this.currentModeleId);
+			return _this.modeles[ _this.idModeles[ _this.currentModeleId ] ];
+		}
+
+		this.saveProduit = function saveProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+// 			var data = new FormData();
+
+// 			var id = e.item ? e.item.id : '';
+// 			var htmlId = e.item ? 'photo_upload_' + e.item.id : 'photo_upload';
+// 			var $htmlId = $('#' + htmlId);
+//             if ($htmlId && $htmlId[0] && $htmlId[0].files) {
+// 				data.append("image", $htmlId[0].files[0], $htmlId[0].files[0].name);
+
+// 				var xhr = new XMLHttpRequest();
+
+// 				xhr.open('post', '/admin/activites/activites', true);
+
+// 				xhr.onreadystatechange = function() {//Call a function when the state changes.
+// 					if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+// 						// Request finished. Do processing here.
+// 					}
+// 				}
+
+// 				xhr.onload = function () {
+// 				  // Request finished. Do processing here.
+
+// 				};
+
+// 				xhr.send(data);
+// 				$("#produit_image_url" + (id ? '_' + id : '')).val($htmlId[0].files[0].name);
+// console.log('$("#produit_image_url_{ id }"' + $("#produit_image_url" + (id ? '_' + id : '')).val());
+// 			}
+
+			if(_this.E_M){
+
+				var isEdit = ( e.item && e.item.id ) ? true : false;
+				if(isEdit){
+					var item = e.item;
+					var itemId = item.id;
+					var activiteId = item.id_activite;
+					var categorieId = _this.currentCategorieId;
+					$('.hide_when_edit_produit', $('#activite_' + activiteId)).removeClass('hidden');
+				}else{
+					var activiteId = _this.currentActiviteId;
+					var categorieId = _this.currentCategorieId;
+			 		$(".hide_when_add_produit", $('#activite_' + activiteId )).removeClass('hidden');
+				}
+
+				$('#save_produit').addClass('hidden'); //.removeClass('inline_block');
+				$('#actions').removeClass('hidden'); //.addClass('inline_block');
+
+				var categorie = _this.categories[_this.idCategories[categorieId]];
+				var activite = categorie['activites'][categorie['idActivites'][activiteId]];
+				var elements = activite['produits'];
+				var idElements = activite['idProduits'];
+console.log('saveProduit: elements: ' + JSON.stringify(elements));
+console.log('saveProduit: idElements: ' + JSON.stringify(idElements));
+				_this.E_M.saveElement({
+					event: e,
+					url: '/admin/activites/activites',
+					fields: e.fields,
+					tag: _this,
+					elements: elements,
+					idElements: idElements,
+					suffixId: 'produit',
+					typeElement: 'produit',
+					typeModele: e.typeModele,
+					prefixFields: 'produit_',
+					prefixId: 'produit_',
+					hideClass: 'hidden',
+					fieldsToGetFromDB: { id_modele: 'id_modele' },
+					beforeUpdate: function beforeUpdate(p){
+
+					}
+				});
+			}
+		}
+
+		this.getSolde = function getSolde(a, b) {
+			var c;
+			if(a && b) {
+				c = Math.abs(a - b).toFixed(2);
+				return (c);
+			} else {
+				return (null);
+			}
+		}
+
+		this.setFixed = function setFixed(a) {
+			if (a) {
+				return(parseFloat(a).toFixed(2));
+			} else {
+				return(null);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+
+						if( typeof idElements[d['id']] === 'undefined'){
+							idElements[d['id']] = i;
+							elements.push(d);
+						}else{
+							elements[ idElements[d['id']] ] = d;
+						}
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}
+					tag.update();
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		edit_produit(htmlId){
+			var ids = htmlId.split('_');
+			var id = parseInt(ids[1], 10);
+			if(id !== NaN){
+				document.getElementById('filtre_activites').value = id;
+				_this.filtre_activites.value = id;
+
+				_this.loadProduits( new MouseEvent('click'));
+			}
+		}
+
+        this.convertDateToDb = function convertDateToDb(date){
+			if( _this.E_M ){
+				return _this.E_M.convertDateToDb(date);
+			}else{
+				return false;
+			}
+        }
+
+        this.convertDateToView = function convertDateToView(date){
+			if( _this.E_M ){
+				return _this.E_M.convertDateToView(date);
+			}else{
+				return false;
+			}
+        }
+
+		this.getCurrentDateToDB = function getCurrentDateToDB(){
+			var now = new Date();
+			var year, month, day;
+
+			year = String(now.getFullYear());
+			month = String(now.getMonth() + 1);
+			if (month.length == 1) {
+				month = "0" + month;
+			}
+			day = String(now.getDate());
+			if (day.length == 1) {
+				day = "0" + day;
+			}
+
+			return year + "-" + month + "-" + day;
+		}
+
+
+
+		this.on('mount', function(){
+			getElements({
+				tag: _this,
+				url: '/admin/activites/activites',
+				elements: _this.categories,
+				idElements: _this.idCategories,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', image_url: 'image_url', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations', id_modele: 'id_modele', },
+				getParameters: { type_element: 'categorie', },
+			});
+		});
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			editCategorie = null;
+			editActivite = null;
+			editProduit = null;
+			showContents = null;
+			showCategories = null;
+			showActivites = null;
+			hideActivites = null;
+			showProduits = null;
+			hideProduits = null;
+			addCategorie = null;
+			addActivite = null;
+			addProduit = null;
+			validDeleteCategorie = null;
+			validDeleteActivite = null;
+			validDeleteProduit = null;
+			cancelDeleteCategorie = null;
+			deleteCategorie = null;
+			cancelDeleteActivite = null;
+			deleteActivite = null;
+			cancelDeleteProduit = null;
+			deleteProduit = null;
+			cancelCategorie = null;
+			cancelActivite = null;
+			cancelProduit = null;
+			saveCategorie = null;
+			saveActivite = null;
+			saveProduit = null;
+			getElements = null;
+			toggleVisible = null;
+		});
+
+    </script>
+</activites>

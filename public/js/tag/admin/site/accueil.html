@@ -1,0 +1,46 @@
+<accueil-site>
+	<!--<div id="titre_page"><h1>Tableau de Bord - Site Internet</h1></div>-->
+	<div class="accueil_site with_submenu left">
+		<div class="accueil_title left">
+			<div class="block center" >
+				<!-- <div class="table c100">
+					<div class="row">
+					</div>
+				</div> -->
+				<div class="block_content left">
+						<a href ="#/site/agendace">
+                    		<img class ="agenda_CE" src=" /img/agenda_CE.png">
+                		</a>
+					<img class ="courriel" src="/img/courriel.png">
+					<a href="../site_client/" target="_blank"><img class ="visualisation_site" src="/img/visualisation_site.png"></a>
+					
+			    </div> 
+			</div>
+			<!-- <div class="block center rightdiv">
+				
+				<div class="block_content left">
+					
+				</div>
+				<a class="linksite" href="/admin/accueil#/site_client" target='_blank'>
+		<div class="cellvisualise">
+			
+	</a>
+			</div> -->
+		</div>
+	</div>
+	<script>
+
+		var app = opts;
+		var _this = this;
+		app.on('unmount-accueil-site', function(){
+			console.log('unmount-accueil-site fired');
+			app.off('unmount-accueil-site');
+			console.log('before unmount-accueil-site, ' + _this.tagName);
+			_this.unmount();
+			console.log('after unmount-accueil-site');
+		});
+
+		this.update();
+
+	</script>
+</accueil-site>

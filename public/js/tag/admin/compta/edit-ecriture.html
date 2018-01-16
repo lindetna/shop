@@ -1,0 +1,292 @@
+<edit-ecriture>
+<!-- début produits ajout -->
+	<div each={ elements }>
+		<div class="table c100">
+			<div class="cell">
+				<div class="cell">
+					<label class="s-large" for="id_journal_{ num_operation }">Journal</label>
+					<select name="id_journal_{ num_operation }" id="id_journal_{ num_operation }" class="xxl-large id_journal" disabled="{ disabled: status == 'active' }"><option value=""></option><option each="{ this.parentTag.journaux }" value="{ id }" selected="{ id_journal === id }">{ libelle }</option></select>
+				</div>
+				<div class="cell">
+					<div>
+						<label class="xs-large label-date" for="date_enregistrement_{ num_operation }">Date</label>
+				
+						<input type="hidden" name="date_enregistrement_{ num_operation }" id="date_enregistrement_{ num_operation }" value="{ convertDateToDb(date_enregistrement) }">
+						<input type="text" maxlength="10" field-for-date="date_enregistrement_{ num_operation }" required="required" class="date l-large date_enregistrement" id="front_date_enregistrement_{ num_operation }" value={ date_enregistrement } onchange={ formatDateField }>
+					</div>
+				</div>
+			</div>
+
+			<div class="cell div_info_montant">
+				<div class="inline_block center info_montant debit">
+					<div><span class="title">Total Débit</span></div>
+					<div><span class="montant">{ edit_debit_total }</span><span class="euro"> €</span></div>
+				</div>
+				<div class="inline_block center info_montant credit">
+					<div><span class="title">Total Crédit</span></div>
+					<div><span class="montant">{ edit_credit_total }</span><span class="euro"> €</span></div>
+				</div>
+				<div class="inline_block center info_montant ecart last">
+					<div><span class="title">Ecart</span></div>
+					<div><span class="montant">{ (Math.abs(edit_credit_total - edit_debit_total)).toFixed(2) }</span><span class="euro"> €</span></div>
+				</div>
+			</div>
+		</div>
+		<div class="edit_block_ecritures">
+			<div each={ ecriture, index in ecritures } id="ecriture_{ num_operation }_{ ecriture.id }_edit" class="ecriture ecritures_ids_{ num_operation }_{ num_piece }" db_id="{ ecriture.id }" action={ ecriture.action }>
+				<div class="ecriture_info_compte">
+					<label class="s-large" for="id_compte_{ num_operation }_{ ecriture.id }">Compte</label>
+					<select name="id_compte_{ num_operation }_{ ecriture.id }" id="id_compte_{ num_operation }_{ ecriture.id }" class="id_compte xxxl-large" onchange={ this.parentTag.showComplementaire } disabled="{ disabled: status == 'active' }">
+						<option value=""></option>
+						<option each={ this.parentTag.comptes } value="{ id }" reference="{ reference }" selected="{ ecriture.id_compte === id }">{ reference } { libelle }</option>
+					</select>
+					<div class="cell_block">
+						<div class="debit">
+							<label class="s-large">Débit</label>
+						</div>
+						<div class="debit">
+							<input type="text" name="debit_{ num_operation }_{ ecriture.id }" id="debit_{ num_operation }_{ ecriture.id }" value="{ parseFloat(ecriture.debit).toFixed(2) }" class="debit s-large" onchange={ changeDebitCredit } disabled="{ disabled: status == 'active' }">
+						</div>
+					</div>
+					<div class="cell_block">
+						<div class="credit">
+							<label class="s-large">Crédit</label>
+						</div>
+						<div class="credit">
+							<input type="text" name="credit_{ num_operation }_{ ecriture.id }" id="credit_{ num_operation }_{ ecriture.id }" value="{ parseFloat(ecriture.credit).toFixed(2) }" class="credit s-large" onchange={ changeDebitCredit } disabled="{ disabled: status == 'active' }">
+						</div>
+					</div>
+
+					<div class="cell_block">
+						<label for="libelle_1">Libelle</label>
+						<input name="libelle" id="libelle_{ num_operation }_{ ecriture.id }" class="libelle" name="libelle_{ num_operation }_{ ecriture.id }" type="text" value="{ ecriture.libelle }" disabled="{ disabled: status == 'active' }">
+					</div>
+					<div class="cell_block" style="vertical-align: bottom" if={ index != 0  && index != 1 }>
+						<p class="modif">
+							<img class="delete_element_img" onclick={ deleteCompte } title="Supprimer" delete_id="{ ecriture.id }" src="/img/delete.png" parentId="{ num_operation }">
+						</p>
+					</div>
+				</div>
+				<div class="ecriture_info_complementaire">
+					<div class="info_fournisseur { hidden : (ecriture.type_compte != 'fournisseur') }">
+						<label class="s-large" for="id_fournisseur_{ num_operation }_{ ecriture.id }">Fournisseur</label>
+						<select name="id_fournisseur_{ num_operation }_{ ecriture.id }" id="id_fournisseur_{ num_operation }_{ ecriture.id }" class="id_fournisseur xl-large"  disabled="{ disabled: status == 'active' }">
+							<option value=""></option>
+							<option each={ this.parentTag.fournisseurs } value="{ id }" selected="{ ecriture.id_fournisseur == id }">{ libelle }</option>
+						</select>
+					</div>
+					<div class="info_analytique { hidden : (ecriture.type_compte != 'analytique') }">
+						<label class="s-large" for="id_analytique_{ num_operation }_{ ecriture.id }">Analytique</label>
+						<select name="id_analytique_{ num_operation }_{ ecriture.id }" id="id_analytique_{ num_operation }_{ ecriture.id }" class="id_analytique xl-large"  disabled="{ disabled: status == 'active' }">
+							<option value=""></option>
+							<option each={ this.parentTag.analytiques } value="{ id }" selected="{ ecriture.id_analytique == id }">{ libelle }</option>
+						</select>
+					</div>
+					<div class="info_salarie { hidden : (ecriture.type_compte != 'salarie') }">
+						<label class="s-large" for="id_salarie_{ num_operation }_{ ecriture.id }">{ this.parentTag.IS_CE ? 'Salarié' : 'Adhérent' }</label>
+						<select name="id_salarie_{ num_operation }_{ ecriture.id }" id="id_salarie_{ num_operation }_{ ecriture.id }" class="id_salarie xl-large contacts"  disabled="{ disabled: status == 'active' }">
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="block_add_compte left">
+				<button class="blue" name="add_compte" onclick={ addCompte }>Ajouter une ligne</button>
+			</div>
+		</div>
+		<div class="right edit_actions">
+			<button name="cancel_submit_{ id }" onclick={ cancelElement } class="annuler button cancel_submit">Annuler</button>
+			<button name="save_submit_{ id }" onclick={ save } class="button enregistrer save_submit">Enregistrer</button>
+		</div>
+	</div>
+
+	<script>
+		var _this = this;
+		this.parentTag = opts.parentTag;
+		var app = this.parentTag.app;
+		this.app = this.parentTag.app;
+		this.el = this.element = opts.element;
+		this.elements = [];
+		this.elements.push(this.el);
+		//console.log('ellll', this.elements);
+		//this.parentTag.elements[this.parentTag.idElements[this.el.num_operation]]
+		this.loaded = false;
+		var permissions = app.session.permissions;
+
+
+		save (e){
+			if(_this.element){
+				e.item = _this.element;
+			}
+			if(e.item.edit_credit_total - e.item.edit_debit_total == 0) {
+				var missingParameters = _this.parentTag.save(e);
+				if(missingParameters === false)
+			    	_this.unmount();
+			}
+		}
+
+		cancelElement(e){
+			if(_this.element){
+				e.item = _this.element;
+			}
+			_this.parentTag.cancelElement(e);
+		    _this.unmount();
+		}
+	
+		changeDebitCredit (e) {
+			e.preventDefault();
+			console.log('parent', _this.parentTag);
+			_this.parentTag.changeDebitCredit_edit('change', e);
+		}
+
+		formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			console.log('caca')
+
+			if(_this.parentTag.E_M){
+				_this.parentTag.E_M.formatDateField({
+					event: e
+				});
+			}
+        }
+
+        deleteCompte(e) {
+			e.preventDefault();
+
+      	    _this.parentTag.deleteCompte('update', e);
+      	}
+
+        addCompte(e) {
+        	e.preventDefault();
+			// e.preventUpdate = true;
+
+			_this.parentTag.addLineCompte('edit', e);
+			console.log('kid:', JSON.stringify(this.el));
+			_this.elements = [];
+			_this.elements.push(this.el);
+        }
+
+        function formatName(item) {
+		    console.log('function name: ' + arguments.callee.caller.name);
+		    return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+		};
+
+        function loadSelectize (selector, index) {
+			var $select = $(selector).selectize({
+				maxItems: 1,
+				valueField: 'id',
+				labelField: 'name',
+				searchField: ['prenom', 'nom', 'numero_salarie'],
+				sortField: [
+					{field: 'prenom', direction: 'asc'},
+					{field: 'nom', direction: 'asc'}
+				],
+				options: _this.parentTag.salaries ? _this.parentTag.salaries : null,
+				persist: false,
+				openOnFocus: false,
+				closeAfterSelect: true,
+			    onType: function (str) {
+				    if (str === "") {
+				        this.close();
+				    }
+				},
+				onFocus: function () {
+					this.clear();
+				},
+				render: {
+					item: function(item, escape) {
+						var name = formatName(item);
+						return '<div>' +
+							(name ? '<span class="name">' + escape(name) + '</span>' : '') +
+							(item.numero_salarie ? '<span class="email">' + escape(item.numero_salarie) + '</span>' : '') +
+						'</div>';
+					},
+					option: function(item, escape) {
+						var name = formatName(item);
+						var label = name || item.numero_salarie;
+						var caption = name ? item.numero_salarie : null;
+						return '<div>' +
+							'<span class="label">' + escape(label) + '</span>' +
+							(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+						'</div>';
+					}
+				},
+			});
+			
+			var selectize = $select[0].selectize;
+
+			var hackToClose = false;
+			selectize.on('item_remove', function(value, $item) {
+			    hackToClose = true;
+			});
+			selectize.on('dropdown_open', function($dropdown) {
+			    if ( hackToClose )
+			        selectize.close();
+
+			    hackToClose = false;
+			});
+
+			selectize.setValue(_this.el.ecritures[index].id_salarie,'');
+        }
+
+        this.app.loadScript('/js/admin/selectize.min.js','selectize_js',
+         	function () {
+         		var selector = '';
+         		for(var index in _this.el.ecritures) {
+         			selector = '#id_salarie_' + _this.el.num_operation + '_' + _this.el.ecritures[index].id;
+         			if($(selector).length > 0) {
+		        		loadSelectize(selector, index);
+		       		}
+		        }
+		    }
+		);
+
+        this.convertDateToDb = function convertDateToDb(date){   
+            var year = date.substr(6, 4);
+		    var month = date.substr(3,2);
+		    var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			return convertedDate;
+        }
+
+        this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+        }
+
+		this.on('mount', function(){
+			var credit = 0;
+			var debit = 0;
+			var ecritures = _this.el.ecritures;
+			for(var index in ecritures) {
+				debit += parseFloat(ecritures[index].debit);
+				credit += parseFloat(ecritures[index].credit);
+				let reference = _this.parentTag.comptes[_this.parentTag.idComptes[ecritures[index].id_compte]].reference;
+				if(reference != "") {
+					if (reference[0] === '6' || reference[0] === '7') {
+						ecritures[index].type_compte = "analytique";
+					} else if (reference.substring(0, 3) === "411") {
+						ecritures[index].type_compte = "salarie";
+					} else if (reference.substring(0, 3) === "401") {
+						ecritures[index].type_compte = "fournisseur";
+					}
+				}
+			}
+			_this.el.edit_credit_total = credit.toFixed(2);
+			_this.el.edit_debit_total = debit.toFixed(2);
+			
+			_this.update();
+			$('#front_date_enregistrement_' +  _this.el.num_operation).datepicker({
+			 	dateFormat: 'dd/mm/yy'
+			});
+		});
+	</script>
+</edit-ecriture>

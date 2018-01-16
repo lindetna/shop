@@ -1,0 +1,1154 @@
+<impressions-salaries>
+    <div if={ COMPTA_READ } class="content with_submenu">
+        <div class="impression_letf_right">
+            <div class="left_impression">
+                <img class="hidden" id="logo_entreprise" src="">
+            </div>
+            <div class="right_impression">
+                <span class="hidden" id="exerciceName">Exercice : { nom_exercice }</span>
+                <!-- <span class="hidden filtreName">Filtre(s) :  </span>
+                <textarea class="hidden" id="filtres_print" rows="7">{ tactac }</textarea> -->
+            </div>
+        </div>
+        <header class="comptes-title center opened" id="filtres" onclick={ showContents }> Filtres </header>
+        <div class="slide-up hidden" id="containerFiltres">
+            <div class="table filtres hidden">
+                <div class="row_1">
+                    <div class="cell_1">
+                        <p>Nom / Prénom / Matricule</p>
+                        <input type="text" name="nom_prenom_matricule">
+                    </div>
+                    <div class="cell_2">
+                        <p>Activités</p>
+                        <input type="text" name="nom_prenom_matricule">
+                    </div>
+                    <div class="cell_3">Statut</div>
+                    <div class="cell_4">
+                        <select class="statut" name="statut">
+                            <option disabled selected>Choisir une Statut</option>
+                            <option value="cadre" selected="{ isEdit && el.statut == 'cadre' ? 'selected' : '' }">Cadre</option>
+                            <option value="employe" selected="{ isEdit && el.statut == 'employe' ? 'selected' : '' }">Employé</option>
+                            <option value="etam" selected="{ isEdit && el.statut == 'etam' ? 'selected' : '' }">ETAM</option>
+                            <option value="ouvrier" selected="{ isEdit && el.statut == 'ouvrier' ? 'selected' : '' }">Ouvrier</option>
+                        </select>
+                    </div>
+                    <div class="cell_5">Dette</div>
+                    <div class="cell_6">
+                        <select class="Dete" name="Dette">
+                            <option value="" disabled selected></option>
+                        </select>
+                    </div>    
+                </div>
+                <div class="row_2">
+                    <div class="cell_1"></div>
+                    <div class="cell_2"></div>
+                    <div class="cell_3">Quotient</div>
+                    <div class="cell_4">
+                        <input type="text" name="quotient1" class="quotient1">
+                        <input type="text" name="quotient2" class="quotient2">
+                    </div>
+                    <div class="cell_5">Service</div>
+                    <div class="cell_6">
+                        <select class="Dete" name="Dette"> 
+                            <option value="" disabled selected>Choisir un service</option>
+                            <option value=""></option>
+                        </select>
+                    </div>    
+                </div>
+                <div class="row_3">
+                    <div class="cell_1"></div>
+                    <div class="cell_2"></div>
+                    <div class="cell_3">Age</div>
+                    <div class="cell_4">
+                        <input type="text" name="age1" class="age1" size="5">
+                        <input type="text" name="age2" class="age2" size="5">
+                    </div>
+                    <div class="cell_5"></div>  
+                    <div class="cell_6"></div>   
+                </div>
+            </div>
+        </div>
+        <header class="comptes-title center closed" id="Impression" onclick={ showContents }> Impression Salariés</header>
+        <div class="slide-up" id="containerImpression">
+            <div id="test1" class="test">
+                <div class="try">
+                    <img class="image_print" src="/img/salaries/liste-des-salaries.png" value="1" alt="liste salariés" onclick= { Onglet_grandLivre }>
+                    <img class="" src="/img/salaries/dettes-par-salaries.png" value="2" alt="dettes par salariés" onclick= { Onglet_grandLivre1 }>
+                    <img class="" src="/img/salaries/liste-des-salaries-famille.png" value="3" alt="liste des salariés et familles">
+                    <img class="" src="/img/salaries/dettes-par-activites.png" value="4" alt="dettes par activité">
+                    <img class="" src="/img/salaries/inscriptions-aux-activites.png" value="5" alt="inscriptions aux activités">
+                    <img class="" src="/img/salaries/situation-de-compte.png" value="6" alt="situation de compte">
+                </div>
+            </div>
+            <div id="list_salar1" class="list_salar hidden">
+                <div class="table table_impressions_liste_salaries">
+                    <div class="cell_1 button_retour" onclick={ retourPageImpression } value="2"></div>
+                    <a class="cell_2 button_export" href="#"></a>
+                    <div class="cell_3 button_imprimer" id="lance_impression" onclick={ lanceImpression }></div>
+                    <div class="cell_4"><b>LISTE SALARIES</b></div>
+                    <div class="cell_5"></div>
+                </div>
+                <div class="table" id="tables">
+                    <div class="entete_tableau" id="entete_salarie">                              
+                        <div class="cell_1">Matricule</div>
+                        <div class="cell_2">titre/Nom/Prenom</div>
+                        <div class="cell_3">Adresse/Code Postal/Ville</div>
+                        <div class="cell_4">Date de naissance</div>
+                        <div class="cell_5">Solde</div>
+                        <div class="cell_6">Quotient</div>
+                    </div>
+                    <div class="impression" each={ salaries }>
+                       <div class="cell_1">{ numero_salarie }</div>
+                        <div class="cell_2">{ titre } { nom } { prenom }</div>                             
+                        <div class="cell_3">{ numero_et_voie } { code_postal } { ville }</div>                         
+                        <div class="cell_4" id="cell_4">{ convertDateToView(date_de_naissance) }</div>
+                        <div class="cell_5">{ solde }</div>
+                        <div class="cell_6">{ quotient }</div>
+                    </div>
+                </div>
+            </div>
+            <div id="dettes_salaries2" class="dettes_salaries hidden">
+                <div class="table table_impressions_dette_salaries">
+                    <div class="cell_1 button_retour" onclick={ retourPageImpression } value="2"></div>
+                    <a class="cell_2 button_export" href="#"></a>
+                    <div class="cell_3 button_imprimer" id="lance_impression" onclick={ lanceImpression }></div>
+                    <div class="cell_4"><b>DETTES PAR SALARIES</b></div>
+                    <div class="cell_5"></div>
+                </div>
+                <div class="detteSalaries"  each={ inscriptions }>
+                    <div class="table entete_tableau" id="entete_tableau">
+                        <div class="cell_1">Matricule</div>
+                        <div class="cell_2">Titre/Nom/Prénom</div>                             
+                        <div class="cell_3">Inscription</div>                         
+                        <div class="cell_4">Montant</div>                               
+                        <div class="cell_5">
+                            <div class="first_sous_cell">Participation CE</div>
+                            <div>Participation salarié</div>
+                        </div>
+                        <div class="cell_6">
+                            <div class="first_sous_cell">Réglement</div>
+                            <div>Solde</div>
+                        </div>
+                    </div>
+                    <div class="table entete_tableau show_infos" id="entete_tableau" each={ produits }>
+                        <div class="cell_1">{ this.salaries[this.idSalaries[id_salarie]].numero_salarie }</div>
+                        <div class="cell_2">
+                            { this.salaries[this.idSalaries[id_salarie]].titre } { this.salaries[this.idSalaries[id_salarie]].nom } { this.salaries[this.idSalaries[id_salarie]].prenom }
+                        </div>
+                        <div class="cell_3" >
+                            { this.elementProduits[this.idProduits[id_produit]].libelle } : QTÉ { quantite }
+                        </div>                         
+                        <div class="cell_4">{ montant }</div>                               
+                        <div class="cell_5">
+                            <div class="first_sous_cell">{ participation_ce }</div>
+                            <div>{ participation_salarie }</div>
+                        </div>
+                        <div class="cell_6">
+                            <div class="first_sous_cell">{ reglement }</div>
+                            <div>{ solde }</div>
+                        </div>
+                    </div>
+                    <div class="table total entete_tableau" id="tableau_bas">                              
+                        <div class="cell_1"></div>
+                        <div class="cell_2"></div>
+                        <div class="cell_3">TOTAL</div>
+                        <div class="cell_4">{ montant.toFixed(2) }</div>
+                        <div class="cell_5">{ participation_ce.toFixed(2) }</div>
+                        <div class="cell_6 { red : (participation_salarie != 0) }">{ participation_salarie.toFixed(2) }</div>
+                    </div> 
+                </div>
+            </div>
+            <div id="list_salaries_familles3" class="list_salaries_familles hidden">
+                <div class="cell1">
+                    <div class="image">
+                        <img  src="/img/button_retour.png"  alt="revenir" value="3" onclick={ retourPageImpression }>
+                        <img src="/img/button_export.png" alt="exportbutton" value="">
+                        <img src="/img/imprimer.png" alt="imprimer_button"> 
+                    </div>
+                    <p> INSCRIPTIONS AUX ACTIVITES </p>
+                </div>
+            </div>
+            <div id="dettes_activites4" class="dettes_activites hidden">
+                <div class="cell1">
+                     <img src="/img/button_retour.png" alt="revenir" value="4" onclick={ retourPageImpression }>
+                    <img src="/img/button_export.png" alt="exportbutton">
+                    <img src="/img/imprimer.png" alt="imprimer_button"> <p> DETTES PAR ACTIVITES </p>
+                </div>
+            </div>
+            <div id="inscriptions_activites5" class="inscriptions_activites hidden">
+                <div class="cell1">
+                     <img src="/img/button_retour.png" alt="revenir" value="5" onclick={ retourPageImpression }>
+                    <img src="/img/button_export.png" alt="exportbutton">
+                    <img src="/img/imprimer.png" alt="imprimer_button"> <p> INSCRIPTIONS AUX ACTIVITES </p>
+                </div>
+            </div>
+            <div id="situation_compte6" class="situation_compte hidden">
+                <div class="cell1">
+                     <img src="/img/compta/button_retour.png" alt="revenir" value="6" onclick={ retourPageImpression }>
+                    <img src="/img/button_export.png" alt="exportbutton">
+                    <img src="/img/imprimer.png" alt="imprimer_button"> <p> SITUATION DE COMPTE </p>
+                </div>
+            </div> 
+        </div>
+        <header class="comptes-title center opened" id="Editeur" onclick= { showContents }> Editeur d'état </header>
+        <div class="slide-up hidden">
+            <div class="container" id="containerEditeur">
+                <div class="editeur_filtres">
+                    <div class="button_export h100 c30" onclick={ tata }></div>
+                    <!-- <a class="cell_2 button_export" href="/admin/salaries/editeur_etat?format=excel"></a> -->
+                    <!-- <img id="FiltreImprimer" src="/img/imprimer.png" value="" alt="liste salariés"> -->
+                    <!-- <div class="cell_3 c30 button_imprimer" id="lance_impression" onclick={ lanceImpression }></div> -->
+                    <!-- <div class="champs">
+                        <div class="">
+                            <p class="tri1"> 1 -Triée </p>
+                            <select class="" name="tri1">
+                                <option value="" disabled selected>Champs</option>
+                                <option each={ champSalaries }>{text}</option>     
+                            </select>
+                        </div>
+                        <div class="">
+                            <p class="tri2"> 2 -Triée </p> 
+                            <select class="" name="tri2" >
+                                <option value="" disabled selected>Champs</option>
+                                <option each={ champSalaries }>{text}</option>         
+                            </select>
+                        </div> 
+                    </div> -->
+                    <!-- <div class="etat">
+                        <div class="">
+                            <p> Nom de l'état</p>
+                            <input type="text" name="nom_etat" class="nom_etat">
+                        </div>
+                        <div class="">
+                            <p> Liste des états </p> 
+                            <select class="liste_etat" name="liste_etat" placeholder ="Choisir un état" >
+                                <option value="" disabled selected>Choisir un état</option>
+                                <option  each={ salaries } value="hurr">{titre}</option>
+                            </select>
+                        </div>  
+                    </div> -->
+                </div>
+                <!-- <div class="annuler_enregistrer">
+                    <button class="button annuler" name="cancel_submit_">Annuler</button>
+                    <button class="button enregistrer" name="save_submit_">Enregistrer</button>
+                </div> -->
+                <div class="filtres_generaux">
+                    <div class="column">
+                        <!-- <select id="trie_function" class="fonction trie_function" name="fonction" onchange={ changeField }>
+                            <option value="" disabled selected>Fonction</option>
+                            <option class="somme" value="somme">Somme</option>
+                            <option class="nombre" value="nombre">Nombre</option>
+                            <option class="moyenne" value="moyenne">Moyenne</option>
+                        </select>  -->
+                        <select class="champs" id="champs1" name="champs" field-name="1" onchange={ changeField }>
+                            <option value="" disabled selected>Champs</option>
+                            <option if={ IS_CE } each={ champSalaries }>{text}</option>
+                        </select>
+                        <div id="nombre_div" class="nombre_div hidden">Nombre : { number }</div>
+                        <div id="somme_div" class="somme_div hidden">Somme : { number }</div>
+                        <div id="moyenne_div" class="moyenne_div hidden">Moyenne : { number }</div>
+                        <div class="tictac">
+                            <div each={ salaries } class="row_1" if={ getFields(1, id)} value={ salaries.length }>
+                                <div class="div_value">
+                                    { getFields(1, id) }
+                                </div>                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <!-- <select class="fonction trie_function2" name="fonction" onchange={ changeField }>
+                            <option value="" disabled selected>Fonction</option>
+                            <option class="somme" value="somme">Somme</option>
+                            <option class="nombre" value="nombre">Nombre</option>
+                            <option class="moyenne" value="moyenne">Moyenne</option>
+                        </select>  -->
+                        <select class="champs" id="champs2" name="champs" field-name="2" onchange={ changeField }>
+                            <option value="" disabled selected>Champs</option>
+                            <option each={ champSalaries }>{text}</option> 
+                        </select>
+                        <div id="nombre_div" class="nombre_div2 hidden">Nombre : { number2 }</div>
+                        <div id="somme_div" class="somme_div2 hidden">Somme : { number2 }</div>
+                        <div id="moyenne_div" class="moyenne_div2 hidden">Moyenne : { number2 }</div>
+                        <div class="tictac">
+                            <div each={ salaries } class="row_1" if={ getFields(2, id) }>
+                                <div class="div_value2">
+                                    { getFields(2, id) }
+                                </div>                                  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <!-- <select class="fonction trie_function3" name="fonction" onchange={ changeField }>
+                            <option value="" disabled selected>Fonction</option>
+                            <option class="somme" value="somme">Somme</option>
+                            <option class="nombre" value="nombre">Nombre</option>
+                            <option class="moyenne" value="moyenne">Moyenne</option>
+                        </select>  -->
+                        <select class="champs" id="champs3" name="champs"  field-name="3" onchange={ changeField }>
+                            <option value="" disabled selected>Champs</option>
+                            <option each={ champSalaries }>{text}</option>   
+                        </select>
+                        <div id="nombre_div" class="nombre_div3 hidden">Nombre : { number3 }</div>
+                        <div id="somme_div" class="somme_div3 hidden">Somme : { number3 }</div>
+                        <div id="moyenne_div" class="moyenne_div3 hidden">Moyenne : { number3 }</div>
+                        <div class="tictac">
+                            <div each={ salaries } class="row_1" if={ getFields(3, id) }>
+                                <div class="div_value3">
+                                    { getFields(3, id) }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <!-- <select class="fonction trie_function4" name="fonction" onchange={ changeField }>
+                            <option value="" disabled selected>Fonction</option>
+                            <option class="somme" value="somme">Somme</option>
+                            <option class="nombre" value="nombre">Nombre</option>
+                            <option class="moyenne" value="moyenne">Moyenne</option>
+                        </select>  -->
+                        <select class="champs" id="champs4" name="champs" field-name="4" onchange={ changeField }>
+                            <option value="" disabled selected>Champs</option>
+                            <option each={ champSalaries }>{text}</option> 
+                        </select>
+                        <div id="nombre_div" class="nombre_div4 hidden">Nombre : { number4 }</div>
+                        <div id="somme_div" class="somme_div4 hidden">Somme : { number4 }</div>
+                        <div id="moyenne_div" class="moyenne_div4 hidden">Moyenne : { number4 }</div>
+                        <div class="tictac">
+                            <div each={ salaries } class="row_1" if={ getFields(4, id) }>
+                                <div class="div_value4">
+                                    { getFields(4, id) }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <!-- <select class="fonction trie_function5" name="fonction" onchange={ changeField }>
+                            <option value="" disabled selected>Fonction</option>
+                            <option class="somme" value="somme">Somme</option>
+                            <option class="nombre" value="nombre">Nombre</option>
+                            <option class="moyenne" value="moyenne">Moyenne</option>
+                        </select>  -->
+                        <select class="champs" id="champs5" name="champs" field-name="5" onchange={ changeField }>
+                            <option value="" disabled selected>Champs</option>
+                            <option each={ champSalaries }>{text}</option>         
+                        </select>
+                        <div id="nombre_div" class="nombre_div5 hidden">Nombre : { number5 }</div>
+                        <div id="somme_div" class="somme_div5 hidden">Somme : { number5 }</div>
+                        <div id="moyenne_div" class="moyenne_div5 hidden">Moyenne : { number5 }</div>
+                        <div class="tictac">
+                            <div each={ salaries } class="row_1" if={ getFields(5, id) }>
+                                <div class="div_value5">
+                                    { getFields(5, id) }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                       <!--  <select class="fonction trie_function6" name="fonction" onchange={ changeField }>
+                            <option value="" disabled selected>Fonction</option>
+                            <option class="somme" value="somme">Somme</option>
+                            <option class="nombre" value="nombre">Nombre</option>
+                            <option class="moyenne" value="moyenne">Moyenne</option>
+                        </select>  -->
+                        <select class="champs" id="champs6" name="champs" field-name="6" onchange={ changeField }>
+                            <option value="" disabled selected >Champs</option>
+                            <option each={ champSalaries }>{text}</option>
+                        </select>
+                        <div id="nombre_div" class="nombre_div6 hidden">Nombre : { number6 }</div>
+                        <div id="somme_div" class="somme_div6 hidden">Somme : { number6 }</div>
+                        <div id="moyenne_div" class="moyenne_div6 hidden">Moyenne : { number6 }</div>
+                        <div class="tictac">
+                            <div each={ salaries } class="row_1" if={ getFields(6, id) }>
+                                <div class="div_value6">
+                                    { getFields(6, id) }
+                                </div>
+                            </div>
+                        </div>
+                    </div>                            
+                </div>
+                <div class="blue_test">
+                    <div class="filtres_generaux_hidden" align="center">
+                        <table align="center">
+                            <tbody class="hidden">
+                                <tr>
+                                    <th class="tab_cell1" if={ $("#champs1").val() != null }>{ $("#champs1").val() }</th>
+                                    <th class="tab_cell2" if={ $("#champs2").val() != null }>{ $("#champs2").val() }</th>
+                                    <th class="tab_cell3" if={ $("#champs3").val() != null }>{ $("#champs3").val() }</th>
+                                    <th class="tab_cell4" if={ $("#champs4").val() != null }>{ $("#champs4").val() }</th>
+                                    <th class="tab_cell5" if={ $("#champs5").val() != null }>{ $("#champs5").val() }</th>
+                                    <th class="tab_cell6" if={ $("#champs6").val() != null }>{ $("#champs6").val() }</th>
+                                </tr>
+                                <tr each={ salaries }>
+                                    <td class="tab_cell1" if={ $("#champs1").val() != null }>{ getFields(1, id) }</td>
+                                    <td class="tab_cell2" if={ $("#champs2").val() != null }>{ getFields(2, id) }</td>
+                                    <td class="tab_cell3" if={ $("#champs3").val() != null }>{ getFields(3, id) }</td>
+                                    <td class="tab_cell4" if={ $("#champs4").val() != null }>{ getFields(4, id) }</td>
+                                    <td class="tab_cell5" if={ $("#champs5").val() != null }>{ getFields(5, id) }</td>
+                                    <td class="tab_cell6" if={ $("#champs5").val() != null }>{ getFields(6, id) }</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                     
+            </div>
+        </div>
+    </div>
+        
+    <script>
+        var app = opts;
+        this.app = opts;
+        var _this = this;
+        _this.comptesMovChecked = false;
+        var permissions = app.session.permissions;
+        var IS_CE = this.IS_CE = permissions.IS_CE || false;
+        var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+        var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+        app.on('unmount-impressions-salaries', function(){
+            app.off('unmount-impressions-salaries');
+            _this.unmount();
+        });
+        _this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+            _this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+            if( _this.loaded ){
+            }
+        });
+
+        _this.app.loadScript('/js/admin/FileSaver.js','FIleSaver_js', function(){
+        });
+
+        _this.app.loadScript('/js/admin/tableexport.js','tableexport_js', function(){
+            
+        });
+
+//----------convertir la date en format jj/mm/annee---------------
+        _this.convertDateToView = function convertDateToView(date){
+            if(_this.E_M){
+                return _this.E_M.convertDateToView(date);
+            }
+        }
+//-------FIN---convertir la date en format jj/mm/annee---------------
+         Onglet_grandLivre(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#list_salar' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+        Onglet_grandLivre1(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#dettes_salaries' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+        Onglet_grandLivre2(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#list_salaries_familles' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+        Onglet_grandLivre3(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#dettes_activites' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+
+        // var id = params.id || null
+
+        // if(params.id)
+        //     id = params.id
+        // else 
+        //     id = null
+
+        Onglet_grandLivre4(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            $('#inscriptions_activites' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+        Onglet_grandLivre5(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            $('#situation_compte' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+        retourPageImpression(e) {
+            var indexdiv = $(e.currentTarget).attr('value');
+            $('#list_salar1').addClass('hidden');
+            $('#dettes_salaries' + indexdiv).addClass('hidden');
+            $('#list_salaries_familles' + indexdiv).addClass('hidden');
+            $('#dettes_activites' + indexdiv).addClass('hidden');
+            $('#inscriptions_activites' + indexdiv).addClass('hidden');
+            $('#situation_compte' + indexdiv).addClass('hidden');
+            $('.test').removeClass('hidden');   
+        }
+
+        _this.app.on('unmount-impressions-salaries', function(){
+            _this.app.off('unmount-impressions-salaries');
+            _this.unmount();
+        });
+
+        this.elements = [
+        ];
+        this.idElements = {};
+
+
+        showContents(e){
+            e.preventDefault();
+            e.preventUpdate = true;
+            if(_this.E_M){
+                _this.E_M.showContents(e);
+            }
+        }
+// ----------------------debut elementProduit--------------------------------
+
+        this.elementProduits=[];
+        this.idProduits={};
+        //console.log("totototyo" + this.elements)
+        function getProduit() {
+           var getParams ={ type_element: 'produit'};
+             if(document.getElementById('id_exercice')){
+                 getParams.id_exercice = document.getElementById('id_exercice').value;
+             } else if( _this.app.session.exercices.selected ){
+                 getParams.id_exercice = _this.app.session.exercices.selected;
+             }
+            $.getJSON('/admin/activites/activites', getParams, function (data){ 
+                //console.log('getproduits data :: ' + JSON.stringify(data));
+                if(data && data.elements){
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var fields = { id: 'id', id_activite: 'id_activite', id_modele: 'id_modele', id_entreprise: 'id_entreprise', libelle: 'libelle', image_url: 'image_url', public_internet: 'public_internet', information_internet: 'information_internet', informations: 'informations', type_modele: 'type_modele', id_exercice: 'id_exercice', visible: 'visible'};
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                        }
+                        _this.idProduits[d['id']] = i;
+                        _this.elementProduits.push(d);
+                    }
+                    _this.update();
+                    //console.log('getProduits produits: ', JSON.stringify(_this.elementProduits ));
+                    //console.log('getProduits idProduits: ', JSON.stringify(_this.idProduits));
+                }
+            });
+        }
+        getProduit();
+//--------------------------fin elementProduit------------------------------------------------
+        this.inscriptions = [];
+        this.idInscriptions = {};
+
+        function getInscription() {
+            var getParams = { };
+
+            if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            } else if( _this.app.session.exercices.selected ){
+                getParams.id_exercice = _this.app.session.exercices.selected;
+            }
+            $.getJSON('/admin/inscription/inscription', getParams, function (data){ 
+                //console.log('getInscription data', JSON.stringify(data));
+                if(data && data.elements){
+                    _this.inscriptions = [];
+                    _this.idInscriptions = { };
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var fields = { id: 'id', id_salarie: 'id_salarie', quantite: 'quantite', date_inscription: 'date_inscription', date_validite: 'date_validite', participation_ce: 'participation_ce', id_produit: 'id_produit', montant: 'montant', participation_salarie: 'participation_salarie', solde: 'solde', libelle: 'libelle' };
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                        }
+                        _this.idInscriptions[d['id']] = i;
+                        _this.inscriptions.push(d);
+                    }
+                    _this.update();
+                    console.log('inscriptionsss',JSON.stringify(_this.inscriptions));
+                }
+            });
+
+        }
+         //getInscription();
+
+         function getInscriptionBySalarie(){            
+             var getParams = { bySalarie: true };
+            if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            } else if( _this.app.session.exercices.selected ){
+                getParams.id_exercice = _this.app.session.exercices.selected;
+            }
+
+            $.getJSON('/admin/inscription/inscription', getParams, function (data){ 
+                //console.log('datasss', data)
+                if(data && data.elements){
+                    _this.inscriptions = [];
+                    _this.idInscriptions = {};
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var currentIdSalarie=0;
+                    var fields = {  quantite: 'quantite', 
+                                    participation_ce: 'participation_ce', 
+                                    id_produit: 'id_produit', 
+                                    montant: 'montant', 
+                                    participation_salarie: 'participation_salarie', 
+                                    solde: 'solde', 
+                                    reglement: 'reglement'};
+
+                    for(i=0; i<l; i++){
+                        if(currentIdSalarie != data.elements[i].id_salarie) {
+                            if(i != 0) {
+                                _this.idInscriptions[d['id']] = i;
+                                _this.inscriptions.push(d);
+                            }
+
+                            currentIdSalarie = data.elements[i].id_salarie;
+                            d = { };
+                            d['id'] = data.elements[i].id;
+                            d['id_salarie'] = data.elements[i].id_salarie;
+                            d['produits'] = [];
+                            d['participation_salarie'] = 0;
+                            d['participation_ce'] = 0;
+                            d['montant'] = 0;
+                            d['reglement'] = 0;
+                            d['solde'] = 0;
+                        }
+                        
+                        var produit = new Object();
+                        for(field in fields) {
+                            produit[ fields[ field ] ] = data.elements[i][field];
+                        }
+                        if (!isNaN(d)){
+                            d['participation_salarie'] += parseFloat(data.elements[i]['participation_salarie']);
+                             d['participation_ce'] += parseInt(data.elements[i]['participation_ce']);
+                            d['montant'] += parseInt(data.elements[i]['montant']);
+                            d['reglement'] += parseInt(data.elements[i]['reglement']);
+                            d['solde'] += parseInt(data.elements[i]['solde']);
+                        }
+                        d.produits.push(produit)
+                    }
+                    _this.idInscriptions[d['id']] = i;
+
+                    _this.inscriptions.push(d);
+ 
+                    _this.update();
+                    console.log('inscriptionsss', JSON.stringify( _this.inscriptions));
+
+                }
+
+            });
+
+        }
+        getInscriptionBySalarie(); 
+//----------------FONCTION ENUMERANT LA TABLE SALARIES----------------
+        this.salaries = [];
+        this.idSalaries = {};
+
+        function getSalaries(){
+            getElements({
+                tag: _this,
+                url: '/admin/salaries/salaries', 
+                elements: _this.salaries,
+                idElements: _this.idSalaries,
+                fields: {
+                    id: 'id', 
+                    id_entreprise: 'id_entreprise', 
+                    id_exercice: 'id_exercice', 
+                    numero_salarie: 'numero_salarie', 
+                    prenom: 'prenom', 
+                    nom: 'nom', 
+                    titre: 'titre',
+                    numero_et_voie: 'numero_et_voie', 
+                    numero_appartement_ou_etage: 'numero_appartement_ou_etage', 
+                    entree_batiment: 'entree_batiment', 
+                    lieu_dit_boite_postale: 'lieu_dit_boite_postale', 
+                    code_postal: 'code_postal',  
+                    ville: 'ville', 
+                    pays: 'pays', 
+                    identifiant_internet: 'identifiant_internet', 
+                    mot_de_passe: 'mot_de_passe', 
+                    nom_de_naissance: 'nom_de_naissance', 
+                    date_de_naissance: 'date_de_naissance', 
+                    situation_familiale: 'situation_familiale', 
+                    telephone: 'telephone', 
+                    portable: 'portable', 
+                    email_personnel: 'email_personnel', 
+                    email_professionnel: 'email_professionnel', 
+                    date_entree: 'date_entree', 
+                    date_sortie: 'date_sortie',
+                    nombre_enfant: 'nombre_enfant',
+                    nombre_ayant_droit: 'nombre_ayant_droit', 
+                    banque: 'banque', 
+                    titulaire: 'titulaire', 
+                    rib: 'rib', 
+                    iban: 'iban', 
+                    bic: 'bic', 
+                    option_1: 'option_1', 
+                    option_2: 'option_2', 
+                    option_3: 'option_3', 
+                    option_4: 'option_4', 
+                    option_5: 'option_5', 
+                    option_6: 'option_6', 
+                    option_7: 'option_7', 
+                    option_8: 'option_8', 
+                    option_9: 'option_9', 
+                    option_10: 'option_10', 
+                    quotient: 'quotient', 
+                    quotientN1: 'quotientN1', 
+                    quotientN2: 'quotientN2', 
+                    tranche_salaire: 'tranche_salaire', 
+                    valeur: 'valeur',
+                    solde: 'solde', 
+                    reglement: 'reglement', 
+                    participation_adherent: 'participation_adherent',
+                    participation_association: 'participation_association', 
+                    fonction: 'fonction', 
+                    visible: 'visible', 
+                    numero_matricule: 'numero_matricule'},
+                getParameters: { type_element: 'salaries'},
+                type: 'salaries',
+                end: function(tag){ 
+                    tag.loaded = true; 
+                },
+            });
+        }
+        getSalaries();
+
+        this.champSalaries = [
+            { text: 'numero_salarie'},
+            { text: 'prenom'},
+            { text: 'nom'},
+            { text: 'titre'},
+            { text: 'numero_et_voie'},
+            { text: 'numero_appartement_ou_etage'},
+            { text: 'entree_batiment'},
+            { text: 'lieu_dit_boite_postale'},
+            { text: 'code_postal'},
+            { text: 'ville'},
+            { text: 'pays'},
+            { text: 'identifiant_internet'},
+            { text: 'mot_de_passe'},
+            { text: 'nom_de_naissance'},
+            { text: 'date_de_naissance' },
+            { text: 'situation_familiale' },
+            { text: 'telephone' },
+            { text: 'portable' },
+            { text: 'email_personnel' },
+            { text: 'email_professionnel' },
+            { text: 'date_entree' },
+            { text: 'date_sortie' },
+            { text: 'nombre_enfant' },
+            { text: 'nombre_ayant_droit' },
+            { text: 'banque' },
+            { text: 'titulaire' },
+            { text: 'rib' },
+            { text: 'iban' },
+            { text: 'bic' },
+            { text: 'option_1' },
+            { text: 'option_2' },
+            { text: 'option_3' },
+            { text: 'option_4' },
+            { text: 'option_5' },
+            { text: 'option_6' },
+            { text: 'option_7' },
+            { text: 'option_8' },
+            { text: 'option_9' },
+            { text: 'option_10' },
+            { text: 'quotient' },
+            { text: 'quotientN1' },
+            { text: 'quotientN2' },
+            { text: 'tranche_salaire' },
+            { text: 'valeur' },
+            { text: 'solde' },
+            { text: 'reglement' },
+            { text: 'participation_adherent' },
+            { text: 'participation_association' },
+            { text: 'fonction' },
+            { text: 'visible' },
+            { text: 'numero_matricule' }
+        ];
+
+        _this.fields = {
+            1: '',
+            2: '',
+            3: '',
+            4: '',
+            5: '',
+            6: '',
+        };
+
+        this.getFields = function getFields(fieldName, id){
+            /*console.log('getFields: ' + fieldName + ' :: ' + _this.salaries[ _this.idSalaries[id] ][ _this.fields[ fieldName ] ]);*/
+            //console.log(id)
+            var number = this.number = $(".div_value").length;
+            var number2 = this.number2 = $(".div_value2").length;
+            var number3 = this.number3 = $(".div_value3").length;
+            var number4 = this.number4 = $(".div_value4").length;
+            var number5 = this.number5 = $(".div_value5").length;
+            var number6 = this.number6 = $(".div_value6").length;
+
+            /*console.log("vdhkfhdskd :::: " + number);*/
+             /*this.number = $(".div_value").length;*/
+            //console.log($("#trie_function").val())
+            if ($(".trie_function").val() == "nombre") {
+                $(".nombre_div").removeClass("hidden");
+                $(".somme_div").addClass("hidden");
+                $(".moyenne_div").addClass("hidden");
+            }
+            if ($(".trie_function").val() == "somme") {
+                $(".somme_div").removeClass("hidden");
+                $(".moyenne_div").addClass("hidden");
+                $(".nombre_div").addClass("hidden");
+            }
+            if ($(".trie_function").val() == "moyenne") {
+                $(".moyenne_div").removeClass("hidden");
+                $(".somme_div").addClass("hidden");
+                $(".nombre_div").addClass("hidden");
+            }
+
+            if ($(".trie_function2").val() == "nombre") {
+                $(".nombre_div2").removeClass("hidden");
+                $(".somme_div2").addClass("hidden");
+                $(".moyenne_div2").addClass("hidden");
+            }
+            if ($(".trie_function2").val() == "somme") {
+                $(".somme_div2").removeClass("hidden");
+                $(".moyenne_div2").addClass("hidden");
+                $(".nombre_div2").addClass("hidden");
+            }
+            if ($(".trie_function2").val() == "moyenne") {
+                $(".moyenne_div2").removeClass("hidden");
+                $(".somme_div2").addClass("hidden");
+                $(".nombre_div2").addClass("hidden");
+            }
+
+            if ($(".trie_function3").val() == "nombre") {
+                $(".nombre_div3").removeClass("hidden");
+                $(".somme_div3").addClass("hidden");
+                $(".moyenne_div3").addClass("hidden");
+            }
+            if ($(".trie_function3").val() == "somme") {
+                $(".somme_div3").removeClass("hidden");
+                $(".moyenne_div3").addClass("hidden");
+                $(".nombre_div3").addClass("hidden");
+            }
+            if ($(".trie_function3").val() == "moyenne") {
+                $(".moyenne_div3").removeClass("hidden");
+                $(".somme_div3").addClass("hidden");
+                $(".nombre_div3").addClass("hidden");
+            }
+
+            if ($(".trie_function4").val() == "nombre") {
+                $(".nombre_div4").removeClass("hidden");
+                $(".somme_div4").addClass("hidden");
+                $(".moyenne_div4").addClass("hidden");
+            }
+            if ($(".trie_function4").val() == "somme") {
+                $(".somme_div4").removeClass("hidden");
+                $(".moyenne_div4").addClass("hidden");
+                $(".nombre_div4").addClass("hidden");
+            }
+            if ($(".trie_function4").val() == "moyenne") {
+                $(".moyenne_div4").removeClass("hidden");
+                $(".somme_div4").addClass("hidden");
+                $(".nombre_div4").addClass("hidden");
+            }
+
+            if ($(".trie_function5").val() == "nombre") {
+                $(".nombre_div5").removeClass("hidden");
+                $(".somme_div5").addClass("hidden");
+                $(".moyenne_div5").addClass("hidden");
+            }
+            if ($(".trie_function5").val() == "somme") {
+                $(".somme_div5").removeClass("hidden");
+                $(".moyenne_div5").addClass("hidden");
+                $(".nombre_div5").addClass("hidden");
+            }
+            if ($(".trie_function5").val() == "moyenne") {
+                $(".moyenne_div5").removeClass("hidden");
+                $(".somme_div5").addClass("hidden");
+                $(".nombre_div5").addClass("hidden");
+            }
+
+            if ($(".trie_function6").val() == "nombre") {
+                $(".nombre_div6").removeClass("hidden");
+                $(".somme_div6").addClass("hidden");
+                $(".moyenne_div6").addClass("hidden");
+            }
+            if ($(".trie_function6").val() == "somme") {
+                $(".somme_div6").removeClass("hidden");
+                $(".moyenne_div6").addClass("hidden");
+                $(".nombre_div6").addClass("hidden");
+            }
+            if ($(".trie_function6").val() == "moyenne") {
+                $(".moyenne_div6").removeClass("hidden");
+                $(".somme_div6").addClass("hidden");
+                $(".nombre_div6").addClass("hidden");
+            }
+
+            return _this.salaries[ _this.idSalaries[id] ][ _this.fields[ fieldName ] ];
+        }
+
+        changeField(e){
+            var fieldName = e.currentTarget.getAttribute('field-name');
+            _this.fields[fieldName] = e.currentTarget.value;
+            //console.log('fieldName: ' + fieldName);
+           // console.log('e.currentTarget.value: ' + e.currentTarget.value);
+            //console.log('this.fields: ' + JSON.stringify(_this.fields));
+            _this.update();
+        }
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        function getExcel(){ 
+            $.getJSON('/admin/inscription/inscription', getParams, function (data){ 
+                if(data && data.elements){
+                    _this.inscriptions = [];
+                    _this.idInscriptions = {};
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var currentIdSalarie=0;
+                    var fields = {  quantite: 'quantite', 
+                                    participation_ce: 'participation_ce', 
+                                    id_produit: 'id_produit', 
+                                    montant: 'montant', 
+                                    participation_salarie: 'participation_salarie', 
+                                    solde: 'solde', 
+                                    reglement: 'reglement'};
+
+                    for(i=0; i<l; i++){
+                        if(currentIdSalarie != data.elements[i].id_salarie) {
+                            if(i != 0) {
+                                _this.idInscriptions[d['id']] = i;
+                                _this.inscriptions.push(d);
+                            }
+
+                            currentIdSalarie = data.elements[i].id_salarie;
+                            d = { };
+                            d['id'] = data.elements[i].id;
+                            d['id_salarie'] = data.elements[i].id_salarie;
+                            d['produits'] = [];
+                            d['participation_salarie'] = 0;
+                            d['participation_ce'] = 0;
+                            d['montant'] = 0;
+                            d['reglement'] = 0;
+                            d['solde'] = 0;
+                        }
+                        
+                        var produit = new Object();
+                        for(field in fields) {
+                            produit[ fields[ field ] ] = data.elements[i][field];
+                        }
+                        d['participation_salarie'] += parseInt(data.elements[i]['participation_salarie']);
+                        d['participation_ce'] += parseInt(data.elements[i]['participation_ce']);
+                        d['montant'] += parseInt(data.elements[i]['montant']);
+                        d['reglement'] += parseInt(data.elements[i]['reglement']);
+                        d['solde'] += parseInt(data.elements[i]['solde']);
+                        d.produits.push(produit)
+                    }
+                    _this.idInscriptions[d['id']] = i;
+
+                    _this.inscriptions.push(d);
+                }
+
+            })
+        }
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        function getElements(params){
+            var tag = params.tag;
+            var url = params.url;
+            var fields = params.fields;
+            var elements = params.elements;
+            var idElements = params.idElements;
+            var getParameters = params.getParameters || {};
+            $.getJSON( url, getParameters, function(data){
+               // console.log()
+                if(data && data.elements){
+
+                    if(params.init && typeof params.init === 'function'){
+                        params.init(tag);
+                    }
+                    var i, field, d;
+                    var l = data.elements.length;
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            if(field != 'first' && field != 'last') {
+                                d[fields[field]] = data.elements[i][field];
+                            } else if ( field == 'first' ) {
+                                if (i == 0) {
+                                    d[fields[field]] = true;
+                                } else {
+                                    d[fields[field]] = false;
+                                }
+                            } else if (field == 'last') {
+                                if(i == (l - 1)) {
+                                    d[fields[field]] = true;
+                                } else {
+                                    d[fields[field]] = false;
+                                }
+                            }
+                        }
+                        if(params.type){
+                            d['type'] = params.type;
+                        }
+                        idElements[d['id']] = i;
+                        elements.push(d);
+                    }
+                    if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+                        params.beforeUpdate(tag);
+                    }             
+                    tag.update();
+
+                    if(params.end && typeof params.end === 'function'){
+                        params.end(tag);
+                    }
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //console.log('salarie:', JSON.stringify(_this.salaries));
+                tag = null;
+                url = null;
+                fields = null;
+                elements = null;
+                idElements = null;
+            });
+        }
+//-------------FIN DE L'ENUME------------------------------
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+			$("#filtres").click(function(){ 
+				$("#containerEditeur").hide();
+				$("#containerImpression").hide();  
+			});
+
+			$("#Impression").click(function(){ 
+				$("#containerFiltres").hide(); 
+				$("#containerEditeur").hide();
+			});
+
+			$("#Editeur").click(function(){ 
+				$("#containerImpression").hide(); 
+				$("#containerFiltres").hide(); 
+				$("#containerEditeur").show(); 
+
+			});
+		});
+
+        tata(e){
+            console.log("otot");
+            $(".filtres_generaux_hidden").removeClass("hidden");
+            $("table").tableExport({
+                headings: true,                    // (Boolean), display table headings (th/td elements) in the <thead>
+                footers: true,                     // (Boolean), display table footers (th/td elements) in the <tfoot>
+                formats: ["csv"],                  // (String[]), filetypes for the export 
+                fileName: "salaries",              // (id, String), filename for the downloaded file                   
+                bootstrap: true,                   // (Boolean), style buttons using bootstrap
+                position: "bottom",                 // (top, bottom), position of the caption element relative to table
+                exportButtons: false,              
+                ignoreRows: null,                  // (Number, Number[]), row indices to exclude from the exported file(s)
+                ignoreCols: null,                  // (Number, Number[]), column indices to exclude from the exported file(s)
+                ignoreCSS: ".tableexport-ignore",  // (selector, selector[]), selector(s) to exclude from the exported file(s)
+                emptyCSS: ".tableexport-empty",    // (selector, selector[]), selector(s) to replace cells with an empty string in the exported file(s)
+                trimWhitespace: false 
+            });
+            $("caption.bottom > button").click();
+            $("caption.bottom > button").hide();
+        }
+
+        this.entreprise = [];
+        this.idEntreprise = {};
+
+        function getEntreprise() {
+            var getParameters = { type_element: 'entreprise' };
+            var type = 'entreprise';
+            $.getJSON( '/admin/site/parametres_entreprise', getParameters, function(data){
+                //console.log('data ::::: ' + JSON.stringify(data))
+                if(data && data.elements){
+                    _this.entreprise = [];
+                    _this.idEntreprise = {};
+
+                    var i, field, d;
+                    var l = data.elements.length;
+                    var fields = { id: 'id', logo: 'logo' };
+                    var logo = '';
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            if (field == "logo") {
+                                logo = data.elements[i][field];
+                                console.log("logo ::::: " + logo)
+                                $("#logo_entreprise").attr("src", "/img/uploads/entreprise/" + logo + "")
+                            }
+                            d[fields[field]] = data.elements[i][field];
+                            console.log("d[fields[field]] : " + d[fields[field]]);
+                        }
+                        if(type){
+                            d['type'] = type;
+                        }
+                        _this.idEntreprise[d['id']] = i;
+                        _this.entreprise.push(d);
+                    }         
+                    _this.update();
+                    //console.log('elements: ' + JSON.stringify(_this.entreprise))
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                tag = null;
+                url = null;
+                fields = null;
+                elements = null;
+                idElements = null;
+            });
+        }
+
+        getEntreprise();
+
+// FONCTION IMPRIMER
+        lanceImpression(e) {
+            var ids = [];
+            var tactac = "";
+            tactac = "Filtres : ";
+            $('.print').each(function() {
+                    if($(this).is(':checked')) {
+                        _this.tactac = "";
+                        ids.push($(this).attr('id'));
+                    }
+                    _this.tactac = "";
+                });
+            $('.print_select').each(function() {
+                    if($(this).is(':selected')) {
+                        _this.tactac = "";
+                        ids.push($(this).attr('id'));
+                    }
+                    console.log("tatatatata");
+                    _this.tactac = "";
+                });
+            $('.print_input_text').each(function() {
+                    if($(this).val()) {
+                        _this.tactac = "";
+                        ids.push($(this).attr('id'));
+                    }
+                    _this.tactac = "";
+                });
+            var i, d;
+
+           for(i=0; i<ids.length; i++){
+                if ($("#"+ids[i]).is( "option" ) ) {
+                    _this.tactac += $("#"+ids[i]).text() + "\n";
+                } else {
+                    _this.tactac += $("#"+ids[i]).val() + "\n";
+                }
+            }
+            _this.update();
+            document.title = $("#entrepriseName").text();
+            window.print();
+
+        }
+//// FIN FONCTION IMPRIMER
+
+    </script>
+</impressions-salaries>

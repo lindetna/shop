@@ -1,0 +1,668 @@
+<menu-site>
+	<!--<div id="titre_page"><h1>Menu du Site <h1 id="ajout_ou_edit"></h1></h1></div>-->
+	<div class="menu_site with_submenu">
+		<div id="add_menu" class="edit edit_journal hidden">
+			<div class="celladd">
+				<input type="hidden" name="type_element" value="menu">
+				<input type="hidden" id="menu_classe" name="menu_classe" value="">
+			</div>
+			<div class="celladd">
+				<div>
+					<label for="titre" class="label_titre">Titre:</label>
+					<input name="menu_titre" id="menu_titre" class="titre">
+					<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="menu_visible" id="menu_visible" class="menu_visible" title="Visible" value="visible">
+				</div>
+			</div>
+			<div class="celladd block">
+				<div>
+					<label for="photo">Photo:</label>					
+    					<label for="menuPhoto" class="select_image">
+						    Choisir une image
+				     		<input type="file" name="menuPhoto"  id="menuPhoto" value="choisir une image" class="photo_upload pointer" onchange={readURL} accept='image/png' />
+						</label>
+				      	<div class="image_position" id='image_position'>
+    						<img class="preview" src="#"/>
+    					</div>
+				</div>
+			</div>
+			<div class="celladd add_button">
+				<button name="cancel_submit" class=" button annuler cancel_submit pointer" onclick={ cancelMenu }>Annuler</button>
+				<button name="save_submit" class=" save_submit button enregistrer pointer" onclick={ saveMenu }>Enregistrer</button>
+			</div>
+		</div>
+		<div class="actions" id="actions">
+			<input id="add_menu_button" type="button" value="Ajouter un Menu" class="ajouter button pointer" name="add_element_button" onclick={ addMenu }>
+		</div>
+		<div class="menu_content menu_edit_content">
+			<div class="corps_menu">
+				<div class="entete_menu">
+					<div class=" cell_1">Image</div>
+					<div class=" cell_2">Titre</div>
+					<div class=" oeil_visibilite cell_4">Visibilité</div>
+					<div class=" cell_5">Actions</div>
+				</div>
+				<div each={ menu } id="menu_{ id }" class="menu_ligne menu_edit_ligne">
+					<div class="show_infos hide_when_edit">
+						<div class="celladd">
+							<input id="menu_reference_{ id }" name="menu_reference_{ id }" type="hidden" maxlength="2" class="two_char" value="{ reference }">
+						</div>
+						<div class=" image cell_1"><img src="/img/cat_art.png"></div>
+						<div class=" cell_2"><h3>{titre}</h3></div>
+						<div class=" oeil_visibilite cell_4"><input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="visible_{ id }" name="visible_{ id }"></i></div>
+						<div class=" actions cell_5">
+							<div>
+								<p class="modif"><img class="edit_element_img" onclick={ editMenu } title="Modifier" src="/img/edit.png"> </p><p class="modif" if={ id > 7 } ><img class="delete_element_img" onclick={ validDeleteMenu } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p><p class="modif"><img if={ !first } alt="monter" title="Monter" class="monter_element_img pointer" onclick={ switchUp } src="/img/compta/fleche_haut.png"></p><p class="modif"><img if={ !last } alt="descendre" title="Descendre" class="pointer descendre_element_img" onclick={ switchDown } src="/img/compta/fleche_bas.png"></p>
+							</div>
+						</div>
+					</div>
+					<div id="menu_{ id }_edit" class="edit edit_menu hidden">
+						<div class="celladd">
+							<div>
+								<label class="label_titre" for="titre">Titre:</label>
+								<input name="menu_titre_{ id }" id="menu_titre_{ id }" class="titre" type="text" value={ titre } if={ id > 7 }>
+								<input name="menu_titre_{ id }" id="menu_titre_{ id }" class="titre" type="text" value={ titre } disabled="disabled" if={ id <= 7 }>
+								<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="menu_visible_{id}" id="menu_visible_{id}" class="menu_visible" title="Visible" value="{visible}">
+							</div>
+						</div>
+						<div class="celladd block">
+							<div>
+								<label for="photo">Photo:</label>
+								<input type='file' class="photo_upload pointer" onchange={readURL} />
+								<div class="image_position">
+			    					<img class="preview" src="#"/>
+			    				</div>
+							</div>
+						</div>
+						<div class="celladd add_button">
+							<button name="cancel_submit_{ id }" onclick={ cancelEditMenu } class="pointer red cancel_submit">Annuler</button>
+							<button name="save_submit_{ id }" onclick={ saveEditMenu } class="pointer blue save_submit">Enregistrer</button>
+						</div>
+					</div>
+					<div id="menu_{ id }_delete" class="delete hidden">
+						<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" id="delete_{ id }" class="pointer" onclick={ deleteMenu }>Supprimer</button><button class="pointer" name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteMenu }>Annuler</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+
+	riot.tag('raw', '<span></span>', function (opts) {
+	    this.updateContent = function () {
+	        this.root.innerHTML = opts.content;
+	    };
+
+	    this.on('update', function() {
+	        this.updateContent();
+	    });
+
+	    this.updateContent();
+	});
+
+	var app = opts;
+	var _this = this;
+	this.app = opts;
+	var permissions = app.session.permissions;
+
+	app.on('unmount-menu-site', function(){
+		app.off('unmount-menu-site');		
+		_this.unmount();
+	});
+
+	this.loaded = false;
+
+	this.thingsToLoad = [ 'menu', 'E_M' ];
+	this.numToLoad = this.thingsToLoad.length;
+
+	if( ! _this.app.session.menu){
+		_this.app.session.menu = {};
+		_this.app.session.menu.elements = [];
+		_this.app.session.menu.idElements = {};
+		_this.menu = _this.app.session.menu.elements;
+		_this.idmenu = _this.app.session.menu.idElements;
+	}else{
+		_this.menu = _this.app.session.menu.elements;
+		_this.numToLoad--;
+	}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.menu = [];
+		this.idMenu = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		_this.app.loadScript('/js/admin/tinymce/tinymce.min.js', 'tinymce_js', function tinymce() {
+		});
+
+
+		/*var textArea = $(".showmore").find(".textContent");
+		console.log(textArea);
+ 		textArea.animate({
+	        height: "1em"
+	    }, 1000);
+
+		showMore(e) {
+		    var linkText = 	$('#linkshow_' + e.item.id ).text().toUpperCase();    
+ 			var textArea = $("#text-container_" + e.item.id ).find(".textContent");
+ 			textArea.animate({
+	       		height: "1em"
+	    	}, 1000);
+    		var moreText = $(this).parents(".content_item").find(".more");
+		    if (textArea.length > 0){ 
+		        if(textArea.hasClass('expanded')){ 
+		            linkText = "Voir Moins";
+		            $('#linkshow_' + e.item.id ).text(linkText);
+		            textArea.animate({
+		                height: "1em"
+		            }, 1000);
+		            
+		            textArea.removeClass("expanded");
+		            linkText = "Voir Plus";
+		            $('#linkshow_' + e.item.id ).text(linkText);
+		            
+		    	}else{
+		        	linkText = "Voir Plus";
+		            $('#linkshow_' + e.item.id ).text(linkText);
+		            var curHeight = textArea.height(); 
+		            console.log(textArea.height());
+		            var autoHeight = textArea.css('height', 'auto').height(); 
+		            textArea.height(curHeight).animate({height: autoHeight}, 1000); 
+		            
+		            textArea.addClass("expanded");
+		            linkText = "Voir Moins";
+		            $('#linkshow_' + e.item.id ).text(linkText);
+		    	}
+    		}
+		}*/
+
+		readURL(input) {
+				console.log('upload button clicked!');
+            if (input.path[0].files && input.path[0].files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (input) {
+                    $('.preview')
+                        .attr('src', input.target.result)
+                        .width(200)
+                        .height(200);
+                };
+                $(".preview").show();
+                reader.readAsDataURL(input.path[0].files[0]);
+                //reader.readAsDataURL(document.getElementById('menuPhoto').files[0]);
+                /*$.ajax('/admin/site/actualites', {
+ 	                data: reader,
+                    processData: false,
+                    contentType: 'multipart/form-data',
+                    type: 'POST',
+				    complete : function(){
+				        console.log("[JQUERY AJAX COMPLETE]", reader);
+				    },
+				    success : function(){
+				        console.log("success");
+				    }, 
+				    error : function () {
+				        console.log("fail");
+				    }
+                });	*/
+            }    
+        }
+
+		switchUp(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchUp');
+			do_switch(e, -1);
+		}
+
+		switchDown(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchDown');
+			do_switch(e, 1);	
+		}
+
+		function do_switch(e, i) {
+			var item = e.item;
+			var item_id = item.id;
+			var position_in_table;
+			var switch_with_id;
+			console.log(e.item.type);
+			if(item.type == 'menu') {
+				position_in_table =  parseInt(_this.idMenu[item_id]);
+				if(_this.menu[position_in_table + i]) {
+					switch_element(item_id, position_in_table, position_in_table + i, _this.idMenu, _this.menu);
+				}
+			}
+		}
+
+		function switch_element(element_id1, element_position1, element_position2, idTable, table){
+			var tmp_element = table[element_position1];
+			var tmp_info;
+			var element_id2 = table[element_position2].id;
+
+			var item_id_reference = table[element_position1].reference;
+			var switch_with_id_reference = table[element_position2].reference;
+
+			idTable[element_id1] = element_position2;
+			idTable[element_id2] = element_position1;
+			table[element_position1] = table[element_position2];
+			table[element_position2] = tmp_element;
+
+			//interchanger ref
+			tmp_info = table[element_position1].reference;
+			table[element_position1].reference = table[element_position2].reference;
+			table[element_position2].reference = tmp_info;
+
+			//interchanger first
+			tmp_info = table[element_position1].first;
+			table[element_position1].first = table[element_position2].first;
+			table[element_position2].first = tmp_info;
+
+			//interchanger last
+			tmp_info = table[element_position1].last;
+			table[element_position1].last = table[element_position2].last;
+			table[element_position2].last = tmp_info;
+
+			updatePosition([
+						{
+							id: element_id1,
+							reference: table[element_position2].reference,
+						},
+						{
+							id: element_id2,
+							reference: table[element_position1].reference,
+						}
+					]);
+		}
+
+		function updatePosition(params){
+			var data = {};
+
+			data.action = "update_reference";
+			data.params = params;
+			$.ajax('/admin/site/menu', {
+				data : data,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+					console.log("done");
+					_this.update();
+				}
+			}).done(function(){
+				console.log('done!...');
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				tag = null;
+			}); //, 'json'
+		}
+
+		function getMenu() {
+			getElements({
+				tag: _this,
+				url: '/admin/site/menu', 
+				elements: _this.menu,
+				idElements: _this.idMenu,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', titre: 'titre', reference: 'reference', visible: 'visible', first: 'first', last: 'last'},
+				getParameters: { type_element: 'menu'},
+				type: 'menu',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		}
+		getMenu();
+
+		editMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var id = e.item.id;
+				$(".menu_edit_ligne").removeClass("menu_ligne");
+				$(".menu_edit_content").removeClass("menu_content");
+		 		$(".actions").hide();
+		 		$(".preview").hide();
+				$(".entete_menu").hide();
+				$(".show_infos").hide();
+				$("#ajout_ou_edit").text("- Modifier");
+				_this.E_M.editElement({ event: e, prefixId: 'menu_', hideClass: 'hidden' });
+			}
+		}
+
+		addMenu(e){
+			$(".menu_content").hide();
+			$('input[type=text]', '#add_menu').val('');
+			if(_this.E_M){
+				$("#add_menu_button").hide();
+				$(".preview").hide();
+				$("#ajout_ou_edit").text("- Ajout");
+				_this.E_M.addElement({event: e, prefixId: 'menu_', hideClass: 'hidden'});
+			}
+		}
+
+		validDeleteMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'menu_',});
+			}
+		}
+
+		deleteMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var index_element;
+				index_element = _this.idMenu[e.item.id];
+				if(_this.menu.length == 2) {
+					if(_this.menu[index_element + 1]){
+						_this.menu[index_element + 1].first = true;
+					}
+					else if(_this.menu[index_element - 1]){
+						_this.menu[index_element - 1].last = true;
+					}
+				} else if(!_this.menu[index_element - 1] && _this.menu[index_element + 1]){
+					_this.menu[index_element + 1].first = true;
+				} else if(!_this.menu[index_element + 1] && _this.menu[index_element - 1]){
+					_this.menu[index_element - 1].last = true;
+				}
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/site/menu', elements: _this.menu, idElements: _this.idMenu, type_element: 'menu',});
+			}
+		}
+
+
+		cancelDeleteMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'menu_',});
+			}
+		}
+
+		cancelMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$("#ajout_ou_edit").text("");
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['titre', 'visible', ],
+					prefixId: 'menu_',
+					hideClass: 'hidden',
+				});
+				$("#add_menu_button").show();
+				$(".menu_content").show();
+				$(".entete_menu").show();
+			}
+		}
+
+		cancelEditMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['titre', 'visible', ],
+					prefixId: 'menu_',
+					hideClass: 'hidden',
+				});
+				$("#ajout_ou_edit").text("");
+				$("#add_menu_button").show();
+				$(".menu_edit_content").addClass("menu_content");
+				$(".menu_content").show();
+				$(".entete_menu").show();
+				$(".menu_edit_ligne").addClass("menu_ligne");
+				$(".menu_ligne").show();
+				$('.show_infos').show();
+				$('.actions').show();
+			}
+		}
+
+		saveMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$("#ajout_ou_edit").text("");
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/menu', 
+					fields: ['titre', 'visible', 'reference' ],
+					tag: _this,
+					elements: _this.menu,
+					idElements: _this.idMenu,
+					typeElement: 'menu',
+					suffixId: 'menu',
+					prefixFields: 'menu_',
+					prefixId: 'menu_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							var max_reference = 0;
+							_this.menu.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && element.id_parent == null
+									&& _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+								if(element.last == true) {
+									element.last = false;
+								}
+							})
+							params.element.reference = max_reference + 1;
+							params.element.last = true;
+							if(_this.menu.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (parseInt(a.reference) < parseInt(b.reference)){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			$(".menu_content").show();
+			$("#add_menu_button").show();
+			$(".entete_menu").show();
+		 	$('.show_infos').show();
+		 	$(".menu_ligne").addClass();
+		 	$(".menu_content").addClass();
+			}
+		}
+		
+		saveEditMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$("#ajout_ou_edit").text("");
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/site/menu', 
+					fields: ['titre', 'visible', 'reference'],
+					tag: _this,
+					elements: _this.menu,
+					idElements: _this.idMenu,
+					typeElement: 'menu',
+					suffixId: 'menu',
+					prefixFields: 'menu_',
+					prefixId: 'menu_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							var max_reference = 0;
+							_this.menu.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && element.id_parent == null
+									&& _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+								if(element.last == true) {
+									element.last = false;
+								}
+							})
+							params.element.reference = max_reference + 1;
+							params.element.last = true;
+							if(_this.menu.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (parseInt(a.reference) < parseInt(b.reference)){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			$(".entete_menu").show();
+		 	$('.actions').show();
+		 	$(".menu_edit_ligne").addClass("menu_ligne");
+		 	$(".menu_edit_content").addClass("menu_content");
+		 	$(".menu_content").addClass();
+		 	$('.show_infos').show();
+			}
+		}
+
+		showMenu(e){
+			e.stopPropagation();
+			e.preventDefault();
+			$('#add_menu_button').removeClass('hidden');
+			var menuId = $('#current_menu').val();
+			$('.show_infos', $('#menu_' + menuId)).removeClass('hidden');
+			$('#current_menu').val('').addClass('hidden');
+			$('#entete_menu').removeClass('hidden');
+			$('.menu').removeClass('hidden');
+			if( _this.currentmenuReference != '') {
+				$('#add_menu').slideUp().addClass('hidden');
+			}
+			_this.currentMenuReference = '';
+		}
+		
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			console.log(params);
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					console.log('elements: ' + JSON.stringify(tag.menu))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addMenu = null;
+			editMenu = null;
+			validDeleteMenu = null;
+			cancelDeleteMenu = null;
+			deleteMenu = null;
+			cancelMenu = null;
+			cancelEditMenu = null;
+			showContents = null;
+			makeVisible = null;
+			saveMenu = null;
+			getMenu = null;
+			getElements = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+		</script>
+</menu-site>

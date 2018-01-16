@@ -1,0 +1,524 @@
+<accueil-compta>
+    <!--<div id="titre_page"><h1>Tableau de Bord</h1></div> -->
+    <div if={ COMPTA_READ } class="accueil_compta with_submenu">
+        <div class="compta_accueil_princip">
+            <div id="compta_accueil_left">
+                <div class="panel_box">
+                    <div class="panel_img_left"><!--<img src="/img/paiement.png">--></div><div class="panel_title"><p class="panel_texte">Trésorerie</p></div>
+                </div>
+                <div class="bank_panel_box">
+                    <h3 class=".">Situation de Trésorerie</h3>
+                    <div class="tresor_bank">
+                        <!-- <div each="{ compte, i in comptes }" class="{ bank_left : i % 3 == 0 }{ bank_center : i % 3 == 1 }{ bank_right : i % 3 == 2 }"> -->
+                        <div class="row">
+                            <div each={ compte, i in tabBordComptes } class="bank" if={ i < 3 }>
+                                <p>{ compte.libelle }</p>
+                                <img src="{ compte.imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + compte.imgurl : '/img/information_site.png' }">
+                                <p>{ (compte.solde).toFixed(2) }</p>
+                                </div>
+                        </div>
+                        <div class="row">
+                            <div each={ compte, i in tabBordComptes } class="bank" if={ i >= 3 }>
+                                <p>{ compte.libelle }</p>
+                                <img src="{ compte.imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + compte.imgurl : '/img/information_site.png' }">
+                                <p>{ (compte.solde).toFixed(2) }</p>
+                            </div>
+                        </div>
+                 <!--        <div each={ compte, i in comptes } class="bank">
+                            <p>{ compte.libelle }</p>
+                            <img src="/img/uploads/compta/tableau_de_bord/{ id_compte2_imgurl }">
+                            <p>{ (compte.solde).toFixed(2) }</p>
+                        </div>
+                        <div each={ compte, i in comptes } class="bank">
+                            <p>{ compte.libelle }</p>
+                            <img src="/img/uploads/compta/tableau_de_bord/{ id_compte3_imgurl }">
+                            <p>{ (compte.solde).toFixed(2) }</p>
+                        </div> -->
+                        
+                    </div>
+                    <!-- <div class="tresor_bank">
+                        <div each={ compte, i in comptes } class="bank">
+                            <p>{ compte.libelle }</p>
+                            <img src="/img/uploads/compta/tableau_de_bord/{ id_compte4_imgurl }">
+                            <p>{ (compte.solde).toFixed(2) }</p>
+                        </div>
+                        <div each={ compte, i in comptes } class="bank">
+                            <p>{ compte.libelle }</p>
+                            <img src="/img/uploads/compta/tableau_de_bord/{ id_compte5_imgurl }">
+                            <p>{ (compte.solde).toFixed(2) }</p>
+                        </div>
+                        <div each={ compte, i in comptes } class="bank">
+                            <p>{ compte.libelle }</p>
+                            <img src="/img/uploads/compta/tableau_de_bord/{ id_compte6_imgurl }">
+                            <p>{ (compte.solde).toFixed(2) }</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div id="compta_accueil_right">
+                <div class="panel_box">
+                    <div class="panel_img_right"><!--<img src="/img/compta/budget.png">--></div><div class="panel_title"><p class="panel_texte">Budgets</p></div>
+                </div>
+                <div class="budget_depenses">
+                    <h3 class="div_title">Situation des dépenses par Budget</h3>
+                        <div class="situation_budgets" each={ elements }>
+                            <p>{ libelle }</p>
+                            <!-- <div class="progress-bar { stripes : pourcentage != 0 }">
+                                <span class="label { black : pourcentage == 0 }" style="width: { pourcentage == 0 || pourcentage > 100 ? 100 : pourcentage }%;">{ pourcentage }%</span>
+                            </div> -->
+                            <div class="progress-bar stripes">
+                                <span class="label" style="width: { pourcentage > 100 ? 100 : pourcentage }%;">
+                                { pourcentage > 15 ? pourcentage + '%' : '' }
+                                </span>
+                                <span class="num_pourcentage" if={ pourcentage <= 15 }> { pourcentage }%</span>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="alertes_box">
+                <h1>Les Alertes</h1>
+                
+                <!-- <div class="widget_compta"> -->
+                <div class="table c100 center">
+                    <div class="widget_cell_compta">
+                        <div class="vignette_cell_1">
+                        </div>
+
+                        <div class="widget_alertes_compta_paiements">
+                            <!-- <p class="quantite rouge">17</p> -->
+                        </div>
+                            <p class="center">Paiements en attente</p>
+
+                    </div>
+
+
+                    <div class="widget_cell_compta">
+                        <div class="vignette_cell_2">
+                        </div>
+                        <div class="widget_alertes_compta_stocks">
+                            <!-- <p class="quantite rouge">03</p> -->
+                        </div>
+                            <p class="center">Stocks</p>
+
+                    </div>
+                </div>
+                <div class="table c100 center">
+                    <div class="widget_cell_compta">
+                        <div class="vignette_cell_3">
+                        </div>
+
+                        <div class="widget_alertes_compta_dette">
+                            <!-- <p class="quantite vert">00</p> -->
+                        </div>
+                            <p class="center">Dette Fournisseur</p>
+                        
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div> 
+    <div if={ (PLA_READ && ! COMPTA_READ) } class="accueil_compta with_submenu">
+        <h1 class="accueil_title">Tableau de bord - P.L.A.</h1>
+        <article id="compta_accueil_pla_left" class="panel_box compta_accueil_pla">
+            <div class="table c100 title">
+                <div class="row">
+                    <div class="cell c25">
+                        <img src="/img/compta/db_clair.png">
+                    </div>
+                    <div class="cell c75">
+                        <h1>Situation Prévisionnelle</h1>
+                    </div>
+                </div>
+            </div>
+            <h2>Dépenses</h2>
+            <div class="table c100">
+                <div class="row header">
+                    <div class="cell c25">Montant Prévisionnel</div>
+                    <div class="cell c25">Activités</div>
+                    <div class="cell c25">Logistique</div>
+                    <div class="cell c25">Pilotage</div>
+                </div>
+                <div class="row">
+                    <div class="cell c25 prev">{ charges.prev }</div>
+                    <div class="cell c25">{ charges.activite_prev }</div>
+                    <div class="cell c25">{ charges.logistique_prev }</div>
+                    <div class="cell c25">{ charges.pilotage_prev }</div>
+                </div>
+            </div>
+            <h2>Recettes</h2>
+            <div class="table c100">
+                <div class="row header">
+                    <div class="cell c25">Montant Prévisionnel</div>
+                    <div class="cell c25">Activités</div>
+                    <div class="cell c25">Logistique</div>
+                    <div class="cell c25">Pilotage</div>
+                </div>
+                <div class="row">
+                    <div class="cell c25 prev">{ produits.prev }</div>
+                    <div class="cell c25">{ produits.activite_prev }</div>
+                    <div class="cell c25">{ produits.logistique_prev }</div>
+                    <div class="cell c25">{ produits.pilotage_prev }</div>
+                </div>
+            </div>
+        </article>
+        <article id="compta_accueil_pla_right" class="panel_box compta_accueil_pla">
+            <div class="table c100 title">
+                <div class="row">
+                    <div class="cell c25">
+                        <img src="/img/compta/db.png">
+                    </div>
+                    <div class="cell c75">
+                        <h1>Situation Réel</h1>
+                    </div>
+                </div>
+            </div>
+            <h2>Dépenses</h2>
+            <div class="table c100">
+                <div class="row header">
+                    <div class="cell c20">Montant Prévisionnel</div>
+                    <div class="cell c20">Montant Réel</div>
+                    <div class="cell c20">Activités</div>
+                    <div class="cell c20">Logistique</div>
+                    <div class="cell c20">Pilotage</div>
+                </div>
+                <div class="row">
+                    <div class="cell c20 prev">{ charges.prev }</div>
+                    <div class="cell c20 reel">{ charges.reel }</div>
+                    <div class="cell c20">{ charges.activite_reel }</div>
+                    <div class="cell c20">{ charges.logistique_reel }</div>
+                    <div class="cell c20">{ charges.pilotage_reel }</div>
+                </div>
+            </div>
+            <h2>Recettes</h2>
+            <div class="table c100">
+                <div class="row header">
+                    <div class="cell c20">Montant Prévisionnel</div>
+                    <div class="cell c20">Montant Réel</div>
+                    <div class="cell c20">Activités</div>
+                    <div class="cell c20">Logistique</div>
+                    <div class="cell c20">Pilotage</div>
+                </div>
+                <div class="row">
+                    <div class="cell c20 prev">{ produits.prev }</div>
+                    <div class="cell c20 reel">{ produits.reel }</div>
+                    <div class="cell c20">{ produits.activite_reel }</div>
+                    <div class="cell c20">{ produits.logistique_reel }</div>
+                    <div class="cell c20">{ produits.pilotage_reel }</div>
+                </div>
+            </div>
+        </article>
+    </div>
+    <script>
+        var app = opts;
+        this.app = opts;
+        var _this = this;
+        this.utilisateur = app.session.utilisateur;
+        _this.charges = {};
+        _this.produits = {};
+        var permissions = app.session.permissions;
+        var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+        var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+
+        function getSituation(){
+            _this.charges = {};
+            _this.produits = {};
+
+            var getParams = {};
+            if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON('/admin/compta/', getParams, function (data){
+                if(data && data.elements){
+                    var elements = data.elements;
+                    var charges = _this.charges;
+                    var produits = _this.produits;
+                    for(var i in elements){
+                        var e = elements[i];
+                        if(e['c_reference'] == "6"){
+                            charges.reference = '6';
+                            charges.prev = e.debit_n_prev;
+                            charges.activite_prev = e.depense_activite_prev;
+                            charges.logistique_prev = e.depense_logistique_prev;
+                            charges.pilotage_prev = e.depense_pilotage_prev;
+                            charges.reel = e.debit_n_1_reel;
+                            charges.activite_reel = e.depense_activite_reel;
+                            charges.logistique_reel = e.depense_logistique_reel;
+                            charges.pilotage_reel = e.depense_pilotage_reel;
+                        }else if(e['c_reference'] == "7"){
+                            produits.reference = '7';
+                            produits.prev = e.credit_n_prev;
+                            produits.activite_prev = e.recette_activite_prev;
+                            produits.logistique_prev = e.recette_logistique_prev;
+                            produits.pilotage_prev = e.recette_pilotage_prev;
+                            produits.reel = e.credit_n_1_reel;
+                            produits.activite_reel = e.recette_activite_reel;
+                            produits.logistique_reel = e.recette_logistique_reel;
+                            produits.pilotage_reel = e.recette_pilotage_reel;
+                        }
+                    }
+                }
+                _this.update();
+            });
+        }
+
+        this.on('mount', function(){
+            if( ! COMPTA_READ && PLA_READ ){
+                getSituation();
+            }
+        });
+
+        this.tabBordComptes = []; // les comptes affichés sur le tableau de bord
+        this.idTabBordComptes = {};
+
+        this.comptes = []; // comptes de tresorerie
+        this.idComptes = {};
+
+        this.id_compte = []; // les ids des différents comptes selectionnés dans tableau de bord
+        this.idIdComptes = {};
+        
+        this.id_budget = []; // les ids des différents budgets selectionnés dans tableau de bord
+
+        app.on('unmount-accueil-compta', function(){
+            getSituation = null;
+            console.log('unmount-accueil-compta fired');
+            app.off('unmount-accueil-compta');
+            console.log('before unmount-accueil-compta, ' + _this.tagName);
+            _this.unmount();
+            console.log('after unmount-accueil-compta');
+        });
+
+
+        this.alertes = {
+            paiements : 3,
+            stocks: 3,
+            fournisseurs: 3,
+        }
+
+        function getTableauDeBord(){ // récupère les ids comptes et budgets de tableau de bord et des imgs liés aux comptes
+            var field_compte = ['id_compte1', 'id_compte2', 'id_compte3', 'id_compte4', 'id_compte5', 'id_compte6']
+            var field_budget = ['id_budget1', 'id_budget2', 'id_budget3', 'id_budget4', 'id_budget5', 'id_budget6']
+            var imgurl = ['id_compte1_imgurl', 'id_compte2_imgurl', 'id_compte3_imgurl', 'id_compte4_imgurl', 'id_compte5_imgurl', 'id_compte6_imgurl']
+            var getParams = { };
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/tableau_de_bord', getParams, function(data){
+                console.log(data);
+                _this.id_compte = [];
+                _this.id_budget = [];
+                _this.idIdComptes = {};
+                if(data && data.elements && data.elements[0]){
+                    _this.tableau_de_bord = data.elements[0];
+                    for(field in field_compte) {
+                        if(data.elements[0][field_compte[field]]) {                         
+                            _this.id_compte.push(data.elements[0][field_compte[field]]);
+                            _this.idIdComptes[data.elements[0][field_compte[field]]] = field; 
+                        }
+                    }
+                    for(field in field_budget) {
+                        if(data.elements[0][field_budget[field]]) {
+                            _this.id_budget.push(data.elements[0][field_budget[field]])
+                        }
+                    }
+                    for(index in imgurl) {
+                        _this[imgurl[index]] = data.elements[0][imgurl[index]];
+                    }
+                    // avoir ce qui se passe pk ça ajoute pas
+                    _this.update();
+                    getTableauDeBordElements();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+            })
+        }
+        getTableauDeBord();
+
+        function getTableauDeBordElements() { // on récupère les informations liés aux ids budgets et comptes.
+            if(_this.id_budget.length > 0) {
+                getElements({
+                    tag: _this,
+                    url: '/admin/compta/accueil', 
+                    elements: _this.elements,
+                    idElements: _this.idElements,
+                    fields: {},
+                    getParameters: { ids: _this.id_budget, type_element: 'budget' },
+                });
+            }
+            
+            var tab_idcompte = _this.id_compte.filter(function(el) { return el; })
+            $.getJSON( '/admin/compta/accueil', { ids: tab_idcompte, type_element: 'comptes' }, function(data){
+                if(data && data.elements){
+                    var i, y, field, d;
+                    for(i=0, y=0; y<tab_idcompte.length; i++, y++){
+                        if(data.elements[i] && data.elements[i].id_compte == tab_idcompte[y]) { // si le compte a des écritures qui lui sont liés
+                            d = new Object();
+                            d['libelle'] = data.elements[i].libelle;
+                            d['solde'] = data.elements[i].debit - data.elements[i].credit;
+                            d['id_compte'] = data.elements[i].id_compte;
+                            if(typeof _this['id_compte' + (parseFloat(_this.idIdComptes[data.elements[i].id_compte]) + 1) + '_imgurl'] != 'undefined') {
+                                d['imgurl'] = _this['id_compte' + (parseFloat(_this.idIdComptes[data.elements[i].id_compte]) + 1) + '_imgurl'];
+                            }
+                            _this.idTabBordComptes[d['id_compte']] = y;
+                            _this.tabBordComptes.push(d);
+                        } else { // si le compte n'a pas d'écritures qui lui est lié du coup on crée un objet avec des données par défaut
+                            d = new Object();
+                            d['libelle'] = _this.comptes[_this.idComptes[tab_idcompte[y]]].libelle;
+                            d['solde'] = 0;
+                            d['id_compte'] = tab_idcompte[y];
+                            if(typeof _this['id_compte' + (parseFloat(_this.idIdComptes[tab_idcompte[y]]) + 1) + '_imgurl'] != 'undefined') {
+                                d['imgurl'] = _this['id_compte' + (parseFloat(_this.idIdComptes[tab_idcompte[y]]) + 1) + '_imgurl'];
+                            }
+                            _this.idTabBordComptes[d['id_compte']] = y;
+                            _this.tabBordComptes.push(d);
+                            i--;
+                        }
+
+                    }
+                    _this.update();
+                }
+            });
+        }
+
+		function getCompteTresorerie(){
+			var getParams = { referenceStartWith: 5 };
+			
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+											
+					var fields = {id: 'id', libelle: 'libelle', reference: 'reference'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idComptes[d['id']] = i;
+						_this.comptes.push(d);
+					}
+					_this.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+                    //_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			})
+		}
+		getCompteTresorerie();
+
+        this.formatAlerts = function formatAlerts(num){
+            var s = num.toString(10);
+            if( s.length === 1 ){
+                s = '0' + s;
+            } else if ( s.length === 0 ){
+                s = '00';
+            }
+            return s;
+        }
+        
+        function chargePercent() {
+            var elem = this.getElementById("label");
+            var width = 1;
+            var id = setInterval(frame, 10);
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(id);
+                } else {
+                    width++;
+                    elem.style.width = width + '%';
+                    this.getElementById("label").innerHTML = width * 1  + '%';
+                }
+            }
+        }
+
+        this.update();
+
+        this.elements = [];
+        this.idElements = {};
+
+        function getElements(params){
+            var tag = params.tag;
+            var url = params.url;
+            var fields = params.fields;
+            var elements = params.elements;
+            var idElements = params.idElements;
+            var getParameters = params.getParameters || {};
+            $.getJSON( url, getParameters, function(data){
+                console.log('data : ', data);
+                if(data && data.elements){
+                    if(params.init && typeof params.init === 'function'){
+                        params.init(tag);
+                    }
+                    var i, field, d;
+                    var l = data.elements.length;
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        d['id'] = data.elements[i]['id'];
+                        d['libelle'] = data.elements[i]['libelle'];
+
+                        var credit_prev = parseFloat(data.elements[i]['credit_prev']);
+                        var debit_prev = parseFloat(data.elements[i]['debit_prev']);
+                        
+                        if ( ! credit_prev && ! debit_prev ) {
+                            d['solde_prev'] = (0).toFixed(2); 
+                        } else if(credit_prev >= debit_prev) {
+                            d['solde_prev'] = (credit_prev - debit_prev).toFixed(2);
+                        } else {
+                            d['solde_prev'] = (debit_prev - credit_prev).toFixed(2);
+                        }
+
+                        var credit_reel = parseFloat(data.elements[i]['credit_reel']);
+                        var debit_reel = parseFloat(data.elements[i]['debit_reel']);
+                        
+                        if ( ! credit_reel && ! debit_reel ) {
+                            d['solde_reel'] = (0).toFixed(2); 
+                        } else if(credit_reel >= debit_reel) {
+                            d['solde_reel'] = (credit_reel - debit_reel).toFixed(2);
+                        } else {
+                            d['solde_reel'] = (debit_reel - credit_reel).toFixed(2);
+                        }
+
+                        if(parseFloat(d['solde_reel']) == parseFloat(d['solde_prev'])) {
+                            d['pourcentage'] = 100;
+                        } else if( parseFloat(d['solde_reel'] == 0)) {
+                            d['pourcentage'] = 0;
+                        } else {
+                            d['pourcentage'] = (parseFloat(d['solde_reel']) / parseFloat(d['solde_prev']) * 100).toFixed(2);
+                        }
+                       
+                        idElements[d['id']] = i;
+                        elements.push(d);
+                    }
+                    if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+                        params.beforeUpdate(tag);
+                    }
+                    tag.update();
+                    if(params.end && typeof params.end === 'function'){
+                        params.end(tag);
+                    }
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                console.log('elements : ',  _this.elements);
+                tag = null;
+                url = null;
+                fields = null;
+                elements = null;
+                idElements = null;
+            });
+        }
+    </script>
+</accueil-compta>

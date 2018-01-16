@@ -1,0 +1,2530 @@
+<fournisseurs>
+	<!--<div id="titre_page"><h1>Fournisseurs</h1></div>-->
+	<div class="button_retour hidden" onclick={ retourPage } value="2"></div>
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div class=" compta_fournisseurs">
+			<div id="printHeader"></div>
+			<div id="filtres" class="menu_fournisseur">
+				<header class="opened" onclick="{ showContents }">Fournisseurs</header>
+				<div class="slide-up ">
+					<!-- Describe Fournisseur edition -->
+					<div id="add_fournisseur" class=" edit_fournisseur hidden">
+						<div class="table add_block_fournisseur gris size-down c100">
+							<header class="fournisseur_header">Fournisseur</header>
+							<div class="row_1 row informations_fournisseur">
+								<div class="flex_content">
+									<div class='flex_1'>
+										<div id='image_upload'>
+											<input type='file' value="choisir une image" id="photo_upload" class="photo_upload photo_add pointer" onchange={readURL} />
+						    				<button for="fournisseurPhoto" class="select_image" text="Choisir une image">Choisir une image</button>
+											<div class="image_position">
+								    			<img class="preview" src="#"/>
+											</div>
+											<button id="reset_image" onclick={resetImage}>X</button>
+								    		<input class="hidden" type="text" name="image" id="image">
+										</div>
+									</div>
+									<div class="flex_5">
+										<label for="libelle" class="cell_1 cell_fournisseurs">
+											Nom Fournisseur
+										</label>
+										<div class="cell_2 cell_fournisseurs">
+											<input id="libelle" class="libelle_fournisseur large_input" type="text" name="libelle">
+										</div>
+										<div class="cell_3 cell_fournisseurs">
+											<div id="mode_de_paiement" class="cell_1 mode_paiement">
+												Mode de paiement
+											</div>
+											<div class="cell_2">
+												<select id="id_mode_paiement" onchange={ changePaiement }>
+													<option value=""></option>
+													<option value="{id}" each={ mode_paiement } if={ fournisseur == 1 } type={ type }>{libelle}</option>
+												</select>
+											</div>
+										</div>
+										<div class="row_2 row informations_fournisseur">
+											<div class="cell_1 cell_fournisseurs"></div>
+											<div class="cell_2 cell_fournisseurs"></div>
+										</div>
+										<div class="row_3 row informations_fournisseur">
+											<div class="cell_1 cell_fournisseurs">
+												N° et Voie
+											</div>
+											<div class="cell_2 cell_fournisseurs">
+												<input id="num_et_voie" class="num_et_voie large_input" type="text" name="num_et_voie">
+											</div>
+											<div class="cell_3 cell_fournisseurs">
+												<div class="cell_1">
+													Banque
+												</div>
+												<div class="cell_2">
+													<input type="text" id="banque" class="banque" name="banque">
+												</div>
+											</div>
+										</div>
+										<div class="row_4 row informations_fournisseur">
+											<div class="cell_1 cell_fournisseurs">
+												N° Appartement ou Etage
+											</div>
+											<div class="cell_2 cell_fournisseurs">
+												<input id="num_appartement_etage" class="num_appartement_ou_etage large_input" type="text" name="num_appartement_ou_etage">
+											</div>
+											<div class="cell_3 cell_fournisseurs">
+												<div class="cell_1">
+													Titulaire
+												</div>
+												<div class="cell_2">
+													<input type="text" name="titulaire" id="titulaire" class="titulaire">
+												</div>
+											</div>
+										</div>
+										<div class="row_5 row informations_fournisseur">
+											<div class="cell_1 cell_fournisseurs">
+												Entrée, Batiment
+											</div>
+											<div class="cell_2 cell_fournisseurs">
+												<input type="text" name="entree_batiment" class="entree_batiment large_input" id="entree_batiment">
+											</div>
+											<div class="cell_3 cell_fournisseurs">
+												<div class="cell_1">
+													RIB
+												</div>
+												<div class="cell_2">
+													<input id="rib" class="rib_1" type="text" name="rib" maxlength="5" minlength="4" placeholder="0000" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(0, 4) : '' }">
+													<input id="rib2" class="rib_2" type="text" name="rib" maxlength="5" minlength="4" placeholder="0000" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(4, 4) : '' }">
+													<input id="rib3" class="rib_3" type="text" name="rib" maxlength="11" minlength="11" placeholder="00000000000" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(8, 11) : '' }">
+													<input id="rib4" class="rib_4" type="text" name="rib" minlength="2" maxlength="2" placeholder="00" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(19, 2) : '' }">
+												</div>
+											</div>
+										</div>
+										<div class="row_6 row informations_fournisseur">
+											<div class="cell_1 cell_fournisseurs">
+												Lieu Dit, Boite Postale
+											</div>
+											<div class="cell_2 cell_fournisseurs">
+												<input type="text" name="lieu_dit_boite_postale" id="lieu_dit_boite_postale" class="lieu_dit_boite_postale large_input">
+											</div>
+											<div class="cell_3 cell_fournisseurs">
+												<div class="cell_1">
+													IBAN
+												</div>
+												<div class="cell_2">
+													<input id="iban" class="iban" type="text" name="iban" placeholder="FR00 0000 0000 0000 0000 0000 00" value="{ parametresCompte.iban ? parametresCompte.iban : '' }">
+													BIC <input id="bic" type="text" class="bic" name="bic" value="{ parametresCompte.bic ? parametresCompte.bic : '' }">
+												</div>
+											</div>
+										</div>
+										<div class="row_7 row informations_fournisseur">
+											<div class="cell_1 cell_fournisseurs">
+												Code Postal
+											</div>
+											<div class="cell_2 cell_fournisseurs">
+												<input type="text" name="code_postal" id="code_postal" class="code_postal" placeholder="75011">
+												Ville <input type="text" name="ville" id="ville" class="ville" placeholder="Paris"> 
+											</div>
+										</div>
+										<div class="row_8 row informations_fournisseur">
+											<div class="cell_1 cell_fournisseurs">
+												Pays
+											</div>
+											<div class="cell_2 cell_fournisseurs">
+												<!--<input type="text" name="pays" id="pays" class="pays" placeholder="FRANCE">-->
+												<select id="pays" class="pays">
+													<option value="France">France</option>
+													<option value="Autre">Autre</option>
+												</select>
+											</div>
+											<div class="cell_3 cell_fournisseurs"></div>
+										</div>
+									</div>
+								</div>
+								<div class="contact_header">
+									<div class="contact">
+										<header class="fournisseur_header">Contact</header>
+										<!--<input type="text" name="pays" id="pays" class="pays" placeholder="FRANCE">-->
+										<textarea name="contact1" id="contact1"></textarea>
+									</div>
+									<div class="contact">
+										<header class="fournisseur_header">Contact</header>							
+										<!--<input type="text" name="pays" id="pays" class="pays" placeholder="FRANCE">-->
+										<textarea name="contact2" id="contact2"></textarea>
+									</div>
+									<div class="contact">
+										<header class="fournisseur_header">Contact</header>
+										<!--<input type="text" name="pays" id="pays" class="pays" placeholder="FRANCE">-->
+										<textarea name="contact3" id="contact3"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="cancel_save_submit">
+								<button name="cancel_submit" class="button annuler" onclick={ cancelFournisseur }>Annuler</button>
+								<button name="save_submit" class="button enregistrer" onclick={ saveFournisseur }>Enregistrer</button>
+							</div>
+						</div>
+					</div>
+					<div id="add_facture" idFournisseurFacture="" class=" edit_fournisseur hidden">
+						<header id="facture_header">Facture</header>
+						<div>
+							<div class="table c100">
+								<div class="cell">
+									<div class="cell">
+										<input class="hidden" id="id_fournisseur" name="id_fournisseur" type="text">
+										<label class="s-large largeLabel margin_align" for="id_journal">N° Facture</label>
+										<input id="numero_facture" class="l-large" name="numero_facture" type="text">
+									</div>
+									<div class="cell">
+										<div class="inlineBlock">
+											<label class="margin label-date" for="front_date_enregistrement">Date de Facture</label>
+											<input type="hidden" name="date" id="date" type="date" >
+											<!-- <input type="text" id="date_view" onkeyup={ formatDateField } maxlength="10" field-for-age="age" field-for-date="date_enregistrement" required="required" class="date l-large date_enregistrement"> -->
+											<input type="text" id="front_date" name="front_date" placeholder="jj/mm/aaaa" maxlength="10" field-for-date="date" required="required" class="date l-large date_enregistrement" onchange={ formatDateField }>
+										</div>
+										<label class="s-large largeLabel" for="libelle">Montant de la facture</label>
+										<input type="text" id="montant_facture" onchange={montantGlobal}>
+									</div>
+								</div>
+								<div class="cell div_info_montant">
+									<div class="inline_block center info_montant debit">
+										<div><span class="title">Montant</span></div>
+										<div><span class="montant">{ montantFacture } </span><span class="euro">€</span></div>
+									</div>
+									<div class="inline_block center info_montant credit">
+										<div><span class="title">Ventilation</span></div>
+										<div><span class="montant">{ ventilationFacture } </span><span class="euro">€</span></div>
+									</div>
+									<div class="inline_block center info_montant ecart last">
+										<div><span class="title">Ecart</span></div>
+										<div><span class="montant" id="save_if_not_null">{ montantFacture ? (Math.abs(montantFacture - ventilationFacture)).toFixed(2) : 0.00} </span><span class="euro">€</span></div>
+									</div>
+								</div>
+							</div>
+							<div class="liste-add-ecriture">
+								<div class="ecriture_info_compte" each={ nbAddComptes } db_id={ id } action="add_ecriture">
+									<label class="s-large align_margin" for="id_compte_{ id }">Produit</label>
+									<select name="id_produit_{ id }" id="id_produit_{ id }" class="id_compte xxxl-large" onclick={ selectInfoProduit } >
+										<option value=""></option>
+										<option each={ produit } id="{id}" value="{id}" stock={id_compte_stock} reference="{ id }">{ nom_produit } </option>
+									</select>
+									<div class="cell_block">
+										<div class="debit">
+											<label class="s-large">Montant</label>
+										</div>
+										<div class="debit">
+											<input type="text" name="montant_produit_{ id }" id="montant_produit_{ id }" class="debit count_this s-large" value="{montantTarif}" onchange={montantGlobal}>
+										</div>
+									</div>
+									<div class="cell_block" style="vertical-align: bottom" if={ id != 1 }>
+											<p class="modif">
+												<img class="delete_element_img" onclick={ parent.add_deleteCompte } title="Supprimer" delete_id="{ id }" src="/img/delete.png">
+											</p>
+									</div>
+
+								</div>
+								<div class="block_add_compte left">
+									<button class="blue align_margin" name="add_compte" onclick={ addLine }>Ajouter une ligne</button>
+								</div>
+							</div>
+						</div>
+						<div class="reglementMenu">
+							<input id="fournisseur_reglement_id" class="hidden">
+							<header id="reglement_header">Effectuer un Réglement</header>
+							<label class="s-large" for="libelle">Montant</label>
+							<input type="text" id="montant">
+							<label class="xs-large label-date largeLabel" for="front_date_enregistrement">Date de Paiement</label>
+							<input type="hidden" name="date_de_paiement" id="date_de_paiement" type="date">
+							<input type="text" id="front_date_de_paiement" placeholder="jj/mm/aaaa" maxlength="10" field-for-age="age" field-for-date="date_de_paiement" required="required" class="date l-large date_enregistrement" onchange={ formatDateField }>
+							<div class="">
+								<input class="hidden" id="id_facture" name="id_facture" type="text">
+								<div class="cell_3 cell_fournisseurs padding_div">
+									Mode de paiement
+									<select id="mode_de_paiement" onchange={ changePaiement }>
+										<option value=""></option>
+										<option value="{id}" each={ mode_paiement } if={ fournisseur == 1 } type={ type }>{libelle}</option>
+									</select>
+									<label class="s-large mode_align" for="libelle">N° Chèque</label>
+									<input type="text" id="numero_cheque">
+								</div>
+							</div>
+						</div>
+						<div class="submit">
+							<button name="cancel_submit" class="button annuler cancel_submit" onclick={ cancelReglement }>Annuler</button>
+							<button name="save_submit" class="button enregistrer save_submit" onclick={ saveReglement } type="submit">Enregistrer</button>
+						</div>
+					</div>
+					<!-- /End Describe Fournisseur edition -->
+					<div class="actions-fournisseurs tohide table c100">
+						<div class="row">
+							<div class="cell c40 middle right">
+								<div class="cell_block center block_couleur_info color1">
+									<span class="italic">Total Factures</span>
+									<br>
+									<span>  {formatNumber(montantTotalF)} <span class="euro-sign">€</span></span>
+								</div>
+								<div class="cell_block center block_couleur_info color2">
+									<span class="italic">Total Règlements</span>
+									<br>
+									<span> {formatNumber(reglementTotalF)}<span class="euro-sign">€</span></span>
+								</div>
+								<div class="cell_block center block_couleur_info color3">
+									<span class="italic">Total Reste à Payer</span>
+									<br>
+									<span>  {formatNumber(soldeF)} <span class="euro-sign">€</span></span>
+								</div>
+							</div>
+							<div class="cell c50 middle">
+								<button id="add_element_button" class="button ajouter" name="add_element_button" onclick={ addFournisseur }>Ajouter un Fournisseur</button>
+							</div>
+						</div>
+					</div>
+					<div class="entete-tableau tohide">
+						<div class="cell_1"></div>
+						<div class="cell_2 left">
+							<p class="">Fournisseur</p>
+						</div>
+						<div class="cell_2 center">
+							<p class="">Nbre Facture</p>
+						</div>
+						<div class="cell_4 center">
+							<p class="">Facture</p>
+						</div>
+						<div class="cell_5 center">
+							<p class="">Règlement</p>
+						</div>
+						<div class="cell_6 center">
+							<p class="">Reste à Payer</p>
+						</div>
+						<div class="cell_8 center">
+							<p class="">Actions</p>
+						</div>
+					</div>
+					<div each={ fournisseur } id="{ id }" class="fournisseur editFournisseur pointer style_ligne">
+						<div class="show_infos when_facture_hide" onclick={factureFournisseur}>
+							<div class="cell_1">
+							</div>
+							<div class="cell_2 left">
+								<p class="">{ libelle }</p>
+							</div>
+							<div class="cell_3 left align_center">
+								<p class="">{ nombre_facture }</p>
+							</div>
+							<div class="cell_4 center">
+								<p class="">{ totalFacture }</p>
+							</div>
+							<div class="cell_5 center">
+								<p class="">{totalMontant}</p>
+							</div>
+							<div class="cell_6 center">
+								<p class="">{ reste_payer }</p>
+							</div>
+							<div class="cell_8 center">
+								<p class="modif">
+									<img class="edit_element_img editElement" onclick={ editElement } title="Modifier" src="/img/edit.png">
+									<img class="delete_element_img" onclick={ validDeleteFournisseur } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+							</div>
+						</div>
+							<div id="{ id }_edit" class="edit edit_fournisseur hidden">
+								<header class="fournisseur_header">Fournisseur</header>
+								<div class="table add_block_fournisseur gris size-down c100">
+									<div class="flex_content">
+										<div class='flex_1'>
+												<div id='image_upload_edit'>
+													<input type='file' value="choisir une image" id="photo_upload_{id}" class="photo_upload photo_upload_edit photo_add pointer" onchange={readURLEdit} />
+								    				<button for="fournisseursPhoto" class="select_image" text="Choisir une image">Choisir une image</button>
+													<div class="image_position">
+										    			<img class="preview_{id} preview_image_edit" src="/img/uploads/fournisseurs/{image}"/>
+													</div>
+													<button id="reset_image" onclick={resetImageEdit}>X</button>
+										    		<input class="hidden" type="text" name="image_{ id }" id="image_{ id }">
+												</div>
+										</div>
+										<div class="flex_5">
+											<div class="row_1 row informations_fournisseur">
+												<label for="libelle" class="cell_1 cell_fournisseurs">
+													Nom Fournisseur
+												</label>
+												<div class="cell_2_edit cell_fournisseurs">
+													<input name="libelle_{id}" id="libelle_{id}" class="libelle large_input" type="text" value={ libelle }>
+												</div>
+												<div class="cell_3 cell_fournisseurs">
+													<div class="cell_2_edit">
+														Mode de paiement
+														<select id="mode_paiement_{id}" class="edit_paiement" onchange={ changePaiement }>
+															<option value=""></option>
+															<option value="{id}" each={ mode_paiement } if={ mode_paiement.fournisseur == 1 } type={ type }>{mode_paiement.libelle}</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="row_2 row informations_fournisseur">
+												<div class="cell_1 cell_fournisseurs"></div>
+												<div class="cell_2_edit cell_fournisseurs"></div>
+												<div class="cell_3 cell_fournisseurs">
+													<div class="cell_2_edit">
+														Banque<input type="text" id="banque_{id}" class="banque_edit" name="banque_{id}" value={banque} >
+													</div>
+												</div>
+											</div>
+											<div class="row_3 row informations_fournisseur">
+												<div class="cell_1 cell_fournisseurs">
+													N° et Voie
+												</div>
+												<div class="cell_2_edit cell_fournisseurs">
+													<input id="num_et_voie_{id}" value={num_et_voie } class="num_et_voie large_input" type="text" name="num_et_voie_{id}" >
+												</div>
+												<div class="cell_3 cell_fournisseurs">
+													<div class="cell_2_edit">
+														Titulaire<input type="text" name="titulaire_{id}" id="titulaire_{id}" class="titulaire_edit" value={titulaire}>
+													</div>
+												</div>
+											</div>
+											<div class="row_4 row informations_fournisseur">
+												<div class="cell_1 cell_fournisseurs">
+													N° Appartement ou Etage
+												</div>
+												<div class="cell_2_edit cell_fournisseurs">
+													<input id="num_appartement_etage_{id}" class="num_appartement_ou_etage large_input" type="text" name="num_appartement_etage_{id}" value={num_appartement_etage } >
+												</div>
+												<div class="cell_3 cell_fournisseurs">
+													<div class="cell_2_edit">
+														<input type="hidden" name="rib_{ id }" id="rib_{ id }" value="{ rib }">
+														RIB<input id="rib1_{id}" class="rib_1 rib_edit" type="text" name="rib" maxlength="5" minlength="4" placeholder="0000" required="required" next-to-focus="rib2_{ id }" onkeyup="{ focusNextOne }">
+														<input id="rib2_{id}" class="rib_2" type="text" name="rib" maxlength="4" minlength="5" placeholder="0000" required="required" next-to-focus="rib3_{ id }" onkeyup="{ focusNextOne }">
+														<input id="rib3_{id}" class="rib_3" type="text" name="rib" maxlength="11" minlength="11" placeholder="00000000000" required="required" next-to-focus="rib4_{ id }" onkeyup="{ focusNextOne }">
+														<input id="rib4_{id}" class="rib_4" type="text" name="rib" minlength="2" maxlength="2" placeholder="00" required="required" >
+													</div>
+												</div>
+											</div>
+											<div class="row_5 row informations_fournisseur">
+												<div class="cell_1 cell_fournisseurs">
+													Entrée, Batiment
+												</div>
+												<div class="cell_2_edit cell_fournisseurs">
+													<input type="text" name="entree_batiment_{id}" class="entree_batiment large_input" value={entree_batiment} id="entree_batiment_{id}">
+												</div>
+												<div class="cell_3 cell_fournisseurs">
+													<div class="cell_2">
+														IBAN<input id="iban_{id}" class="iban iban_edit" type="text" name="iban_{id}"  value="{ iban }">
+														BIC <input id="bic_{id}" type="text" class="bic" name="bic_{id}" value="{ bic }">
+													</div>
+												</div>
+											</div>
+											<div class="row_6 row informations_fournisseur">
+												<div class="cell_1 cell_fournisseurs">
+													Lieu Dit, Boite Postale
+												</div>
+												<div class="cell_2_edit cell_fournisseurs">
+													<input type="text" name="lieu_dit_boite_postale_{id}" id="lieu_dit_boite_postale_{id}" class="lieu_dit_boite_postale large_input" value={lieu_dit_boite_postale}>
+												</div>
+												<div class="cell_3 cell_fournisseurs"></div>
+											</div>
+											<div class="row_7 row informations_fournisseur">
+												<div class="cell_1 cell_fournisseurs postal">
+													Code Postal
+												</div>
+												<div class="cell_2 cell_fournisseurs">
+													<input type="text" name="code_postal_{id}" id="code_postal_{id}" class="code_postal" placeholder="75011" value={code_postal}>
+													Ville <input type="text" name="ville_{id}" id="ville_{id}" class="ville" value={ville}> 
+												</div>
+												<div class="cell_3 cell_fournisseurs"></div>
+											</div>
+											<div class="row_8 row informations_fournisseur">
+												<div class="cell_1 cell_fournisseurs">
+													Pays
+												</div>
+												<div class="cell_2 cell_fournisseurs">
+													<select id="pays">
+														<option value="France">France</option>
+														<option value="Autre">Autre</option>
+													</select>
+												</div>
+												<div class="cell_3 cell_fournisseurs"></div>
+											</div>
+										</div>
+									</div>
+									<div class="contact_header">
+										<div class="contact">
+											<header class="fournisseur_header">Contact</header>
+											<!--<input type="text" name="pays" id="pays" class="pays" placeholder="FRANCE">-->
+											<textarea name="contact1_{id}" id="contact1_{id}" value={contact1}>{contact1}</textarea>
+										</div>
+										<div class="contact">
+											<header class="fournisseur_header">Contact</header>							
+											<!--<input type="text" name="pays" id="pays" class="pays" placeholder="FRANCE">-->
+											<textarea name="contact2_{id}" id="contact2_{id}" value={contact2}>{contact2}</textarea>
+										</div>
+										<div class="contact">
+											<header class="fournisseur_header">Contact</header>
+											<!--<input type="text" name="pays" id="pays" class="pays" placeholder="FRANCE">-->
+											<textarea name="contact3_{id}" id="contact3_{id}">{contact3}</textarea>
+										</div>
+									</div>
+								</div>
+								<div class="cancel_save_submit">
+									<button name="cancel_submit" class="button annuler" onclick={ cancelEditFournisseur }>Annuler</button>
+									<button name="save_submit" class="button enregistrer" onclick={ saveEditFournisseur }> Enregistrer</button>
+								</div>
+								<div class="type_tresorerie hidden">
+									<span><label class="small" for="domiciliation">Domiciliation :</label><input name="domiciliation_{ id }" type="text" class="domiciliation xl-large" value="{ domiciliation !== 'NULL' ? domiciliation : '' }"></span>
+									<span><label class="small" for="iban">IBAN :</label><input name="iban_{ id }" type="text" class="iban xl-large" value="{ iban !== 'NULL' ? iban : '' }"></span>
+									<span><label class="small" for="bic">BIC :</label><input name="bic_{ id }" type="text" class="bic xl-large" value="{ bic !== 'NULL' ? bic : '' }"></span>
+								</div>
+							</div>
+							<div id="{ id }_facture"  class="hidden factureHide">
+
+								<div class="slide-up factureStyle hidden">
+									<!-- Describe Fournisseur edition -->
+									<!-- /End Describe Fournisseur edition -->
+									<div class="actions-fournisseurs hide_when_add_facture table c100">
+										<div class="row header_facture">
+											<div class='flex1'>
+												<img class="facture_image" src="/img/uploads/fournisseurs/{image}">
+											</div>
+											<div class="flex3">
+												<label class='titre_facture_fournisseur'>Fournisseur</label><input value="{libelle}" disabled>
+											</div>
+											<div class="cell c40 middle right flex1">
+												<div class="align_items">
+													<div>
+														<div class="cell_inline ">
+															<span class="">Facture</span>
+															<input class="montant_total" type="text" value="{formatNumber(montantTotal)}" align="right" disabled> 
+														</div>
+														<div class="cell_inline ">
+															<span class="">Règlement</span>
+															<input class="reglement_total" type="text" value="{formatNumber(reglementTotal)}" align="right" disabled>
+														</div>
+														<div class="cell_inline ">
+															<span class="">Solde</span>
+															<input class="solde_facture" type="text" value="{formatNumber(soldeTotal)}" align="right" disabled>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="rightAjout" id="deleteThis">
+										<button id="add_element_button" class="button ajouter factureToSearch" value="{id}" name="add_element_button" onclick={ addFacture }>Ajouter une Facture</button>
+									</div>
+									<div class="entete-tableau">
+										<div class="cell_1"></div>
+										<div class="cell_2 left">
+											<p class="">Date</p>
+										</div>
+										<div class="cell_2 right">
+											<p class="">Facture</p>
+										</div>
+										<div class="cell_4 right">
+											<p class="">Montant</p>
+										</div>
+										<div class="cell_5 right">
+											<p class="">Règlement</p>
+										</div>
+										<div class="cell_6 right">
+											<p class="">Reste à Payer</p>
+										</div>
+										<div class="cell_8 right">
+											<p class="">Actions</p>
+										</div>
+									</div>
+									<div each={ facture } id="{ id }" class="fournisseur editFournisseur factureLine pointer">
+										<div class="show_infos show_infos_{id}">
+											<div class="cell_1">
+											</div>
+											<div class="cell_2 left">
+												<p class="">{ convertDateToView(date) }</p>
+											</div>
+											<div class="cell_3 right ">
+												<p class="" id="get_numero_facture">{ numero_facture }</p>
+											</div>
+											<div class="cell_4 right">
+												<p class="">{ montant_facture }</p>
+											</div>
+											<div class="cell_5 right">
+												<p class="">{ reglement }</p>
+											</div>
+											<div class="cell_6 right">
+												<p class="">{ reste }</p>
+											</div>
+											<div class="cell_8 right">
+												<p class="modif">
+													<img class="edit_element_img editFacture" onclick={ editFacture } title="Modifier" src="/img/edit.png">
+													<img class="delete_element_img" onclick={ validDeleteFacture } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+												</div>
+											</div>
+											<div id="{ id }_edit" class="{id}_edit edit edit_fournisseur hidden">
+												<header id="facture_header">Facture</header>
+												<div class="edit_facture_montant">
+													<div class="table c100">
+														<div class="cell">
+															<div class="cell">
+																<input class="hidden" id="id_reg_{id}" name="id_reg_{id}" value="{id_reg}" type="text">
+																<input class="hidden" id="id_fournisseur_{id}" name="id_fournisseur_{id}" value="{id_fournisseur}" type="text">
+																<label class="s-large largeLabel margin_align" for="id_journal">N° Facture</label>
+																<input id="numero_facture_{id}" class="l-large" name="numero_facture" value="{numero_facture}" type="text" disabled>
+															</div>
+															<div class="cell">
+																<div class="inlineBlock">
+																	<label class="margin label-date" for="front_date_enregistrement">Date de Facture</label>
+																	<input type="hidden" name="date" id="date" type="date" >
+																	<input type="text" id="front_date_{id}" value="{ convertDateToView(date) }" name="front_date" placeholder="jj/mm/aaaa" maxlength="10" field-for-date="date" required="required" class="date l-large date_enregistrement" disabled onchange={ formatDateField }>
+																</div>
+																<label class="s-large largeLabel" for="libelle">Montant de la facture</label>
+																<input type="text" id="montant_facture_{id}" value="{montant_facture}" disabled>
+															</div>
+														</div>
+														<div class="cell div_info_montant">
+															<div class="inline_block center info_montant debit">
+																<div><span class="title">Montant</span></div>
+																<div><span class="montant">{ montantFactureEdit } </span><span class="euro">€</span></div>
+															</div>
+															<div class="inline_block center info_montant credit">
+																<div><span class="title">Ventilation</span></div>
+																<div><span class="montant">{ ventilationFactureEdit } </span><span class="euro">€</span></div>
+															</div>
+															<div class="inline_block center info_montant ecart last">
+																<div><span class="title">Ecart</span></div>
+																<div><span class="montant" >{ (Math.abs(montantFactureEdit - ventilationFactureEdit)).toFixed(2) } </span><span class="euro">€</span></div>
+															</div>
+														</div>
+													</div>
+													<div class="liste-add-ecriture">
+														<div class="ecriture_info_compte" each={ facture2 }  action={ facture.action }>
+															<label class="s-large align_margin" for="id_compte_{ id }">Produit</label>
+															<select name="id_produit" id="id_produit" class="id_compte xxxl-large" disabled>
+																<option each={ produit }  value="{ id }" reference="{ reference }" selected="{id_produit === id }" disabled>{ nom_produit } </option>
+															</select>
+															<div class="cell_block">
+																<div class="debit">
+																	<label class="s-large">Montant</label>
+																</div>
+																<div class="debit">
+																	<input type="text" name="montant_produit_{id}" id="montant_produit_{id}" class="debit count_this_edit s-large" value="{montant_produit}" disabled>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="reglementMenu">
+													<header id="reglement_header">Effectuer un Réglement</header>
+													<input class="hidden" id="id_fournisseur_{id_reg}" name="id_fournisseur_{id_reg}" value="{id_fournisseur}" type="text">
+													<label class="s-large" for="libelle">Montant</label>
+													<input type="text" id="montant_{id_reg}">
+													<label class="xs-large label-date largeLabel" for="front_date_enregistrement">Date de Paiement</label>
+													<input type="hidden" name="date_de_paiement_{id_reg}" id="date_de_paiement_{id_reg}" type="date">
+													<input type="text" id="front_date_de_paiement_{id_reg}" placeholder="jj/mm/aaaa" maxlength="10" field-for-age="age" field-for-date="date_de_paiement_{id_reg}" required="required" class="date l-large date_enregistrement" onchange={ formatDateField }>
+													<div class="">
+														<input class="hidden" id="id_facture_{id_reg}" value="{id}" name="id_facture" type="text">
+														<div class="cell_3 cell_fournisseurs padding_div">
+															Mode de paiement
+															<select id="mode_de_paiement_{id_reg}" onchange={ changePaiement }>
+																<option value=""></option>
+																<option value="{id}" each={ mode_paiement } if={ fournisseur == 1 } type={ type }>{libelle}</option>
+															</select>
+															<label class="s-large mode_align" for="libelle">N° Chèque</label>
+															<input type="text" id="numero_cheque_{id_reg}">
+														</div>
+													</div>
+												</div>
+												<div class="submit">
+													<button name="cancel_submit" class="button annuler cancel_submit" onclick={ cancelEditReglement }>Annuler</button>
+													<button name="save_submit" class="button enregistrer save_submit" onclick={ saveEditReglement } type="submit">Enregistrer</button>
+												</div>
+											</div>
+											<div id="facture_{ id }_delete" class="delete hidden">
+												<div>
+													<p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p>
+													<button name="delete_{ id }" onclick={ deleteFacture }>Supprimer</button>
+													<button name="cancel_{ id }" onclick={ cancelDeleteFacture }>Annuler</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="fournisseur_{ id }_delete" class="delete hidden">
+									<div>
+										<p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" onclick={ deleteFournisseur }>Supprimer</button><button name="cancel_{ id }" onclick={ cancelDeleteFournisseur }>Annuler</button>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div id="filtres" class="menu_produit compta">
+					<header id="produitSlide" class="opened" onclick="{ showContents }">Produits</header>
+					<div class="slide-up hidden">
+						<div id="add_produit" class=" edit_produit hidden">
+							<div class="table add_block_fournisseur gris size-down c100">
+								<header class="produit_header">Produit</header>
+								<div class="row_1 row informations_fournisseur style_movement">
+									<label for="libelle" class="">
+										Libelle
+									</label>
+									<div class="cell_2 cell_fournisseurs">
+										<input id="nom_produit" class="libelle_produit large_input" type="text" name="nom_produit">
+									</div>
+								</div>
+								<div class="row_2 row informations_fournisseur style_movement">
+									<div class="cell_3 cell_fournisseurs">
+										<div id="mode_paiement" class="cell_1 mode_paiement">
+											Compte
+										</div>
+										<div class="cell_2">
+											<select id="id_compte">
+												<option selected ></option>
+												<option each={ comptes }  if={ reference.substring(0, 1) === "6" || reference.substring(0, 1) === "7" } value="{ reference }" reference="{ reference }">{ reference } { libelle }</option>
+											</select>
+										</div>
+										<div id="mode_paiement" class="cell_1 mode_paiement">
+											Analytique
+										</div>
+										<div class="cell_2">
+											<select id="id_analytique">
+												<option selected ></option>
+												<option each={ this.analytiques }  value="{ libelle }" reference="{ libelle }">{ reference } { libelle }</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<input type="checkbox" id="checkbox" class="hidden" value="Mouvement de Stock" onclick={showMe}><span class="style_movement hidden">Mouvement de Stock</span>
+								<div class="row_8 row informations_fournisseur hidden style_movement" id="checkbox_mouvement">
+									<div id="mode_paiement" class="cell_1 mode_paiement">
+										Compte de Stock
+									</div>
+									<div class="cell_2">
+										<select id="id_compte_stock">
+											<option selected ></option>
+											<option each={ this.comptes }  value="{ reference }" reference="{ reference }">{ reference } { libelle }</option>
+										</select>
+									</div>
+									<div id="mode_paiement" class="cell_1 mode_paiement">
+										Produit
+									</div>
+									<div class="cell_2">
+										<select id="id_compte_produit">
+											<option selected ></option>
+											<option each={ this.activites } value="{ p_id }" id="{p_id}" reference="{ p_libelle }">{ p_libelle }</option>
+										</select>
+									</div>
+								</div>
+
+							</div>
+							<div class="cancel_save_submit">
+								<button name="cancel_submit" class="button annuler" onclick={ cancelProduit }>Annuler</button>
+								<button name="save_submit" class="button enregistrer" onclick={ saveProduit }>Enregistrer</button>
+							</div>
+						</div>
+						<div class="add_produit">
+							<button id="add_element_button" class="button ajouter" name="add_element_button" onclick={ addProduit }>Ajouter un Produit</button>
+						</div>
+						<div class="entete-tableau">
+							<div class="cell_1"></div>
+							<div class="cell_2 left">
+								<p class="">Libelle</p>
+							</div>
+							<div class="cell_4 center">
+								<p class="">Compte</p>
+							</div>
+							<div class="cell_2 center">
+								<p class="">Analytique</p>
+							</div>
+							<div class="cell_8 center">
+								<p class="">Actions</p>
+							</div>
+						</div>
+						<div each={ produit } id="{ id }" class="fournisseur editProduit style_ligne">
+							<div class="show_infos">
+								<div class="cell_1">
+								</div>
+								<div class="cell_2 left">
+									<p class="">{ nom_produit }</p>
+								</div>
+								<div class="cell_4 center">
+									<p class="">{ id_compte }</p>
+								</div>
+								<div class="cell_3 left">
+									<p class="">{ id_analytique }</p>
+								</div>
+								<div class="cell_8 center">
+									<p class="modif">
+										<img class="edit_element_img editProduit" onclick={ editProduit } title="Modifier" src="/img/edit.png">
+										<img class="delete_element_img" onclick={ validDeleteProduit } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+									</div>
+								</div>
+								<div id="{ id }_edit" class="edit edit_fournisseur hidden">
+									<div class="table add_block_fournisseur gris size-down c100">
+										<header class="produit_header">Produit</header>
+										<div class="row_1  informations_fournisseur ">
+											<div class="cell_2 cell_fournisseurs">
+												<label for="libelle" class="">
+													Libelle
+												</label>
+												<input id="nom_produit_{id}" class="libelle_produit xl_large_input" type="text" name="nom_produit_{id}" value="{nom_produit}">
+											</div>
+										</div>
+										<div class="row_2  informations_fournisseur">
+											<div class="cell_3 cell_fournisseurs">
+												<div id="mode_paiement" class="cell_1 mode_paiement">
+													Compte
+												</div>
+												<div class="cell_2">
+													<select id="id_compte_{ id }">
+														<option ></option>
+														<option each={ this.comptes }  if={ reference.substring(0, 1) === "6" || reference.substring(0, 1) === "7" } value="{ reference }" reference="{ reference }" selected="{ id_compte === reference }">{ reference } { libelle }</option>
+													</select>
+												</div>
+												<div id="mode_paiement" class="cell_1 mode_paiement">
+													Analytique
+												</div>
+												<div class="cell_2">
+													<select id="id_analytique_{ id }">
+														<option ></option>
+														<option each={ this.analytiques } value="{ libelle }" reference="{ reference }" selected="{ id_analytique === libelle }"> { libelle }</option>
+													</select>
+												</div>
+											</div>
+
+										</div>
+										<input type="checkbox" id="checkbox" class="hidden" value="Mouvement de Stock" onclick={showMe}><span class="style_movement hidden">Mouvement de Stock</span>
+									</div>
+									<div class="cancel_save_submit">
+										<button name="cancel_submit" class="button annuler" onclick={ cancelEditProduit }>Annuler</button>
+										<button name="save_submit" class="button enregistrer" onclick={ saveEditProduit }> Enregistrer</button>
+									</div>
+								</div>
+								<div id="{ id }_delete" class="delete hidden">
+									<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" onclick={ deleteProduit }>Supprimer</button><button name="cancel_{ id }" onclick={ cancelDeleteProduit }>Annuler</button></div>
+								</div>
+							</div>
+						</div>
+					</div>
+		</div>
+
+		<script>
+		var app = opts;
+		this.app = app;
+		var _this = this;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+		this.loaded = false;
+		this.E_M;
+
+		this.thingsToLoad = [ 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		app.on('unmount-fournisseurs', function(){
+			app.off('unmount-fournisseurs');
+			_this.unmount();
+		});
+
+		this.nbAddComptes = [
+			{id: 1},
+		];
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		showMe() {
+			$('#checkbox_mouvement').toggleClass('hidden');
+		}
+
+		readURL(input) {
+			console.log('upload button clicked!');
+            if (input.path[0].files) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('.photo_add')[0].files[0].name);
+	                reader.onload = function (input) {
+	                    $('.preview')
+	                        .attr('src', input.target.result)
+	                        .width(200)
+	                        .height(200);
+	                };
+	                $(".preview").show();
+	                $("#image").val($('.photo_add')[0].files[0].name);
+	                reader.readAsDataURL($('.photo_add')[0].files[0]);
+            }    
+        }
+
+        readURLEdit(e) {
+        	if (e.item.id) {
+            		var reader = new FileReader();
+	                console.log("fichier",$('#photo_upload_' + e.item.id)[0].files[0].name);
+	                reader.onload = function (input) {
+	                	console.log(e.item.id)
+	                    $('.preview_' + e.item.id)
+	                        .attr('src', input.target.result)
+	                        .width(200)
+	                        .height(200);
+	                };
+	                $(".preview_" + e.item.id).show();
+	                $("#image_" + e.item.id).val($('#photo_upload_' + e.item.id)[0].files[0].name);
+	                reader.readAsDataURL($('#photo_upload_' + e.item.id)[0].files[0]);
+            	}
+        }
+
+        resetImage(){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview").attr('src','#');
+        	$(".preview").hide();
+        	$('#photo_upload').val("");
+			$('#photo_upload').type = '';
+			$('#photo_upload').type = 'file';
+        }
+
+        resetImageEdit(e){
+        	//$(".preview").toggleClass('hidden');
+        	$(".preview_" + e.item.id).attr('src','#');
+        	$(".preview_" + e.item.id).hide();
+        	$('#photo_upload_' + e.item.id).val("");
+			$('#photo_upload_' + e.item.id).type = '';
+			$('#photo_upload_' + e.item.id).type = 'file';
+        }
+
+        add_deleteCompte(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			deleteCompte('add', e);
+		}
+
+		function deleteCompte(action, e){
+			var item = e.item;
+			if(action == 'add') {
+			    // index on the collection
+			    var index = _this.nbAddComptes.indexOf(item);
+
+			    // remove from collection
+			    _this.nbAddComptes.splice(index, 1);
+
+			    var debit = 0;
+				var credit = 0;
+
+				_this.update();
+
+				$('input.debit', '.add_ecriture').each(function(){
+					if(Number.isInteger(parseFloat($(this).val())))
+						debit += parseFloat($(this).val());
+				})
+
+				$('input.credit', '.add_ecriture').each(function(){
+					if(Number.isInteger(parseFloat($(this).val())))
+						credit += parseFloat($(this).val());
+				})
+
+				_this.add_debit_total = debit.toFixed(2);
+				_this.add_credit_total = credit.toFixed(2);
+			} else if (action == 'update') {
+				// TODO: remove this loop
+				var block_ecriture = $('#ecriture_' + $(e.currentTarget).attr('parentId') + '_' + $(e.currentTarget).attr('delete_id') + '_edit');
+				if(block_ecriture.attr('action') === 'add_ecriture') {
+					_this.elements[_this.idElements[$(e.currentTarget).attr('parentId')]].pieces[0].ecritures.splice(e.item.index, 1);
+				} else if(block_ecriture.attr('action') === 'update_ecriture') {
+					$(block_ecriture).addClass('hidden').attr('action', 'delete_ecriture');
+				}
+			}
+			_this.update();
+		}
+
+		this.deleteCompte = function deleteCompte(action, e){
+			var item = e.item;
+		    var debit = 0;
+			var credit = 0;
+			if(action == 'add') {
+			    // index on the collection
+			    var index = _this.nbAddComptes.indexOf(item);
+
+			    // remove from collection
+			    _this.nbAddComptes.splice(index, 1);
+
+				$('input.debit', '.add_ecriture').each(function(){
+					if(Number.isInteger(parseFloat($(this).val())))
+						debit += parseFloat($(this).val());
+				})
+
+				$('input.credit', '.add_ecriture').each(function(){
+					if(Number.isInteger(parseFloat($(this).val())))
+						credit += parseFloat($(this).val());
+				})
+
+				_this.add_debit_total = debit.toFixed(2);
+				_this.add_credit_total = credit.toFixed(2);
+			} else if (action == 'update') {
+				// TODO: remove this loop
+				var block_ecriture = $('#ecriture_' + $(e.currentTarget).attr('parentId') + '_' + $(e.currentTarget).attr('delete_id') + '_edit');
+				if(block_ecriture.attr('action') === 'add_ecriture') {
+					_this.elements[_this.idElements[$(e.currentTarget).attr('parentId')]].pieces[0].ecritures.splice(e.item.index, 1);
+				} else if(block_ecriture.attr('action') === 'update_ecriture') {
+					$(block_ecriture).addClass('hidden').attr('action', 'delete_ecriture');
+				}
+				console.log('num', e.item.ecriture.num_piece);
+				$('.ecriture', '#piece_' + e.item.ecriture.num_piece + '_edit').not('.hidden').each(function(){
+					if(Number.isInteger(parseFloat($('input.debit',$(this)).val())))
+						debit += parseFloat($('input.debit',$(this)).val());
+				})
+
+				$('.ecriture', '#piece_' + e.item.ecriture.num_piece + '_edit').not('.hidden').each(function(){
+					if(Number.isInteger(parseFloat($('input.credit',$(this)).val())))
+						credit += parseFloat($('input.credit',$(this)).val());
+				})
+				var num_piece = e.item.ecriture.num_piece;
+				var num_operation = e.item.ecriture.num_operation
+				console.log('num_piece:', num_piece, 'num_operation:', num_operation, 'credit:', credit, 'debit:', debit);
+
+				var piece = _this.elements[_this.idElements[num_operation]].pieces[_this.elements[_this.idElements[num_operation]].idPieces[num_piece]];
+				console.log('piece:', piece);
+				piece.edit_debit_total = debit.toFixed(2);
+				piece.edit_credit_total = credit.toFixed(2);
+			}
+			_this.update();
+		}
+
+        addLine(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			_this.addLineCompte('add', e);
+		}
+
+		this.addLineCompte = function addLineCompte(action, e) {
+			console.log('e', e.item);
+			if(action == 'add') {
+				var newItem = { id: _this.nbAddComptes.length + 1};
+				_this.nbAddComptes.push(newItem);
+			} else if (action == 'edit') {
+				if(e.item.status != 'active') {
+					console.log('this all : ', _this.idElements, 'this test : ', _this.idElements[14], 'this : ', _this.idElements[e.item.num_operation], ' id : ', e.item.id, ' elem:', _this.elements[_this.idElements[e.item.num_operation]]);
+					var element = _this.elements[_this.idElements[e.item.num_operation]];
+					var piece = element.pieces[element.idPieces[e.item.num_piece]];
+					if(piece.ecritures[piece.ecritures.length - 1].id > 0) {
+						var tmp = {
+							id: -1,
+							debit: 0,
+							credit: 0,
+							action: 'add_ecriture',
+							num_piece: e.item.num_piece,
+							num_operation: e.item.num_operation,
+						};
+					} else {
+						var tmp = {
+							id: piece.ecritures[piece.ecritures.length - 1]. id - 1,
+							debit: 0,
+							credit: 0,
+							action: 'add_ecriture',
+							num_piece: e.item.num_piece,
+							num_operation: e.item.num_operation,
+
+						}
+					}
+					piece.ecritures.push(tmp);
+				}
+			}
+			_this.update();
+		}
+
+        this.reglement = [];
+		this.idReglement = {};
+
+		this.analytiques = [];
+		this.idAnalytiques = {};
+
+		function getAnalytiques(){
+			var getParams = { type_element: 'analytique'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/budgets', getParams, function(data){
+				/*debugtime-console.log('getAnalytiques AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idAnalytiques[d['id']] = i;
+						_this.analytiques.push(d);
+					}
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //_this.numToLoad--;
+            })
+		}
+		getAnalytiques();
+
+		this.activites = [];
+		this.idActivites = {};
+
+		function getActivites(){
+			var getParams = { activite_produit: 1, visible: 'visible'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/activites/activites', getParams, function(data){
+				/*debugtime-console.log('getActivites AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {p_id: 'p_id', p_libelle: 'p_libelle', tarif: 'tarif', nb_places: 'nb_places'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idActivites[d['id']] = i;
+						_this.activites.push(d);
+					}
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //_this.numToLoad--;
+            })
+		}
+		getActivites();
+
+		selectInfoProduit(e) {
+			var test = $("#id_produit option:selected").val();
+			if ($("#id_produit option:selected").attr("stock")) {
+				$("#mouvement_de_stock").removeClass("hidden");
+			} else {
+				$("#mouvement_de_stock").addClass("hidden");
+			}
+			var montantTarif;
+			var nb_placeFront;
+			var getParams = { activite_produit: 1, visible: 'visible'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/activites/activites', getParams, function(data){
+				/*debugtime-console.log('getActivites AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = { p_libelle: 'p_libelle', tarif: 'tarif', nb_places: 'nb_places'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							if (data.elements[i][field] == test) {
+								_this.montantTarif = data.elements[i]['tarif'];
+								_this.nb_placeFront = data.elements[i]['nb_places'];
+							}
+						}
+					}
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //_this.numToLoad--;
+            })
+		}
+
+		this.mode_paiement = [];
+		this.idMode_paiement = {};
+
+		function getModePaiement(){
+			var getParams = {};
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON('/admin/compta/mode_paiement', getParams, function (data){
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+											
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', fournisseur: 'fournisseur', permanence: 'permanence', id_journal: 'id_journal', type: 'type', id_exercice: 'id_exercice', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idMode_paiement[d['id']] = i;
+						_this.mode_paiement.push(d);
+					}
+					// _this.update();
+					// if(_this.E_M) {
+					// 	_this.E_M.removeLoader({});
+					// } else {
+					// 	$('#loader').addClass('hidden');
+					// }
+
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			});
+		}
+		getModePaiement();
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] == 'visible') {
+							d = new Object();
+
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idComptes[d['id']] = i;
+							_this.comptes.push(d);
+						}
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+		this.parametres = [];
+		this.idParametres= {};
+
+		cancelParametres(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['id_compte_asso', 'id_compte_fo', 'id_compte_os', 'id_journal_cheques', 'id_journal_especes', 'id_journal_virements', 'id_journal_prelevements', 'id_journal_cartebleue', 'id_journal_chequesvacances', 'id_journal_couponsjeunes', 'id_journal_couponsports', 'id_journal_nouveaux', 'id_journal_paye', 'frais_virements', 'frais_prelevements', 'frais_cartebleue', 'taux_cartebleue', 'prefixe_numero_operations', 'prefixe_numero_pieces', 'banque', 'titulaire', 'rib', 'bic', 'iban'],
+					tag: _this,
+				});
+			}
+		}
+
+		saveParametres(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/parametres', 
+					fields: ['id_compte_asso', 'id_compte_fo', 'id_compte_os', 'id_journal_cheques', 'id_journal_especes', 'id_journal_virements', 'id_journal_prelevements', 'id_journal_cartebleue', 'id_journal_chequesvacances', 'id_journal_couponsjeunes', 'id_journal_couponsports', 'id_journal_nouveaux', 'id_journal_paye', 'frais_virements', 'frais_prelevements', 'frais_cartebleue', 'taux_cartebleue', 'prefixe_numero_operations', 'prefixe_numero_pieces', 'banque', 'titulaire', 'rib', 'bic', 'iban'],
+					tag: _this,
+					beforeSend: function(params){
+						var a = $('#rib').val();
+						a += $('#rib2').val();
+						a += $('#rib3').val();
+						a += $('#rib4').val();
+						params.data.rib = a;
+					},
+				});
+			}
+			console.log("Enregistré!");
+		}
+
+		this.parametresCompte = {};
+
+		function getParametresComptes(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON( '/admin/compta/parametres_fournisseur', getParams, function(data){
+				if(data && data.elements){
+					_this.parametresCompte = data.elements[0];
+					_this.numToLoad--;
+					_this.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+				}else{
+							// TODO: no data elements, get and manage error!...
+						}
+						_this.numToLoad--;
+					})
+		}
+		getParametresComptes();
+
+		this.journaux = [];
+		this.idJournaux = {};
+
+		function getJournaux(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/journaux', getParams, function(data){
+						if(data && data.elements){
+							var l = data.elements.length;
+							var i, d; 
+							var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte'};
+							for(i=0; i<l; i++){
+								if(data.elements[i]['visible'] == 'visible') { 
+									d = new Object();
+									for(field in fields){
+										d[fields[field]] = data.elements[i][field];
+									}
+									_this.idJournaux[d['id']] = i;
+									_this.journaux.push(d);
+								}
+							}
+							_this.numToLoad--;
+							_this.update();
+						}else{
+							// TODO: no data elements, get and manage error!...
+						}
+						_this.numToLoad--;
+					})
+		}
+		getJournaux();
+
+		retourPage(e) {
+			$(".factureHide").hide();
+			$(".menu_fournisseur").css('visibility', 'visible');
+			$(".menu_produit").css('visibility', 'visible');
+			$(".closed, .actions-fournisseurs, .entete-tableau").css('height', 'auto');
+			$(".tohide").css('display', 'block');
+			$(".button_retour").hide();
+			$(".editFournisseur").css('height', 'auto');
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				$('.add_produit').show();
+				$(".editProduit").show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['id_fournisseur', 'numero_facture', 'date', 'date_de_paiement','montant_facture','id_produit','montant_produit','quantite_produit'],
+					tag: _this,
+					prefixId: 'facture',
+				});
+				$("#add_fournisseur").hide();
+				$("#add_reglement").hide();
+				$('.factureStyle').show();
+				$('.factureLine').css('height', 'auto');
+				//$('.entete-tableau').css('display', 'table');
+				//$('.factureHide').css('display', 'block');
+				$('.rightAjout').show();
+				$('.hide_when_add_facture').show();
+				$('.trueFiltres').show();
+				$('.menu_produit').show();
+		    	$(".when_facture_hide").show();
+		    	$(".fournisseur.editFournisseur.pointer.style_ligne").show();
+			}
+
+		}
+
+		editElement(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var id = e.item.id;
+				$('.actions-fournisseurs').addClass('hidden');
+				$('.entete-tableau').addClass('hidden');
+				//$('#filtres').addClass('hidden');
+				//$('.show_infos').addClass('hidden');
+				$(".editFournisseur:not(#"+ id + ")").addClass('hidden');
+				var rib = document.getElementById('rib_' + id);
+				var rib1 = document.getElementById('rib1_' + id);
+				var rib2 = document.getElementById('rib2_' + id);
+				var rib3 = document.getElementById('rib3_' + id);
+				var rib4 = document.getElementById('rib4_' + id);
+				rib1.value = rib.value.substr(0,5);
+				rib2.value = rib.value.substr(5,5);
+				rib3.value = rib.value.substr(10,11);
+				rib4.value = rib.value.substr(21,2);
+				_this.E_M.editElement({
+					event: e, 
+					tag: _this,
+					end: function(params){
+					}
+				});
+
+			}
+		}
+
+		editProduit(e){
+			if(_this.E_M){
+				var id = e.item.id;
+				$('.actions-fournisseurs').addClass('hidden');
+				$('.entete-tableau').addClass('hidden');
+				$('#filtres').addClass('hidden');
+				$('.show_infos').addClass('hidden');
+				$('.menu_fournisseur').hide();
+				$('.add_produit').hide();
+				$(".editProduit:not(#"+ id + ")").hide();
+				_this.E_M.editElement({event: e, tag: _this,
+					end: function(params){
+					}
+				});
+			}
+		}
+
+		editFacture(e) {
+			$('#deleteThis').hide();
+			if(_this.E_M){
+				console.log(e.item.id)
+				var id_fournisseur = 0;
+				id_fournisseur = $( "#id_fournisseur" ).val();
+				_this.id_fournisseur = $( "#id_fournisseur" ).val();
+				getFactureLine(id_fournisseur, e.item.id);
+				$("#id_fournisseur_" + e.item.id).attr('value', $( "#id_fournisseur" ).val());
+				var id_reg = $("#id_reg_" + e.item.id).val();
+				var id = e.item.id;
+				console.log("id reglement :: " + id_reg );
+				console.log("id facture : " + id);
+				$("." + id + "_edit").removeClass("hidden");
+				$(".show_infos_" + id).addClass("hidden");
+
+				var montantFactureEdit = 0;
+				_this.montantFactureEdit = $("#montant_facture_" + id).val();
+				var ventilationFactureEdit = 0;
+				var quantiteFactureEdit = 0;
+
+				$('input.count_this_edit', "#" + e.item.id + "_edit").each(function(){
+					if(Number.isInteger(parseFloat($(this).val())))
+						quantiteFactureEdit += parseFloat($(this).val());
+					console.log("fdfdgfdf :::::::: " + quantiteFactureEdit)
+
+				})
+				_this.ventilationFactureEdit = quantiteFactureEdit.toFixed(2);
+				$( function() {
+					$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+					$( "#front_date_de_paiement_" + id_reg).datepicker({
+						dateFormat: 'dd/mm/yy',
+						showOtherMonths: true,
+						selectOtherMonths: true
+					});
+				} );
+				$('.entete-tableau').addClass('hidden');
+				$('.hide_when_add_facture').addClass("hidden");
+				$('.rightAjout').addClass('hidden');
+				$(".fournisseur.editFournisseur.factureLine.pointer:not(#" + e.item.id + ")").addClass('hidden');
+				_this.E_M.editElement({event: e, tag: _this,
+					end: function(params){
+					}
+				});
+			}
+			_this.update();
+		}
+
+		factureFournisseur(e) {
+			e.stopPropagation();
+			e.preventDefault();
+		    $("#" + e.item.id + "_facture .factureStyle").removeClass("hidden");
+		    $(".when_facture_hide").hide();
+		    $(".button_retour").show();
+		    $('#' + e.item.id + '_facture').show();
+		    //$('#' + e.item.id + '_facture').css('visibility', 'visible');
+		    //$(".menu_fournisseur:not(#add_facture)").css('visibility', 'hidden');
+		    $(".menu_produit").addClass("hidden");
+		    $('.menu_produit').hide();
+		    $(".editFournisseur:not(#"+ e.item.id + ")").css('height', '0');
+		    //$(".closed, .actions-fournisseurs, .entete-tableau").css('height', '0');
+		    $(".tohide").css('display', 'none');
+		    //$("#add_facture").css('visibility', 'visible');
+		    $( "#id_fournisseur" ).val(e.item.id);
+		    //$(".reglementMenu").hide();
+		    var id_fournisseur = e.item.id;
+		    getFacture(id_fournisseur);
+		    getReglement(id_fournisseur);
+		    var id_fournisseur = 0;
+			_this.id_fournisseur = $( "#id_fournisseur" ).val();
+			console.log(id_fournisseur)
+		}
+
+		$('.editFournisseur *').click(function(e){ e.stopPropagation(); });
+
+
+		focusNextOne(e) {
+			var limit = e.currentTarget.getAttribute('maxlength');
+			var next_one = e.currentTarget.getAttribute('next-to-focus');
+			var next = document.getElementById(next_one);
+			var length = e.currentTarget.value.length;
+			if(length == limit){
+				next.focus();
+			}
+		}
+
+		formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.formatDateField({
+					event: e
+				});
+			}
+		}
+
+		this.convertDateToDb = function convertDateToDb(date){   
+			var year = date.substr(6, 4);
+			var month = date.substr(3,2);
+			var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			return convertedDate;
+		}
+
+		this.convertDateToView = function convertDateToView(date){
+			var convertedDate = '';
+			if( ! date){
+				convertedDate = "Date sans valeur";
+			}else{
+				var year = date.substr(0,4);
+				var month = date.substr(5,2);
+				var day = date.substr(8,2);
+				var convertedDate = day + "/" + month + "/" + year;
+			}
+			return convertedDate;
+		}
+
+		addFournisseur(e){
+			if(_this.E_M){
+				$('.actions-fournisseurs').addClass('hidden');
+				$('.entete-tableau').addClass('hidden');
+				$('.fournisseur').addClass('hidden');
+				//$('#filtres').addClass('hidden');
+				_this.E_M.addElement({event: e, prefixId: 'fournisseur'});
+			}
+		}
+
+		montantGlobal(e) {
+			var montantFacture = 0;
+			montantFacture = parseFloat($("#montant_facture").val());
+			_this.montantFacture = montantFacture.toFixed(2);
+			var ventilationFacture = 0;
+			var quantiteFacture = 0;
+
+			$('input.count_this', '#add_facture').each(function(){
+				if(Number.isInteger(parseFloat($(this).val())))
+					quantiteFacture += parseFloat($(this).val());
+			})
+
+			_this.ventilationFacture = quantiteFacture.toFixed(2);
+			_this.update();
+		}
+
+		addFacture(e){
+			if(_this.E_M){
+				/*$('.actions-fournisseurs').addClass('hidden');*/
+				$('.entete-tableau').hide();
+				$('.rightAjout').hide();
+				$('.hide_when_add_facture').hide();
+				$('#add_facture').show();
+				$("#fournisseur_reglement_id").val(e.item.id)
+				console.log(e.item.id);
+				$( function() {
+					$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+					$( "#front_date").datepicker({
+						dateFormat: 'dd/mm/yy',
+						showOtherMonths: true,
+						selectOtherMonths: true
+					});
+				} );
+				$( function() {
+					$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+					$( "#front_date_de_paiement").datepicker({
+						dateFormat: 'dd/mm/yy',
+						showOtherMonths: true,
+						selectOtherMonths: true
+					});
+				} );
+				$('#'+e.item.id+'_facture').hide();
+				$('#'+e.item.id+'_facture').removeClass('hidden');
+				$('.factureStyle').css('display', 'none');
+				$('#'+e.item.id+'_facture').css('display', 'none');
+				_this.E_M.addElement({event: e, prefixId: 'facture'});
+			}
+		}
+
+		addProduit(e){
+			if(_this.E_M){
+				$('.actions-fournisseurs').addClass('hidden');
+				$('.entete-tableau').addClass('hidden');
+				$('.fournisseur').addClass('hidden');
+				//$('#filtres').addClass('hidden');
+				$('.edit_fournisseur').hide();
+				$('.add_produit').hide();
+				$(".editProduit").hide();
+				_this.E_M.addElement({event: e, prefixId: 'produit'});
+			}
+		}
+
+		validDeleteFournisseur(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e,  prefixId: 'fournisseur_',});
+			}
+		}
+
+		validDeleteFacture(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log(e.item.id)
+			$(".delete#facture_" + e.item.id + "_delete").removeClass("hidden");
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'facture_',});
+			}
+		}
+
+		validDeleteProduit(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteFournisseur(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'fournisseur_'});
+			}
+		}
+
+		deleteFournisseur(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/compta/fournisseurs', elements: _this.fournisseur, idElements: _this.idFournisseur, type_element: 'fournisseur'});
+			}
+		}
+
+		cancelDeleteFacture(e){
+			$(".delete#facture_" + e.item.id + "_delete").addClass("hidden");
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'facture_'});
+			}
+		}
+
+		deleteFacture(e){
+			if(_this.E_M){
+				var id_fournisseur = $( "#id_fournisseur" ).val();
+				var numero_facture = parseInt($("#" + e.item.id + " #get_numero_facture").text());
+				data = { action: 'delete',  numero_facture: numero_facture, id_fournisseur: id_fournisseur, id: e.item.id, type_element: 'facture'},
+				console.log("facture " + JSON.stringify(data)),
+				$.ajax('/admin/compta/fournisseur_facture', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						console.log("facture supprimée");
+						//getEcritures();
+					}
+				}).done(function(){
+					console.log('done!...');
+					var id_fournisseur = $( "#id_fournisseur" ).val();
+
+					getFacture(id_fournisseur);
+					tag = null;
+				}).fail(function(){
+					console.log('fail!...');
+					tag = null;
+				}); //, 'json'
+			}
+		}
+
+		cancelDeleteProduit(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteProduit(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/compta/fournisseur_produit', elements: _this.produit, idElements: _this.idProduit, type_element: 'produit'});
+			}
+		}
+
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		cancelFournisseur(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				$(".editFournisseur").show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'num_et_voie', 'num_appartement_etage', 'banque', 'entree_batiment', 'titulaire', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'rib', 'bic', 'iban'],
+					tag: _this,
+					prefixId: 'fournisseur',
+				});
+			}
+		}
+
+		cancelEditFournisseur(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					addClass: 'hidden',
+					fields: ['libelle', 'num_et_voie', 'num_appartement_etage', 'banque', 'entree_batiment', 'titulaire', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'rib', 'bic', 'iban'],
+				});
+				//$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				/*$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');*/
+				$('.' + e.item.id + '_edit').addClass('hidden');
+				//$('.show_infos').removeClass('hidden');
+				$(".editFournisseur").removeClass('hidden');
+				$(".edit_fournisseur").addClass('hidden');
+				/*$('.show_infos').css('display', 'table');
+				$(".editFournisseur").show();*/
+			}
+		}
+
+		cancelEditProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['nom_produit', 'id_analytique', 'id_compte', 'id_compte_produit', 'id_compte_stock'],
+				});
+				$('.add_produit').show();
+				$('.menu_fournisseur').show();
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				//$('.show_infos').css('display', 'table');
+				$(".editProduit").show();
+			}
+		}
+
+		cancelProduit(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				$('.add_produit').show();
+				$(".editProduit").show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['nom_produit', 'id_analytique', 'id_compte', 'id_compte_produit', 'id_compte_stock'],
+					tag: _this,
+					prefixId: 'produit',
+				});
+			}
+		}
+
+		cancelFacture(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				$('.add_produit').show();
+				$(".editProduit").show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['id_fournisseur', 'numero_facture', 'date', 'date_de_paiement','montant_facture','id_produit','montant_produit','quantite_produit'],
+					tag: _this,
+					prefixId: 'facture',
+				});
+				$("#add_fournisseur").hide();
+				$("#add_reglement").hide();
+				$('.factureStyle').show();
+				$('.factureLine').css('height', 'auto');
+				$('.entete-tableau').show();
+				$('#' + $(".factureToSearch").val() + '_facture').css('display', 'block');
+				$('.rightAjout').show();
+				$('.hide_when_add_facture').show();
+				$('.trueFiltres').show();
+				$(".tohide").addClass("hidden");
+				$(".entete-tableau.tohide").hide();
+			}
+		}
+
+		changePaiement(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			_this.type_paiement = $(e.currentTarget).val();
+			_this.update();	
+			if($(e.currentTarget).val() != "") {
+				var $date = $('#date_reglement');
+				$date.datepicker({
+					dateFormat: 'dd/mm/yy'
+				});
+				$date.datepicker( "setDate", new Date() );
+			}
+			if($(e.currentTarget).val() === "cheques") {
+				$('.date_remise').datepicker({
+					dateFormat: 'dd/mm/yy'
+				});
+			}
+		}
+
+		cancelEditReglement(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var id = e.item.id;
+				console.log(id);
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').show();
+				var id_fournisseur = parseInt($( "#id_fournisseur" ).val());		
+				console.log(id_fournisseur)		
+				$("#" + e.item.id + "_edit").hide();
+				$('.add_produit').show();
+				$(".editProduit").show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['id_fournisseur', 'numero_cheque', 'mode_de_paiement', 'montant'],
+					tag: _this,
+					prefixId: 'reglement',
+				});
+				$("#add_fournisseur").hide();
+				$("#add_reglement").hide();
+				$('.factureStyle').show();
+				$('.factureLine').css('height', 'auto');
+				$('.entete-tableau').show();
+				$('.factureHide').css('display', 'block');
+				$('.rightAjout').show();
+				$("." + id + "_edit").addClass("hidden");
+				$(".show_infos_" + id).removeClass("hidden");
+				$('.hide_when_add_facture').show();
+				$("#" + id_fournisseur + "> .show_infos.when_facture_hide").hide();
+				$('.trueFiltres').show();
+				$(".entete-tableau.tohide").hide();
+				$(".fournisseur.editFournisseur.pointer.style_ligne").not('#' + id_fournisseur).addClass("hidden");
+			}
+		}
+
+		cancelReglement(e) {
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				$('.add_produit').show();
+				$(".editProduit").show();
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['id_fournisseur', 'numero_cheque', 'mode_de_paiement', 'montant'],
+					tag: _this,
+					prefixId: 'reglement',
+				});
+				$("#add_fournisseur").hide();
+				$("#add_facture").hide();
+				$('.factureStyle').show();
+				$('.entete-tableau').show();
+				$('.rightAjout').show();
+				$('.hide_when_add_facture').show();
+				$('.trueFiltres').show();
+				$('#' + $(".factureToSearch").val() + '_facture').css('display', 'block');
+				$(".tohide").addClass("hidden");
+				$(".entete-tableau.tohide").hide();
+			}
+		}
+
+		saveEditFournisseur(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if ( $('#photo_upload_' + e.item.id)[0].files[0] ) {
+				var data = new FormData();
+
+				data.append("image", $('#photo_upload_' + e.item.id)[0].files[0],  $('#photo_upload_' + e.item.id)[0].files[0].name);
+
+				var xhr = new XMLHttpRequest();
+
+				xhr.open('post', '/admin/compta/fournisseurs', true);
+				var image = $('#photo_upload_' + e.item.id)[0].files[0].name;
+				console.log(image)
+				xhr.send(data);
+			} else {
+				$("#image_" + e.item.id).val(e.item.image);
+			}
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/compta/fournisseurs', 
+					fields: ['image' ,'libelle', 'num_et_voie', 'num_appartement_etage', 'banque', 'entree_batiment', 'titulaire', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'rib', 'bic', 'iban', 'contact1', 'contact2', 'contact3'],
+					tag: _this,
+					elements: _this.fournisseur,
+					idElements: _this.idFournisseur,
+					typeElement: 'fournisseur',
+					suffixId: '_fournisseur',
+					beforeSend: function(params){
+						var a = $('#rib1_' + e.item.id).val();
+						a += $('#rib2_' + e.item.id).val();
+						a += $('#rib3_' + e.item.id).val();
+						a += $('#rib4_' + e.item.id).val();
+						params.data.rib = a;
+					},
+					beforeUpdate: function(params){
+					},
+				});
+				$('.menu_fournisseur').show();
+				$('.add_produit').show();
+				$(".editFournisseur").removeClass("hidden");
+				$(".entete-tableau").removeClass("hidden");
+				$(".actions-fournisseurs").removeClass("hidden");
+			}
+		}
+
+		saveEditProduit(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				$(".editProduit").show();
+				$(".add_produit").show();
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/compta/fournisseur_produit', 
+					fields: ['nom_produit', 'id_analytique', 'id_compte', 'id_compte_produit', 'id_compte_stock'],
+					tag: _this,
+					elements: _this.produit,
+					idElements: _this.idProduit,
+					typeElement: 'produit',
+					suffixId: '_produit',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+					},
+					beforeUpdate: function(params){
+					},
+				});
+			}
+		}
+
+		saveFournisseur(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				$(".editFournisseur").show();
+				var $photo_add = $('.photo_add');
+				if($photo_add[0] && $photo_add[0].files && $photo_add[0].files[0] && $photo_add[0].files[0].name){
+					var data = new FormData();
+
+					data.append("imageA", $photo_add[0].files[0], $photo_add[0].files[0].name);
+
+					var xhr = new XMLHttpRequest();
+
+					xhr.open('post', '/admin/compta/fournisseurs', true);
+					var image = $photo_add[0].files[0].name;
+					xhr.send(data);
+				}
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/compta/fournisseurs',
+					elements: _this.fournisseur,
+					idElements: _this.idFournisseur,
+					typeElement: 'fournisseur',
+					fields: ['image', 'libelle', 'num_et_voie', 'num_appartement_etage', 'id_mode_paiement', 'banque', 'entree_batiment', 'titulaire', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'rib', 'bic', 'iban', 'contact1', 'contact2', 'contact3'],
+					suffixId: '_fournisseur',
+					prefixId: 'fournisseur',
+					tag: _this,
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						var a = $('#rib').val();
+						a += $('#rib2').val();
+						a += $('#rib3').val();
+						a += $('#rib4').val();
+						params.data.rib = a;
+					},
+					beforeUpdate: function(params){
+					},
+				});
+				var lastObject;
+				for (lastObject in this.idFournisseur);
+				lastObject = parseInt(lastObject) + 1;
+
+				$("#add_fournisseur").hide();
+				//$("#" + e.item.id + "_edit").hide();
+			}
+			_this.update();
+			getFacture(lastObject);
+			console.log("Enregistré!");
+		}
+
+		saveProduit(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+				$('#add_produit').hide();
+				$('.add_produit').show();
+				$(".editProduit").show();
+				if ($("#checkbox").is(':checked')) {
+					_this.E_M.saveElement({
+						event: e, 
+						url: '/admin/compta/fournisseur_produit',
+						elements: _this.produit,
+						idElements: _this.idProduit,
+						typeElement: 'produit',
+						fields: ['nom_produit', 'id_analytique', 'id_compte', 'id_compte_produit', 'id_compte_stock'],
+						tag: _this,
+						beforeSend: function(params){
+							console.log(params)
+						},
+						beforeUpdate: function(params){
+						},
+					});
+				} else {
+					_this.E_M.saveElement({
+						event: e, 
+						url: '/admin/compta/fournisseur_produit',
+						elements: _this.produit,
+						idElements: _this.idProduit,
+						typeElement: 'produit',
+						fields: ['nom_produit', 'id_analytique', 'id_compte'],
+						tag: _this,
+						beforeSend: function(params){
+							console.log(params)
+						},
+						beforeUpdate: function(params){
+						},
+					});
+				}
+
+				$("#add_fournisseur").hide();
+				//$("#" + e.item.id + "_edit").hide();
+			}
+			console.log("Enregistré!");
+		}
+
+		saveReglement(e){
+			if(_this.E_M){
+				var save_or_not = parseInt($("#save_if_not_null").text());
+				console.log(save_or_not)
+				if(save_or_not == 0) {
+					//var id_fournisseur = $( "div[idFournisseurReglement]" ).attr('idFournisseurReglement');
+					$('.entete-tableau').show();
+					$('.rightAjout').show();
+					$('.hide_when_add_facture').show();
+					$('.trueFiltres').show();
+					var id_produit;
+					var id_exercice = $('#id_exercice').val();
+					var montant_produit;
+					var numero_facture = $("#numero_facture").val();
+					var date = $("#date").val();
+					var montant_facture = $("#montant_facture").val();
+					var id = $("#fournisseur_reglement_id").val();
+					var countLine = $("[db_id]:last")[0].attributes[2].value;
+					console.log("count :::::: " + countLine);
+					var id_fournisseur = $( "#id_fournisseur" ).val();
+					for (var i = 1; i <= countLine; i++) {
+						id_produit = $("[db_id="+ i +"] #id_produit_"+ i + " ")[0].value;			
+						montant_produit = $("[db_id="+ i +"] #montant_produit_"+ i + " ")[0].value;	
+						if(id_produit != "" && montant_produit != "") {
+							data = { action: 'add', id_fournisseur: id_fournisseur, numero_facture: numero_facture, date: date, montant_facture: montant_facture, id_produit: id_produit,  montant_produit: montant_produit, id_exercice: id_exercice },
+							console.log("facture " + JSON.stringify(data)),
+							$.ajax('/admin/compta/fournisseur_facture', {
+								data : data,
+								type : 'POST',
+								dataType: 'json',
+								success: function (result, textStatus, jqXHR){
+									console.log("facture validées");
+									//getEcritures();
+								}
+							}).done(function(){
+								console.log('done!...');
+								var id_fournisseur = $( "#id_fournisseur" ).val();
+
+								getFacture(id_fournisseur);
+								tag = null;
+							}).fail(function(){
+								console.log('fail!...');
+								tag = null;
+							}); //, 'json'
+						}else {
+							console.log("modal error");
+						}		
+					};	
+
+					$('#id_facture').val(JSON.stringify(this.idFacture));
+					//var numero_facture = $('#numero_facture_'+ e.item.id).val();
+					_this.E_M.saveElement({
+						event: e, 
+						url: '/admin/compta/fournisseur_reglement',
+						elements: _this.reglement,
+						idElements: _this.idReglement,
+						typeElement: 'reglement',
+						fields: ['id_fournisseur', 'numero_cheque', 'date_de_paiement', 'mode_de_paiement', 'montant'],
+						suffixId: '_facture',
+						prefixId: 'facture',
+						tag: _this,
+						beforeSend: function(params){
+							console.log(params)
+						},
+						beforeUpdate: function(params){
+						},
+					});
+					$("#add_fournisseur").hide();
+					$("#add_facture").hide();
+					$('.factureStyle').show();
+					$('.rightAjout').removeClass('hidden');
+					$('.factureLine').css('height', 'auto');
+					$('.factureHide').css('display', 'block');
+					$('.tohide').addClass("hidden");
+					$('.rightAjout').show();
+					$('.hide_when_add_facture').show();
+					$('.trueFiltres').show();
+					$(".entete-tableau").show();
+					$(".tohide").hide();
+					$("#"+id).hide();
+					$('#' + $(".factureToSearch").val() + '_facture').css('display', 'block');
+					getFacture(id);
+					_this.update();
+					console.log("Enregistré!");
+				}
+			}
+		}
+
+		saveEditReglement(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log(_this.idReglement)
+			var id_fournisseur = parseInt($( "#id_fournisseur" ).val());
+			console.log(id_fournisseur)
+			var id = e.item.id;
+			console.log(id);
+
+			$("#id_fournisseur_" + e.item.id).val(id_fournisseur)
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				$('.actions-fournisseurs').removeClass('hidden');
+				$('.entete-tableau').removeClass('hidden');
+				$('.fournisseur').removeClass('hidden');
+				$('#filtres').removeClass('hidden');
+				$('.show_infos').show();
+				$("#" + e.item.id + "_edit").hide();
+				$('.add_produit').show();
+				$(".editProduit").show();
+				var id_reglement = $("#id_reg_" + e.item.id).val();
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/compta/fournisseur_reglement', 
+					fields: ['id_fournisseur', 'numero_cheque', 'id_facture', 'date_de_paiement', 'mode_de_paiement', 'montant'],
+					tag: _this,
+					elements: _this.reglement,
+					idElements: _this.idReglement,
+					typeElement: 'reglement',
+					suffixId: '_reglement',
+					id: id_reglement,
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						console.log(params);
+					},
+					beforeUpdate: function(params){
+					},
+				});
+				$("#add_fournisseur").hide();
+				$("#add_reglement").hide();
+				$('.factureStyle').show();
+				$('.factureLine').css('height', 'auto');
+				$('.entete-tableau').show();
+				$('.factureHide').css('display', 'block');
+				$('#deleteThis').show();
+				$('.rightAjout').show();
+				$('.hide_when_add_facture').show();
+				//$("#"+id_fournisseur).hide();
+				$("." + id + "_edit").addClass("hidden");
+				$(".show_infos_" + id).removeClass("hidden");
+				$('.trueFiltres').show();
+				$("#" + id_fournisseur + "> .show_infos.when_facture_hide").hide();
+				$(".entete-tableau.tohide").hide();
+				$(".fournisseur.editFournisseur.pointer.style_ligne").not('#' + id_fournisseur).addClass("hidden");
+			}
+			getFacture(id_fournisseur);
+			_this.update();
+		}
+
+		this.fournisseur = [];
+		this.idFournisseur = {};
+
+		function getFournisseur() {
+			var getParams = { type_element: 'fournisseur',};
+			var montantTotalF = 0;
+			var reglementTotalF = 0;
+			var soldeF = 0;
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			console.log('getFournisseur before callback');
+			$.getJSON( '/admin/compta/fournisseurs', getParams, function(data){
+				/*debugtime-console.log('getFacture AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+				console.log('getFournisseurs callback data: ' + JSON.stringify(data));
+				if(data && data.elements){
+					console.log('getFournisseurs data: ' + JSON.stringify(data));
+					var l = data.elements.length;
+					var i, d;
+					var totalFacture;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise',  image: 'image', libelle: 'libelle', id_modele: 'id_modele', id_activite: 'id_activite', num_et_voie:'num_et_voie', mode_paiement:'mode_paiement', num_appartement_etage:'num_appartement_etage', banque:'banque', entree_batiment:'entree_batiment', titulaire:'titulaire', lieu_dit_boite_postale:'lieu_dit_boite_postale', code_postal:'code_postal', ville:'ville', pays:'pays', rib:'rib', bic:'bic', iban:'iban', contact1:'contact1', contact2:'contact2', contact3:'contact3', nombre_facture: 'nombre_facture', totalFacture: 'totalFacture', totalMontant: 'totalMontant', reste_payer: 'reste_payer'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+							if (field == 'totalFacture' && !isNaN(parseFloat(d[fields[field]])) && isFinite(parseFloat(d[fields[field]]))) {
+								montantTotalF += parseFloat(d[fields[field]]);
+								_this.totalFacture = parseFloat(d[fields[field]]).toFixed(2);
+							};
+							if (field == 'totalMontant' && !isNaN(parseFloat(d[fields[field]])) && isFinite(parseFloat(d[fields[field]]))) {
+								reglementTotalF += parseFloat(d[fields[field]]);
+							};
+						}
+						_this.montantTotalF = montantTotalF;
+						_this.reglementTotalF = reglementTotalF;
+						_this.soldeF = montantTotalF - reglementTotalF;
+						_this.idFournisseur[d['id']] = i;
+						_this.fournisseur.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}	
+		getFournisseur();
+
+
+		this.produit = [];
+		this.idProduit = {};
+
+		function getProduit() {
+			getElements({
+				tag: _this,
+				url: '/admin/compta/fournisseur_produit', 
+				elements: _this.produit,
+				idElements: _this.idProduit,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', nom_produit: 'nom_produit', id_analytique: 'id_analytique', id_compte: 'id_compte', id_compte_stock: 'id_compte_stock', id_compte_produit: 'id_compte_produit'},
+				getParameters: { type_element: 'produit'},
+				type: 'produit',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		}
+		getProduit();
+
+		this.facture = [];
+		this.idFacture = {};
+		this.facture2 = [];
+
+		this.formatNumber = function formatNumber(x) {
+			x = x.toFixed(2);
+			var parts = x.toString().split(".");
+			parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			return parts.join(".");
+		}
+
+		function getFactureLine(id_fournisseur, id_facture_to_search) {
+			var facture = parseInt($(".show_infos_" + id_facture_to_search +" #get_numero_facture").html());
+			console.log("fourniseeueu ::::: " + id_fournisseur)
+			var getParams = { type_element: 'facture', id_fournisseur, facture};
+			$.getJSON( '/admin/compta/fournisseur_facture', getParams, function(data){
+				/*debugtime-console.log('getFacture AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_fournisseur: 'id_fournisseur', id_entreprise: 'id_entreprise', id_produit: 'id_produit', montant_produit: 'montant_produit', };
+					_this.facture2 = [];
+
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.facture2.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+
+		function getFacture(id_fournisseur){
+			var getParams = { type_element: 'facture', id_fournisseur};
+			//var facture = parseInt($(".show_infos_" + id_facture_to_search +" #get_numero_facture").html());
+
+			var montantTotal = 0;
+			var reglementTotal = 0;
+			var solde = 0;
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/fournisseur_facture', getParams, function(data){
+				/*debugtime-console.log('getFacture AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_fournisseur: 'id_fournisseur', id_reg:'id_reg', id_entreprise: 'id_entreprise', date: 'date', id_produit: 'id_produit', quantite_produit: 'quantite_produit', reglement:'reglement', montant_produit: 'montant_produit', reste: 'reste', numero_facture: 'numero_facture', montant_facture: 'montant_facture', date_de_paiement: 'date_de_paiement'};
+					_this.idFacture = {};
+					_this.facture = [];
+
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+							if (field == 'montant_facture' && !isNaN(parseFloat(d[fields[field]])) && isFinite(parseFloat(d[fields[field]]))) {
+								montantTotal += parseFloat(d[fields[field]]);
+							};
+							if (field == 'reglement' && !isNaN(parseFloat(d[fields[field]])) && isFinite(parseFloat(d[fields[field]]))) {
+								reglementTotal += parseFloat(d[fields[field]]);
+							};
+						}
+						_this.montantTotal = montantTotal;
+						_this.reglementTotal = reglementTotal;
+						_this.soldeTotal = montantTotal - reglementTotal;
+						_this.idFacture[d['id']] = i;
+						_this.facture.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+       // getFacture();
+
+		function getReglement(id_fournisseur) {
+			getElements({
+				tag: _this,
+				url: '/admin/compta/fournisseur_reglement', 
+				elements: _this.reglement,
+				idElements: _this.idReglement,
+				fields: {id: 'id', montant: 'montant'},
+				getParameters: { type_element: 'reglement', id_fournisseur: id_fournisseur},
+				type: 'reglement',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+			console.log("id reglement ::: " + JSON.stringify(_this.reglement))
+		}
+
+		makeVisible(e){
+			if(_this.E_M){
+				_this.E_M.makeVisible({event: e});
+			}
+		}
+
+		makeInvisible(e){
+			if(_this.E_M){
+				_this.E_M.makeInvisible({event: e});
+			}
+		}
+
+		selectExercice(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+		this.elements = [];
+		this.idElements = {};
+
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					console.log('elements: ' + JSON.stringify(tag.menu))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		this.on('mount', function(){
+
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			showContents = null;
+			makeVisible = null;
+			getElements = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+		trueCheckbox(e) {
+			var id = e.currentTarget.getAttribute("id-for-uncheck");
+			var checked = e.currentTarget.checked;
+			if (checked == true){
+				document.getElementById(id).disabled = false;
+			} else {
+				document.getElementById(id).disabled = true;
+				$('#' + id).val('');
+			}
+		}
+
+	</script>
+</fournisseurs>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="description" content="{% block description %}{% endblock %}">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<script id="jquery_js" type="text/javascript" src="/js/jquery.min.js"></script>
+		<script id="jquery_js" type="text/javascript" src="/js/jquery-ui/jquery-ui.min.js"></script>
+		<title>{% block title %}Axis Technologie{% endblock %}</title>
+{% block css_inc %}{% endblock %}
+{% block nodece_js %}
+		<script type="text/javascript" src="/js/nodece.js"></script>
+{% endblock %}
+{% block js_inc %}{% endblock %}
+	</head>
+	<body>
+{% block menutop %}
+<!--
+		<navbar id="menutop">
+			<ul>
+				<li><a href="/admin/accueil">Accueil</a></li>
+				<li><a href="#">Permanence</a></li>
+				<li><a href="#">Salariés</a></li>
+				<li><a href="#">Activités / Prestations</a></li>
+				<li{% if menu and menu=="compta" %} class="selected"{% endif %}><a href="/admin/compta">Comptabilité</a></li>
+				<li><a href="#">Administration site internet</a></li>
+			</ul>
+		</navbar>
+-->
+{% endblock %}
+{% block submenu %}{% endblock %}
+		<section class="content_container">
+{% block name_title %}
+			<h1 class="name_title"></h1>
+{% endblock %}
+{% block container %}
+{% endblock %}
+		</section>
+	</body>
+</html>

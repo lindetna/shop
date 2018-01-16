@@ -1,0 +1,282 @@
+<accueil>
+	<div class="navbar"></div>
+	<div class="content_tag">
+		<div id="loader" class="loader hidden">
+        </div>
+		<div id="add_element" class="edit hidden">
+			<div>
+				<p class="center title_add">Ajout d'une référence</p>					
+			</div>
+			<div class="table full">
+				<div class="cell cell_1">
+						<label class="" for="reference">Reference :</label>
+						<input name="reference" id="reference" class="reference" type="text" value="">
+				</div>
+				<div class="cell cell_2">
+					<div>
+						<label class="" for="stock">Stock :</label>
+						<input name="stock" id="stock" class="stock" type="text" value="">
+					</div>
+				</div>
+				<div class="cell cell_3">
+					<div>
+						<label class="" for="price">Prix unité :</label>
+						<input name="price" id="price" class="price" type="text" value="" onchange={ setToFixed }>
+					</div>
+				</div>
+				<div class="cell cell_4">
+					<label class="" for="packof">Paquet de :</label>
+					<input name="packof" id="packof" class="packof" type="text" value="" placeholder="Par default à 6">				
+				</div>
+				<div class="cell cell_5">
+					<button name="save_submit" class="button enregistrer save_submit" onclick={ saveElement }>Enregistrer</button>
+					<button name="cancel_submit" class="button annuler cancel_submit" onclick={ cancelElement }>Annuler</button>
+				</div>
+			</div>
+		</div>
+		<div class="actions" id="actions">
+			<button id="add_element_button" class="button ajouter" name="add_element_button" onclick={ addElement }>Ajouter un Journal</button>
+		</div>
+		<div class="entete_tableau">
+			<div class="cell cell_1">
+				<p class="">Reference</p>					
+			</div>
+			<div class="cell cell_2">
+				<p class="">Stock</p>					
+			</div>
+			<div class="cell cell_3">
+				<p class="">Prix unité</p>
+			</div>
+			<div class="cell cell_4">
+				<p class="">Paquet de</p>
+			</div>
+			<div class="cell cell_6">
+				<p class="">Stock vendus</p>
+			</div>
+			<div class="cell cell_5">
+				<p class="">Actions</p>
+			</div>
+		</div>
+		<div each={ elements } id="{ id }" class="element">
+			<div class="show_infos">
+				<div class="cell cell_1">
+					<p class="">{ reference }</p>
+				</div>
+				<div class="cell cell_2">
+					<p class="">{ stock }</p>
+				</div>
+				<div class="cell cell_3">
+					<p class="">{ price }</p>
+				</div> 
+				<div class="cell cell_4">
+					<p class="">{ packof }</p>
+				</div>
+				<div class="cell cell_6">
+					<p class="">{ number_sold }</p>
+				</div>
+				<div class="cell cell_5">
+					<div>
+						<p class="modif"><img class="edit_element_img" onclick={ editElement } title="Modifier" src="/img/edit.png"> <img class="delete_element_img" onclick={ validDeleteElement } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+					</div>
+				</div>
+			</div>
+			<div id="{ id }_edit" class="edit edit_element hidden">
+				<div class="table full">
+					<div class="cell cell_1">
+							<label class="" for="reference_{ id }">Reference :</label>
+							<input name="reference_{ id }" id="reference_{ id }" class="reference" type="text" value="{ reference }">
+					</div>
+					<div class="cell cell_2">
+						<div>
+							<label class="" for="stock_{ id }">Stock :</label>
+							<input name="stock_{ id }" id="stock_{ id }" class="stock" type="text" value="{ stock }">
+						</div>
+					</div>
+					<div class="cell cell_3">
+						<div>
+							<label class="" for="price_{ id }">Prix unité:</label>
+							<input name="price_{ id }" id="price_{ id }" class="price" type="text" value="{ price }">
+						</div>
+					</div>
+					<div class="cell cell_4">
+						<label class="" for="packof_{ id }">Paquet de :</label>
+						<input name="packof_{ id }" id="packof_{ id }" class="packof" type="text" value="{ packof }" placeholder="Par default à 6">				
+					</div>
+					<div class="cell cell_5">
+						<button name="save_submit_{ id }" onclick={ saveElement } class="button enregistrer save_submit">Enregistrer</button>
+						<button name="cancel_submit_{ id }" onclick={ cancelElement } class="button annuler cancel_submit">Annuler</button>
+					</div>
+				</div>
+			</div>
+			<div id="{ id }_delete" class="delete hidden center">
+				<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" id="delete_{ id }" onclick={ deleteElement }>Supprimer</button><button name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteElement }>Annuler</button></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	  	var _this = this;
+		var app = opts;
+		this.app = opts;
+
+		this.loaded = false;
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.elements = [];
+		this.idElements = {};
+
+		setToFixed(e) {
+			var value = $(e.currentTarget).val();
+			if( ! isNaN(value) ) {
+				$(e.currentTarget).val(parseFloat(value).toFixed(2));
+			} else {
+				$(e.currentTarget).val('');
+			}
+		}
+
+		function getElement(){
+			var getParams = { };
+
+			$.getJSON( '/api/element', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = { id: 'id', reference: 'reference', packof: 'packof', stock: 'stock', number_sold: 'number_sold', price: 'price'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idElements[d['id']] = i;
+						_this.elements.push(d);
+					}
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			})
+		}
+		getElement();
+		
+		this.E_M = new E_M();
+		  
+		_this.app.on('unmount-accueil', function(){
+			_this.app.off('unmount-accueil');
+			_this.unmount();
+		});
+
+		this.elements = [];
+		this.idElements = {};
+
+		editElement(e){
+			if(_this.E_M){
+			_this.E_M.editElement({event: e, tag: _this,});
+			}
+		}
+
+		addElement(e){
+			$('#actions').addClass('hidden').removeClass('inline_block');
+			$('input[type=text], select', '#add_element').val('');
+			$('#packof').val(6);
+			if(_this.E_M){
+				_this.E_M.addElement({event: e});
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteElement(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/api/element', loader: true,});
+			}
+		}
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['reference', 'stock', 'price', 'packof'],
+					tag: _this,
+				});
+			}
+		}
+
+		saveElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/api/element', 
+					fields: ['reference', 'stock', 'price', 'packof'],
+					tag: _this,
+				});
+			}
+		}
+
+		/**
+		 * Permet de loader un tag riot
+		 *
+		 * @param {string} selector: le selecteur de l'élément HTML sur lequel on souhaite mettre le TAG
+		 * @param {string} tagName: le nom du tag que l'on souhaite load
+		 * @param {string} path: le path pour accéder au TAG html
+		 * @param {string} newselector: si nous n'avons pas de selecteur pour mettre le tag, permet de set l'ID de la div qu'on va créer pour mettre le TAG
+		 * @param {string} tagContainer: si nous n'avons pas de selecteur pour mettre le tag, permet de choisir l'élément sur lequel nous allons append la div qu'on va créer
+		 * @param {string} opt: les options à passer au TAG riot enfant
+		 * @returns null.
+		 */
+		function loadTag({ selector=null, tagName=null, path=null, newselector="newtag", tagContainer=null, opt={ parentTag: _this }}) {
+			var	mountTag = document.createElement('div');
+
+			if(newselector) {
+				newselector = newselector;
+			}
+			if(tagContainer) {
+				mountTag.setAttribute('id', newselector);
+				$(tagContainer).append(mountTag);
+			}
+
+			if( (selector || tagContainer) && tagName && path ) {
+				riot.compile( path, function() {
+					var mounted = riot.mount( tagContainer ? '#' + newselector : selector, tagName, opt);
+				});
+			}
+		}
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+			loadTag({ selector: ".navbar", tagName: "navbar", path: "/js/tag/navbar.html", opt: { parentTag: _this, active: "accueil" }});
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			_this.trigger('unmount-navbar');
+		});
+	</script>
+
+</accueil>

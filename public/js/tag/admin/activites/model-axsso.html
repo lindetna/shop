@@ -1,0 +1,375 @@
+<model-axsso>
+<!-- début produits ajout -->
+	<div class="general">
+		<div class="cell_1">
+			<input id="produit_id_activite{ el ? '_' + el.id : '' }" name="produit_id_activite{ el ? '_' + el.id : '' }" type="hidden" value="{ parentTag.currentActiviteId }">
+			<input id="produit_id_modele{ el ? '_' + el.id : '' }" name="produit_id_modele{ el ? '_' + el.id : '' }" type="hidden" value="1">
+			<input id="produit_image_url" name="produit_image_url" class="" type="hidden" value="">
+			<img class="img_produits_modif" src="">
+		</div>
+		<div class="cell_2">
+			<p>
+				<label for="produit_categorie" class="xl-large">Catégorie</label>
+				<input id="produit_categorie" name="produit_categorie" type="text" disabled="disabled" value="{ currentCategorieLibelle }">
+			</p>
+			<p>
+				<label for="produit_activite" class="xl-large">Activité</label>
+				<input id="produit_activite" name="produit_activite" type="text" disabled="disabled" value="{ currentActiviteLibelle }">
+			</p>
+			<p>
+				<label for="produit_libelle" class="xl-large">Nom</label>
+				<input id="produit_libelle" name="produit_libelle" class="" type="text" value="">
+			</p>
+		</div>
+		<div class="cell_3">
+			<input onclick={ toggleVisible } type="image" class="produit_image_visible" src="/img/btn_visible.png" title="visible" value="visible" id="produit_visible"  name="produit_visible">
+		</div>
+	</div>
+	<div class="nav_categorie_activite_modif ">
+		<div>
+			<header class="opened titre" onclick="{ showContents }">
+				Informations
+			</header>
+			<div class="old_informations table_categorie_activite_modif slide-up table">
+				<div class="row_table_categorie_activite_modif1">
+					<div class="cell_1 ">
+						<p>Nombre de Places</p>
+						<p>Nombre d'inscrit</p>
+						<p>Nombre restant</p>
+					</div>
+					<div class="cell_2 ">
+						<p><input class="nombre_place" id="nombre_place" type="text" name="nombre_place" value="15"></p>
+						<p><input class="nombre_inscrit" id="nombre_inscrit" type="text" name="nombre_inscrit" value="10"></p>
+						<p><input class="nombre_restant" id="nombre_restant" type="text" name="nombre_restant" value="5"></p>
+					</div>
+					<div class="cell_3 ">
+						<span>Professeur</span>
+						<p><input class="professeur_internet" id="professeur_internet" type="check" name="professeur_internet" value="Nicolas"></p>
+						<p><input type="checkbox" name="inscription_plusieurs_fois">Inscription plusieurs fois</p>
+					</div>
+					<div class="cell_4 ">
+						<div class="internet_activite">
+							<div class="internet_activite_choix">
+								<span>Internet</span>
+								<div class="information_act1"><input type="checkbox" name="information_activite_internet">Information Activité
+								<input type="radio" name="public_internet_activite">Public
+								<input type="radio" name="prive_internet_activite">Privé</div>
+								<div class="information_act2"><input type="checkbox" name="simulation_cout">Simulation de Coût
+								<input type="checkbox" name="pre_inscription">Pré-inscription</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row_table_categorie_activite_modif2">
+					<div class="cell_1 ">
+						<p>Age Mini</p>
+						<p>Age Maxi</p>
+					</div>
+					<div class="cell_2 ">
+						<p><input class="age_mini" id="age_mini" type="text" name="age_mini" value="5"></p>
+						<p><input class="age_maxi" id="age_maxi" type="text" name="age_maxi" value="15"></p>
+					</div>
+					<div class="cell_3 ">
+						<span>Date limite d'inscription</span>
+						<p><input class="date_limite_inscription" id="date_limite_inscription" type="check" name="date_limite_inscription" value="31/12/2016"></p>
+					</div>
+					<div class="cell_4 ">
+						<div class="internet_activite_informations">
+							<span><i>Informations</i></span>
+							<p><input class="information_info_internet" id="information_info_internet" type="text" name="information_info_internet"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<header class="opened titre" onclick="{ showContents }">
+				Tarifs / Conditions
+			</header>
+			<div class="tarifs_conditions table_categorie_activite_modif slide-up table">
+				<div class="row_table_categorie_activite_tarif">
+					<div class="cell_1">
+						<div><input type="checkbox" name="tarif_montant_activite"></div>
+						<div class="tarif_activite_annuelle_montant"><input type="checkbox" name="tarif_montant_annuelle"></div>
+					   <div class="tarif_montant_commune_options"><input type="checkbox" name="tarif_montant_commune"></div>
+					   <div class="tarif_montant_horscommune"><input type="checkbox" name="tarif_montant_horscommune"></div>
+					   <div><input type="checkbox" name="tarif_montant_activite"></div>
+					</div>
+					<div class="cell_2">
+						<div>Montant de l'activité à demander</div>
+						<div class="tarif_activite_annuelle_montant">Montant de l'activité Annuelle
+							<input id="tarif_activite_annuelle_montant_value" type="text" name="tarif_activite_annuelle_montant_value" value="250.00">
+						</div>
+						<div>Montant Commune
+							<select class="tarif_montant_commune_select">
+								<option>Sceaux</option>
+								<option>Anthony</option>
+							</select>
+						</div>
+						<div>Montant Hors Commune <input class="tarif_montant_horscommune_input1" type="text" name="tarif_montant_horscommune_input1" value="25%"><input class="tarif_montant_horscommune_input2" type="text" name="tarif_montant_horscommune_input2" value="0.00"></div>
+						<div>
+							Montant Pré-Inscription
+							<input class="tarif_montant_preinscription_input1" type="text" name="tarif_montant_preinscription_input1" value="150.00">
+							<input class="tarif_montant_preinscription_input2" type="text" name="tarif_montant_preinscription_input2" value="01/06/2017">
+							<input class="tarif_montant_preinscription_input3" type="text" name="tarif_montant_preinscription_input3" value="31/07/2017">
+						</div>
+					</div>
+					<div class="cell_3">
+						<div>
+							<input type="checkbox" name="tarif_montant_activite_demi_saison">
+							Montant de l'activité 1° Demi-Saison
+							<input type="text" name="tarif_montant_activite_demi_saison_text" value="130.00">
+						</div>
+						<div>
+							<input type="checkbox" name="tarif_montant_activite_demi_saison">
+							Montant de l'activité 2° Demi-Saison
+							<input type="text" name="tarif_montant_activite_demi_saison_text" value="130.00">
+						</div>
+						<div class="tarif_activite_annuelle_montant_choix">
+							<input type="checkbox" name="remise_row_table_categorie_activite_tarif">Remise
+							<input type="radio" name="montant__row_table_categorie_activite_tarif">Montant
+							<input type="radio" name="percent__row_table_categorie_activite_tarif">%
+							<input type="checkbox" name="proratisation_row_table_categorie_activite_tarif">Proratisation
+						</div>
+						<div class="bareme_formule">
+							<div class="bareme_image"><span>Barème</span> <!--<img src="/img/activites/bareme.png"> --></div>
+							<div class="formule_image"><span>Formule</span> <!-- <img src="/img/activites/formule.png">--> </div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<header class="opened titre" onclick="{ showContents }">
+				Comptabilité
+			</header>
+			<div class="comptabilite slide-up table">
+				<div class="table">
+					<div class="row">
+						<div class="cell_1 ">
+							<p>Comptes</p>
+							<p class="analytiques_compta_categ_activite">Analytiques</p>
+						</div>
+						<div class="cell_2 ">
+							<p class="select_compta_categ_activite">
+								<select>
+									<option>70610000 - Participation des Adhérents</option>
+									<option>70610000 - Participation des Adhérents</option>
+								</select>
+							</p>
+							<p class="select_compta_categ_activite">
+								<select>
+									<option>Danse HIPHOP</option>
+									<option>Danse HIPHOP</option>
+								</select>
+							</p>
+						</div>
+						<div class="cell_3">
+							<div class="table petite_table_compta_categ_activite">
+								<div class="row row_petite_table">
+									<div class="cell_1">
+									</div>
+									<div class="cell_2">
+										Dépenses
+									</div>
+									<div class="cell_3">
+										Recette
+									</div>
+									<div class="cell_4">
+										Solde
+									</div>
+								</div>
+								<div class="row row_petite_table">
+									<div class="cell_1">
+										Année en cours
+									</div>
+									<div class="cell_2">
+										<input id="input_depense_annee" type="text" name="input_depense_annee" value="2 000.00">
+									</div>
+									<div class="cell_3">
+										<input id="input_recette_annee" type="text" name="input_recette_annee" value="10 000.00">
+									</div>
+									<div class="cell_4">
+										<input id="input_solde_annee" type="text" name="input_solde_annee" value="8 000.00">
+									</div>
+								</div>
+								<div class="row row_petite_table">
+									<div class="cell_1">
+										Prévisionnel
+									</div>
+									<div class="cell_2">
+										<input id="input_depense_previsionnel" type="text" name="input_depense_previsionnel" value="2 000.00">
+									</div>
+									<div class="cell_3">
+										<input id="input_recette_previsionnel" type="text" name="input_recette_previsionnel" value="10 000.00">
+									</div>
+									<div class="cell_4">
+										<input id="input_solde_previsionnel" type="text" name="input_solde_previsionnel" value="8 000.00">
+									</div>
+								</div>
+								<div class="row row_petite_table">
+									<div class="cell_1">
+										Année précédent
+									</div>
+									<div class="cell_2">
+										<input id="input_depense_pre" type="text" name="input_depense_pre" value="2 000.00">
+									</div>
+									<div class="cell_3">
+										<input id="input_recette_pre" type="text" name="input_recette_pre" value="10 000.00">
+									</div>
+									<div class="cell_4">
+										<input id="input_solde_pre" type="text" name="input_solde_pre" value="8 000.00">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="cell_4">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 ">
+						</div>
+						<div class="cell_2 ">
+						</div>
+						<div class="cell_3 ">
+							<div class="situation_budget_categ_activite">
+								<p>Situation Budgétaire</p>
+								<div class="progress-bar stripes">
+									<span id="label">80%</span>
+								</div>
+							</div>
+						</div>
+						<div class="cell_4">
+						</div>
+					</div>
+				</div>
+			</div>
+			<header class="opened titre" onclick="{ showContents }">
+				Questions
+			</header>
+			<div class="questions question_table slide-up table">
+				<div class="table table_questions_categorie_activite">
+					<div class="row_table_questions_categorie_activite">
+						<div class="cell_1">
+							<input type="checkbox" name="">
+						</div>
+						<div class="cell_2">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+						<div class="cell_3">
+							<input type="checkbox" name="">
+						</div>
+						<div class="cell_4">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+						<div class="cell_5">
+						   <input type="checkbox" name="">
+						</div>
+						<div class="cell_6">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+					</div>
+					<div class="row_table_questions_categorie_activite">
+						<div class="cell_1">
+							<input type="checkbox" name="">
+						</div>
+						<div class="cell_2">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+						<div class="cell_3">
+							<input type="checkbox" name="">
+						</div>
+						<div class="cell_4">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+						<div class="cell_5">
+						   <input type="checkbox" name="">
+						</div>
+						<div class="cell_6">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+					</div>
+					<div class="row_table_questions_categorie_activite">
+						<div class="cell_1">
+							<input type="checkbox" name="">
+						</div>
+						<div class="cell_2">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+						<div class="cell_3">
+							<input type="checkbox" name="">
+						</div>
+						<div class="cell_4">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+						<div class="cell_5">
+						   <input type="checkbox" name="">
+						</div>
+						<div class="cell_6">
+							<input class="cell_questions_categorie_activite" type="text" name="">
+						</div>
+					</div>
+				</div>
+			</div>
+			<header class="opened titre" onclick="{ showContents }">
+				Lettres
+			</header>
+			<div class="lettres categorie_table_lettres_activite slide-up table">
+				<div class="left_right_lettres">
+					<div class="left_block_lettres">
+						<div class="titre_lettres">
+							<span>Lettre</span>
+							<div class="lettres_left_categ_act">
+								<input type="checkbox" name="checkbox_gestion_lettre">Gestion Lettre
+								<input type="checkbox" name="checkbox_impression_automatique">Impression Automatique
+							</div>
+						</div>
+					</div>
+					<div class="right_block_lettres">
+						<select class="select_right_block_lettres">
+							<option>N° Adhérent</option>
+							<option>TItre</option>
+							<option>Nom</option>
+							<option>Prénom</option>
+							<option>N° et Voie</option>
+							<option>N° Appartement ou Etage</option>
+							<option>Entrée, Batiment</option>
+							<option>Lieu Dit, Boite Postale</option>
+							<option>Code Postal</option>
+							<option>Ville</option>
+							<option>Pays</option>
+							<option>Nom de Naissance</option>
+							<option>Date de Naissance</option>
+							<option>Situation Familiale</option>
+							<option>Téléphone</option>
+							<option>Portable</option>
+							<option>E-mail Personnel</option>
+							<option>E-mail Professionel</option>
+							<option>Identifiant Internet</option>
+							<option>Mot de Passe</option>
+							<option>Option 1</option>
+							<option>Option 2</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- fin produits ajout -->
+	<script>
+		var _this = this;
+		var app = opts.app;
+		this.app = opts.app;
+		this.parentTag = opts.parentTag;
+		this.element = opts.element;
+		this.loaded = false;
+		var permissions = app.session.permissions;
+		var ACTIVITES_READ = this.ACTIVITES_READ = permissions.ACTIVITES_READ || false;
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+            if(_this.parentTag.E_M){
+                _this.parentTag.E_M.showContents(e, { toggleClass: 'hidden', });
+            }
+		}
+
+	</script>
+</model-axsso>

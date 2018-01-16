@@ -1,0 +1,1162 @@
+<budgets>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> -->
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div id="loader" class="loader hidden">
+        </div>
+		<div class="compta compta_budgets">
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/journaux">
+						Journaux
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/comptes">
+						Comptes
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage budgets block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+					Budgets
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="compta_content">
+						<!--<div class="filtres_container">
+							<div id="exercice"><label>Exercice  </label><select class="id_exercice" id="id_exercice" name="id_exercice" onchange={ selectExercice }><option each={ exercices } selected={ id == selectedExercice } value="{ id }">{ nom }{ (is_default == 1) ? ' (par défaut)' : ''}</option></select></div>
+							<div class="filtres">
+								<div class="cell_1">
+									<p class="">Filtres</p>
+								</div>
+								<div class="cell_2">
+									<div>
+										<label for="filtre_budgets">Budgets :</label>
+										<select name="filtre_budgets"><option each={ budgets } value="{ id }" >{ libelle }</option></select>
+									</div>
+									<div>		
+										<label for="filtre_nature">Nature :</label>
+										<select name="filtre_nature"><option></option><option value="oeuvres_sociales">Oeuvres Sociales</option><option value="fonctionnement">Fonctionnement</option></select>
+									</div>
+									<div>
+										<label for="filtre_exercice">Exercice :</label>
+										<select name="filtre_exercice"><option>Exercice</option></select>
+									</div>
+									<div>
+										<label for="filtre_submit"></label>
+										<button name="filtre_submit" class="blue">Rechercher</button>
+									</div>
+								</div>
+								<div class="cell_3">
+									<div class="">
+										<label for="filtre_tri">Trier par :</label>
+										<select name="filtre_tri"><option>Croissant</option><option>Décroissant</option></select>
+									</div>
+								</div>
+							</div>
+						</div>-->
+			<!-- Describe Add Budgets -->
+						<div id="add_budget" class="edit edit_budget hidden">
+							<div class="cell_1">
+								<input type="hidden" name="type_element" value="budget">
+							</div>
+							<div class="cell_2">
+								<div>
+									<label for="budget_libelle">Budget : </label>
+									<input type="text" name="budget_libelle" id="budget_libelle" class="xxxl-large" value="" size="80" maxlength="80">
+								</div>
+							</div>
+							<!-- <div class="cell_3" if={ IS_CE }>
+								<div>
+									<label class="small xs-large" for="budget_nature">Nature :</label>
+									<select name="budget_nature" id="budget_nature" class="nature xl-large">
+										<option value="oeuvres_sociales">Oeuvres Sociales</option>
+										<option value="fonctionnement">Fonctionnement</option>
+									</select>
+								</div>
+							</div> -->
+							<div class="cell_4">
+								<!--<div class="visibility">
+									<label class="small" for="budget_visible"></label><button class="visible yes" name="budget_visible" value="visible" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible neutral" name="budget_invisible" value="visible" onclick={ makeInvisible } title="Invisible">NON</button>
+								</div>-->
+								<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="budget_visible" id="budget_visible" title="Visible" value="visible">
+							</div>
+							<div class="cell_5">								
+								<button class="button enregistrer save_submit" onclick={ saveBudget }>Enregistrer</button><!--
+							 --><button class="button annuler cancel_submit" onclick={ cancelBudget }>Annuler</button> 
+							</div>
+						</div>
+			<!-- /End Describe Add Budgets -->
+			<!-- Describe Add Analytiques -->
+						<div id="add_analytique" class="edit edit_analytique hidden">
+							<input type="hidden" name="type_element" value="analytique">
+							<input type="hidden" name="analytique_id_budget" id="analytique_id_budget" value="">
+							<div class="edit_analytique_block">
+								<div class="c49 inline_block">
+									<div>
+										<label for="analytique_libelle" class="s-large">Analytique : </label>
+										<input type="text" name="analytique_libelle" id="analytique_libelle" class="xl-large-22" value="" size="80" maxlength="80">
+									</div>
+									<div class="block_nature" if={ IS_CE }>
+										<label for="analytique_nature" class="s-large">Nature :</label>
+										<select name="analytique_nature" id="analytique_nature" class="">
+											<option value="oeuvres_sociales">Oeuvres Sociales</option>
+											<option value="fonctionnement">Fonctionnement</option>
+										</select>
+									</div>
+									<input onclick={ toggleVisible } class="visible" type="image" src="/img/btn_visible.png" title="Visible" id="analytique_visible" name="analytique_visible" value="visible">
+								</div>
+								<div class="c45 inline_block">
+									<div if={ IS_ASSO }>
+										<p class="title">Imputation Exercice</p>
+										<div class="padding-bottom">
+											<label class="" for="exercice_1">Exercice :</label>
+											<select name="exercice_1" id="exercice_1" class="xl-large">
+												<option value="2016">2016</option>
+												<option value="2017">2017</option>
+											</select>
+											<input type="text" class="six_char" value""> %
+										</div>
+										<div>
+											<label class="" for="exercice_2">Exercice :</label>
+											<select name="exercice_2" id="exercice_2" class="xl-large">
+												<option value="2016">2016</option>
+												<option value="2017">2017</option>
+											</select>
+											<input type="text" class="six_char" value""> %
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="analytiquePrevisionnel"><!-- if classe in [6-7] -->
+								<div class="cell">
+									<div class="table c100">
+										<div class="row">
+											<h1 class="cell c49">Prévisionnel</h1>
+										</div>
+									</div>
+									<div class="previsionnel">
+										<div class="budget_prev table">
+											<div class="row">
+												<div class="cell c_1"></div>
+												<div class="cell c_2">Dépense</div>
+												<div class="cell c_3">Recette</div>
+												<div class="cell c_4">Solde</div>
+											</div>
+											<div class="row">
+												<div class="cell c_1 bold">N</div>
+												<div class="cell c_2"><input type="text" value="" name="analytique_depense_previsionnelle" id="analytique_depense_previsionnelle"></div>
+												<div class="cell c_3"><input type="text" value="" name="analytique_recette_previsionnelle" id="analytique_recette_previsionnelle"></div>
+												<div class="cell c_4"><input type="text" value="" name="compte_solde_n_prev" id="compte_solde_n_prev" class="bold" disabled="disabled"></div>
+											</div>
+											<div class="row">
+												<div class="cell c_1 bold">N-1</div>
+												<div class="cell c_2"><input type="text" value="" name="compte_debit_n_1_prev" id="compte_debit_n_1_prev" disabled=disabled></div>
+												<div class="cell c_3"><input type="text" value="" name="compte_credit_n_1_prev" id="compte_credit_n_1_prev" disabled=disabled></div>
+												<div class="cell c_4"><input type="text" value="" name="compte_solde_n_1_prev" id="compte_solde_n_1_prev" class="bold" disabled="disabled"></div>
+											</div>
+										</div>
+									</div><!-- /previsionnel -->
+								</div><!-- /budget_PLA_previsionnel -->
+
+								<div class="cell">
+									<div class="block_reel">
+										<div class="table c100">
+											<div class="row">
+												<h1 class="cell c49">Réel</h1>
+											</div>
+										</div>
+										<div class="reel">
+											<div class="budget_reel table">
+												<div class="row">
+													<div class="cell c_1"></div>
+													<div class="cell c_2">Dépense</div>
+													<div class="cell c_3">Recette</div>
+													<div class="cell c_4">Solde</div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 bold">N</div>
+													<div class="cell c_2"><input type="text" value="" name="analytique_depense_reelle" id="analytique_depense_reelle" disabled></div>
+													<div class="cell c_3"><input type="text" value="" name="analytique_recette_reelle" id="analytique_recette_reelle" disabled></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_solde_n_reel" id="compte_solde_n_reel" class="bold" disabled="disabled"></div>
+												</div>
+												<div class="row">
+													<div class="cell c_1 bold">N-1</div>
+													<div class="cell c_2"><input type="text" value="" name="compte_debit_n_1_reel" id="compte_debit_n_1_reel" disabled=disabled></div>
+													<div class="cell c_3"><input type="text" value="" name="compte_credit_n_1_reel" id="compte_credit_n_1_reel" disabled=disabled></div>
+													<div class="cell c_4"><input type="text" value="" name="compte_solde_n_1_reel" id="compte_solde_n_1_reel" class="bold" disabled="disabled"></div>
+												</div>
+											</div>
+										</div><!-- /reel -->
+									</div>
+								</div><!-- /budget_PLA_reel -->
+								<!-- <div class="cell_2">
+									<div>
+										<label for="analytique_libelle">Libellé : </label>
+										<input type="text" name="analytique_libelle" id="analytique_libelle" class="title xl-large" value="">
+									</div>
+								</div>
+								<div class="cell_3">
+									<div>
+										<label for="analytique_depense_previsionnelle">Dépense prévisionnelle : </label>
+										<input type="text" id="analytique_depense_previsionnelle" name="analytique_depense_previsionnelle" class="title xl-large" value="">
+									</div>
+								</div>
+								<div class="cell_4">
+									<div>
+										<label for="analytique_recette_previsionnelle">Recette prévisionnelle : </label>
+										<input type="text" id="analytique_recette_previsionnelle" name="analytique_recette_previsionnelle" class="title xl-large" value="">
+									</div>
+								</div>
+								<div class="cell_5">
+									<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="analytique_visible" id="analytique_visible" title="Visible" value="visible">
+								</div>-->
+								<div class="saveAnalytique">
+									<button class="button annuler cancel_submit" onclick={ cancelAnalytique }>Annuler</button> 
+									<button class="button enregistrer save_submit" onclick={ saveAnalytique }>Enregistrer</button>
+								</div>
+							</div>
+						</div>
+			<!-- /End Describe Add Analytiques -->
+						<div class="actions_container">
+							<div class="location">
+								<button id="root_budgets" class="button btn_nav action_button_size" value="" onclick={ showBudgets }>Budgets</button>
+								<button id="current_budget" class="button btn_nav hidden action_button_size" value="" onclick={ showAnalytiques }></button>				
+							</div>
+							<div class="actions" id="actions">
+								<!--<button id="print_element_button" class="orange">Impressions</button>
+								<button id="delete_element_button" class="red">Supprimer</button>-->
+								<button id="add_budget_button" onclick={ addBudget } class="button ajouter action_button_size">Ajouter un Budget</button>
+								<button id="add_analytique_button" onclick={ addAnalytique } class="button ajouter action_button_size hidden">Ajouter un Analytique</button>
+							</div>
+						</div>
+						<div id="entete_budget" class="entete-tableau">
+							<div class="cell_1"></div>
+							<div class="cell_2">
+								<p class="small left">Budget</p>
+							</div>
+							<!-- <div class="cell_3" if={ IS_CE }>
+								<p class="small">Nature</p>
+							</div> -->
+							<div class="cell_3">
+								<span class="small">Prévisionnel</span>
+							</div>
+							<div class="cell_4">
+								<span class="small">Réel</span>
+							</div>
+							<div class="cell_7">
+								<span class="small">Analytiques</span>
+							</div>
+							<div class="cell_5">
+								<p class="small">Visible</p>
+							</div>
+							<div class="cell_6">
+								<p class="small">Actions</p>
+							</div>
+						</div>
+						<div class="entete-tableau entete_tableau_budget_supp">
+							<div class="cell_1"></div>
+							<div class="cell_2">
+							</div>
+							<!-- <div class="cell_3" if={ IS_CE }>
+							</div> -->
+							<div class="cell_3">
+								<div class="c48 inline_block">
+									<span class="small">Solde Débit</span>
+								</div>
+								<div class="c48 inline_block">
+									<span class="small">Solde Crédit</span>
+								</div>
+							</div>
+							<div class="cell_4">
+								<div class="c48 inline_block">
+									<span class="small">Solde Débit</span>
+								</div>
+								<div class="c48 inline_block">
+									<span class="small">Solde Crédit</span>
+								</div>
+							</div>
+							<div class="cell_7">
+							</div>
+							<div class="cell_5">
+							</div>
+							<div class="cell_6">
+							</div>
+						</div>
+			<!-- Describe the Budgets -->
+						<div each={ budgets } id="budget_{ id }" class="budget">
+							<div class="show_infos" onclick={ showAnalytiques }>
+								<div class="cell_1">
+									<!--checkbox<input type="checkbox" name="action[]">-->
+								</div>
+								<div class="cell_2">
+									<p class="title left">{ libelle }</p>
+								</div>
+								<!-- <div class="cell_3" if={ IS_CE }>
+									<p class="nature">{ nature === 'oeuvres_sociales' ? 'Œuvres sociales' : 'Fonctionnement' }</p>
+								</div> -->
+								<div class="cell_3">
+									<div class="c48 inline_block" title="Dépense prévisionnelle">{ sum_depense || (0).toFixed(2) }</div>
+									<div class="c48 inline_block" title="Recette prévisionnelle">{ sum_recette || (0).toFixed(2) }</div>
+								</div>
+								<div class="cell_4">
+									<div class="c48 inline_block" title="Dépense réelle">{ solde_debit_reel }</div>
+									<div class="c48 inline_block" title="Recette réelle">{ solde_credit_reel }</div>
+								</div>
+								<!-- <div class="cell_4">
+									<p class="" title="Ecritures"><span class="blue_text">{ ecritures }</span></p>
+								</div>
+								<div class="cell_5">
+									<p class="" title="Brouillard"><span class="blue_text">{ brouillards }</span></p>
+								</div> -->
+								<div class="cell_7">
+									{ ! analytique || analytique == 0 ? '0' : analytique }
+								</div>
+								<div class="cell_5">
+									<!-- <div class="visibility">
+										<button class="{ visible === 'visible' ? 'visible yes' : 'visible neutral' }" title="Visible">OUI</button><button class="{ visible === 'hidden' ? 'invisible no' : 'invisible neutral' }" title="Invisible">NON</button>
+									</div> -->
+									<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+								</div>
+
+								<div class="cell_6">
+									<div>
+										<p class="modif"><img class="edit_element_img" onclick={ editBudget } alt="Modifier" title="Modifier" src="/img/edit.png"><img alt="Supprimer" title="Supprimer" class="delete_element_img" onclick={ validDeleteBudget } src="/img/delete.png" if={ ! analytique || analytique == 0 }><!--<img title="Afficher les analytiques" alt="Afficher les analytiques" onclick={ showAnalytiques } class="enlarge_analytique_img enlarge_element_img" src="/img/enlarge.png">--></p>
+									</div>
+								</div>
+							</div>
+							<div id="budget_{ id }_edit" class="edit edit_budget hidden">
+								<div class="cell_1">
+								</div>
+								<div class="cell_2">
+									<div>
+										<label class="small m-large" for="budget_libelle_{ id }">Libellé : </label>
+										<input id="budget_libelle_{ id }" name="budget_libelle_{ id }" type="text" class="xl-large-22" value="{ libelle }" size="80" maxlength="80">
+									</div>
+								</div>
+								<!-- <div class="cell_3" if={ IS_CE }>
+									<div>
+										<label class="small xs-large" for="budget_nature{ id }">Nature :</label>
+										<select id="budget_nature_{ id }" name="budget_nature_{ id }" class="nature xl-large">
+											<option value="oeuvres_sociales" selected="{ nature==='oeuvres_sociales' }">Oeuvres Sociales</option>
+											<option value="fonctionnement" selected="{ nature==='fonctionnement' }">Fonctionnement</option>
+										</select>
+									</div>
+								</div> -->
+								<div class="cell_4"></div>
+								<div class="cell_5">
+									<!-- <div class="visibility">
+										<label class="small" for="budget_visible_{ id }"></label><button class="visible { visible === 'visible' ? 'yes' : 'neutral' }" id="budget_visible_{ id }" name="budget_visible_{ id }" value="{ visible }" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible { visible === 'hidden' ? 'no' : 'neutral' }" id="budget_invisible_{ id }" name="budget_invisible_{ id }" value="{ visible }" onclick={ makeInvisible } title="Invisible">NON</button>
+									</div>
+									 -->
+									 <input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="budget_visible_{ id }" name="budget_visible_{ id }">
+								</div>
+								<div class="cell_6">
+									<button onclick={ saveBudget } class="button enregistrer save_submit">Enregistrer</button><!--
+								 --><button onclick={ cancelBudget } class="button annuler cancel_submit">Annuler</button>
+								</div>
+							</div>
+							<div id="budget_{ id }_delete" class="delete hidden">
+								<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button onclick={ deleteBudget }>Supprimer</button><button onclick={ cancelDeleteBudget }>Annuler</button></div>
+							</div>
+			<!-- /End Describe the Budgets -->
+			<!-- Describe the Analytiques -->
+							<div class="analytiques hidden">
+								<div class="entete-tableau entete_analytique">
+									<div class="cell_1"></div>
+									<div class="cell_2 left">
+										<p class="small">Analytique</p>
+									</div>
+									<div class="cell_3" if={ IS_CE }>
+										<p class="small">Nature</p>
+									</div>
+									<div class="cell_3">
+										<p class="small">Prévisionnel</p>
+									</div>
+									<div class="cell_4">
+										<p class="small">Réel</p>
+									</div>
+									<div class="cell_5">
+										<p class="small">Visibilité</p>
+									</div>
+									<div class="cell_6">
+										<p class="small">Actions</p>
+									</div>
+								</div>
+								<div class="entete-tableau entete_tableau_analytique_supp">
+									<div class="cell_1"></div>
+									<div class="cell_2">
+									</div>
+									<div class="cell_3" if={ IS_CE }>
+									</div>
+									<div class="cell_3">
+										<div class="c48 inline_block small">Solde Débit</div>
+										<div class="c48 inline_block small">Solde Crédit</div>
+									</div>
+									<div class="cell_4">
+										<div class="c48 inline_block small">Solde Débit</div>
+										<div class="c48 inline_block small">Solde Crédit</div>
+									</div>
+									<div class="cell_5">
+									</div>
+									<div class="cell_6">
+									</div>
+								</div>
+								<div each={ analytiques } id="analytique_{ id }"  class="analytique">
+									<div class="show_infos">
+										<div class="cell_1">
+											<!--checkbox<input type="checkbox" name="action[]">-->
+										</div>
+										<div class="cell_2">
+											<p class="title left">{ libelle }</p>
+										</div>
+										<div class="cell_3" if={ IS_CE }>
+											<p class="text_nature">{ nature }</p>
+										</div>
+										<div class="cell_3">
+											<div class="c48 inline_block" title="Dépense prévisionnelle">{ solde_depense }</div>
+											<div class="c48 inline_block" title="Recette prévisionnelle">{ solde_recette }</div>
+										</div>
+										<div class="cell_4">
+											<div class="c48 inline_block" title="Dépense réelle">{ solde_debit_reel }</div>
+											<div class="c48 inline_block" title="Recette réelle">{ solde_credit_reel }</div>
+										</div>
+										<div class="cell_5">
+											<!-- <div class="visibility">
+												<button class="{ visible === 'visible' ? 'visible yes' : 'visible neutral' }" title="Visible">OUI</button><button class="{ visible === 'hidden' ? 'invisible no' : 'invisible neutral' }" title="Invisible">NON</button>
+											</div> -->
+											<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+										</div>
+										<div class="cell_6">
+											<div>
+												<p class="modif"><img class="edit_element_img" alt="Editer" onclick={ editAnalytique } src="/img/edit.png"><img alt="Supprimer" class="delete_element_img" onclick={ validDeleteAnalytique } src="/img/delete.png"></p>
+											</div>
+										</div>
+									</div>
+									<div id="analytique_{ id }_edit" class="edit edit_analytique hidden">
+										<input type="hidden" id="analytique_id_budget_{ id }" name="analytique_id_budget_{ id }" value="{ id_budget }">
+										<div class="edit_analytique_block">
+											<div class="c49 inline_block">
+												<div>
+													<label class="small m-large" for="analytique_libelle_{ id }">Analytique : </label>
+													<input id="analytique_libelle_{ id }" name="analytique_libelle_{ id }" type="text" class="xl-large-22" value="{ libelle }" size="80" maxlength="80">
+												</div>
+												<div class="block_nature" if={ IS_CE }>
+													<label for="analytique_nature_{ id }" class="s-large">Nature :</label>
+													<select name="analytique_nature_{ id }" id="analytique_nature_{ id }" class="">
+														<option value=""></option>
+														<option value="oeuvres_sociales" selected="{ nature == 'oeuvres_sociales' ? 'selected' : ''}">Oeuvres Sociales</option>
+														<option value="fonctionnement" selected="{ nature == 'fonctionnement' ? 'selected' : ''}">Fonctionnement</option>
+													</select>
+												</div>
+											</div>
+											<div class="c45 inline_block">
+												<div if={ IS_ASSO }>
+													<p class="title">Imputation Exercice</p>
+													<div class="padding-bottom">
+														<label class="" for="exercice_1">Exercice :</label>
+														<select name="exercice_1" id="exercice_1" class="xl-large">
+															<option value="2016">2016</option>
+															<option value="2017">2017</option>
+														</select>
+														<input type="text" class="six_char" value""> %
+													</div>
+													<div>
+														<label class="" for="exercice_2">Exercice :</label>
+														<select name="exercice_2" id="exercice_2" class="xl-large">
+															<option value="2016">2016</option>
+															<option value="2017">2017</option>
+														</select>
+														<input type="text" class="six_char" value""> %
+													</div>
+												</div>
+											</div>
+											<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="analytique_visible_{ id }" name="analytique_visible_{ id }" class='visible'>
+										</div>
+
+										<div class="analytiquePrevisionnel"><!-- if classe in [6-7] -->
+											<div class="cell">
+												<div class="table c100">
+													<div class="row">
+														<h1 class="cell c49">Prévisionnel</h1>
+													</div>
+												</div>
+												<div class="previsionnel">
+													<div class="budget_prev table">
+														<div class="row">
+															<div class="cell c_1"></div>
+															<div class="cell c_2">Dépense</div>
+															<div class="cell c_3">Recette</div>
+															<div class="cell c_4">Solde</div>
+														</div>
+														<div class="row">
+															<div class="cell c_1 bold">N</div>
+															<div class="cell c_2"><input type="text" value="{ depense_previsionnelle }" name="analytique_depense_previsionnelle_{ id }" id="analytique_depense_previsionnelle_{ id }" class="depense_previsionnelle"></div>
+															<div class="cell c_3"><input type="text" value="{ recette_previsionnelle }" name="analytique_recette_previsionnelle_{ id }" id="analytique_recette_previsionnelle_{ id }" class="recette_previsionnelle"></div>
+															<div class="cell c_4"><input type="text" value="{ solde_depense > solde_recette ? solde_depense : solde_recette }" name="" id="" class="bold" disabled="disabled"></div>
+														</div>
+														<div class="row">
+															<div class="cell c_1 bold">N-1</div>
+															<div class="cell c_2"><input type="text" value="" name="" id="" disabled=disabled></div>
+															<div class="cell c_3"><input type="text" value="" name="" id="" disabled=disabled></div>
+															<div class="cell c_4"><input type="text" value="" name="" id="" class="bold" disabled="disabled"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- PAS ENCORE MIS LES VALEUR { } POUR QUE CA SOIT EN DYNAMIQUE -->
+											<div class="cell">
+												<div class="block_reel">
+													<div class="table c100">
+														<div class="row">
+															<h1 class="cell c49">Réel</h1>
+														</div>
+													</div>
+													<div class="reel">
+														<div class="budget_reel table">
+															<div class="row">
+																<div class="cell c_1"></div>
+																<div class="cell c_2">Dépense</div>
+																<div class="cell c_3">Recette</div>
+																<div class="cell c_4">Solde</div>
+															</div>
+															<div class="row">
+																<div class="cell c_1 bold">N</div>
+																<div class="cell c_2"><input type="text" value="{ debit_reel }" name="analytique_depense_reelle" id="analytique_depense_reelle" disabled></div>
+																<div class="cell c_3"><input type="text" value="{ credit_reel }" name="analytique_recette_reelle" id="analytique_recette_reelle" disabled></div>
+																<div class="cell c_4"><input type="text" value="{ solde === 'credit' ? solde_credit_reel : solde_debit_reel }" name="compte_solde_n_reel" id="compte_solde_n_reel" class="bold" disabled="disabled"></div>
+															</div>
+															<div class="row">
+																<div class="cell c_1 bold">N-1</div>
+																<div class="cell c_2"><input type="text" value="" name="compte_debit_n_1_reel" id="compte_debit_n_1_reel" disabled=disabled></div>
+																<div class="cell c_3"><input type="text" value="" name="compte_credit_n_1_reel" id="compte_credit_n_1_reel" disabled=disabled></div>
+																<div class="cell c_4"><input type="text" value="" name="compte_solde_n_1_reel" id="compte_solde_n_1_reel" class="bold" disabled="disabled"></div>
+															</div>
+														</div>
+													</div><!-- /reel -->
+												</div>
+											</div><!-- /budget_PLA_reel -->
+										</div>	
+										<div class="saveAnalytique">
+											<button class="button annuler cancel_submit" onclick={ cancelAnalytique }>Annuler</button> 
+											<button class="button enregistrer save_submit" onclick={ saveAnalytique }>Enregistrer</button>
+										</div>
+									</div>
+									<!--
+									<div id="analytique_{ id }_edit" class="edit edit_analytique hidden">
+										<div class="cell_1">
+											<input type="hidden" id="analytique_id_budget_{ id }" name="analytique_id_budget_{ id }" value="{ id_budget }">
+										</div>
+										<div class="cell_2">
+											<div>
+												<label class="small m-large" for="analytique_libelle_{ id }">Libellé : </label>
+												<input id="analytique_libelle_{ id }" name="analytique_libelle_{ id }" type="text" class="title xl-large" value="{ libelle }">
+											</div>
+										</div>
+										<div class="cell_3">
+											<div>
+												<label for="analytique_depense_previsionnelle_{ id }">Dépense prévisionnelle : </label>
+												<input type="text" id="analytique_depense_previsionnelle_{ id }" name="analytique_depense_previsionnelle_{ id }" class="title xl-large" value="{ depense_previsionnelle }">
+											</div>
+										</div>
+										<div class="cell_4">
+											<div>
+												<label for="analytique_recette_previsionnelle_{ id }">Recette prévisionnelle : </label>
+												<input type="text" id="analytique_recette_previsionnelle_{ id }" name="analytique_recette_previsionnelle_{ id }" class="title" value="{ recette_previsionnelle }">
+											</div>
+										</div>
+
+										<div class="cell_5">
+											<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="analytique_visible_{ id }" name="analytique_visible_{ id }">
+
+										</div>
+										<div class="cell_6">
+											<button onclick={ saveAnalytique } class="blue save_submit">Enregistrer</button>
+											<button onclick={ cancelAnalytique } class="red cancel_submit">Annuler</button>
+										</div>
+									</div>-->
+									<div id="analytique_{ id }_delete" class="delete hidden">
+										<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button onclick={ deleteAnalytique }>Supprimer</button><button onclick={ cancelDeleteAnalytique }>Annuler</button></div>
+									</div>
+			<!-- /End Describe the Analytiques -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/cle_repartition">
+						Clé de répartition
+					</a>
+				</header>
+			</div> -->
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/chapitres">
+						Chapitres Bilan et Compte de Résultat
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/parametres">
+						Paramètres Comptables	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/mode_paiement">Mode de Paiement</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/exercices">
+						Exercices	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/tableau_de_bord">
+						Tableau de Bord	
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/utilitaires">
+						Utilitaires
+					</a>
+				</header>
+			</div> -->
+		</div>
+	</div>
+
+	
+	<script>
+	  	var _this = this;
+		var app = opts;
+		this.app = opts;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+
+		app.on('unmount-budgets', function(){
+			app.off('unmount-budgets');		
+			_this.unmount();
+		});
+
+		this.loaded = false;
+
+		this.thingsToLoad = [ 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+/*************************************************************************
+		this.budgets = [
+			{ id: 555, reference: 1, libelle: '...', ecritures: 29, brouillards: 3, visible: 'visible', idAnalytiques: {}, analytiques:
+				[
+					{ id: 551, id_budget: 555, reference: 10, libelle: 'Capital et réserves', ecritures: 29, brouillards: 3, visible: 'visible', },
+				]
+			},
+		];
+****************************************************************************/
+		this.budgets = [];
+		this.idBudgets = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		editBudget(e){
+			e.stopPropagation();
+			if(_this.E_M){
+				console.log(_this.budgets);
+				_this.E_M.editElement({ event: e, prefixId: 'budget_' });
+			}
+		}
+
+		editAnalytique(e){
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e, prefixId: 'analytique_' });
+			}
+		}
+
+		showBudgets(e){
+			$('#add_budget_button').show();
+			$('#add_analytique_button').hide();
+			var budgetId = $('#current_budget').val();
+			$('#current_budget').hide();
+			$('.show_infos', $('#budget_' + budgetId)).show();
+			$('#entete_budget').show();
+			$('.entete_tableau_budget_supp').show();
+			$('.entete_analytique', $('#budget_' + budgetId)).hide();
+			$('.entete_tableau_analytique_supp', $('#budget_' + budgetId)).hide();
+			$('.budget').slideDown();
+			$('.analytique').slideUp();
+			_this.budgets = [];
+			getElements({
+				tag: _this,
+				url: '/admin/compta/budgets', 
+				elements: _this.budgets,
+				idElements: _this.idBudgets,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', /*nature: 'nature',*/libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', sum_depense: 'sum_depense', sum_recette: 'sum_recette', analytique: 'analytique'},
+				getParameters: { type_element: 'budget', reel: true},
+				childsName: 'analytiques',
+				idChildsName: 'idAnalytiques',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		}
+		
+		showAnalytiques(e){
+			var item;
+			var itemId;
+			if(e.item){
+				item = e.item;
+				itemId = item.id;
+			}else{
+				itemId = $('#current_budget').val();
+				item = [];
+				item.libelle = $('#current_budget').attr('title');			
+			}
+			var htmlId = 'budget_' + itemId;
+			var $item = $('#' + htmlId);
+
+			 _this.budgets[_this.idBudgets[itemId]]['analytiques'] = [];
+			var elements = _this.budgets[_this.idBudgets[itemId]]['analytiques'];
+			_this.budgets[_this.idBudgets[itemId]]['idAnalytiques'] = {};
+			var idElements = _this.budgets[_this.idBudgets[itemId]]['idAnalytiques'];
+			// get analytiques and dispatch them
+			getElements({
+				tag: _this,
+				url: '/admin/compta/budgets', 
+				elements: elements,
+				idElements: idElements,
+				fields: {id: 'id', id_budget: 'id_budget', id_entreprise: 'id_entreprise', libelle: 'libelle', depense_previsionnelle: 'depense_previsionnelle', recette_previsionnelle: 'recette_previsionnelle', id_exercice: 'id_exercice', visible: 'visible', solde_depense: 'solde_depense', solde_recette: 'solde_recette', nature: 'nature'},
+				getParameters: { type_element: 'analytique', id_budget: itemId, reel: true},
+				end: function(tag){
+					$('.analytiques', $item).slideDown();
+				},
+			});
+
+			_this['analytique_id_budget'].value = itemId;
+			$('#entete_budget').hide();
+			$('.entete_tableau_budget_supp').hide();
+			$('.entete_analytique', $item).show();
+			$('.entete_tableau_analytique_supp', $item).show();
+			$('#current_budget').val(itemId).text('Budget : ' + item.libelle).attr('title', item.libelle).show();
+			$('.budget').each(function(index){
+				if(this.id !== htmlId){
+					$(this).hide();
+				}else{
+					$('.show_infos', $(this)).hide();
+				}
+			});
+			$('#add_budget_button').hide();
+			$('#add_analytique_button').show();
+		}
+
+		hideAnalytiques(e){
+			var item = e.item;
+			var itemId = item.id;
+			var $item = $('#budget_' + itemId);
+			$('.analytiques', $item).slideUp();
+			$('#current_budget').val('').text('').attr('title', '').hide();
+			$('.budget').each(function(index){
+				$(this).show();
+			});
+			$('#add_budget_button').show();
+			$('#add_analytique_button').hide();
+		}
+
+		addBudget(e){
+			$('#actions').addClass('hidden').removeClass('inline_block');
+			$('input[type=text]', '#add_budget').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e, prefixId: 'budget_',});
+			}
+		}
+
+		addAnalytique(e){
+			$('#actions').addClass('hidden').removeClass('inline_block');
+			$('input[type=text]', '#add_analytique').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e, prefixId: 'analytique_',});
+			}
+		}
+
+		validDeleteBudget(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'budget_',});
+			}
+		}
+
+		validDeleteAnalytique(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'analytique_',});
+			}
+		}
+
+		cancelDeleteBudget(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'budget_',});
+			}
+		}
+
+		deleteBudget(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/budgets', elements: _this.budgets, idElements: _this.idBudgets, type_element: 'budget',});
+			}
+		}
+		
+		cancelDeleteAnalytique(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'analytique_',});
+			}
+		}
+
+		deleteAnalytique(e){
+			if(_this.E_M){
+				var item = e.item;
+				var budgetId = item.id_budget;
+				var elements =  _this.budgets[_this.idBudgets[budgetId]]['analytiques'];
+				var idElements = _this.budgets[_this.idBudgets[budgetId]]['idAnalytiques'];
+				
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/budgets', elements: elements, idElements: idElements, type_element: 'analytique',});
+			}
+		}
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelBudget(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'reference', 'visible', ],
+					prefixId: 'budget_',
+				});
+			}
+		}
+
+		cancelAnalytique(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				console.log("ok");
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'reference', 'visible', 'depense_previsionnelle', 'recette_previsionnelle', 'nature' ],
+					prefixId: 'analytique_',
+				});
+			}
+		}
+
+		saveBudget(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/budgets', 
+					fields: ['libelle', /*'nature',*/ 'visible', ],
+					tag: _this,
+					elements: _this.budgets,
+					idElements: _this.idBudgets,
+					typeElement: 'budget',
+					suffixId: 'budget',
+					prefixFields: 'budget_',
+					prefixId: 'budget_',
+				});
+			}
+		}
+
+		saveAnalytique(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				var idBudget;
+				if(e.item){
+					idBudget = e.item.id_budget;
+				}else{
+					idBudget = $('#current_budget').val();
+				}
+				var elements = _this.budgets[_this.idBudgets[idBudget]]['analytiques'];
+				var idElements = _this.budgets[_this.idBudgets[idBudget]]['idAnalytiques']
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/budgets', 
+					fields: ['libelle', 'id_budget', 'depense_previsionnelle', 'recette_previsionnelle', 'visible', 'nature' ],
+					tag: _this,
+					elements: elements,
+					idElements: idElements,
+					typeElement: 'analytique',
+					suffixId: 'analytique',
+					prefixFields: 'analytique_',
+					prefixId: 'analytique_',
+					beforeSend: function(params){
+						var depense = parseFloat(params.element['depense_previsionnelle']);
+						var recette = parseFloat(params.element['recette_previsionnelle'])
+						if(depense < recette) {
+							params.element['solde_recette'] = (recette - depense).toFixed(2);
+							params.element['solde_depense'] = (0).toFixed(2);
+						} else if (depense > recette) {
+							params.element['solde_depense'] = (depense - recette).toFixed(2);
+							params.element['solde_recette'] = (0).toFixed(2);
+						} else if (depense == recette) {
+							params.element['solde_depense'] = (0).toFixed(2);
+							params.element['solde_recette'] = (0).toFixed(2);
+						}
+					},
+				});
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			if( _this.selectedExercice ){
+				getParameters.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParameters.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( url, getParameters, function(data){
+				console.log('data : ', data);
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'solde_depense' && field != 'solde_recette')
+								d[fields[field]] = data.elements[i][field];
+							if(field == 'solde_depense') {
+								d[fields[field]] = getSoldePrevisionnelle(parseFloat(data.elements[i]['depense_previsionnelle']), parseFloat(data.elements[i]['recette_previsionnelle']), 'depense');
+							} else if (field == 'solde_recette') {
+								d[fields[field]] = getSoldePrevisionnelle(parseFloat(data.elements[i]['depense_previsionnelle']), parseFloat(data.elements[i]['recette_previsionnelle']),  'recette');
+							} else if (field == 'sum_recette') {
+								var sum_recette = parseFloat(data.elements[i]['sum_recette']);
+								var sum_depense = parseFloat(data.elements[i]['sum_depense']);
+								var sum = sum_recette - sum_depense;
+								d[fields[field]] = sum > 0 ? (sum).toFixed(2) : (0).toFixed(2);
+							} else if (field == 'sum_depense') {
+								var sum_recette = parseFloat(data.elements[i]['sum_recette']);
+								var sum_depense = parseFloat(data.elements[i]['sum_depense']);
+								var sum = sum_depense - sum_recette;
+								d[fields[field]] = sum > 0 ? (sum).toFixed(2) : (0).toFixed(2);
+							}
+						}
+						//if(getParameters.type_element === 'budget') {
+							var credit_reel = parseFloat(data.elements[i]['credit_reel']);
+							var debit_reel = parseFloat(data.elements[i]['debit_reel']);
+							if ( ! credit_reel && ! debit_reel ) {
+								d['solde_credit_reel'] = (0).toFixed(2); 
+								d['solde_debit_reel'] = (0).toFixed(2);
+							} else if(credit_reel >= debit_reel) {
+								d['solde_credit_reel'] = (credit_reel - debit_reel).toFixed(2);
+								d['solde_debit_reel'] = (0).toFixed(2);
+								d['solde'] = 'credit';
+							} else {
+								d['solde_debit_reel'] = (debit_reel - credit_reel).toFixed(2);
+								d['solde_credit_reel'] = (0).toFixed(2);
+								d['solde'] = 'debit';
+							}
+
+							if(getParameters.type_element === 'analytique') {
+								d['debit_reel'] = ! debit_reel ? (0).toFixed(2) : debit_reel.toFixed(2);
+								d['credit_reel'] = ! credit_reel ? (0).toFixed(2) : credit_reel.toFixed(2);
+							}
+						//}
+						/*	if(getParameters.type_element === 'analytique') {
+							var credit_reel = parseFloat(data.elements[i]['credit_reel']);
+							var debit_reel = parseFloat(data.elements[i]['debit_reel']);
+							if ( ! credit_reel || ! debit_reel ) {
+								d['solde_credit_reel'] = (0).toFixed(2); 
+								d['solde_debit_reel'] = (0).toFixed(2);
+							} else if(credit_reel >= debit_reel) {
+								d['solde_credit_reel'] = (credit_reel - debit_reel).toFixed(2);
+								d['solde_debit_reel'] = (0).toFixed(2); 
+							} else {
+								d['solde_debit_reel'] = (debit_reel - credit_reel).toFixed(2);
+								d['solde_credit_reel'] = (0).toFixed(2); 
+							}
+						}*/
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}
+					tag.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				console.log('elements : ',  _this.budgets);
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		function getSoldePrevisionnelle(depense, recette, type) {
+			if(depense < recette && type == 'recette') {
+				return((recette - depense).toFixed(2));
+			} else if (depense < recette & type == 'depense') {
+				return((0).toFixed(2));
+			} else if (depense > recette && type == 'recette') {
+				return((0).toFixed(2));
+			} else if (depense > recette && type == 'depense') {
+				return((depense - recette).toFixed(2));
+			} else {
+				return((0).toFixed(2));
+			}
+		}
+
+		this.on('mount', function(){
+			getElements({
+				tag: _this,
+				url: '/admin/compta/budgets', 
+				elements: _this.budgets,
+				idElements: _this.idBudgets,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', /*nature: 'nature',*/ libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', sum_depense: 'sum_depense', sum_recette: 'sum_recette', analytique: 'analytique'},
+				getParameters: { type_element: 'budget', reel: true},
+				childsName: 'analytiques',
+				idChildsName: 'idAnalytiques',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			editAnalytique = null;
+			editBudget = null;
+			showBudgets = null;
+			showContents = null;
+			showAnalytiques = null;
+			hideAnalytiques = null;
+			addBudget = null;
+			addAnalytique = null;
+			validDeleteBudget = null;
+			validDeleteAnalytique = null;
+			cancelDeleteBudget = null;
+			deleteBudget = null;
+			cancelDeleteAnalytique = null;
+			deleteAnalytique = null;
+			deleteElements = null;
+			cancelBudget = null;
+			cancelAnalytique = null;
+			saveBudget = null;
+			saveAnalytique = null;
+			getElements = null;
+			makeVisible = null;
+			makeInvisible = null;
+			toggleVisible = null;			
+		});
+	</script>
+</budgets>

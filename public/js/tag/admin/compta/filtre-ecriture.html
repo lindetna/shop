@@ -1,0 +1,377 @@
+<filtre-ecriture>
+	<div class="reset" onclick={ resetFiltre }>
+	</div>
+  	<div class="cell">
+  		<div class="filtre_journaux_comptes">
+	  		<label class="s-large" for="filtre_journal">Journaux</label>
+	  		<select name="filtre_journal" id="filtre_journal" onchange={ filterChange }>
+	  			<option value=""></option>
+	  			<option each="{ this.parentTag.journaux }" value="{ id }" id="print_select_journaux_{id}" class="print_select">{ libelle }</option>
+	  		</select>
+	  		<label class="s-large margin-left" for="filtre_compte">Comptes</label>
+	  		<select name="filtre_compte" id="filtre_compte" onchange={ filterChange }>
+	  			<option value=""></option>
+	  			<option each="{ this.parentTag.comptes }" class="print_select" id="print_select_comptes_{id}" value="{ id }">{ reference } { libelle }</option>
+	  		</select>
+	  	</div>
+	  	<div class="filtre_budget_analyt">
+	  		<label class="s-large" for="filtre_budget">Budget</label>
+	  		<select name="filtre_budget" id="filtre_budget" onchange={ filterChange }>
+	  			<option value=""></option>
+	  			<option each="{ this.parentTag.budgets }" class="print_select" id="print_select_budget_{id}" value="{ id }">{ libelle }</option>
+	  		</select>
+	  		<label class="s-large margin-left" for="filtre_analytique">Analytique</label>
+	  		<select name="filtre_analytique" id="filtre_analytique" onchange={ filterChange }>
+	  			<option value=""></option>
+	  			<option each="{ this.parentTag.analytiques }" class="print_select" id="print_select_analytique_{id}" value="{ id }">{ libelle }</option>
+	  		</select>
+	  	</div>
+	  	<div class="filtre_fournisseur_salarie">
+	  		<label class="s-large" for="filtre_fournisseur">Fournisseur</label>
+	  		<select name="filtre_fournisseur" id="filtre_fournisseur" onchange={ filterChange }>
+	  			<option value=""></option>
+	  			<option each="{ this.parentTag.fournisseurs }" value="{ id }" id="print_select_fournisseur_{id}" class="print_select">{ libelle }</option>
+	  		</select>
+	  		<label class="s-large margin-left" for="filtre_salarie">{ this.parentTag.IS_CE ? 'Salarié' : 'Adhérent' }</label>
+	  		<div class="filtre_salarie">
+		  		<select name="filtre_salarie" id="filtre_salarie" class="contacts print_select" onchange={ filterChange }>
+		  		</select>
+		  	</div>
+	  	</div>
+	  	<div class="filtre_libelle">
+	  		<label class="s-large" for="filtre_libelle">Libelle</label>
+	  		<input class="print_input_text" type="text" id="filtre_libelle" onchange={ filterChange }>
+	  	</div>
+  	</div>
+  	<div class="c50 cell filtres_checkbox">
+  		<div class="table c100">
+  			<div class="row">
+		  		<div class="c49 cell">
+		  			<input class="print" type="checkbox" id="ec_valides" onchange={ filterChange } value="Ecritures Validées"><label for="ec_valides">Ecritures Validées</label>
+		  		</div>
+		  		<div class="c49 cell">
+		  			<input class="print" type="checkbox" id="ec_lettrees" onchange={ filterChange } value="Ecritures Lettrées"><label for="ec_lettrees">Ecritures Lettrées</label>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="c49 cell">
+		  			<input class="print" type="checkbox" id="ec_non_valides" onchange={ filterChange } checked={ checked: checked == 'ec_non_valides' } value="Ecritures Non Validées"><label for="ec_non_valides">Ecritures Non Validées</label>
+		  		</div>
+		  		<div class="c49 cell">
+		  			<input class="print" type="checkbox" id="ec_non_lettrees" onchange={ filterChange } value="Ecritures Non Lettrées"><label for="ec_non_lettrees">Ecritures Non Lettrées</label>
+		  		</div>
+		  	</div>
+	  	</div>
+  		<div class="cell">
+  			<label>Date</label><input type="text" class="print_input_text" id="filtre_date_enregistrement_min" idfiltre="filtre_date_enregistrement" onchange={ filterChange }><input class="print_input_text" type="text" id="filtre_date_enregistrement_max" idfiltre="filtre_date_enregistrement" onchange={ filterChange }>
+  			<label for="filtre_operation" class="margin-left">N° Opération</label><input class="print_input_text" type="text" id="filtre_operation" onchange={ filterChange }>
+  			<label for="filtre_piece" class="margin-left">N° Pièce</label><input class="print_input_text" type="text" id="filtre_piece" onchange={ filterChange }>
+
+  		</div>
+	</div>
+	<script>
+		var _this = this;
+		this.parentTag = opts.parentTag;
+		var app = this.parentTag.app;
+		this.app = this.parentTag.app;
+		this.checked = opts.checked || null;
+
+		this.convertDateToDb = function convertDateToDb(date){
+		    var year = date.substr(6, 4);
+		    var month = date.substr(3,2);
+		    var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			return convertedDate;
+		}
+
+		this.parentTag.filtres = [
+			{ 
+				nom_db: 'id_journal',
+				id: 'filtre_journal',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_compte',
+				id: 'filtre_compte',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_analytique',
+				id: 'filtre_analytique',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_fournisseur',
+				id: 'filtre_fournisseur',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_salarie',
+				id: 'filtre_salarie',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'num_operation',
+				id: 'filtre_operation',
+				value: false,
+				ignore: true,
+				type: "text",
+			},
+			{ 
+				nom_db: 'num_piece',
+				id: 'filtre_piece',
+				value: false,
+				ignore: true,
+				type: "text",				
+			},
+			{
+				nom_db: 'date_enregistrement',
+				id: 'filtre_date_enregistrement',
+				min: false,
+				max: false,
+				ignore: true,
+				type: 'text_between',
+				type_value: "date",
+			},
+			{ 
+				nom_db: 'status',
+				id: 'ec_valides',
+				value: 'active',
+				ignore: true,
+				type: "checkbox",				
+			},
+			{ 
+				nom_db: 'status',
+				id: 'ec_non_valides',
+				value: 'standby',
+				ignore: (opts.checked == 'ec_non_valides' ? false : true),
+				type: "checkbox",	
+			},
+			{ 
+				nom_db: 'lettrage',
+				id: 'ec_lettrees',
+				value: null,
+				ignore: true,
+				type: "checkbox",	
+			},
+			{ 
+				nom_db: 'nonlettrage',
+				id: 'ec_non_lettrees',
+				value: null,
+				ignore: true,
+				type: "checkbox",	
+			},
+			{ 
+				nom_db: 'libelle',
+				id: 'filtre_libelle',
+				value: false,
+				ignore: true,
+				type: "text",	
+			},
+			{ 
+				nom_db: 'id_budget',
+				id: 'filtre_budget',
+				type: 'select',
+				value: false,
+				ignore: true,
+			},
+		];
+
+		this.parentTag.idFiltres = { filtre_journal: 0, filtre_compte: 1, filtre_analytique: 2, filtre_fournisseur: 3, filtre_salarie: 4, filtre_operation: 5, filtre_piece: 6, filtre_date_enregistrement: 7, ec_valides: 8, ec_non_valides: 9, ec_lettrees: 10, ec_non_lettrees: 11, filtre_libelle: 12, filtre_budget: 13 };
+
+		filterChange (e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var $current = $(e.currentTarget);
+			var currentVal = $current.val();
+			var id = $current.attr('id');
+			var idfiltre = $current.attr('idfiltre');
+			var filtre = _this.parentTag.filtres[_this.parentTag.idFiltres[(idfiltre ? idfiltre : id)]];
+
+			if(filtre.type == "select" || filtre.type == 'text') {
+				if(currentVal != '') {
+					filtre.ignore = false;
+					if(id == 'filtre_date_debut' || id == 'filtre_date_fin') {
+						filtre.value = _this.convertDateToDb(currentVal);
+					} else {
+						filtre.value = currentVal;
+					}
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'checkbox') {
+				if($current.is(':checked') == true) {
+					if(filtre.id == "ec_du_jour") {
+						var now = new Date();
+						var year = now.getFullYear();
+						var month = now.getMonth() + 1;
+						var day = now.getDate();
+						filtre.date_debut = year + "-" + month + "-" + day;
+					}
+					filtre.ignore = false;
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'text_between') {
+				var type = id.substr(id.length - 3);
+				if(currentVal != "") {
+					filtre.ignore = false;
+					filtre[type] = filtre.type_value === "date" ? _this.convertDateToDb(currentVal) : currentVal;
+				} else { 
+					filtre[type] = false;
+					if( ! filtre.min && ! filtre.max) {
+						filtre.ignore = true;
+					}
+				}
+			} else {
+
+			}
+
+			var objet_non_lettre = _this.parentTag.filtres[_this.parentTag.idFiltres['ec_non_lettrees']];
+			var objet_lettre = _this.parentTag.filtres[_this.parentTag.idFiltres['ec_lettrees']];
+			var objet_valide = _this.parentTag.filtres[_this.parentTag.idFiltres['ec_valides']];
+			var objet_non_valide = _this.parentTag.filtres[_this.parentTag.idFiltres['ec_non_valides']];
+
+
+
+			if(objet_non_lettre.ignore == false && objet_lettre.ignore == false) {
+				objet_non_lettre.ignore = true;
+				objet_lettre.ignore = true;
+			} else	if(filtre == objet_non_lettre || filtre == objet_lettre) {
+				objet_non_lettre.ignore = $('#' + objet_non_lettre.id).is(':checked') ? false : true;
+				objet_lettre.ignore = $('#' + objet_lettre.id).is(':checked') ? false : true;
+			}
+			if(objet_valide.ignore == false && objet_non_valide.ignore == false) {
+				objet_valide.ignore = true;
+				objet_non_valide.ignore = true;
+			} else if(filtre == objet_valide || filtre == objet_non_valide) {
+				objet_non_valide.ignore = $('#' + objet_non_valide.id).is(':checked') ? false : true;
+				objet_valide.ignore = $('#' + objet_valide.id).is(':checked') ? false : true;
+			}
+
+			// TODO: add a callback to inject functions
+			if( typeof _this.parentTag.getEcritures == "function" ){
+				_this.parentTag.getEcritures();
+			}
+			if( typeof _this.parentTag.getFiltresElements == "function" ){
+				_this.parentTag.getFiltresElements();
+			}
+		}
+
+		resetFiltre(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			for(var index in _this.parentTag.filtres) {
+				_this.parentTag.filtres[index].ignore = true;
+				if(_this.parentTag.filtres[index].id == 'ec_non_valides') {
+					_this.parentTag.filtres[index].ignore = false;
+				}
+			}
+			$('input[type=text], select', $('.block-filtre')).val('');
+			$('input[type=checkbox]', $('.block-filtre')).prop('checked', false);
+			$('#ec_non_valides').prop('checked', true);
+			var selectize = $('#filtre_salarie')[0].selectize;
+			selectize.clear();
+
+			if( typeof _this.parentTag.getEcritures == "function" ){
+				_this.parentTag.getEcritures();
+			}
+		}
+
+		function formatName(item) {
+		    return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+		};
+
+		function loadSelectize (selector) {
+			var $select = $(selector).selectize({
+				maxItems: 1,
+				valueField: 'id',
+				labelField: 'name',
+				searchField: ['prenom', 'nom', 'numero_salarie'],
+				sortField: [
+					{field: 'prenom', direction: 'asc'},
+					{field: 'nom', direction: 'asc'}
+				],
+				options: _this.parentTag.salaries ? _this.parentTag.salaries : null,
+				persist: false,
+				openOnFocus: false,
+				closeAfterSelect: true,
+			    onType: function (str) {
+				    if (str === "") {
+				        this.close();
+				    }
+				},
+				onFocus: function () {
+					this.clear();
+				},
+				render: {
+					item: function(item, escape) {
+						var name = formatName(item);
+						return '<div>' +
+							(name ? '<span class="name">' + escape(name) + '</span>' : '') +
+							(item.numero_salarie ? '<span class="email">' + escape(item.numero_salarie) + '</span>' : '') +
+						'</div>';
+					},
+					option: function(item, escape) {
+						var name = formatName(item);
+						var label = name || item.numero_salarie;
+						var caption = name ? item.numero_salarie : null;
+						return '<div>' +
+							'<span class="label">' + escape(label) + '</span>' +
+							(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+						'</div>';
+					}
+				},
+			});
+			var selectize = $select[0].selectize;
+
+			var hackToClose = false;
+			selectize.on('item_remove', function(value, $item) {
+			    hackToClose = true;
+			});
+			selectize.on('dropdown_open', function($dropdown) {
+			    if ( hackToClose )
+			        selectize.close();
+
+			    hackToClose = false;
+			});
+        }
+
+        this.app.loadScript('/js/admin/selectize.min.js','selectize_js',
+         	function () {
+		        loadSelectize('#filtre_salarie');
+		    }
+		);
+
+		this.parentTag.on('update', function() {
+			_this.update();
+		})
+
+		this.on('mount', function(){
+			if( typeof _this.parentTag.getEcritures == "function" ){
+				_this.parentTag.getEcritures();
+			}
+			if( typeof _this.parentTag.getFiltresElements == "function" ){
+				_this.parentTag.getFiltresElements();
+			}
+			$('#filtre_date_enregistrement_min, #filtre_date_enregistrement_max').datepicker({
+			 	dateFormat: 'dd/mm/yy'
+			});
+		});
+		this.parentTag.on('mount', function() {
+			//this.parentTag.loadSelectize('#filtre_salarie');
+		})
+	</script>
+</filtre-ecriture>

@@ -1,0 +1,954 @@
+<liste-inscriptions-salaries>
+	<div if={ SALARIES_READ } class="content with_submenu">
+		<div class="liste_inscriptions liste_inscriptions_liste_inscriptions">
+			<div class="filtres_container">
+				<div class="block_info_montant">
+					<div class="cell block_info_montant_total">
+						<div class="cell center info_montant debit">
+							<div class="title">Montant</div>
+							<div class="montant">{ parseInt(montant_total || 0).toFixed(2) } €</div>
+						</div>
+						<div class="cell center info_montant credit last">
+							<div class="title">Règlement</div>
+							<div class="montant">{ parseInt(reglement_total || 0).toFixed(2)} €</div>
+						</div>
+					</div>
+					<div class="cell block_info_montant_solde">
+						<div class="cell center info_montant debit">
+							<div class="title">Reste à payer</div>
+							<div class="montant">{ parseInt(reste_payer_total || 0).toFixed(2)} €</div>
+						</div>
+					</div>
+					<div class="cell_1 button_export"></div>
+					<div class="cell_2 button_imprimer"></div>
+				</div>
+				<!-- FILTRES -->
+				<div class="filtre_block">
+					<div class="header block-slider">
+						<header class="closed center" onclick= { showContents }>Filtres</header>
+						<div class="table block_test slide-up hidden">
+							<div class="line-separator"></div>
+							<div class="table block_filtre">
+								<div class="row row_filtre">
+									<div class="cell_1 identite_filtre">
+										<label class="s-large margin-left" for="filtre_salarie">{ IS_CE ? 'Salarié' : 'Adhérent' }</label>
+										<select name="filtre_salarie" id="filtre_salarie" class="contacts print_select" onchange={ filterChange }><select>
+									</div>
+									<div class="cell_2 statut_filtre">
+										<label for="filtre_categorie">categories</label>
+										<div>
+											<select class="" id="filtre_categorie" name="filtre_categorie" onchange={ refreshFiltreActiviteProduit }>
+												<option value="" selected></option>
+												<option each={ categories } value="{ id }">{ libelle }</option>
+											</select>
+										</div>
+									</div>
+									<div class="cell_3">
+										<label for="filtre_activite">activites</label>
+										<div>
+											<select class="" id="filtre_activite" name="filtre_activite" onchange={ refreshFiltreActiviteProduit }>
+												<option value="" selected></option>
+												<option each={ activites } value="{ id }">{ libelle }</option>
+											</select>
+										</div>						
+									</div>
+									<div class="cell_4 service_filtre">
+											<label for="filtre_produit">produits</label>
+											<div>
+											<select class="" id="filtre_produit" name="filtre_produit" onchange={ refreshFiltreActiviteProduit }>
+												<option value="" selected></option>
+												<option each={ produits } value="{ id }">{ libelle }</option>
+											</select>
+										</div>
+									</div>
+									<div class="cell_5 input_service_filtre">
+										<label for="filtre_dette">Dette</label>
+										<div>
+											<select class="" id="filtre_dette" name="filtre_dette" onchange={ filterChange }>
+												<option value="" selected></option>
+												<option value="superior">Dette > 0</option>
+												<option value="equal">Dette = 0</option>
+											</select>
+										</div>
+									</div>
+									<div class="cell_6">
+										<label for="filtre_date_inscription">Date Inscription</label>
+										<div>
+											<input class="" type="text" id="filtre_date_inscription_min" onchange={ filterChange } idfiltre="filtre_date_inscription">
+											<input class="" type="text" id="filtre_date_inscription_max" onchange={ filterChange } idfiltre="filtre_date_inscription">
+									
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div>
+				<!-- FIN FILTRES -->
+				<div class="listas_block">
+					<div class="header block-slider">
+						<header class="center closed" onclick= { showContents }>Liste des inscriptions</header>
+						<div class="block_test slide-up hidden">
+							<div class="entete-tableau "> 
+								<div class="cell_1">Date d'inscription</div>
+								<div class="cell_2">Titre Prénom & Nom</div>
+								<div class="cell_3">Activité<br>Produits</div>
+								<div class="cell_4 left">Montant<br>Règlement</div>
+								<div class="cell_5">Reste à Payer</div>
+								<!-- <div class="cell_6">Mode de Paiement<br>Etat du Paiement</div> -->
+							</div>
+							<div each={ inscriptions } class="table1 inscription">
+								<div class="row">
+									<div class="cell_1">{ convertDateToView(date_inscription)}</div>
+									<div class="cell_2">{ titres[this.salaries[this.idSalaries[id_salarie]].titre] } { this.salaries[this.idSalaries[id_salarie]].prenom } { this.salaries[this.idSalaries[id_salarie]].nom }</div>
+									<div class="cell_3">{ libelle_activite } <br> { produit } </div>
+									<div class="cell_4">{ montant } { montant ? '€' : '' } <br> { reglement } { reglement ? '€' : '' }</div>
+									<div class="cell_5">{ solde } { solde ? '€' : '' }</div>
+									<!-- <div class="cell_6">{ mode_paiement }</div> -->
+								</div>
+							</div>
+						</div><!--fin class table-->		
+					</div> <!--fin class listas_block-->
+				</div>
+
+				<div class="nav_compta_parametrage block-slider block_reglements">
+					<header class="comptes-title center closed" onclick= { showContents }>
+						Règlements 
+					</header>
+					<div class="slide-up hidden">
+						<div class="line-separator"></div>
+						<div class="block_reglement">
+							<div class="entete-tableau">
+								<div class="cell_1">
+									<p>Date Reglement</p>
+								</div>
+								<div class="cell_6">
+									<p class="">Titre Prénom & Nom</p>
+								</div>
+								<div class="cell_2">
+									<p class="">Mode de paiement</p>
+								</div>
+								<div class="cell_3">
+									<p class="">N° cheque</p>
+								</div>
+								<div class="cell_4">
+									<p class="">Remis</p>
+								</div>
+								<div class="cell_5">
+									<p class="">Montant</p>
+								</div>
+								<!-- <div class="cell_7">
+									<p class="">Action</p>
+								</div> -->
+							</div>
+							<div each={ reglements } class="reglement">
+								<div class="cell_1">
+									<p>{ convertDateToView(date_reglement) }</p>
+								</div>
+								<div class="cell_6">
+									{ titres[this.salaries[this.idSalaries[id_salarie]].titre] } { this.salaries[this.idSalaries[id_salarie]].prenom } { this.salaries[this.idSalaries[id_salarie]].nom }
+								</div>
+								<div class="cell_2">
+									<p class="">{ type }</p>
+								</div>
+								<div class="cell_3">
+									<p class="">{ numero_cheque }</p>
+								</div>
+								<div class="cell_4">
+									<p class="" if={ type != 'especes' }>{ remis ? 'oui' : 'non' }</p>
+								</div>
+								<div class="cell_5">
+									<p class="">{ montant } { montant ? '€' : '' }</p>
+								</div>
+								<!-- <div class="cell_6">
+									<p class="" if={ type == 'cheques' } onclick={ infoReglement }>i</p>
+								</div> -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>								
+	<script> 
+		var _this = this;
+		var app = opts;
+		this.app = opts;
+		var permissions = app.session.permissions;
+		var SALARIES_READ = this.SALARIES_READ = permissions.SALARIES_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		this.loaded = false;
+
+		this.titres = { monsieur: 'M.', madame: 'Mme', }
+
+		this.thingsToLoad = [ 'selectize', 'salaries' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.categories = [];
+		this.idCategories = {};
+
+		function getCategories() {
+			_this.categories = [];
+			_this.idCategories = {};
+			
+			getElements({
+				tag: _this,
+				url: '/admin/activites/activites',
+				elements: _this.categories,
+				idElements: _this.idCategories,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', image_url: 'image_url', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations', id_modele: 'id_modele', },
+				getParameters: { type_element: 'categorie'},
+			});
+		}
+		getCategories();
+
+		this.activites = [];
+		this.idActivites = {};
+
+		function getActivites(id) {
+			var getParams = { type_element: 'activite'};
+			if(id) {
+				getParams.id_categorie = id;
+			}
+
+			_this.activites = [];
+			_this.idActivites = {};
+
+			getElements({
+				tag: _this,
+				url: '/admin/activites/activites',
+				elements: _this.activites,
+				idElements: _this.idActivites,
+				fields: {id: 'id', id_categorie: 'id_categorie', id_entreprise: 'id_entreprise', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations',
+				conditions: 'conditions', limite_quantite: 'limite_quantite', condition_quantite: 'condition_quantite', limite_montant: 'limite_montant', condition_montant: 'condition_montant', participation: 'participation', type_participation: 'type_participation', montant_participation: 'montant_participation', conditions_commande: 'conditions_commande', limite_commande: 'limite_commande', condition_commande: 'condition_commande'},
+				getParameters: getParams,
+			});
+		}
+
+		getActivites();
+
+		this.produits = [];
+		this.idProduits = {};
+
+		function getProduits(id_categorie, id_activite) { 
+			var getParams = { type_element: 'produit'};
+			if(id_activite) {
+				getParams.id_activite = id_activite;
+			}
+			if(id_categorie) {
+				getParams.id_categorie = id_categorie;
+			}
+			_this.produits = [];
+			_this.idProduits = {};
+
+			getElements({
+				tag: _this,
+				url: '/admin/activites/activites',
+				elements: _this.produits,
+				idElements: _this.idProduits,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', image_url: 'image_url', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations', id_modele: 'id_modele', },
+				getParameters: getParams,
+			});
+		}
+
+		getProduits();
+
+		this.filtres = [
+			{ 
+				nom_db: 'id_salarie',
+				id: 'filtre_salarie',
+				value: false,
+				ignore: true,
+				type: "select",
+				type_value: "string",
+			},
+			{ 
+				nom_db: 'solde',
+				id: 'filtre_dette',
+				value: false,
+				ignore: true,
+				type: "select",
+				type_value: "string",
+			},
+			{ 
+				nom_db: 'id_categorie',
+				id: 'filtre_categorie',
+				value: false,
+				ignore: true,
+				type: "select",
+				type_value: "string",
+				
+			},
+			{ 
+				nom_db: 'id_activite',
+				id: 'filtre_activite',
+				value: false,
+				ignore: true,
+				type: "select",
+				type_value: "string",
+			},
+			{ 
+				nom_db: 'id_produit',
+				id: 'filtre_produit',
+				value: false,
+				ignore: true,
+				type: "select",
+				type_value: "string",				
+			},
+			{
+				nom_db: 'date_inscription',
+				id: 'filtre_date_inscription',
+				min: false,
+				max: false,
+				ignore: true,
+				type: 'text_between',
+				type_value: "date",
+			}
+		];
+
+		this.idFiltres = { filtre_salarie: 0, filtre_dette: 1, filtre_categorie: 2, filtre_activite: 3, filtre_produit: 4, filtre_date_inscription: 5 };
+
+		refreshFiltreActiviteProduit(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var $current = $(e.currentTarget);
+			var currentVal = $current.val();
+			var id = $current.attr('id');
+
+			if(id == "filtre_categorie") {
+				getActivites(currentVal);
+				getProduits(currentVal, null);
+				_this.filtres[_this.idFiltres['filtre_produit']].ignore = true;
+				_this.filtres[_this.idFiltres['filtre_activite']].ignore = true;
+				
+			} else if(id == "filtre_activite") {
+				getProduits(null, currentVal);
+				_this.filtres[_this.idFiltres['filtre_produit']].ignore = true;
+			}
+			_this.filterChange(e);
+		}
+
+		this.filterChange = function filterChange (e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var $current = $(e.currentTarget);
+			var currentVal = $current.val();
+			var id = $current.attr('id');
+			var idfiltre = $current.attr('idfiltre');
+			var filtre = _this.filtres[_this.idFiltres[(idfiltre ? idfiltre : id)]];
+			
+			if(filtre.type == "select" || filtre.type == 'text') {
+				if(currentVal != "") {
+					filtre.ignore = false;
+					filtre.value = filtre.type_value === "date" ? _this.convertDateToDb(currentVal) : currentVal;
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'checkbox') {
+				if($current.is(':checked') == true) {
+					filtre.ignore = false;
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'text_between') {
+				var type = id.substr(id.length - 3);
+				if(currentVal != "") {
+					filtre.ignore = false;
+					filtre[type] = filtre.type_value === "date" ? _this.convertDateToDb(currentVal) : currentVal;
+				} else { 
+					filtre[type] = false;
+					if( ! filtre.min && ! filtre.max) {
+						filtre.ignore = true;
+					}
+				}
+			} else {
+
+			}
+			getInscription();
+		}
+
+		this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+		}
+		
+		this.mode_paiement = [];
+		this.idMode_paiement = {};
+
+		function getModePaiement(){
+			var getParams = {};
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON('/admin/compta/mode_paiement', getParams, function (data){
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+											
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', fournisseur: 'fournisseur', permanence: 'permanence', id_journal: 'id_journal', type: 'type', id_exercice: 'id_exercice', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idMode_paiement[d['id']] = i;
+						_this.mode_paiement.push(d);
+					}
+					_this.update();
+					getReglementSalarie();			
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			});
+		}
+		getModePaiement();
+
+		this.reglements = [];
+		this.idReglements = {};
+
+		function getReglementSalarie() {
+			var url = '/admin/compta/reglement';
+			var getParameters = { reglementSalarie: 1 };
+			if( _this.selectedExercice ){
+				getParameters.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParameters.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					_this.reglements = [];
+					_this.idReglements = {};
+					var i, d;
+					var fields = { id: 'id', id_inscription: 'id_inscription', id_salarie: 'id_salarie', montant: 'montant', nom: 'nom',
+									numero_cheque: 'numero_cheque', date_reglement: 'date_reglement', id_remise: 'id_remise', id_mode_paiement: 'id_mode_paiement', remis: 'remis', date_previsionnelle: 'date_previsionnelle', titulaire_paiement: 'titulaire_paiement', domiciliation: 'domiciliation', date_remise: 'date_remise', parent_date_remise: 'parent_date_remise'};
+					var l = data.elements.length;
+					for(i=0, y=0; i<l; i++){
+						d = {};
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						d['type'] = _this.mode_paiement[_this.idMode_paiement[d['id_mode_paiement']]].type;
+
+						_this.reglements.push(d);
+						_this.idReglements[d['id']] = i;
+					}
+					_this.update();
+				}
+			});
+
+		}
+		this.comptes = [];
+		this.idComptes = {};
+
+		this.salaries = [];
+		this.idSalaries = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idComptes[d['id']] = i;
+						_this.comptes.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+
+				_this.comptes = data.elements;
+				_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+		function getSalaries(){
+        	getElements({
+				tag: _this,
+				url: '/admin/salaries/salaries', 
+				elements: _this.salaries,
+				idElements: _this.idSalaries,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', montant: 'montant', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', statut: 'statut', date_entree: 'date_entree', date_sortie: 'date_sortie', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', quotientN1: 'quotientN1', quotientN2: 'quotientN2', tranche_salaire: 'tranche_salaire', valeur: 'valeur',solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', fonction: 'fonction', visible: 'visible'},
+				getParameters: { type_element: 'salaries'},
+				type: 'salaries',
+				action: 'update',
+				end: function(tag){
+					tag.loaded = true;
+					_this.numToLoad--;
+					if(_this.numToLoad == 0) {
+						loadSelectize('#filtre_salarie');
+					}
+				},
+			});
+		}
+		getSalaries();
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+// console.log('getElements params: ' + JSON.stringify(params));
+// console.log('getElements data: ' + JSON.stringify(data));
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+
+						if(params.action){
+							d['action'] = params.action;
+						}
+
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		function formatName(item) {
+		    return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+		};
+
+		function loadSelectize (selector) {
+			var $select = $(selector).selectize({
+				maxItems: 1,
+				valueField: 'id',
+				labelField: 'name',
+				searchField: ['prenom', 'nom', 'numero_salarie'],
+				sortField: [
+					{field: 'prenom', direction: 'asc'},
+					{field: 'nom', direction: 'asc'}
+				],
+				options: _this.salaries ? _this.salaries : null,
+				persist: false,
+				openOnFocus: false,
+				closeAfterSelect: true,
+			    onType: function (str) {
+				    if (str === "") {
+				        this.close();
+				    }
+				},
+				onFocus: function () {
+					this.clear();
+				},
+				render: {
+					item: function(item, escape) {
+						var name = formatName(item);
+						return '<div>' +
+							(name ? '<span class="name">' + escape(name) + '</span>' : '') +
+							(item.numero_salarie ? '<span class="email">' + escape(item.numero_salarie) + '</span>' : '') +
+						'</div>';
+					},
+					option: function(item, escape) {
+						var name = formatName(item);
+						var label = name || item.numero_salarie;
+						var caption = name ? item.numero_salarie : null;
+						return '<div>' +
+							'<span class="label">' + escape(label) + '</span>' +
+							(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+						'</div>';
+					}
+				},
+			});
+			var selectize = $select[0].selectize;
+
+			var hackToClose = false;
+			selectize.on('item_remove', function(value, $item) {
+			    hackToClose = true;
+			});
+			selectize.on('dropdown_open', function($dropdown) {
+			    if ( hackToClose )
+			        selectize.close();
+
+			    hackToClose = false;
+			});
+        }
+
+
+		this.app.loadScript('/js/admin/selectize.min.js','selectize_js',
+         	function () {
+				 _this.numToLoad--
+				 if(_this.numToLoad == 0) {
+					loadSelectize('#filtre_salarie');
+				 }
+		    }
+		);
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+
+			_this.update();
+		});
+
+		this.convertDateToDb = function convertDateToDb(date) {
+			if(_this.E_M){
+				return _this.E_M.convertDateToDb(date);
+			}
+		}
+
+		this.convertDateToView = function convertDateToView(date){
+			if(_this.E_M){
+				return _this.E_M.convertDateToView(date);
+			}
+		}
+
+		_this.app.on('unmount-liste-inscriptions-salaries', function(){
+			_this.app.off('unmount-liste-inscriptions-salaries');
+			_this.unmount();
+		});
+
+		this.elements = [];
+		this.idElements = {};
+
+		editElement(e){
+			if(_this.E_M){
+				_this.E_M.editElement({event: e, tag: _this,
+					end: function(params){
+						var item = params.item;
+						var edit = params.edit;
+						if(item.type === 'tresorerie'){
+							$('.type_tresorerie', edit).show();
+							$('.id_compte option', edit).each(function(){
+								var t = this.text;
+								if(t.charAt(0)!=='5'){
+									this.setAttribute('disabled', 'disabled');
+								}
+							});
+						}
+					}
+				});
+			}
+		}
+
+		addElement(e){
+			$('#actions').addClass('hidden').removeClass('inline_block');
+			$('input[type=text], select', '#add_element').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e});
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteElement(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/salaries/liste_inscriptions'});
+			}
+		}
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'nature', 'type', 'id_compte', 'visible', 'domiciliation', 'bic', 'iban'],
+					tag: _this,
+				});
+			}
+		}
+
+		saveElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/salaries/liste_inscriptions', 
+					fields: ['libelle', 'nature', 'type', 'id_compte', 'visible', 'domiciliation', 'bic', 'iban'],
+					tag: _this,
+				});
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		selectExercice(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+		this.inscriptions = [];
+		this.idInscriptions = { };
+		
+		function getInscription() {
+			var getParams = {};
+
+			var filtre_data = [];
+            for(var index in _this.filtres) {
+                if(_this.filtres[index].ignore == false) {
+                    filtre_data.push(_this.filtres[index]);
+                }
+			}
+			
+			getParams.filtres = filtre_data;
+		
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+			$.getJSON('/admin/inscription/inscription', getParams, function (data){ 
+				console.log('datasss', data)
+				if(data && data.elements){
+					_this.inscriptions = [];
+					_this.idInscriptions = { };
+					var i, field, d;
+					var l = data.elements.length;
+					var fields = { id: 'id', id_salarie: 'id_salarie', date_inscription: 'date_inscription', id_produit: 'id_produit', montant: 'montant', solde: 'solde', libelle: 'produit', reglement: 'reglement', libelle_activite: 'libelle_activite' };
+					var montant = 0;
+					var reglement = 0;
+					var reste_payer = 0;
+					console.log("TOTO")
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						montant = montant + parseInt(d['montant']); //changer le type du variable pour pouvoir additionner
+						reglement = reglement + parseInt(d['reglement']);
+						reste_payer = reste_payer + parseInt(d['solde']);
+ 						console.log('reste_payer', d['solde']); //dans mon sql (fields) c'et un champ solde et non "reste_payer"
+					
+						//console.log('id : ' + d['id']); // on additionne les id et non catantoner
+						_this.idInscriptions[d['id']] = i;
+						_this.inscriptions.push(d);
+					
+					}
+					_this.montant_total = montant; //montant valeur du montant total
+					_this.update();
+				
+					_this.reglement_total = reglement; //reglement est valeur du reglement total
+					_this.update();
+					
+					reste_payer_total = reste_payer;
+					_this.update();
+				}
+			});
+		}
+		getInscription();
+
+/***********************************************************************************
+		function getListeInscripton(){
+			var getParams = {};
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			$.getJSON('/admin/salaries/liste_inscriptions', getParams, function (data){
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', nature: 'nature', id_compte: 'id_compte', _type: 'type', domiciliation: 'domiciliation', bic: 'bic', iban: 'iban', id_exercice: 'id_exercice', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idElements[d['id']] = i;
+						_this.elements.push(d);
+					}
+					_this.update();
+
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+						//_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			});
+		}
+		getListeInscripton();
+***********************************************************************************/
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+			var $date = $('#filtre_date_inscription_min, #filtre_date_inscription_max');
+			$date.datepicker({
+			 	dateFormat: 'dd/mm/yy'
+			});
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			cancelDeleteElement = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelElement = null;
+			saveElement = null;
+			showContents = null;
+			makeVisible = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+		_this.app.on('unmount-liste-inscriptions-salaries', function(){
+           _this.app.off('unmount-liste-inscriptions-salaries');
+           _this.unmount();
+       });
+
+	</script>
+</liste-inscriptions-salaries>

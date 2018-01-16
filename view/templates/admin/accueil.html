@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}{# => admin/accueil.html #}
+
+{% block container %}
+{% block content %}
+			<form action="" method="post">
+				<div>
+					<div class="widget">
+						<h1 class="w_title small_t">Permanence</h1>
+						<div class="w_content">
+							<a href="#"><img src="/img/permanence.png"></a>
+						</div>
+					</div>
+					<div class="widget">
+						<h1 class="w_title small_t">Salariés</h1>
+						<div class="w_content">
+							<a href="#"><img src="/img/salaries.png"></a>
+						</div>
+					</div>
+					<div class="widget">
+						<h1 class="w_title small_t">Activités / Prestations</h1>
+						<div class="w_content">
+							<a href="#"><img src="/img/activites-prestations.png"></a>
+						</div>
+					</div>
+					<div class="widget">
+						<h1 class="w_title small_t">Comptabilité</h1>
+						<div class="w_content">
+							<a href="/admin/compta"><img src="/img/comptabilite.png"></a>
+						</div>
+					</div>
+					<div class="widget">
+						<h1 class="w_title small_t">Administration Site Internet</h1>
+						<div class="w_content">
+							<a href="#"><img src="/img/admin.png"></a>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div class="widget">
+						<h1 class="w_title small_t">Alerte</h1>
+						<div class="w_content padding">
+							<ul>
+								<li>3 inscriptions Ayant-droits en cours de validation</li>
+								<li>17 paiement en retard</li>
+								<li>3 factures en attente de paiement</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</form>
+{% endblock %}
+{% endblock %}

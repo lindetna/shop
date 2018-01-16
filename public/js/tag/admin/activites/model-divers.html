@@ -1,0 +1,252 @@
+<model-divers>
+	<!-- début produits ajout -->
+	<div class="divers edit_divers">
+		<div class="general">
+			<div class="cell_1">
+				<input id="produit_id_categorie{ isEdit ? '_' + el.id : '' }" name="produit_id_categorie{ isEdit ? '_' + el.id : '' }" type="hidden" value="{ parentTag.currentCategorieId }">
+				<input id="produit_id_activite{ isEdit ? '_' + el.id : '' }" name="produit_id_activite{ isEdit ? '_' + el.id : '' }" type="hidden" value="{ parentTag.currentActiviteId }">
+				<input id="produit_id_modele{ isEdit ? '_' + el.id : '' }" name="produit_id_modele{ isEdit ? '_' + el.id : '' }" type="hidden" value="{ parentTag.currentModeleId }">
+				<!-- 
+				<div id="image_upload">
+					<input type="file" value="choisir une image" id="produit_photo_upload{ isEdit ? '_' + el.id : '' }" class="image_upload photo_add pointer" onchange={readURL} />
+					<div class="image_position">
+		    			<img class="preview" src="#"/>
+					</div>
+					<button id="reset_image" onclick={resetImage}>X</button>
+					<input class="hidden" type="text" name="produit_image_url{ isEdit ? '_' + el.id : '' }" id="produit_image_url{ isEdit ? '_' + el.id : '' }">
+					
+				</div>
+				-->
+			</div>
+			<div class="cell_2">
+				<p>
+					<label for="produit_categorie{ isEdit ? '_' + el.id : '' }" class="xl-large">Catégorie</label>
+					<input id="produit_categorie{ isEdit ? '_' + el.id : '' }" name="produit_categorie{ isEdit ? '_' + el.id : '' }" type="text" disabled="disabled" value="{ parentTag.currentCategorieLibelle }">
+				</p>
+				<p>
+					<label for="produit_activite{ isEdit ? '_' + el.id : '' }" class="xl-large">Activité</label>
+					<input id="produit_activite{ isEdit ? '_' + el.id : '' }" name="produit_activite{ isEdit ? '_' + el.id : '' }" type="text" disabled="disabled" value="{ parentTag.currentActiviteLibelle }">
+				</p>
+				<p>
+					<label for="produit_libelle{ isEdit ? '_' + el.id : '' }" class="xl-large">Nom</label>
+					<input id="produit_libelle{ isEdit ? '_' + el.id : '' }" name="produit_libelle{ isEdit ? '_' + el.id : '' }" class="" type="text" value="{ element.libelle }">
+				</p>
+			</div>
+			<div class="cell_3">
+				<input onclick={ parentTag.toggleVisible } type="image" class="produit_image_visible" src="/img/btn_{ element && element.visible == 'hidden' ? 'non' : '' }visible.png" title="visible" value="{ element && element.visible ? element.visible : 'visible' }" id="produit_visible{ isEdit ? '_' + el.id : '' }"  name="produit_visible{ isEdit ? '_' + el.id : '' }">
+			</div>
+		</div>
+		<div>
+			<header class="opened titre" onclick="{ showContents }">
+				Tarifs / Conditions
+			</header>
+			<div class="tarifs_conditions slide-up table">
+				<div class="row">
+					<div class="cell cell_1 bloc_tarif_condition">
+						<div class="block_infos block_infos_2">
+							<span class="block_title"><input type="checkbox" id="produit_participation{ isEdit ? '_' + el.id : '' }" name="produit_participation{ isEdit ? '_' + el.id : '' }" checked="{ element.participation ? 'checked' : '' }"> <span>Participation du CE</span></span>
+							<div class="block_infos_content">
+								<input type="radio" id="produit_type_participation{ isEdit ? '_' + el.id : '' }" name="produit_type_participation{ isEdit ? '_' + el.id : '' }" value="montant" checked="{ element.type_participation == 'montant' ? 'checked' : '' }">Montant
+								<input type="radio" id="produit_type_participation_pourcentage{ isEdit ? '_' + el.id : '' }" name="produit_type_participation{ isEdit ? '_' + el.id : '' }" value="pourcentage" checked="{ element.type_participation == 'pourcentage' ? 'checked' : '' }">%
+								<input class="input_montant right" type="text" id="produit_montant_participation{ isEdit ? '_' + el.id : '' }" name="produit_montant_participation{ isEdit ? '_' + el.id : '' }" value="{ element.montant_participation }">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<header class="opened titre" onclick="{ showContents }">
+				Comptabilité
+			</header>
+			<div class="comptabilite slide-up table">
+				<div class="table">
+					<div class="row">
+						<div class="cell_1">
+							<div>
+								<label for="produit_id_compte{ isEdit ? '_' + el.id : '' }" class="bold">Comptes </label>
+								<select id="produit_id_compte{ isEdit ? '_' + el.id : '' }" name="produit_id_compte{ isEdit ? '_' + el.id : '' }">
+									<option value="">-----------------</option>
+									<option each={ comptes } value={ id } selected={ id == element.id_compte ? 'selected' : '' }>{ reference } - { libelle }</option>
+								</select>
+							</div>
+							<div>
+								<label for="produit_id_analytique{ isEdit ? '_' + el.id : '' }" class="bold">Analytique </label>
+								<select id="produit_id_analytique{ isEdit ? '_' + el.id : '' }" name="produit_id_analytique{ isEdit ? '_' + el.id : '' }">
+									<option value="">-----------------</option>
+									<option each={ analytiques } value={ id } selected={ id == element.id_analytique ? 'selected' : '' }>{ libelle }</option>
+								</select>
+							</div>
+						</div>
+						<div class="cell_2">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<header class="opened titre" onclick="{ showContents }">
+				Formule
+			</header>
+			<div class="comptabilite Informations slide-up table">
+
+				<div class="table Information_colonne">
+					<div class="row">
+						<div class="participation_salarie">
+							<input type="checkbox" id-to-disable="produit_formule_participation_ce{ isEdit ? '_' + el.id : '' }" id="produit_is_formule_participation_ce{ isEdit ? '_' + el.id : '' }" name="produit_is_formule_participation_ce{ isEdit ? '_' + el.id : '' }" checked="{ element.formule_participation_ce ? 'checked' : '' }" class="Information_cheick" onclick="{ disableElementById }"><label>Participation CE</label><br>
+							<textarea class="" id="produit_formule_participation_ce{ isEdit ? '_' + el.id : '' }" name="produit_formule_participation_ce{ isEdit ? '_' + el.id : '' }">{ element.formule_participation_ce }</textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="save_produit">
+			<button class="button annuler cancel_submit" onclick={ cancelProduit }>Annuler</button> 
+			<button class="button enregistrer save_submit" onclick={ saveProduit }>Enregistrer</button>
+		</div>
+	</div>
+	<script>
+		var _this = this;
+		var app = opts.app;
+		this.app = opts.app;
+		this.parentTag = opts.parentTag;
+		this.el = this.element = opts.element;
+		this.loaded = false;
+		var permissions = app.session.permissions;
+		var ACTIVITES_READ = this.ACTIVITES_READ = permissions.ACTIVITES_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+		var element = this.el = this.element = opts.element;
+		var isEdit = this.isEdit = false;
+
+		if(opts.element){
+			isEdit = this.isEdit = true;
+		}else{
+			element = this.el = this.element = {};
+		}
+
+
+		this.cell = {};
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			getParams.visible = 'visible';
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					var invisible_nb = 0;
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] === 'visible') {
+							d = new Object();
+
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idComptes[d['id']] = i - invisible_nb;
+							_this.comptes.push(d);
+						} else {
+							invisible_nb += 1;
+						}
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+		this.analytiques = [];
+		this.idAnalytiques = {};
+
+		function getAnalytiques(){
+			var getParams = { type_element: 'analytique', visible: 'visible'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/budgets', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idAnalytiques[d['id']] = i;
+						_this.analytiques.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		getAnalytiques();
+
+		saveProduit(e){
+			e.fields = [
+				'id_activite',
+				'id_modele',
+				'libelle',
+				'visible',
+				'id_compte',
+				'id_analytique',
+				'participation',
+				'type_participation',
+				'montant_participation',
+				'formule_participation_ce',
+			];
+
+			e.typeModele = 'divers';
+
+			if( isEdit ){
+				e.item = _this.element;
+			}
+
+			_this.parentTag.saveProduit(e);
+		    _this.unmount();
+		}
+
+		cancelProduit(e){
+			if( isEdit ){
+				e.item = _this.element;
+			}
+			_this.parentTag.cancelProduit(e);
+		    _this.unmount();
+		}
+
+		this.on('mount', function(){
+			if(_this.parentTag.E_M){
+
+			}
+		});
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+            if(_this.parentTag.E_M){
+                _this.parentTag.E_M.showContents(e, { toggleClass: 'hidden', });
+            }
+		}
+
+	</script>
+</model-divers>

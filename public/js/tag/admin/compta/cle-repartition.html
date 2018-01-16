@@ -1,0 +1,845 @@
+<cle-repartition>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> -->
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div id="loader" class="loader">
+        </div>
+		<div class="compta compta_cle_repartition">
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/journaux">
+						Journaux
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/comptes">
+						Comptes
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/budgets">
+						Budgets
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+				Clé de répartition
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="compta_content">
+			<!-- Describe Cle Repartition edition -->
+						<div id="add_element" class="edit edit_cle_repartition hidden">
+							<div>
+								<div class="inline_block c49">
+									<label class="xs-large" for="libelle">Clé :</label>
+										<input name="libelle" id="libelle" class="libelle xl-large-22" type="text" value="">
+								</div>
+								<div class="inline_block c40 right">
+									<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="visible" id="visible" title="Visible" value="visible">
+								</div>	
+								<div class="liste_add_analytiques">
+									<div each={ nbAddAnalytiques } class="add_analytiques_infos analytique_ids" db_id={ id } action="add_analytique">
+										<div class="analytique_info">
+											<label class="s-large" for="id_analytique_{ id }">Analytique</label>
+											<select name="id_analytique_{ id }" id="id_analytique_{ id }" class="id_analytique xxxl-large">
+												<option value=""></option>
+												<option each={ this.analytiques } value="{ id }">{ libelle }</option>
+											</select>
+											<div class="cell_block center">
+												<div class="pourcentage">
+													<label class="s-large">%</label>
+												</div>
+												<div class="debit">
+													<input type="text" name="pourcentage_{ id }" id="pourcentage_{ id }" class="pourcentage s-large" max-length="2" size="2">
+												</div>
+											</div>
+											<div class="cell_block" style="vertical-align: bottom" if={ id != 1  && id != 2 }>
+												<p class="modif">
+													<img class="delete_element_img" onclick={ parent.add_deleteAnalytique } title="Supprimer" delete_id="{ id }" src="/img/delete.png">
+												</p>
+											</div>
+										</div>
+									</div>
+									<div class="block_add_analytique left">
+										<button class="blue" name="add_analytique" onclick={ addAnalytique }>Ajouter un Code Analytique</button>
+									</div>
+								</div>
+							</div>
+							<div class="right">
+								<button name="cancel_submit" class="button annuler cancel_submit" onclick={ cancelElement }>Annuler</button>
+								<button name="save_submit" class="button enregistrer save_submit" onclick={ saveElement }>Enregistrer</button>
+							</div>
+						</div>
+			<!-- /End Describe Cle repartition edition -->
+						<div class="actions" id="actions">
+							<button id="add_element_button" class="button ajouter action_button_size" name="add_element_button" onclick={ addElement }>Ajouter une Clé de répartition</button>
+						</div>
+						<div class="entete-tableau">
+							<div class="cell_1"></div>
+							<div class="cell_2">
+								<p class="small">Clé</p>
+							</div>
+							<div class="cell_3">
+								<p class="small">Analytique</p>
+							</div>
+
+							<div class="cell_4">
+								<p class="small">%</p>
+							</div>
+							<div class="cell_5">
+								<p class="small">Visible</p>
+							</div>
+							<div class="cell_6">
+								<p class="small">Actions</p>
+							</div>
+						</div>
+						<div each={ elements } id="{ id }" class="cle_repartition">
+							<div class="show_infos">
+								<div class="cell_1">
+									<!-- <input type="checkbox" name="action[]"> -->
+								</div>
+								<div class="cell_2">
+									<p class="title libelle">{ libelle }</p>
+								</div>
+								<div class="cell_3" >
+									<p class="title" each={ cle_analytique }>{ this.analytiques[this.idAnalytiques[id_analytique]].libelle }</p>
+								</div> 
+								<div class="cell_4">
+									<p class="title" each={ cle_analytique }>{ pourcentage }</p>
+								</div> 
+								<div class="cell_5">
+									<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+								</div>
+								<div class="cell_6">
+									<div>
+										<p class="modif"><img class="edit_element_img" onclick={ editElement } title="Modifier" src="/img/edit.png"> <img class="delete_element_img" onclick={ validDeleteElement } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+									</div>
+								</div>
+							</div>
+							<div id="{ id }_edit" class="edit edit_journal hidden">
+								<div>
+									<div class="inline_block c49">
+										<label class="xs-large" for="libelle">Clé :</label>
+											<input name="libelle" id="libelle_{ id }" class="libelle xl-large-22" type="text" value="{ libelle }">
+									</div>
+									<div class="inline_block c40 right">
+										<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="visible_{ id }">
+									</div>	
+									<div class="liste_add_analytiques">
+										<div each={ analytique, i in cle_analytique } class="add_analytiques_infos analytique_ids" index={ i } action="add_analytique">
+											<div class="analytique_info">
+												<label class="s-large" for="id_analytique_{ id }_{ i }">Analytique</label>
+												<select name="id_analytique_{ id }_{ i }" id="id_analytique_{ id }_{ i }" class="id_analytique xxxl-large">
+													<option value=""></option>
+													<option each={ this.analytiques } value="{ id }" selected="{ 'selected' : id == analytique.id_analytique }">{ libelle }</option>
+												</select>
+												<div class="cell_block center">
+													<div class="pourcentage">
+														<label class="s-large">%</label>
+													</div>
+													<div class="debit">
+														<input type="text" name="pourcentage_{ id }_{ i }" id="pourcentage_{ id }_{ i }" class="pourcentage s-large" max-length="2" size="2" value="{ analytique.pourcentage }">
+													</div>
+												</div>
+												<div class="cell_block" style="vertical-align: bottom" if={ i != 0  && i != 1 }>
+													<p class="modif">
+														<img class="delete_element_img" onclick={ parent.update_deleteAnalytique } title="Supprimer" delete_id="{ i }" parentId="{ id }" src="/img/delete.png">
+													</p>
+												</div>
+											</div>
+										</div>
+										<div class="block_add_analytique left">
+											<button class="blue" name="add_analytique" onclick={ addAnalytique_edit }>Ajouter un Code Analytique</button>
+										</div>
+									</div>
+								</div>
+								<div class="right">
+									<button name="cancel_submit" class="button annuler cancel_submit" onclick={ cancelElement }>Annuler</button>
+									<button name="save_submit" class="button enregistrer save_submit" onclick={ saveElement }>Enregistrer</button>
+								</div>
+							</div>
+
+							<div id="{ id }_delete" class="delete hidden">
+								<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" id="delete_{ id }" onclick={ deleteElement }>Supprimer</button><button name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteElement }>Annuler</button></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/chapitres">
+						Chapitres Bilan et Compte de Résultat
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/parametres">
+						Paramètres Comptables	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/mode_paiement">Mode de Paiement</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/exercices">
+						Exercices	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/tableau_de_bord">
+						Tableau de Bord	
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/utilitaires">
+						Utilitaires
+					</a>
+				</header>
+			</div> -->
+		</div>
+	</div>
+
+	<script>
+	  	var _this = this;
+		var app = opts;
+		this.app = opts;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+		this.loaded = false;
+
+		this.thingsToLoad = [ 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		this.nbAddAnalytiques = [
+			{id: 1},
+			{id: 2},
+		];
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+
+			if( _this.loaded ){
+			}
+		});
+	  	_this.app.on('unmount-cle-repartition', function(){
+			_this.app.off('unmount-cle-repartition');
+			_this.unmount();
+		});
+
+		this.elements = [];
+		this.idElements = {};
+
+		editElement(e){
+			if(_this.E_M){
+			_this.E_M.editElement({event: e, tag: _this,
+					end: function(params){
+						var item = params.item;
+						var edit = params.edit;
+						if(item.type === 'tresorerie'){
+							$('.type_tresorerie', edit).show();
+							$('.id_compte option', edit).each(function(){
+								var t = this.text;
+								if(t.charAt(0)!=='5'){
+									this.setAttribute('disabled', 'disabled');
+								}
+							});
+						}
+					}
+				});
+			}
+		}
+
+		addElement(e){
+			$('#actions').addClass('hidden').removeClass('inline_block');
+			$('input[type=text], select', '#add_element').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e});
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteElement(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/cle_repartition'});
+			}
+		}
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'nature', 'type', 'id_compte', 'visible', 'domiciliation', 'bic', 'iban'],
+					tag: _this,
+				});
+				if(!e.item){
+					this.nbAddAnalytiques = [
+						{id: 1},
+						{id: 2},
+					];
+					_this.update();
+				} else {
+					$(".analytique_ids",'#' + e.item.id).removeClass('hidden');
+				}
+			}
+		}
+
+		/*saveElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/compta/journaux', 
+					fields: ['libelle', 'nature', 'type', 'id_compte', 'visible', 'domiciliation', 'bic', 'iban'],
+					tag: _this,
+				});
+			}
+		}*/
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+
+		this.analytiques = [];
+		this.idAnalytiques = {};
+
+		function getAnalytiques(){
+			var getParams = { type_element: 'analytique', visible: 'visible'};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/budgets', getParams, function(data){
+				/*debugtime-console.log('getAnalytiques AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+				
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idAnalytiques[d['id']] = i;
+						_this.analytiques.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+
+		getAnalytiques();
+		this.idElements = {};
+		this.elements =  [];
+
+		function getCleRepartition(){
+			var getParams = {};
+			/*if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}*/
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			$.getJSON( '/admin/compta/cle_repartition', getParams, function(data){
+				console.log(data);				
+				if(data && data.elements){
+					this.idElements = {};
+					this.elements =  [];
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+
+						try {
+						  d['cle_analytique'] = JSON.parse(data.elements[i]['analytique']);
+						} catch (ex) {
+						  console.error(ex);
+						}
+
+						_this.idElements[d['id']] = i;
+						_this.elements.push(d);
+					}
+					//_this.numToLoad--;
+					_this.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			})
+		}
+
+		getCleRepartition();
+
+		addAnalytique(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			addLineAnalytique('add', e);
+		}
+
+		addAnalytique_edit(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			addLineAnalytique('edit', e);
+		}
+
+		function addLineAnalytique(action, e) {
+			if(action == 'add') {
+				var newItem = { id: _this.nbAddAnalytiques.length + 1};
+				_this.nbAddAnalytiques.push(newItem);
+			} else if (action == 'edit') {
+				var tmp = {
+							id: -1,
+							action: 'add',
+						};
+				console.log('this all : ', _this.idElements, 'this test : ', _this.idElements[14], 'this : ', _this.idElements[e.item.id], ' id : ', e.item.id);
+				_this.elements[_this.idElements[e.item.id]].cle_analytique.push(tmp);
+				console.log(_this.elements[_this.idElements[e.item.id]].cle_analytique);
+			}
+			_this.update();
+		}
+
+		add_deleteAnalytique(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			deleteAnalytique('add', e);
+		}
+
+		update_deleteAnalytique(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			deleteAnalytique('update', e);
+		}
+
+		function deleteAnalytique(action, e){
+			var item = e.item;
+			if(action == 'add') {
+			    // index on the collection
+			    var index = _this.nbAddAnalytiques.indexOf(item);
+
+			    // remove from collection
+			    _this.nbAddAnalytiques.splice(index, 1);
+
+				_this.update();
+
+			} else if (action == 'update') {
+				// TODO: remove this loop
+				var parentId = $(e.currentTarget).attr('parentId');
+				var deleteId = $(e.currentTarget).attr('delete_id');
+				$('.analytique_ids[index=' + deleteId + ']', $('#' + parentId)).addClass('hidden');
+				//_this.elements[_this.idElements[$(e.currentTarget).attr('delete_id')]].cle_analytique.splice(e.item.i, 1);
+			}
+			_this.update();
+		}
+
+		function checkRequiredValue(element, missingParameters, selector) {
+			if(element === '') {
+				$(selector).addClass('required');
+				return(true);
+			} else {
+				$(selector).removeClass('required');
+				if(missingParameters === false) {
+					return(false);
+				} else {
+					return(true);
+				}
+			}
+		}
+
+		saveElement(e){
+			var params = { hideClass: 'hidden', }
+			var isEdit = false;
+
+			var field, fieldById, suffixOperationId = '', data = {};
+			var numElement, numParentElement;
+			var newEcriture;
+			var $ecritures, ecritures, idEcritures;
+			var action, id_exercice, libelle;
+			var tag = _this;
+			var elements = _this.elements;
+			var idElements = _this.idElements;
+			var parentElement, element;
+			var ecrituresByOrderInPiece = {};
+			var missingParameters = false;
+			var sommeAnalytique = 0;
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			if( e.item ){
+				var item = e.item;
+				isEdit = true;
+
+				element = elements[idElements[e.item.id]];
+				console.log("el", element);
+				analytiques = element.cle_analytique;
+				console.log("analytiques: ", analytiques);
+				//idAnalytiques = element.idAnalytiques;
+
+				$analytiques = $('.liste_add_analytiques .analytique_ids', $('#' + e.item.id));
+				action = 'update';
+				suffixOperationId = '_' + e.item.id; // remplacer numOperation par id
+				data.id = e.item.id;
+			}else{
+				var element = new Object();
+				elements.push(element);
+				element.cle_analytique = [];
+				//element.idAnalytiques = {};
+
+				analytiques = element.cle_analytique;
+				//idAnalytiques = element.idAnalytiques;
+
+				$analytiques = $('.analytique_ids', $('#add_element'));
+				action = 'add';
+				id_exercice = $('#id_exercice').val();
+				element.id_exercice = id_exercice;
+			}
+
+			data.action = action;
+			var libelle = document.getElementById('libelle' + suffixOperationId).value;
+			missingParameters = checkRequiredValue(libelle, missingParameters, '#libelle' + suffixOperationId);
+			var visible = document.getElementById('visible' + suffixOperationId).value;
+
+			element.libelle = libelle;
+			element.visible = visible;
+
+
+			data.visible = visible;
+			data.libelle = libelle;
+			data.analytiques = [];
+			$analytiques.each(function (index){
+				if($(this).hasClass('hidden')) {
+						elements[idElements[e.item.id]].cle_analytique.splice($(this).attr('index'), 1);
+				} else {
+					var index_edit;
+					var i = data.analytiques.length;
+					var action = $(this).attr('action');
+					data.analytiques.push(new Object());
+					var dataAnalytique = data.analytiques[i];
+					var suffixAnalytiqueId;
+					var analytique;
+
+					/* 
+						TODO: 
+							new ecriture if isEdit is true, have no db_id attribute ...
+					*/
+					if( isEdit ){
+						index_edit = $(this).attr('index');
+						suffixAnalytiqueId = suffixOperationId + '_' + (index_edit || '');
+						if( action === 'add' ){
+							analytiques.push(new Object);
+							analytique = analytique[ analytiques.length - 1 ];
+						}else{
+							analytique = analytiques[ index_edit ];
+						}
+						console.log("analx:", analytique);
+					}else{
+						analytiques.push(new Object);
+						analytique = analytiques[ analytiques.length - 1 ];
+
+						suffixAnalytiqueId = '_' + (i + 1);
+					}
+					
+					var id_analytique = document.getElementById('id_analytique' + suffixAnalytiqueId).value;
+					missingParameters = checkRequiredValue(id_analytique, missingParameters, '#id_analytique' + suffixAnalytiqueId);
+					var pourcentage = document.getElementById('pourcentage' + suffixAnalytiqueId, this).value;
+					missingParameters = checkRequiredValue(pourcentage, missingParameters, '#pourcentage' + suffixAnalytiqueId);
+					//var montant = document.getElementById('montant' + suffixAnalytiqueId).value;
+					//missingParameters = checkRequiredValue(montant, missingParameters, '#montant' + suffixAnalytiqueId);
+					//montant = parseFloat(montant).toFixed(2);
+
+					//missingParameters = checkRequiredValue(libelle, missingParameters, '#libelle' + suffixAnalytiqueId);
+					dataAnalytique.action = action;
+					if(action == 'add') {
+						dataAnalytique.id_exercice = $('#id_exercice').val();
+					}
+
+					dataAnalytique.id_analytique = id_analytique;
+					analytique.id_analytique = id_analytique;
+					if(pourcentage.length != 0) {
+						dataAnalytique.pourcentage = pourcentage;
+						sommeAnalytique += parseFloat(pourcentage);
+						analytique.pourcentage = pourcentage;
+					}
+
+					if( id_exercice ){
+						dataAnalytique.id_exercice = id_exercice;
+					}
+					analytique.action = action;
+
+					if(action == 'add') {
+						analytique.id_exercice = $('#id_exercice').val();
+					}
+				}
+			});
+			console.log('data :', data);
+			console.log('somme :', sommeAnalytique);
+			if(missingParameters === false && sommeAnalytique == 100/* &&  1 == 0*/) {
+				$.ajax('/admin/compta/cle_repartition', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						console.log('result', JSON.stringify(result))
+						if(!result.error) {
+							if(_this.E_M) {
+								_this.E_M.removeLoader({time: 1000});
+							} else {
+								setTimeout(function(){ $('#loader').addClass('hidden'); }, 1000);
+							}
+							if( !isEdit ){
+								console.log(1)
+									$('#add_element').hide();
+									$('#actions').removeClass('hidden');
+								} else {
+							}
+							console.log(result)
+							if(result.id){
+								if( isEdit ){
+									var $container = $('#' + e.item.id);
+									var $editContainer = $('#' + e.item.id + '_edit');
+									$('.show_infos', $container).show();
+									$editContainer.hide();
+								}else{
+									element.id = result.id
+									idElements[result.id] = elements.length - 1;
+								}
+								$('input, select', $editContainer).removeClass('required');
+							}else if(result.messages){
+							}else if(result.error){
+							}
+							tag.update();
+							tag = null;
+						}
+					}
+				}).done(function(){
+					console.log('done!...');
+					tag = null;
+				}).fail(function(){
+					console.log('fail!...');
+					tag = null;
+				}); //, 'json'
+			} else if( missingParameters === true && ! isEdit) {
+				_this.elements.pop();
+			} else if(/* missingParameters === true &&*/ isEdit) {
+			}
+		}
+
+		/*
+		
+		cancelElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M && e.item){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'id_journal', 'id_compte', 'date_enregistrement', 'debit', 'credit'],
+					prefixId: 'piece_',
+					tag: _this,
+					hideClass: 'hidden',
+				});
+				var item = e.item;
+				var copyItem = jQuery.extend(true, {}, e.item);
+				var ecritures = item.ecritures;
+				
+				for(var i = 0, l = ecritures.length; i < l; i++){
+					if(ecritures[i].id != -1) {
+						$('#debit_' + item.id + '_' + ecritures[i].id,'#piece_' + item.id + '_edit').val(parseFloat(ecritures[i].debit).toFixed(2));
+						$('#credit_' + item.id + '_' + ecritures[i].id,'#piece_' + item.id + '_edit').val(parseFloat(ecritures[i].credit).toFixed(2));
+						$('#libelle_' + item.id + '_' + ecritures[i].id,'#piece_' + item.id + '_edit').val(ecritures[i].libelle);
+						$('#id_compte_' + item.id + '_' + ecritures[i].id + ' option','#piece_' + item.id + '_edit').removeAttr('selected');
+						$('#id_compte_' + item.id + '_' + ecritures[i].id + ' option[value=' + ecritures[i].id_compte + ']', '#piece_' + item.id + '_edit').prop('selected', 'selected');
+					}
+				}
+				$('input, select', '#piece_' + item.id + '_edit').removeClass('required');
+				$('.edit_block_ecritures .ecriture', '#piece_' + item.id + '_edit').removeClass('hidden').attr('action', 'update_ecriture');
+
+				$('#date_enregistrement_' + item.id, '#piece_' + item.id + '_edit').val(_this.convertDateToDb(e.item.date_enregistrement));
+				for(var i = ecritures.length - 1; i >= 0; i--) {
+					if(ecritures[i].action === 'add_ecriture' && ecritures[i].id == '-1') {
+						ecritures.splice(i, 1);
+					}
+				}
+				_this.update();
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				if($(e.target).hasClass('closed') && $(e.target).hasClass('add-ecriture-title')) {
+					$('.block_info_montant').hide();
+					_this.nbAddAnalytiques = [
+						{id: 1},
+						{id: 2},
+					];
+					_this.update();
+					if($('.liste-ecritures-title').hasClass('opened')) {
+						$('.liste-ecritures-title').removeClass('opened').addClass('closed');
+						$('.slide-up', '.liste-ecritures').slideToggle('fast');
+					}
+				} else if($(e.target).hasClass('opened') && $(e.target).hasClass('add-ecriture-title')){
+					$('.block_info_montant').show();
+					if($('.liste-ecritures-title').hasClass('closed')) {
+						$('.liste-ecritures-title').removeClass('closed').addClass('opened');
+						$('.slide-up', '.liste-ecritures').slideToggle('fast');
+					}
+				}
+				_this.E_M.showContents(e);
+			}
+		}*/
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			cancelDeleteElement = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelElement = null;
+			saveElement = null;
+			showContents = null;
+			makeVisible = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+	</script>
+
+</cle-repartition>

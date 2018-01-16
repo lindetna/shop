@@ -1,0 +1,251 @@
+<chequevacances>
+<!--<div id="titre_page"><h1>Trésorerie</h1></div>-->
+    <div if={ COMPTA_READ } class="content with_submenu">
+        <!-- <div class="title_tresorerie">
+            <p><font size="5"><b>Trésorerie</b></font></p>
+        </div> -->
+        <div class="compta compta_tresorerie">
+            <div if={ COMPTA_READ && parametresCompte.id_journal_cheques } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/cheques">
+                        Chèques
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_especes } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/especes">
+                        Espèces
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_virements } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/virements">
+                        Virements
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_prelevements } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/prelevement">
+                        Prélèvements
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_cartebleue } class="nav_compta_parametrage block-slider">
+                <header class="closed">
+                    <a class="comptes-title center" href="#/compta/cartebleue">
+                        Carte Bleue
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ && parametresCompte.id_journal_chequesvacances } class="nav_compta_parametrage block-slider">
+                <header class="comptes-title center opened" onclick= { showContents }>
+                    Chèques Vacances
+                </header>
+                <div class="slide-up">
+                    <div class="fieldsets_liaison_comptable">
+                        <div class="liaison_comptable_fs">
+                            <span>Filtres</span>
+                            <div class="table table_liaison_comptable">
+
+                                <div class="row row_table_liaison_comptable" id="liaison_table_1">
+                                    <div class="cell_1"> 
+                                        <label> { IS_CE ? "Adhérent" : 'Salarié' } </label>
+                                        <select class="liaison_comptable_select">
+                                            <option value="choix1">Choisir un journal</option>
+                                            <option value="cheques">Chèques à encaisser</option>
+                                        </select> 
+                                    </div>
+
+                                    <div class="cell_2">
+                                        <label> Mois </label>
+                                        <select class="tresorerie_liaison_comptable_1">
+                                            <option value="choix_mois">Choisir le mois</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row row_table_liaison_comptable" id="liaison_table_2">
+                                    <div class="cell_1">
+                                        <label> Montant </label>
+                                        <input id="input_montant_liaison_comptable" class="input_montant_liaison_comptable" name="input_montant_liaison_comptable" type="text" value="0.00€">
+                                    </div>
+
+                                    <div class="cell_2">
+                                        <label> Domiciliation </label>
+                                        <select class="tresorerie_liaison_comptable_2">
+                                            <option value="" disabled selected>Choisir une domiciliation</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row row_table_liaison_comptable" id="liaison_table_3">
+                                    <div class="cell_1">
+                                        <label> Date Prévisionelle </label>
+                                        <input id="input_date_liaison_comptable" class="input_date_liaison_comptable" name="input_date_liaison_comptable" type="text" value="00/00/0000">
+                                        <input id="input_date_liaison_comptable" class="input_date_liaison_comptable" name="input_date_liaison_comptable" type="text" value="00/00/0000">
+                                    </div>
+
+                                    <div class="cell_2">
+                                        <label> Activité </label>
+                                        <select class="tresorerie_liaison_comptable_3">
+                                            <option value="" disabled selected>Choisir une Activité</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="entete-tableau_1">
+                        <div class="bande_1">
+                            <div class="cell_1">
+                                <label> Nom - Prenom { IS_CE ? "Adhérent" : 'Salarié' } </label>
+                            </div>
+                            <div class="cell_2">
+                                <p>Date d'inscription</p>
+                            </div>
+                            <div class="cell_3">
+                            </div>
+                            <div class="cell_4">
+                            </div>
+                            <div class="cell_5">
+                                <p>Montant</p>
+                            </div>
+                            <div class="cell_6">
+                                <p>Actions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="entete-tableau_2">
+                        <div class="bande_1">
+                            <div class="cell_1">
+                                <p>M Chamard Christian - 166545631</p>
+                            </div>
+                            <div class="cell_2">
+                                <p>16/09/2016</p>
+                            </div>
+                            <div class="cell_3">
+                            </div>
+                            <div class="cell_4">
+                            </div>
+                            <div class="cell_5">
+                                <p>380.00</p>
+                            </div>
+                            <div class="cell_6">
+                                <p><input type="checkbox"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="entete-tableau_3">
+                        <div class="bande_1">
+                            <div class="cell_1">
+                                <p>M Dupont Olivier - 13131235420</p>
+                            </div>
+                            <div class="cell_2">
+                                <p>16/09/2016</p>
+                            </div>
+                            <div class="cell_3">
+                            </div>
+                            <div class="cell_4">
+                            </div>
+                            <div class="cell_5">
+                                <p>380.00</p>
+                            </div>
+                            <div class="cell_6">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="entete-tableau_4">
+                        <div class="cell_1">
+                            <div class="carre_total_remise">
+                                <p><i>Total de la remise 0.00€</i></p>
+                                <p><i>Nbre de Chèque : 0</i></p> 
+                            </div>
+                        </div>
+                        <div class="cell_2">
+                            <div class="sous_table_total_remise">
+                                <div class="cell_1">
+                                    <p>Compte Banque</p>
+                                    <p>Numéro de la remise</p> 
+                                </div>
+                                <div class="cell_2">
+                                    <p><select class="compte_banque_select">
+                                        <option class="choix_banque">Choisir un compte</option>
+                                        <option class="choix_banque">Choisir un compte</option>
+                                    </select></p>
+                                    <p><input type="text" name="input_numero_remise"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cell_3">
+                            <input type="button" name="enregistrer" id="enregistrer" class="enregister" value="Enregistrer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var app = opts;
+        this.app = opts;
+        var _this = this;
+        var permissions = app.session.permissions;
+        var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+        app.on('unmount-chequevacances', function(){
+            app.off('unmount-chequevacances');
+            _this.unmount();
+        });
+
+        _this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+            _this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+            if( _this.loaded ){
+            }
+        });
+
+        this.update();
+
+        showContents(e){
+            e.preventDefault();
+            e.preventUpdate = true;
+            if(_this.E_M){
+                console.log(e.target);
+                _this.E_M.showContents(e);
+            }
+        };
+
+        this.parametresCompte = {};
+
+        function getParametresComptes(){
+            var getParams = { };
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/parametres', getParams, function(data){
+                if(data && data.elements){
+                    _this.parametresCompte = data.elements[0];
+                    _this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                _this.numToLoad--;
+            })
+        }
+        getParametresComptes();
+
+    </script>
+
+</chequevacances>

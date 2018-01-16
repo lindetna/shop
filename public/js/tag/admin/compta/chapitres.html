@@ -1,0 +1,1561 @@
+<chapitres>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> 	-->
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div id="loader" class="loader hidden">
+        </div>
+		<div class="compta compta_chapitres">
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/journaux">
+						Journaux
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/comptes">
+						Comptes
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/budgets">
+						Budgets
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/cle_repartition">
+						Clé de répartition
+					</a>
+				</header>
+			</div> -->
+			<div if={ COMPTA_READ } class="nav_compta_parametrage chapitres block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+					Chapitres Bilan et Compte de Résultat
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="compta_content">
+						<!--<div class="filtres_container">
+							<div id="exercice"><label>Exercice  </label><select class="id_exercice" id="id_exercice" name="id_exercice" onchange={ selectExercice }><option each={ exercices } selected={ id == selectedExercice } value="{ id }">{ nom }{ (is_default == 1) ? ' (par défaut)' : ''}</option></select></div>
+							<div class="filtres">
+								<div class="cell_1">
+									<p class="">Filtres</p>
+								</div>
+								<div class="cell_2">
+									<div>
+										<label for="filtre_chapitres">Chapitres :</label>
+										<select name="filtre_chapitres"><option each={ chapitres } value="{ id }">{ libelle }</option></select>
+									</div>
+									<div>
+										<label for="filtre_exercice">Exercice :</label>
+										<select name="filtre_exercice"><option>Exercice</option></select>
+									</div>
+									<div>
+										<label for="filtre_submit"></label>
+										<button name="filtre_submit" class="blue">Rechercher</button>
+									</div>
+								</div>
+								<div class="cell_3">
+									<div class="">
+										<label for="filtre_tri">Trier par :</label>
+										<select name="filtre_tri"><option>Croissant</option><option>Décroissant</option></select>
+									</div>
+								</div>
+							</div>
+						</div>-->
+						<!-- Describe Add Chapitres -->
+						<div id="add_chapitre" class="edit edit_chapitre hidden">
+							<div class="cell_1">
+								<input type="hidden" name="type_element" value="chapitre">
+								<input type="hidden" id="chapitre_classe" name="chapitre_classe" value="">
+							</div>
+							<!--<div class="cell_2">
+								<div>
+									<label for="chapitre_reference">Chapitre : </label>
+									<input type="text" id="chapitre_reference" name="chapitre_reference" required="required" size="1" maxlength="1" class="one_char" value="">
+								</div>
+							</div>-->
+							<div class="cell_3">
+								<div>
+									<label>Libellé : </label>
+									<input type="text" name="chapitre_libelle" id="chapitre_libelle" class="xl-large-22" value="" size="80" maxlength="80">
+								</div>
+							</div>
+							<div class="cell_4">
+								<div class="visibility">
+									<!-- <label class="small"></label><button class="visible yes" name="chapitre_visible" value="visible" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible neutral" name="chapitre_invisible" value="visible" onclick={ makeInvisible } title="Invisible">NON</button> -->
+									<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="chapitre_visible" id="chapitre_visible" title="Visible" value="visible">
+								</div>
+							</div>
+							<div class="cell_5">
+								<button class="button enregistrer save_submit" onclick={ saveChapitre }>Enregistrer</button><!--
+							 --><button class="button annuler cancel_submit" onclick={ cancelChapitre }>Annuler</button>
+							</div>
+						</div>
+						<!-- /End Describe Add Chapitres -->
+						<!-- Describe Add Sous_Chapitres -->
+						<div id="add_sous_chapitre" class="edit edit_sous_chapitre hidden">
+							<div class="cell_1">
+								<input type="hidden" name="type_element" value="sous_chapitre">
+								<input type="hidden" name="sous_chapitre_id_chapitre" value="">
+								<input type="hidden" id="sous_chapitre_id_parent" name="sous_chapitre_id_parent" value="">
+								<input type="hidden" id="sous_chapitre_classe" name="sous_chapitre_classe" value="">
+							</div>
+							<!--<div class="cell_2">
+								<div>
+									<label>Référence : { currentChapitreReference }</label>
+									<input type="text" name="sous_chapitre_reference" class="title xl-large" value="">
+								</div>
+							</div>-->
+							<div class="cell_3">
+								<div>
+									<label>Libellé : </label>
+									<input type="text" name="sous_chapitre_libelle" id="sous_chapitre_libelle" class="xl-large-22" value="" size="80" maxlength="80">
+								</div>
+							</div>
+							<div class="cell_4">
+								<!-- <div class="visibility">
+									<label class="small"></label><button class="visible yes" name="sous_chapitre_visible" value="visible" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible neutral" name="sous_chapitre_invisible" value="visible" onclick={ makeInvisible } title="Invisible">NON</button>
+								</div> -->
+								<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="sous_chapitre_visible" id="sous_chapitre_visible" title="Visible" value="visible">
+							</div>
+							<div class="cell_5">
+								<button class="button enregistrer save_submit" onclick={ saveSousChapitre }>Enregistrer</button><!--
+							 --><button class="button annuler cancel_submit" onclick={ cancelSousChapitre }>Annuler</button> 
+							</div>
+						</div>
+						<!-- /End Describe Add Sous_Chapitres -->
+						<!-- Describe Add Chapitres -->
+						<div id="add_sous_sous_chapitre" class="edit edit_sous_sous_chapitre hidden">
+							<div class="cell_1">
+								<input type="hidden" name="type_element" value="sous_sous_chapitre">
+								<input type="hidden" name="sous_sous_chapitre_id_chapitre" value="">
+								<input type="hidden" name="sous_sous_chapitre_id_sous_chapitre" value="">
+								<input type="hidden" id="sous_sous_chapitre_id_parent" name="sous_sous_chapitre_id_parent" value="">
+								<input type="hidden" id="sous_sous_chapitre_classe" name="sous_sous_chapitre_classe" value="">
+							</div>
+							<!-- <div class="cell_2">
+								<div>
+									<label>Référence : { currentChapitreReference }{ currentSousChapitreReference }</label>
+									<input type="text" name="sous_sous_chapitre_reference" class="title xl-large" value="">
+								</div>
+							</div> -->
+							<div class="cell_2">
+								<div>
+									<label>Libellé : </label>
+									<input type="text" name="sous_sous_chapitre_libelle" id="sous_sous_chapitre_libelle" class="xl-large-22" value="" size="80" maxlength="80">
+								</div>
+							</div>
+							<div class="cell_3">
+							<!-- 	<div class="visibility">
+									<label class="small"></label><button class="visible yes" name="sous_sous_chapitre_visible" value="visible" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible neutral" name="sous_sous_chapitre_invisible" value="visible" onclick={ makeInvisible } title="Invisible">NON</button>
+								</div> -->
+								<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="sous_sous_chapitre_visible" id="sous_sous_chapitre_visible" title="Visible" value="visible">
+							</div>
+							<div class="cell_4">
+								<button class="button enregistrer save_submit" onclick={ saveSousSousChapitre }>Enregistrer</button><!--
+							 --><button class="button annuler cancel_submit" onclick={ cancelSousSousChapitre }>Annuler</button>
+							</div>
+						</div>
+						<!-- /End Describe Add Chapitres -->
+						<div class="actions_container">
+							<div class="location">
+								<button id="root_classe" class="button btn_nav action_button_size" value="" onclick={ showClasses }>Chapitres</button>
+								<button id="root_chapitres" class="button btn_nav action_button_size hidden" value="" onclick={ showChapitres }><!--Chapitres--></button>
+								<button id="current_chapitre" class="button btn_nav hidden action_button_size" value="" onclick={ showSousChapitres }></button>
+								<button id="current_sous_chapitre" class="button btn_nav hidden action_button_size" value=""></button>
+							</div>
+							<div class="actions" id="actions">
+								<!--<button id="print_element_button" class="orange">Impressions</button>
+								<button id="delete_element_button" class="red">Supprimer</button>-->
+								<button id="add_chapitre_button" onclick={ addChapitre } class="button ajouter action_button_size hidden">Ajouter un Chapitre</button>
+								<button id="add_sous_chapitre_button" onclick={ addSousChapitre } class="button ajouter hidden action_button_size">Ajouter un sous-chapitre</button>
+								<button id="add_sous_sous_chapitre_button" onclick={ addSousSousChapitre } class="button ajouter hidden action_button_size">Ajouter un sous-sous-chapitre</button>
+							</div>
+						</div>
+						<!-- <div class="chapitre_classes">
+							<button id="bilan_actif_button" class="onglet onglet_selected" onclick={ setBilanActif }>Bilans actifs</button>
+							<button id="bilan_passif_button" class="onglet" onclick={ setBilanPassif }>Bilans passifs</button>
+							<button id="compte_resultat_button" class="onglet" onclick={ setCompteResultat }>Comptes de résultats</button>
+						</div> -->
+						<div id="entete_classe" class="entete-tableau">
+							<div class="cell_1"></div>
+							<div class="cell_3">
+								<p class="small">Libellé</p>
+							</div>
+							<div class="cell_2">
+								<p class="small">Nombre de Comptes de Rattachement</p>
+							</div>
+							<div class="cell_4"><p class="small">Visible</p></div>
+							<div class="cell_5"><p class="small">Actions</p></div>
+						</div>
+						<div class="classe">
+							<div class="show_infos" onclick={ setBilanActif }>
+								<div class="cell_1"></div>
+								<div class="cell_3 cell_bilan">
+									<p class="title2">Bilan Actif</p>
+								</div>
+								<div class="cell_2">
+									<p class=""></p>
+									<p class=""></p>
+								</div>
+								<div class="cell_4"></div>
+								<div class="cell_5"></div>
+							</div>
+						</div>
+						<div class="classe">
+							<div class="show_infos" onclick={ setBilanPassif }>
+								<div class="cell_1"></div>
+								<div class="cell_3 cell_bilan">
+									<p class="title2">Bilan Passif</p>
+								</div>
+								<div class="cell_2">
+									<p class=""></p>
+									<p class=""></p>
+								</div>
+								<div class="cell_4"></div>
+								<div class="cell_5"></div>
+							</div>
+						</div>
+						<div class="classe">
+							<div class="show_infos" onclick={ setCompteResultat }>
+								<div class="cell_1"></div>
+								<div class="cell_3 cell_bilan">
+									<p class="title2">Compte de résultat</p>
+								</div>
+								<div class="cell_2">
+									<p class=""></p>
+									<p class=""></p>
+								</div>
+								<div class="cell_4"></div>
+								<div class="cell_5"></div>
+							</div>
+						</div>
+						<div id="entete_chapitre" class="entete-tableau hidden">
+							<div class="cell_1"></div>
+							<div class="cell_3">
+								<p class="small">Libellé</p>
+							</div>
+							<!--position<div class="cell_6">
+								<p class="small">Position</p>
+							</div>position-->
+							<div class="cell_2">
+								<p class="small">Nombre de Comptes de Rattachement</p>
+							</div>
+							<div class="cell_4">
+								<p class="small">Visible</p>
+							</div>
+							<div class="cell_5">
+								<p class="small">Actions</p>
+							</div>
+						</div>
+						<!-- Describe the Chapitres -->
+						<div each={ chapitres } id="chapitre_{ id }" class="chapitre">
+							<div class="show_infos" onclick={ showSousChapitres }>
+								<div class="cell_1">
+									<!--<input type="checkbox" name="action[]">-->
+								</div>
+								<div class="cell_3">
+									<p class="title">{ libelle }</p>
+								</div>
+								<!--position<div class="cell_6">
+									<p class="title">{ reference }</p>
+								</div>position-->
+								<div class="cell_2">
+									<p class="title"></p>
+								</div>
+								<div class="cell_4">
+									<!-- <div class="visibility">
+										<button class="{ visible === 'visible' ? 'visible yes' : 'visible neutral' }" title="Visible">OUI</button><button class="{ visible === 'hidden' ? 'invisible no' : 'invisible neutral' }" title="Invisible">NON</button>
+									</div> -->
+									<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+								</div>
+								<div class="cell_5">
+									<div>
+										<p class="modif"><img class="edit_element_img" onclick={ editChapitre } alt="Modifier" title="Modifier" src="/img/edit.png"><img alt="Supprimer" title="Supprimer" class="delete_element_img" onclick={ validDeleteChapitre } src="/img/delete.png"><img if={ !first } alt="monter" title="Monter" class="monter_element_img" onclick={ switchUp } src="/img/compta/fleche_haut.png"><img if={ !last } alt="descendre" title="Descendre" class="descendre_element_img" onclick={ switchDown } src="/img/compta/fleche_bas.png"><!-- <img title="Afficher les sous-chapitres" alt="Afficher les sous-chapitres" onclick={ showSousChapitres } class="enlarge_sous_chapitres_img enlarge_element_img" src="/img/enlarge.png"> --></p>
+									</div>
+								</div>
+							</div>
+							<div id="chapitre_{ id }_edit" class="edit edit_chapitre hidden">
+								<div class="cell_1">
+									<input type="hidden" id="chapitre_classe_{ id }" name="chapitre_classe_{ id }" value="{ classe }">
+									<input id="chapitre_reference_{ id }" name="chapitre_reference_{ id }" type="hidden" maxlength="2" class="two_char" value="{ reference }">
+								</div>
+								<div class="cell_3">
+									<div>
+										<label class="small m-large" for="chapitre_libelle_{ id }">Libellé : </label>
+										<input id="chapitre_libelle_{ id }" name="chapitre_libelle_{ id }" type="text" class="xl-large-22" value="{ libelle }" size="80" maxlength="80">
+									</div>
+								</div>
+								<!--position<div class="cell_6">
+									<div><label class="small m-large" for="chapitre_reference_{ id }">Position : </label><input id="chapitre_reference_{ id }" name="chapitre_reference_{ id }" type="text" maxlength="2" class="two_char" value="{ reference }"></div>
+								</div>position-->
+								<div class="cell_2">
+
+								</div>
+								<div class="cell_4">
+									<!-- <div class="visibility">
+										<label class="small" for="chapitre_visible_{ id }"></label><button class="visible { visible === 'visible' ? 'yes' : 'neutral' }" id="chapitre_visible_{ id }" name="chapitre_visible_{ id }" value="{ visible }" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible { visible === 'hidden' ? 'no' : 'neutral' }" id="chapitre_invisible_{ id }" name="chapitre_invisible_{ id }" value="{ visible }" onclick={ makeInvisible } title="Invisible">NON</button>
+									</div> -->
+									<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="chapitre_visible_{ id }" name="chapitre_visible_{ id }">
+								</div>
+								<div class="cell_5">
+									<button onclick={ saveChapitre } class="button enregistrer save_submit">Enregistrer</button><!--
+								 --><button onclick={ cancelChapitre } class="button annuler cancel_submit">Annuler</button>
+								</div>
+							</div>
+							<div id="chapitre_{ id }_delete" class="delete hidden">
+								<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button onclick={ deleteChapitre }>Supprimer</button><button onclick={ cancelDeleteChapitre }>Annuler</button></div>
+							</div>
+							<!-- /End Describe the Chapitres -->
+							<!-- Describe the Sous-chapitres -->
+							<div class="sous_chapitres hidden">
+								<div class="entete-tableau  entete_sous_chapitre">
+									<div class="cell_1"></div>
+									<div class="cell_3">
+										<p class="small">Libellé</p>
+									</div>
+									<!--position<div class="cell_6">
+										<p class="small">Position</p>
+									</div>position-->
+									<div class="cell_2">
+										<p class="small">Nombre de Comptes de Rattachement</p>
+									</div>
+									<div class="cell_4">
+										<p class="small">Visible</p>
+									</div>
+									<div class="cell_5">
+										<p class="small">Actions</p>
+									</div>
+								</div>
+								<div each={ sous_chapitres } id="sous_chapitre_{ id }"  class="sous_chapitre">
+									<div class="show_infos" onclick={ showSousSousChapitres }>
+										<div class="cell_1">
+											<!-- <input type="checkbox" name="action[]"> -->
+										</div>
+										<div class="cell_3">
+											<p class="title">{ libelle }</p>
+										</div>
+										<!--position<div class="cell_6">
+											<p class="title">{ reference }</p>
+										</div>position-->
+										<div class="cell_2">
+											<p class="title"></p>
+										</div>
+										<div class="cell_4">
+											<!-- <div class="visibility">
+												<button class="{ visible === 'visible' ? 'visible yes' : 'visible neutral' }" title="Visible">OUI</button><button class="{ visible === 'hidden' ? 'invisible no' : 'invisible neutral' }" title="Invisible">NON</button>
+											</div> -->
+											<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+										</div>
+										<div class="cell_5">
+											<div>
+												<p class="modif"><img class="edit_element_img" alt="Editer" onclick={ editSousChapitre } src="/img/edit.png"><img alt="Supprimer" class="delete_element_img" onclick={ validDeleteSousChapitre } src="/img/delete.png"><img if={ !first } alt="monter" title="Monter" class="monter_element_img" onclick={ switchUp } src="/img/compta/fleche_haut.png"><img if={ !last } alt="descendre" title="Descendre" class="descendre_element_img" onclick={ switchDown } src="/img/compta/fleche_bas.png"><!-- <img alt="Afficher les sous_sous_chapitres" class="enlarge_element_img" onclick={ showSousSousChapitres } src="/img/enlarge.png"> --></p>
+											</div>
+										</div>
+									</div>
+									<div id="sous_chapitre_{ id }_edit" class="edit edit_sous_chapitre hidden">
+										<div class="cell_1">
+											<input type="hidden" id="sous_chapitre_id_parent_{ id }" name="sous_chapitre_id_parent_{ id }" value="{ id_parent }">
+											<input type="hidden" id="sous_chapitre_classe_{ id }" name="sous_chapitre_classe_{ id }" value="{ classe }">
+											<input id="sous_chapitre_reference_{ id }" name="sous_chapitre_reference_{ id }" type="hidden" maxlength="2" class="two_char" value="{ reference }">
+										</div>
+										<div class="cell_3">
+											<div>
+												<label class="small m-large" for="sous_chapitre_libelle_{ id }">Libellé : </label>
+												<input id="sous_chapitre_libelle_{ id }" name="sous_chapitre_libelle_{ id }" type="text" class="xl-large-22" value="{ libelle }" size="80" maxlength="80">
+											</div>
+										</div>
+										<!--position<div class="cell_6">
+											<div><label class="small m-large" for="sous_chapitre_reference_{ id }">Position : </label><input id="sous_chapitre_reference_{ id }" name="sous_chapitre_reference_{ id }" type="text" maxlength="2" class="two_char" value="{ reference }"></div>
+										</div>position-->
+										<div class="cell_2">
+											
+										</div>
+										<div class="cell_4">
+											<!-- <div class="visibility">
+												<label class="small" for="sous_chapitre_visible_{ id }"></label><button class="visible { visible === 'visible' ? 'yes' : 'neutral' }" id="sous_chapitre_visible_{ id }" name="sous_chapitre_visible_{ id }" value="{ visible }" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible { visible === 'hidden' ? 'no' : 'neutral' }" id="sous_chapitre_invisible_{ id }" name="sous_chapitre_invisible_{ id }" value="{ visible }" onclick={ makeInvisible } title="Invisible">NON</button>
+											</div> -->
+											<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="sous_chapitre_visible_{ id }" name="sous_chapitre_visible_{ id }">
+										</div>
+										<div class="cell_5">
+											<button onclick={ saveSousChapitre } class="button enregistrer save_submit">Enregistrer</button><!--
+										 --><button onclick={ cancelSousChapitre } class="button annuler cancel_submit">Annuler</button>
+										</div>
+									</div>
+									<div id="sous_chapitre_{ id }_delete" class="delete hidden">
+										<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button onclick={ deleteSousChapitre }>Supprimer</button><button onclick={ cancelDeleteSousChapitre }>Annuler</button></div>
+									</div>
+									<!-- /End Describe the Sous-chapitres -->
+									<!-- Describe the Sous_Sous_Chapitres -->
+									<div class="sous_sous_chapitres hidden">
+										<div class="entete-tableau entete_sous_sous_chapitre">
+											<div class="cell_1"></div>
+											<div class="cell_3">
+												<p class="small">Libellé</p>
+											</div>
+											<div class="cell_2">
+											</div>
+											<!--position<div class="cell_6">
+												<p class="small">Position</p>
+											</div>position-->
+											<div class="cell_4">
+												<p class="small">Visible</p>
+											</div>
+											<div class="cell_5">
+												<p class="small">Actions</p>
+											</div>
+										</div>
+										<div each={ sous_sous_chapitres } id="sous_sous_chapitre_{ id }"  class="sous_sous_chapitre ">
+											<div class="show_infos">
+												<div class="cell_1">
+													<!-- <input type="checkbox" name="action[]"> -->
+												</div>
+												<div class="cell_3">
+													<p class="title">{ libelle }</p>
+												</div>
+												<div class="cell_2">
+												</div>
+												<!--position<div class="cell_6">
+													<p class="title">{ reference }</p>
+												</div>position-->
+												<div class="cell_4">
+													<!-- <div class="visibility">
+														<button class="{ visible === 'visible' ? 'visible yes' : 'visible neutral' }" title="Visible">OUI</button><button class="{ visible === 'hidden' ? 'invisible no' : 'invisible neutral' }" title="Invisible">NON</button>
+													</div> -->
+													<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+												</div>
+												<div class="cell_5">
+													<div>
+														<p class="modif"><img class="edit_element_img" onclick={ editSousSousChapitre } alt="Editer" src="/img/edit.png"><img alt="Supprimer" class="delete_element_img" onclick={ validDeleteSousSousChapitre } src="/img/delete.png"><img if={ !first } alt="monter" title="Monter" class="monter_element_img" onclick={ switchUp } src="/img/compta/fleche_haut.png"><img if={ !last } alt="descendre" title="Descendre" class="descendre_element_img" onclick={ switchDown } src="/img/compta/fleche_bas.png"></p>
+													</div>
+												</div>
+											</div>
+											<div id="sous_sous_chapitre_{ id }_edit" class="edit edit_sous_sous_chapitre hidden">
+												<div class="cell_1">
+													<input type="hidden" id="sous_sous_chapitre_id_chapitre_{ id }" name="sous_sous_chapitre_id_chapitre_{ id }" value="{ parent.parent.id }">
+													<input type="hidden" id="sous_sous_chapitre_id_parent_{ id }" name="sous_sous_chapitre_id_parent_{ id }" value="{ id_parent }">
+													<input type="hidden" id="sous_sous_chapitre_classe_{ id }" name="sous_sous_chapitre_classe_{ id }" value="{ classe }">
+												</div>
+												<div class="cell_3">
+													<div>
+														<label class="small m-large" for="sous_sous_chapitre_libelle_{ id }">Libellé : </label>
+														<input id="sous_sous_chapitre_libelle_{ id }" name="sous_sous_chapitre_libelle_{ id }" type="text" class="xl-large-20" value="{ libelle }" size="80" maxlength="80">
+														<input id="sous_sous_chapitre_reference_{ id }" name="sous_sous_chapitre_reference_{ id }" type="hidden" maxlength="2" class="two_char" value="{ reference }">
+													</div>
+												</div>
+												<div class="cell_2">
+												</div>
+												<!--position<div class="cell_6">
+													<div>
+														<label class="small m-large" for="sous_sous_chapitre_reference_{ id }">Position : </label>
+														<input id="sous_sous_chapitre_reference_{ id }" name="sous_sous_chapitre_reference_{ id }" type="text" maxlength="2" class="two_char" value="{ reference }">
+													</div>
+												</div>position-->
+												<div class="cell_4">
+														<!-- <div class="visibility">
+															<label class="small" for="sous_sous_chapitre_visible_{ id }"></label><button class="visible { visible === 'visible' ? 'yes' : 'neutral' }" id="sous_sous_chapitre_visible_{ id }" name="sous_sous_chapitre_visible_{ id }" value="{ visible }" onclick={ makeVisible } title="Visible">OUI</button><button class="invisible { visible === 'hidden' ? 'no' : 'neutral' }" id="sous_sous_chapitre_invisible_{ id }" name="sous_sous_chapitre_invisible_{ id }" value="{ visible }" onclick={ makeInvisible } title="Invisible">NON</button>
+														</div> -->
+														<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="sous_sous_chapitre_visible_{ id }" name="sous_sous_chapitre_visible_{ id }">
+													</div>
+													<div class="cell_5">
+														<button onclick={ saveSousSousChapitre } class="button enregistrer save_submit">Enregistrer</button><!--
+													 --><button onclick={ cancelSousSousChapitre } class="button annuler cancel_submit">Annuler</button>
+													</div>
+												</div>
+												<div id="sous_sous_chapitre_{ id }_delete" class="delete hidden">
+													<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" onclick={ deleteSousSousChapitre }>Supprimer</button><button name="cancel_{ id }" onclick={ cancelDeleteSousSousChapitre }>Annuler</button></div>
+												</div>
+											</div>
+										</div>
+										<!-- /End Describe the Sous_Sous_Chapitres -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/parametres">
+							Paramètres Comptables	
+						</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+					<a class="comptes-title center" href="#/compta/mode_paiement">Mode de Paiement</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/exercices">
+							Exercices	
+						</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/tableau_de_bord">
+							Tableau de Bord	
+						</a>
+					</header>
+				</div>
+				<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/utilitaires">
+							Utilitaires
+						</a>
+					</header>
+				</div> -->
+			</div>
+		</div>
+
+	
+	<script>
+	  	var _this = this;
+		this.app = opts;
+		var app = opts;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+		app.on('unmount-chapitres', function(){
+			app.off('unmount-chapitres');		
+			_this.unmount();
+		});
+
+		this.loaded = false;
+
+		this.thingsToLoad = [ 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		this.currentClasse = '';
+		this.currentChapitreReference = '';
+		this.currentSousChapitreReference = '';
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+/*************************************************************************
+		this.chapitres = [
+			{ id: 555, classe: 'bilan_actif', libelle: 'Comptes de capitaux', visible: 'visible', idSousChapitres: {}, sous_chapitres:
+				[
+					{ id: 551, id_chapitre: 555, classe: 'bilan_actif', libelle: 'Capital et réserves', visible: 'visible', idSousSousChapitres: {}, sous_sous_chapitres:
+						[
+							{ id: 1, id_sous_chapitre: 551, classe: 'bilan_actif', libelle: 'Capital', visible: 'visible'},
+						]
+					},
+				]
+			},
+		];
+****************************************************************************/
+		this.chapitres = [];
+		this.idChapitres = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		switchUp(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchUp');
+			do_switch(e, -1);
+		}
+		switchDown(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log('switchDown');
+			do_switch(e, 1);
+		}
+		
+		function do_switch(e, i) {
+			var item = e.item;
+			var item_id = item.id;
+			var item_id_parent = item.id_parent;
+			var position_in_table;
+			var switch_with_id;
+			console.log(e.item.type);
+			if(item.type == 'chapitre') {
+				position_in_table =  parseInt(_this.idChapitres[item_id]);
+							console.log(position_in_table);
+				if(_this.chapitres[position_in_table + i]) {
+					switch_element(item_id, position_in_table, position_in_table + i, _this.idChapitres, _this.chapitres);
+				}
+			} else if(item.type == 'sous_chapitre') {
+				console.log('here');
+				var chapitre =  _this.chapitres[_this.idChapitres[item_id_parent]];
+				console.log('chapitre', chapitre);
+				var sous_chapitres = chapitre.sous_chapitres;
+				console.log('sous_chapitre', sous_chapitres);
+				var id_sous_chapitres = chapitre.idSousChapitres;
+				console.log('id_sous_c', id_sous_chapitres);
+				position_in_table = id_sous_chapitres[item_id];
+				console.log('position_in_table', position_in_table);
+				if(sous_chapitres[position_in_table + i]) {
+					switch_element(item_id, position_in_table, position_in_table + i, id_sous_chapitres, sous_chapitres);
+				}
+			} else if(item.type == 'sous_sous_chapitre') {
+				var chapitreId = $('#current_chapitre').val();
+				var chapitre =  _this.chapitres[_this.idChapitres[chapitreId]];
+				var sous_chapitre = chapitre.sous_chapitres[chapitre.idSousChapitres[item_id_parent]];
+				var sous_sous_chapitres = sous_chapitre.sous_sous_chapitres;
+				var id_sous_sous_chapitres = sous_chapitre.idSousSousChapitres;
+				position_in_table = id_sous_sous_chapitres[item_id];
+				if(sous_sous_chapitres[position_in_table + i]) {
+					switch_element(item_id, position_in_table, position_in_table + i, id_sous_sous_chapitres, sous_sous_chapitres);
+				}
+			}
+		}
+
+		function switch_element(element_id1, element_position1, element_position2, idTable, table){
+			var tmp_element = table[element_position1];
+			var tmp_info;
+			var element_id2 = table[element_position2].id;
+
+			idTable[element_id1] = element_position2;
+			idTable[element_id2] = element_position1;
+			table[element_position1] = table[element_position2];
+			table[element_position2] = tmp_element;
+
+			//interchanger ref
+			tmp_info = table[element_position1].reference;
+			table[element_position1].reference = table[element_position2].reference;
+			table[element_position2].reference = tmp_info;
+
+			//interchanger first
+			tmp_info = table[element_position1].first;
+			table[element_position1].first = table[element_position2].first;
+			table[element_position2].first = tmp_info;
+
+			//interchanger last
+			tmp_info = table[element_position1].last;
+			table[element_position1].last = table[element_position2].last;
+			table[element_position2].last = tmp_info;
+
+			updatePosition([
+						{
+							id: element_id1,
+							reference: table[element_position2].reference,
+						},
+						{
+							id: element_id2,
+							reference: table[element_position1].reference,
+						}
+					]);
+		}
+
+		function updatePosition(params){
+			var data = {};
+
+			data.action = "update_reference";
+			data.params = params;
+			$.ajax('/admin/compta/chapitres', {
+				data : data,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+					_this.update();
+				}
+			}).done(function(){
+				console.log('done!...');
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				tag = null;
+			}); //, 'json'
+		}
+
+		setBilanActif(e){
+			_this.chapitres = [];
+			_this.currentClasse = 'bilan_actif';
+			$('#root_chapitres').removeClass('hidden');
+			$('#root_chapitres').text('Bilan Actif : Chapitres');
+			$('.classe').addClass('hidden');
+			$('#entete_classe').addClass('hidden');
+			$('#bilan_actif_button').addClass('onglet_selected');
+			$('#bilan_passif_button').removeClass('onglet_selected');
+			$('#compte_resultat_button').removeClass('onglet_selected');
+			$('#chapitre_classe').val('bilan_actif');
+			$('#sous_chapitre_classe').val('bilan_actif');
+			$('#sous_sous_chapitre_classe').val('bilan_actif');
+			_this.showChapitres(e);
+			getChapitres("bilan_actif");
+		}
+
+		setBilanPassif(e){
+			_this.chapitres = [];
+			_this.currentClasse = 'bilan_passif';
+			$('#root_chapitres').removeClass('hidden');
+			$('#root_chapitres').text('Bilan Passif : Chapitres');
+			$('.classe').addClass('hidden');
+			$('#entete_classe').addClass('hidden');
+			$('#bilan_actif_button').removeClass('onglet_selected');
+			$('#bilan_passif_button').addClass('onglet_selected');
+			$('#compte_resultat_button').removeClass('onglet_selected');
+			$('#chapitre_classe').val('bilan_passif');
+			$('#sous_chapitre_classe').val('bilan_passif');
+			$('#sous_sous_chapitre_classe').val('bilan_passif');
+			_this.showChapitres(e);
+			getChapitres("bilan_passif");
+		}
+
+		setCompteResultat(e){
+			_this.chapitres = [];
+			_this.currentClasse = 'compte_resultat';
+			$('#root_chapitres').removeClass('hidden');
+			$('#root_chapitres').text('Compte de Résultat : Chapitres');
+			$('.classe').addClass('hidden');
+			$('#entete_classe').addClass('hidden');
+			$('#bilan_actif_button').removeClass('onglet_selected');
+			$('#bilan_passif_button').removeClass('onglet_selected');
+			$('#compte_resultat_button').addClass('onglet_selected');
+			$('#chapitre_classe').val('compte_resultat');
+			$('#sous_chapitre_classe').val('compte_resultat');
+			$('#sous_sous_chapitre_classe').val('compte_resultat');
+			_this.showChapitres(e);
+			getChapitres("compte_resultat");
+		}
+		
+		function getChapitres(chap_classe) {
+			getElements({
+				tag: _this,
+				url: '/admin/compta/chapitres', 
+				elements: _this.chapitres,
+				idElements: _this.idChapitres,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', classe: 'classe', libelle: 'libelle', reference: 'reference', id_exercice: 'id_exercice', visible: 'visible', first: 'first', last: 'last', id_parent: 'id_parent'},
+				getParameters: { type_element: 'chapitre', classe: chap_classe},
+				childsName: 'sous_chapitres',
+				idChildsName: 'idSousChapitres',
+				type: 'chapitre',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+		}
+
+		editChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e, prefixId: 'chapitre_', hideClass: 'hidden' });
+			}
+		}
+
+		editSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e, prefixId: 'sous_chapitre_', hideClass: 'hidden' });
+			}
+		}
+
+		editSousSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e, prefixId: 'sous_sous_chapitre_', hideClass: 'hidden' });
+			}
+		}
+
+		showClasses(e) {
+			e.stopPropagation();
+			e.preventDefault();
+
+			//$('.sous_chapitres').slideUp();
+			$('.sous_chapitres').addClass('hidden');
+			$('#add_chapitre_button').addClass('hidden');
+			$('#add_sous_chapitre_button').addClass('hidden');
+			$('#add_sous_sous_chapitre_button').addClass('hidden');
+			var chapitreId = $('#current_chapitre').val();
+			$('.show_infos', $('#chapitre_' + chapitreId)).removeClass('hidden');
+			$('#root_chapitres').addClass('hidden');
+			$('#current_sous_chapitre').val('').addClass('hidden');
+			$('#current_chapitre').val('').addClass('hidden');
+			$('#entete_chapitre').addClass('hidden');
+			//$('.chapitre').slideUp();
+			$('.chapitre').addClass('hidden');
+			$('.entete_sous_chapitre', $('#chapitre_' + chapitreId)).addClass();
+			//$('.sous_chapitre').slideUp();
+			$('#entete_classe, .classe').removeClass('hidden');
+			_this.currentChapitreReference = '';
+			_this.currentSousChapitreReference = '';
+			$('#add_chapitre, #add_sous_chapitre, #add_sous_sous_chapitre').slideUp().addClass('hidden');
+		}
+
+
+
+		showChapitres(e){
+			e.stopPropagation();
+			e.preventDefault();
+			$('#add_chapitre_button').removeClass('hidden');
+			$('#add_sous_chapitre_button').addClass('hidden');
+			$('#add_sous_sous_chapitre_button').addClass('hidden');
+			var chapitreId = $('#current_chapitre').val();
+			$('.show_infos', $('#chapitre_' + chapitreId)).removeClass('hidden');
+			$('#current_sous_chapitre').val('').addClass('hidden');
+			$('#current_chapitre').val('').addClass('hidden');
+			$('#entete_chapitre').removeClass('hidden');
+			$('.entete_sous_chapitre', $('#chapitre_' + chapitreId)).addClass('hidden');
+			/*$('.chapitre').slideDown();
+			$('.sous_chapitre').slideUp();*/
+			$('.chapitre').removeClass('hidden');
+			$('.sous_chapitres').addClass('hidden');
+			if( _this.currentChapitreReference != '') {
+				$('#add_chapitre, #add_sous_chapitre, #add_sous_sous_chapitre').slideUp().addClass('hidden');
+			}
+			_this.currentChapitreReference = '';
+			_this.currentSousChapitreReference = '';
+		}
+		
+		showSousChapitres(e){
+			e.stopPropagation();
+			e.preventDefault();
+			console.log(_this.chapitres);
+			var item;
+			var itemId;
+			if(e.item){
+				item = e.item;
+				itemId = item.id;
+			}else{
+				itemId = $('#current_chapitre').val();				
+			}
+			var htmlId = 'chapitre_' + itemId;
+			var $item = $('#' + htmlId);
+			$('#sous_chapitre_id_parent').val(itemId);
+
+			_this.chapitres[_this.idChapitres[itemId]]['sous_chapitres'] = [];
+			_this.chapitres[_this.idChapitres[itemId]]['idSousChapitres'] = {};
+
+			var elements = _this.chapitres[_this.idChapitres[itemId]]['sous_chapitres'];
+			var idElements = _this.chapitres[_this.idChapitres[itemId]]['idSousChapitres'];
+			// get sous_chapitres and dispatch them
+			getElements({
+				tag: _this,
+				url: '/admin/compta/chapitres', 
+				elements: elements,
+				idElements: idElements,
+				fields: {id: 'id', id_parent: 'id_parent', id_entreprise: 'id_entreprise', classe: 'classe', reference: 'reference', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', first: 'first', last: 'last',},
+				getParameters: { type_element: 'sous_chapitre', id_parent: itemId},
+				childsName: 'sous_sous_chapitres',
+				idChildsName: 'idSousSousChapitres',
+				type: 'sous_chapitre',
+				end: function(tag){
+					$('.sous_chapitres', $item).removeClass('hidden');
+				},
+			});
+
+			_this['sous_chapitre_id_chapitre'].value = itemId;
+			$('#entete_chapitre').addClass('hidden');
+			$('.entete_sous_chapitre', $item).removeClass('hidden');
+			$('.entete_sous_sous_chapitre', $item).addClass('hidden');
+			$('.sous_sous_chapitre', $item).addClass('hidden');
+			if(item){
+				$('#current_chapitre').val(itemId).text('Chapitre : ' + item.libelle).removeClass('hidden');
+				_this.currentChapitreReference = item.reference;
+			}
+			$('.chapitre').each(function(index){
+				if(this.id !== htmlId){
+					$(this).addClass('hidden');
+				}else{
+					$('.show_infos', $(this)).addClass('hidden');
+				}
+			});
+			$('#add_chapitre_button').addClass('hidden');
+			$('#add_sous_chapitre_button').removeClass('hidden');
+			$('#add_sous_sous_chapitre_button').addClass('hidden');
+			$('#current_sous_chapitre').val('').addClass('hidden');
+			_this.currentSousChapitreReference = '';
+		}
+
+		hideSousChapitres(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item = e.item;
+			var itemId = item.id;
+			var $item = $('#chapitre_' + itemId);
+			$('.sous_chapitres', $item).slideUp();
+			$('#current_chapitre').val('').text('').attr('title', '').addClass('hidden');
+			$('.chapitre').each(function(index){
+				$(this).removeClass('hidden');
+			});
+			$('#add_chapitre_button').removeClass('hidden');
+			$('#add_sous_chapitre_button').addClass('hidden');
+			$('#add_sous_sous_chapitre_button').addClass('hidden');
+			_this.currentChapitreReference = '';
+		}
+
+		showSousSousChapitres(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item = e.item;
+			var itemId = item.id;
+			var htmlId = 'sous_chapitre_' + itemId;
+			var chapitreId = item.id_parent;
+			var $parent = $('#chapitre_' + chapitreId);
+			var $item = $('#' + htmlId);
+			$('#sous_sous_chapitre_id_parent').val(itemId);
+
+			//var chapitreId = $('#current_chapitre').val()
+			var chapitre = _this.chapitres[_this.idChapitres[chapitreId]];
+			var ssChapitre = chapitre['sous_chapitres'][chapitre['idSousChapitres'][itemId]]
+			ssChapitre['sous_sous_chapitres'] = [];
+			ssChapitre['idSousSousChapitres'] = {};
+			var elements = ssChapitre['sous_sous_chapitres'];
+			var idElements = ssChapitre['idSousSousChapitres'];
+			// get sous_sous_chapitres and dispatch them
+			getElements({
+				tag: _this,
+				url: '/admin/compta/chapitres', 
+				elements: elements,
+				idElements: idElements,
+				fields: {id: 'id', id_parent: 'id_parent', id_entreprise: 'id_entreprise', classe: 'classe', reference: 'reference', libelle: 'libelle', id_exercice: 'id_exercice', visible: 'visible', first: 'first', last: 'last',},
+				getParameters: { type_element: 'sous_sous_chapitre', id_parent: itemId},
+				type: 'sous_sous_chapitre',
+				end: function(tag){
+					$('.sous_sous_chapitres', $item).removeClass('hidden');
+				},
+			});
+
+			_this['sous_sous_chapitre_id_chapitre'].value = itemId;
+			_this['sous_sous_chapitre_id_sous_chapitre'].value = itemId;
+
+			$('.entete_sous_chapitre', $parent).addClass('hidden');
+			$('.entete_sous_sous_chapitre', $item).removeClass('hidden');
+			$('#current_sous_chapitre').val(itemId).text('Sous-chapitre : ' + item.libelle).removeClass('hidden');
+			_this.currentSousChapitreReference = item.reference;
+			$('.sous_chapitre', $parent).each(function(index){
+				if(this.id !== htmlId){
+					$(this).addClass('hidden');
+				}else{
+					$('.show_infos', $(this)).addClass('hidden');
+				}
+			});
+			$('#add_chapitre_button').addClass('hidden');
+			$('#add_sous_chapitre_button').addClass('hidden');
+			$('#add_sous_sous_chapitre_button').removeClass('hidden');
+		}
+
+		hideSousSousChapitres(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var item = e.item;
+			var itemId = item.id;
+			var $item = $('#sous_chapitre_' + itemId);
+			var $parent = $('#chapitre_' + item.id_chapitre);
+			$('.sous_sous_chapitres', $item).slideUp();
+			$('#current_sous_chapitre').val('').text('').attr('title', '').addClass('hidden');
+			_this.currentSousChapitreReference = '';
+			$('.sous_chapitre', $parent).each(function(index){
+				$(this).removeClass('hidden');
+			});
+			$('#add_chapitre_button').addClass('hidden');
+			$('#add_sous_chapitre_button').removeClass('hidden');
+			$('#add_sous_sous_chapitre_button').addClass('hidden');
+
+		}
+
+		addChapitre(e){
+			$('input[type=text]', '#add_chapitre').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e, prefixId: 'chapitre_', hideClass: 'hidden'});
+			}
+		}
+
+		addSousChapitre(e){
+			$('input[type=text]', '#add_sous_chapitre').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e, prefixId: 'sous_chapitre_', hideClass: 'hidden',});
+			}
+		}
+
+		addSousSousChapitre(e){
+			$('input[type=text]', '#add_sous_sous_chapitre').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e, prefixId: 'sous_sous_chapitre_', hideClass: 'hidden',});
+			}
+		}
+
+		validDeleteChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'chapitre_',});
+			}
+		}
+
+		validDeleteSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'sous_chapitre_',});
+			}
+		}
+
+		validDeleteSousSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'sous_sous_chapitre_',});
+			}
+		}
+
+		cancelDeleteChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'chapitre_',});
+			}
+		}
+
+		deleteChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var index_element;
+				index_element = _this.idChapitres[e.item.id];
+				if(_this.chapitres.length == 2) {
+					if(_this.chapitres[index_element + 1]){
+						_this.chapitres[index_element + 1].first = true;
+					}
+					else if(_this.chapitres[index_element - 1]){
+						_this.chapitres[index_element - 1].last = true;
+					}
+				} else if(!_this.chapitres[index_element - 1] && _this.chapitres[index_element + 1]){
+					_this.chapitres[index_element + 1].first = true;
+				} else if(!_this.chapitres[index_element + 1] && _this.chapitres[index_element - 1]){
+					_this.chapitres[index_element - 1].last = true;
+				}
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/chapitres', elements: _this.chapitres, idElements: _this.idChapitres, type_element: 'chapitre',});
+			}
+		}
+		
+		cancelDeleteSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'sous_chapitre_',});
+			}
+		}
+
+		deleteSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var item = e.item;
+				var chapitreId = item.id_parent;
+				var sousChapitre;
+				var elements =  _this.chapitres[_this.idChapitres[chapitreId]]['sous_chapitres'];
+				var idElements = _this.chapitres[_this.idChapitres[chapitreId]]['idSousChapitres'];
+				var index_element;
+				var chapitre;
+
+				chapitre = _this.chapitres[_this.idChapitres[chapitreId]];
+				sousChapitres = chapitre.sous_chapitres;
+
+				index_element = chapitre.idSousChapitres[e.item.id];
+				if(sousChapitres.length == 2) {
+					if(sousChapitres[index_element + 1]){
+						sousChapitres[index_element + 1].first = true;
+					}
+					else if(sousChapitres[index_element - 1]){
+						sousChapitres[index_element - 1].last = true;
+					}
+				} else if(!sousChapitres[index_element - 1] && sousChapitres[index_element + 1]){
+					sousChapitres[index_element + 1].first = true;
+				} else if(!sousChapitres[index_element + 1] && sousChapitres[index_element - 1]){
+					sousChapitres[index_element - 1].last = true;
+				}
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/chapitres', elements: elements, idElements: idElements, type_element: 'sous_chapitre',});
+			}
+		}
+		
+		cancelDeleteSousSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'sous_sous_chapitre_',});
+			}
+		}
+
+		deleteSousSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var item = e.item;
+				var itemId = item.id;
+				var chapitre;
+				var sousChapitres;
+				var sousChapitre;
+				var sousSousChapitre;
+				var ssChapitreId = item.id_parent;
+				var chapitreId = $('#current_chapitre').val()
+				var chapitre = _this.chapitres[_this.idChapitres[chapitreId]];
+				var ssChapitre = chapitre['sous_chapitres'][chapitre['idSousChapitres'][ssChapitreId]]
+				var elements = ssChapitre['sous_sous_chapitres'];
+				var idElements = ssChapitre['idSousSousChapitres'];
+
+				chapitre = _this.chapitres[_this.idChapitres[chapitreId]];
+				sousChapitres = chapitre.sous_chapitres;
+
+				sousChapitre = sousChapitres[chapitre.idSousChapitres[ssChapitreId]];
+				sousSousChapitres = sousChapitres[chapitre.idSousChapitres[ssChapitreId]].sous_sous_chapitres;
+			
+				index_element = sousChapitre.idSousSousChapitres[e.item.id];
+				if(sousSousChapitres.length == 2) {
+					if(sousSousChapitres[index_element + 1]){
+						sousSousChapitres[index_element + 1].first = true;
+					}
+					else if(sousSousChapitres[index_element - 1]){
+						sousSousChapitres[index_element - 1].last = true;
+					}
+				} else if(!sousSousChapitres[index_element - 1] && sousSousChapitres[index_element + 1]){
+					sousSousChapitres[index_element + 1].first = true;
+				} else if(!sousSousChapitres[index_element + 1] && sousSousChapitres[index_element - 1]){
+					sousSousChapitres[index_element - 1].last = true;
+				}
+
+				_this.E_M.deleteElement({loader: true, event: e, tag: _this, url: '/admin/compta/chapitres', elements: elements, idElements: idElements, type_element: 'sous_sous_chapitre',});
+			}
+		}
+
+		deleteElements(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'classe', 'visible', ],
+					prefixId: 'chapitre_',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		cancelSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'classe', 'visible', ],
+					prefixId: 'sous_chapitre_',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		cancelSousSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['libelle', 'classe', 'visible', ],
+					prefixId: 'sous_sous_chapitre_',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		saveChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/chapitres', 
+					fields: ['libelle', 'reference', 'classe', 'visible', ],
+					tag: _this,
+					elements: _this.chapitres,
+					idElements: _this.idChapitres,
+					typeElement: 'chapitre',
+					suffixId: 'chapitre',
+					prefixFields: 'chapitre_',
+					prefixId: 'chapitre_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							var max_reference = 0;
+							_this.chapitres.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && element.id_parent == null
+									&& _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+								if(element.last == true) {
+									element.last = false;
+								}
+							})
+							params.element.reference = max_reference + 1;
+							params.element.last = true;
+							if(_this.chapitres.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (parseInt(a.reference) < parseInt(b.reference)){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			}
+		}
+
+		saveSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var idChapitre;
+				if(e.item){
+					idChapitre = e.item.id_parent;
+				}else{
+					idChapitre = $('#current_chapitre').val();
+				}
+				var elements = _this.chapitres[_this.idChapitres[idChapitre]]['sous_chapitres'];
+				var idElements = _this.chapitres[_this.idChapitres[idChapitre]]['idSousChapitres']
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/chapitres', 
+					fields: ['libelle', 'classe', 'reference', 'id_parent', 'visible', ],
+					tag: _this,
+					elements: elements,
+					idElements: idElements,
+					typeElement: 'sous_chapitre',
+					suffixId: 'sous_chapitre',
+					prefixFields: 'sous_chapitre_',
+					prefixId: 'sous_chapitre_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							var max_reference = 0;
+							var chapitre_parent;
+							_this.chapitres.forEach(function(element){
+								if(idChapitre == element.id)
+									chapitre_parent = element;
+							})
+							chapitre_parent.sous_chapitres.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+								if(element.last == true) {
+									element.last = false;
+								}
+							})
+							params.element.last = true;
+							if(chapitre_parent.sous_chapitres.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+							params.element.reference = max_reference + 1;
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (a.reference < b.reference){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			}
+		}
+
+		saveSousSousChapitre(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				if(e.item){
+					var item = e.item;
+					var itemId = item.id;
+					var ssChapitreId = item.id_parent;
+					var chapitreId = $('#current_chapitre').val();
+				}else{
+					var ssChapitreId = $('#current_sous_chapitre').val();
+					var chapitreId = $('#current_chapitre').val();
+				}
+				var chapitre = _this.chapitres[_this.idChapitres[chapitreId]];
+				var ssChapitre = chapitre['sous_chapitres'][chapitre['idSousChapitres'][ssChapitreId]]
+				var elements = ssChapitre['sous_sous_chapitres'];
+				var idElements = ssChapitre['idSousSousChapitres'];
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/chapitres', 
+					fields: ['libelle', 'classe', 'reference', 'id_parent', 'visible', ],
+					tag: _this,
+					elements: elements,
+					idElements: idElements,
+					suffixId: 'sous_sous_chapitre',
+					typeElement: 'sous_sous_chapitre',
+					prefixFields: 'sous_sous_chapitre_',
+					prefixId: 'sous_sous_chapitre_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							var max_reference = 0;
+							var chapitre_parent;
+							var sschapitre_parent;
+							_this.chapitres.forEach(function(element){
+								if(chapitreId == element.id)
+									chapitre_parent = element;
+							})
+							chapitre_parent.sous_chapitres.forEach(function(element){
+								if(ssChapitreId == element.id)
+									sschapitre_parent = element;
+							})
+							sschapitre_parent.sous_sous_chapitres.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+								if(element.last == true) {
+									element.last = false;
+								}
+							})
+							params.element.last = true;
+							if(sschapitre_parent.sous_sous_chapitres.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+							params.element.reference = max_reference + 1;
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (a.reference < b.reference){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+						console.log(params);
+
+			var getParameters = params.getParameters || {};
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			if( _this.selectedExercice ){
+				getParameters.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParameters.id_exercice = document.getElementById('id_exercice').value;
+			}
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+					console.log('elements: ' + JSON.stringify(tag.chapitres))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		this.on('mount', function(){
+			/*getElements({
+				tag: _this,
+				url: '/admin/compta/chapitres', 
+				elements: _this.chapitres,
+				idElements: _this.idChapitres,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', classe: 'classe', libelle: 'libelle', reference: 'reference', id_exercice: 'id_exercice', visible: 'visible'},
+				getParameters: { type_element: 'chapitre', },
+				childsName: 'sous_chapitres',
+				idChildsName: 'idSousChapitres',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});*/
+		});
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			setBilanActif = null;
+			setBilanPassif = null;
+			setCompteResultat = null;
+			editChapitre = null;
+			editSousChapitre = null;
+			editSousSousChapitre = null;
+			showContents = null;
+			showChapitres = null;
+			showSousChapitres = null;
+			hideSousChapitres = null;
+			showSousSousChapitres = null;
+			hideSousSousChapitres = null;
+			addChapitre = null;
+			addSousChapitre = null;
+			addSousSousChapitre = null;
+			validDeleteChapitre = null;
+			validDeleteSousChapitre = null;
+			validDeleteSousSousChapitre = null;
+			cancelDeleteChapitre = null;
+			deleteChapitre = null;
+			cancelDeleteSousChapitre = null;
+			deleteSousChapitre = null;
+			cancelDeleteSousSousChapitre = null;
+			deleteSousSousChapitre = null;
+			deleteElements = null;
+			cancelChapitre = null;
+			cancelSousChapitre = null;
+			cancelSousSousChapitre = null;
+			saveChapitre = null;
+			saveSousChapitre = null;
+			saveSousSousChapitre = null;
+			makeVisible = null;
+			makeInvisible = null;
+			getElements = null;
+			toggleVisible = null;			
+		});
+	</script>
+</chapitres>

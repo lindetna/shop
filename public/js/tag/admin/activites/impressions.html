@@ -1,0 +1,460 @@
+<impressions-activites>
+    <div if={ COMPTA_READ } class="content with_submenu">
+       <!-- <div class="title_impressions">
+            <p><font size="5"><b>Impressions</b></font></p>
+        </div>-->
+        <div class="compta compta_impressions">
+            <header class="comptes-title"> Filtres </header>
+            </div>  
+            <!--<div if={ COMPTA_READ } class="nav_compta_impressions block-slider">-->
+                <div class="filtres">
+                    <div class="column1">
+                        <div class="cell1">
+                            <p> Nom / Prénom / Matricule</p>
+                            <input type="text" name="nom_prenom_matricule" size="46">
+                            </div>
+                        <div class="cell2">
+                            <p> Activités</p>
+                            <input type="text" name="nom_prenom_matricule" size="46">
+                         </div>
+                     </div>
+                    <div class="column2">
+                        <div class="cell1">
+                            <p> Statut</p>
+                            <select class="statut" name="statut">
+                                <option value="" disabled selected>Choisir un statut</option>
+                                <option value="hurr">Durr</option>
+                            </select>
+                            </div>
+                        <div class="cell2">
+                            <p> Dette</p>
+                            <select class="Dete" name="Dette"></select>
+                         </div>
+                        <div class="cell3">
+                            <p> Quotient</p>
+                            <input type="text" name="quotient1" class="quotient1">
+                            <input type="text" name="quotient2" class="quotient2">
+                        </div>
+                     </div>
+                     <div class="column3">
+                        <div class="cell1">
+                            <p> Service </p>
+                            <select class="Dete" name="Dette"> 
+                                <option value="" disabled selected>Choisir un service</option>
+                                <option value="hurr">Durr</option></select>
+                            </div>
+                        <div class="cell2">
+                            <p> Age</p>
+                            <input type="text" name="age1" class="age1" size="5">
+                            <input type="text" name="age2" class="age2" size="5">
+                         </div>
+                     </div>
+
+                </div>
+            <header class="comptes-title center opened" onclick={ showContents }> Impression Salariés </header>
+                <div class="slide-up">
+                    <div id="test1" class="test">
+                        <div class="try">
+                            <img class="image_print" src="/img/activites/liste-des-inscriptions.png" value="1" alt="liste salariés" onclick= { Onglet_grandLivre }>
+                            <img class="" src="/img/activites/inscriptions.png" value="2" alt="dettes par salariés" onclick= { Onglet_grandLivre1 }>
+                            <img class="image_print2" src="/img/activites/statistiques-des-categories.png" value="3" alt="liste des salariés et familles" onclick= { Onglet_grandLivre2 }>
+                            <img class="" src="/img/activites/statistique-des-activites.png" value="4" alt="dettes par activité" onclick= { Onglet_grandLivre3 }>
+                        </div>
+                    </div>
+                <!--<div each={ impressions } id="balancegenerale2" class="balancegenerale hidden">-->
+                <div id="list_activites1" class="list_salar hidden">
+                    <div class="cell1">
+                        <img src="/img/compta/button_retour.png" alt="revenir" value="1" onclick={ retourPageImpression }>
+                        <img src="/img/compta/button_export.png" alt="exportbutton" value="1">
+                        <img class="img_pdf" src="/img/compta/button_imprimer.png" alt="imprimer_button" value="1"> <p>LISTE DES ACTIVITES </p>
+                    </div>
+                </div>
+                <div id="list_inscriptions2" class="dettes_salaries hidden">
+                    <div class="cell1">
+                        <img src="/img/compta/button_retour.png" alt="revenir" value="2" onclick={ retourPageImpression }>
+                        <img src="/img/compta/button_export.png" alt="exportbutton">
+                        <img src="/img/compta/button_imprimer.png" alt="imprimer_button"> <p> LISTE DES INSCRIPTIONS </p>
+                    </div>
+                    
+                </div>
+                <div id="stat_categories3" class="list_salaries_familles hidden">
+                    <div class="cell1">
+                        <div class="image">
+                            <img src="/img/compta/button_retour.png" alt="revenir" value="3" onclick={ retourPageImpression }>
+                            <img src="/img/compta/button_export.png" alt="exportbutton" value="">
+                            <img src="/img/compta/button_imprimer.png" alt="imprimer_button"> 
+                        </div>
+                        <p> STATISTIQUE DES CATEGORIES </p>
+                    </div>
+                </div>
+                <div id="stat_activites4" class="dettes_activites hidden">
+                    <div class="cell1">
+                         <img src="/img/compta/button_retour.png" alt="revenir" value="4" onclick={ retourPageImpression }>
+                        <img src="/img/compta/button_export.png" alt="exportbutton">
+                        <img src="/img/compta/button_imprimer.png" alt="imprimer_button"> <p> STATISTIQUES DES ACTIVITES </p>
+                    </div>
+                </div>
+            </div>          
+            <header class="comptes-title center opened" onclick= { showContents }> Editeur d'état </header>
+            <div class="slide-up hidden">
+                <div class="container">
+                    <div class="editeur_filtres">
+                        <img class="" src="/img/compta/button_export.png" value="" alt="liste salariés">
+                        <img class="" src="/img/compta/button_imprimer.png" value="" alt="liste salariés">
+                        <div class="champs">
+                            <div class="cell1">
+                                <p class="tri1"> 1 -Triée </p>
+                                <select class="" name="tri1">
+                                    <option value="" disabled selected>Champs</option>
+                                    <option>Titre</option>
+                                    <option>Nom</option>
+                                    <option>Prénom</option>
+                                    <option>N° et Voie</option>
+                                    <option>N° Appartement ou</option>
+                                    <option>Etage</option>
+                                    <option>Entrée, Bâtiment</option>
+                                    <option>Lieu Dit, Boîte Postale</option>
+                                    <option>Code Postal</option>
+                                    <option>Pays</option>
+                                    <option>Nom de Naissance</option>
+                                    <option>Date de Naissance</option>
+                                    <option>Situation Familiale</option>
+                                    <option>Téléphone</option>
+                                    <option>Portable</option>
+                                    <option>E-mail Personnel</option>
+                                    <option>E-mail Professionnel</option>
+                                    <option>Identifiant Internet</option>
+                                    <option>Mot de Passe</option>
+                                    <option>Option 1</option>
+                                    <option>Option 2</option>       
+                                </select> 
+                            </div>
+                            <div class="cell2">
+                                <p class="tri2"> 2 -Triée </p> 
+                                <select class="" name="tri2" >
+                                    <option value="" disabled selected>Champs</option>
+                                    <option>Titre</option>
+                                    <option>Nom</option>
+                                    <option>Prénom</option>
+                                    <option>N° et Voie</option>
+                                    <option>N° Appartement ou</option>
+                                    <option>Etage</option>
+                                    <option>Entrée, Bâtiment</option>
+                                    <option>Lieu Dit, Boîte Postale</option>
+                                    <option>Code Postal</option>
+                                    <option>Pays</option>
+                                    <option>Nom de Naissance</option>
+                                    <option>Date de Naissance</option>
+                                    <option>Situation Familiale</option>
+                                    <option>Téléphone</option>
+                                    <option>Portable</option>
+                                    <option>E-mail Personnel</option>
+                                    <option>E-mail Professionnel</option>
+                                    <option>Identifiant Internet</option>
+                                    <option>Mot de Passe</option>
+                                    <option>Option 1</option>
+                                    <option>Option 2</option>       
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="etat">
+                            <div class="cell1">
+                                <p> Nom de l'état</p>
+                                <input type="text" name="nom_etat" class="nom_etat">
+                            </div>
+                            <div class="cell2">
+                                <p> Liste des états </p> 
+                                <select class="liste_etat" name="liste_etat" placeholder ="Choisir un état">
+                                    <option value="" disabled selected>Choisir un état</option>
+                                    <option value="hurr">Durr</option>
+                                </select>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="annuler_enregistrer">
+                        <button class="button annuler" name="cancel_submit_">Annuler</button>
+                        <button class="button enregistrer" name="save_submit_">Enregistrer</button>
+                    </div>
+                    <div class="filtres_generaux">
+                        <div class="column">
+                            <select class="fonction" name="fonction">
+                                <option value="" disabled selected>Fonction</option>
+                                <option value="hurr">Somme</option>
+                                <option value="hurr">Nombre</option>
+                                <option value="hurr">Moyenne</option>
+                            </select> 
+                            <select class="champs" name="champs" >
+                                <option value="" disabled selected>Champs</option>
+                                <option>Titre</option>
+                                <option>Nom</option>
+                                <option>Prénom</option>
+                                <option>N° et Voie</option>
+                                <option>N° Appartement ou</option>
+                                <option>Etage</option>
+                                <option>Entrée, Bâtiment</option>
+                                <option>Lieu Dit, Boîte Postale</option>
+                                <option>Code Postal</option>
+                                <option>Pays</option>
+                                <option>Nom de Naissance</option>
+                                <option>Date de Naissance</option>
+                                <option>Situation Familiale</option>
+                                <option>Téléphone</option>
+                                <option>Portable</option>
+                                <option>E-mail Personnel</option>
+                                <option>E-mail Professionnel</option>
+                                <option>Identifiant Internet</option>
+                                <option>Mot de Passe</option>
+                                <option>Option 1</option>
+                                <option>Option 2</option>           
+                            </select>
+                        </div>
+                        <div class="column">
+                            <select class="fonction" name="fonction">
+                                <option value="" disabled selected>Fonction</option>
+                                <option value="hurr">Somme</option>
+                                <option value="hurr">Nombre</option>
+                                <option value="hurr">Moyenne</option>
+                            </select> 
+                            <select class="champs" name="champs" >
+                                <option value="" disabled selected>Champs</option>
+                                <option>Titre</option>
+                                <option>Nom</option>
+                                <option>Prénom</option>
+                                <option>N° et Voie</option>
+                                <option>N° Appartement ou</option>
+                                <option>Etage</option>
+                                <option>Entrée, Bâtiment</option>
+                                <option>Lieu Dit, Boîte Postale</option>
+                                <option>Code Postal</option>
+                                <option>Pays</option>
+                                <option>Nom de Naissance</option>
+                                <option>Date de Naissance</option>
+                                <option>Situation Familiale</option>
+                                <option>Téléphone</option>
+                                <option>Portable</option>
+                                <option>E-mail Personnel</option>
+                                <option>E-mail Professionnel</option>
+                                <option>Identifiant Internet</option>
+                                <option>Mot de Passe</option>
+                                <option>Option 1</option>
+                                <option>Option 2</option>           
+                            </select>
+                        </div>
+                        <div class="column">
+                            <select class="fonction" name="fonction">
+                                <option value="" disabled selected>Fonction</option>
+                                <option value="hurr">Somme</option>
+                                <option value="hurr">Nombre</option>
+                                <option value="hurr">Moyenne</option>
+                            </select> 
+                            <select class="champs" name="champs" >
+                                <option value="" disabled selected>Champs</option>
+                                <option>Titre</option>
+                                <option>Nom</option>
+                                <option>Prénom</option>
+                                <option>N° et Voie</option>
+                                <option>N° Appartement ou</option>
+                                <option>Etage</option>
+                                <option>Entrée, Bâtiment</option>
+                                <option>Lieu Dit, Boîte Postale</option>
+                                <option>Code Postal</option>
+                                <option>Pays</option>
+                                <option>Nom de Naissance</option>
+                                <option>Date de Naissance</option>
+                                <option>Situation Familiale</option>
+                                <option>Téléphone</option>
+                                <option>Portable</option>
+                                <option>E-mail Personnel</option>
+                                <option>E-mail Professionnel</option>
+                                <option>Identifiant Internet</option>
+                                <option>Mot de Passe</option>
+                                <option>Option 1</option>
+                                <option>Option 2</option>           
+                            </select>
+                        </div>
+                        <div class="column">
+                            <select class="fonction" name="fonction">
+                                <option value="" disabled selected>Fonction</option>
+                                <option value="hurr">Somme</option>
+                                <option value="hurr">Nombre</option>
+                                <option value="hurr">Moyenne</option>
+                            </select> 
+                            <select class="champs" name="champs" >
+                                <option value="" disabled selected>Champs</option>
+                                <option>Titre</option>
+                                <option>Nom</option>
+                                <option>Prénom</option>
+                                <option>N° et Voie</option>
+                                <option>N° Appartement ou</option>
+                                <option>Etage</option>
+                                <option>Entrée, Bâtiment</option>
+                                <option>Lieu Dit, Boîte Postale</option>
+                                <option>Code Postal</option>
+                                <option>Pays</option>
+                                <option>Nom de Naissance</option>
+                                <option>Date de Naissance</option>
+                                <option>Situation Familiale</option>
+                                <option>Téléphone</option>
+                                <option>Portable</option>
+                                <option>E-mail Personnel</option>
+                                <option>E-mail Professionnel</option>
+                                <option>Identifiant Internet</option>
+                                <option>Mot de Passe</option>
+                                <option>Option 1</option>
+                                <option>Option 2</option>           
+                            </select>
+                        </div>
+                        <div class="column">
+                            <select class="fonction" name="fonction">
+                                <option value="" disabled selected>Fonction</option>
+                                <option value="hurr">Somme</option>
+                                <option value="hurr">Nombre</option>
+                                <option value="hurr">Moyenne</option>
+                            </select> 
+                            <select class="champs" name="champs" >
+                                <option value="" disabled selected>Champs</option>
+                                <option>Titre</option>
+                                <option>Nom</option>
+                                <option>Prénom</option>
+                                <option>N° et Voie</option>
+                                <option>N° Appartement ou</option>
+                                <option>Etage</option>
+                                <option>Entrée, Bâtiment</option>
+                                <option>Lieu Dit, Boîte Postale</option>
+                                <option>Code Postal</option>
+                                <option>Pays</option>
+                                <option>Nom de Naissance</option>
+                                <option>Date de Naissance</option>
+                                <option>Situation Familiale</option>
+                                <option>Téléphone</option>
+                                <option>Portable</option>
+                                <option>E-mail Personnel</option>
+                                <option>E-mail Professionnel</option>
+                                <option>Identifiant Internet</option>
+                                <option>Mot de Passe</option>
+                                <option>Option 1</option>
+                                <option>Option 2</option>           
+                            </select>
+                        </div>
+                        <div class="column">
+                            <select class="fonction" name="fonction">
+                                <option value="" disabled selected>Fonction</option>
+                                <option value="hurr">Somme</option>
+                                <option value="hurr">Nombre</option>
+                                <option value="hurr">Moyenne</option>
+                            </select> 
+                            <select class="champs" name="champs" >
+                                <option value="" disabled selected>Champs</option>
+                                <option>Titre</option>
+                                <option>Nom</option>
+                                <option>Prénom</option>
+                                <option>N° et Voie</option>
+                                <option>N° Appartement ou</option>
+                                <option>Etage</option>
+                                <option>Entrée, Bâtiment</option>
+                                <option>Lieu Dit, Boîte Postale</option>
+                                <option>Code Postal</option>
+                                <option>Pays</option>
+                                <option>Nom de Naissance</option>
+                                <option>Date de Naissance</option>
+                                <option>Situation Familiale</option>
+                                <option>Téléphone</option>
+                                <option>Portable</option>
+                                <option>E-mail Personnel</option>
+                                <option>E-mail Professionnel</option>
+                                <option>Identifiant Internet</option>
+                                <option>Mot de Passe</option>
+                                <option>Option 1</option>
+                                <option>Option 2</option>           
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <script>
+        var app = opts;
+        this.app = opts;
+        var _this = this;
+        _this.comptesMovChecked = false;
+        var permissions = app.session.permissions;
+        var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+        app.on('unmount-impressions', function(){
+            app.off('unmount-impressions');
+            _this.unmount();
+        });
+
+        _this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+            _this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+            if( _this.loaded ){
+            }
+        });
+
+         Onglet_grandLivre(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#list_activites' + indexdiv).removeClass('hidden');
+            /*$('#list_activites' + indexdiv).removeClass('hidden');
+            /*$('#list_salaries_familles' + indexdiv).removeClass('hidden');
+            $('#dettes_activites' + indexdiv).removeClass('hidden');
+            $('#inscriptions_activites' + indexdiv).removeClass('hidden');
+            $('#situation_compte' + indexdiv).removeClass('hidden');*/
+            $('.test').addClass('hidden');
+        }
+
+        Onglet_grandLivre1(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#list_inscriptions' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+        Onglet_grandLivre2(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#stat_categories' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+        Onglet_grandLivre3(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            console.log("test ok");
+            $('#stat_activites' + indexdiv).removeClass('hidden');
+            $('.test').addClass('hidden');
+        }
+
+
+         retourPageImpression(e) {
+            var indexdiv = $(e.currentTarget).attr('value');
+            $('#list_activites' + indexdiv).addClass('hidden');
+            $('#list_inscriptions' + indexdiv).addClass('hidden');
+            $('#stat_categories' + indexdiv).addClass('hidden');
+            $('#stat_activites' + indexdiv).addClass('hidden');
+            $('.test').removeClass('hidden');   
+        }
+     
+            _this.app.on('unmount-impressions-activites', function(){
+            _this.app.off('unmount-impressions-activites');
+            _this.unmount();
+        });
+
+        this.elements = [
+        ];
+        this.idElements = {};
+
+
+        showContents(e){
+            e.preventDefault();
+            e.preventUpdate = true;
+            if(_this.E_M){
+                _this.E_M.showContents(e);
+            }
+        }
+
+    </script>
+</impressions-activites>

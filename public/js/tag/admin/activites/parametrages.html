@@ -1,0 +1,314 @@
+<parametrages-activites>
+	<!-- /* new menutop*/ <div id="titre_page"><h1>Paramètrages</h1></div> -->
+	<main class="content with_submenu">
+		<div id="rubrique_adherents">	
+			<header id="head_ra" class="opened" onclick="{ showContents }">
+				tableau de bord 
+			</header>
+
+
+
+			<div class="slide-up" id="slide_up_rub">
+
+			<div class ="panel_box_activite">
+				<div class="panel_title_activite">
+					<img src="../../img/activites/salarie_accueil.png">
+	           	</div>
+	         	<div class="panel_title_activite_1">
+					<p class ="panel_texte"> Nombre d'inscription </p>
+				</div>
+	         
+			</div>
+
+				<div class="table">
+					<div class="row">
+						<div class="cell_3_params ">
+							catégorie d'activité
+						</div>
+						<div class="cell_4">	<!-- libelle: { this.categories[ idCategories[ 1 ]].libelle }
+							{ id_categorie_1 } -->
+ 								<select name="" id="id_categorie_1" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_categorie_1 == id  }">{ libelle }</option>
+                                </select>
+						</div> 
+					</div>
+						
+					<div class="row">
+						<div class="cell_3_params ">
+							catégorie d'activité
+						</div>
+						<div class="cell_4">	
+ 								<select name="" id="id_categorie_2" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_categorie_2 == id  }">{ libelle }</option>
+                                </select>
+						</div>
+					</div>
+
+ 
+                    <div class="row">
+						<div class="cell_3_params ">
+							catégorie d'activité
+						</div>
+						<div class="cell_4">	
+ 								<select name="" id="id_categorie_3" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{categories}" value="{ id }" selected="{ selected : this.id_categorie_3 == id  }">{ libelle }</option>
+                                </select>
+						</div>
+					</div>
+
+
+
+                    <div class="row">
+						<div class="cell_3_params ">
+							catégorie d'activité
+						</div>
+						<div class="cell_4">	
+ 								<select name="" id="id_categorie_4" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{categories}" value="{ id }" selected="{ selected : this.id_categorie_4 == id  }">{ libelle }</option>
+                                </select>
+						</div>
+					</div>
+
+
+                
+
+				<div class="row">
+						<div class="cell_3_params">
+							catégorie d'activité
+						</div>
+						<div class="cell_4">	
+ 								<select name="" id="id_categorie_5" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{categories}" value="{ id }" selected="{ selected : this.id_categorie_5 == id  }" >{ libelle }</option>
+                                </select>
+						</div>
+					</div>
+						
+				<div class="row">
+						<div class="cell_3_params ">
+							catégorie d'activité
+						</div>
+						<div class="cell_4">	
+ 								<select name="" id="id_categorie_6" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{categories}" value="{ id }" selected="{ selected : this.id_categorie_6 == id }">{ libelle }</option>
+                                </select>
+						</div>
+					</div>
+
+
+					
+				</div>
+			</div>			
+		</div>
+		<!-- rudbrique_adherents -> css for enumeration  -->
+		
+		
+		
+		<footer class="submit">
+			<button name="save_submit" class="button enregistrer save_submit" onclick={ save } type="submit"> enregistrer </button>
+		</footer>
+	</main>
+	
+	<script>
+
+	  	var _this = this;
+	  	this.app = opts;
+	  	var permissions = app.session.permissions;
+	  	var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	  	app.on('unmount-parametrages-activites', function(){
+			console.log('unmount-parametrages-activites fired');
+			app.off('unmount-parametrages-activites');
+			console.log('before unmount-parametrages-activites, ' + _this.tagName);
+			_this.unmount();
+			console.log('after unmount-parametrages-activites');
+		});
+
+		this.E_M;
+		this.elements = [];
+		this.idElements = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+	
+
+	function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+
+						if( typeof idElements[d['id']] === 'undefined'){
+							idElements[d['id']] = i;
+							elements.push(d);
+						}else{
+							elements[ idElements[d['id']] ] = d;
+						}
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}
+					tag.update();
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		edit_produit(htmlId){
+			var ids = htmlId.split('_');
+			var id = parseInt(ids[1], 10);
+			if(id !== NaN){
+				document.getElementById('filtre_activites').value = id;
+				_this.filtre_activites.value = id;
+
+				_this.loadProduits( new MouseEvent('click'));
+			}
+		}
+
+        this.convertDateToDb = function convertDateToDb(date){
+			if( _this.E_M ){
+				return _this.E_M.convertDateToDb(date);
+			}else{
+				return false;
+			}
+        }
+
+        this.convertDateToView = function convertDateToView(date){
+			if( _this.E_M ){
+				return _this.E_M.convertDateToView(date);
+			}else{
+				return false;
+			}
+        }
+
+        this.categories = [];
+		this.idCategories = {};
+
+	    getElements({
+				tag: _this,
+				url: '/admin/activites/activites',
+				elements: _this.categories,
+				idElements: _this.idCategories,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', image_url: 'image_url', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations', id_modele: 'id_modele', },
+				getParameters: { type_element: 'categorie', },
+				childsName: 'activites',
+				idChildsName: 'idActivites',
+				end: function(tag){
+					tag.loaded = true;
+					tag.numToLoad--;
+				},
+			});
+
+	    save(e) {
+	    	var id1 = $('#id_categorie_1').val();
+	    	var id2 = $('#id_categorie_2').val();
+            var id3 = $('#id_categorie_3').val();
+            var id4 = $('#id_categorie_4').val();
+            var id5 = $('#id_categorie_5').val();
+            var id6 = $('#id_categorie_6').val();
+	 		var object = { action: 'update', id_categorie_1: id1 === '' ? null : id1, 
+	 			id_categorie_2: id2 === '' ? null : id2, id_categorie_3 : id3 === '' ? null: id3, 
+	 			id_categorie_4:  id4 === '' ? null : id4, id_categorie_5 : id5 === '' ? null :id5 , 
+	 			id_categorie_6 : id6 === '' ? null :id6 }
+	 		object['id_exercice'] = document.getElementById('id_exercice').value;
+	 		console.log('object::', object)
+	    	$.ajax('/admin/activites/parametrages', {
+				data : object,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+                
+				}
+			}).done(function(){
+				console.log('done!...');
+				// free reference to permit garbage collect the tag when it will be unmounted
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				// free reference to permit garbage collect the tag when it will be unmounted
+				tag = null;
+			});
+	    }
+
+		 function getParametresActivites(){
+		 
+			var getParams = { };
+			if( _this.selectedExercice ){
+		 		getParams.id_exercice = _this.selectedExercice;
+		 	}else if(document.getElementById('id_exercice')){
+		 		getParams.id_exercice = document.getElementById('id_exercice').value;
+		 	}
+
+		 	$.getJSON( '/admin/activites/parametrages', getParams, function(data){
+		
+				console.log('data:', data);
+				if(data && data.elements){
+					
+					var i, d; 
+		 			var fields = {id_categorie_1: 'id_categorie_1', id_categorie_2: 'id_categorie_2', id_categorie_3: 'id_categorie_3', id_categorie_4: 'id_categorie_4',
+		 				id_categorie_5: 'id_categorie_5', id_categorie_6: 'id_categorie_6'};
+		 			var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+		 		    		_this[fields[field]] = data.elements[i][field];
+						}	
+						
+					}
+
+				// _this.id_categorie_1 = data.elements['id_categorie_1'];
+				_this.update();
+		// 		}else{
+				// TODO: no data elements, get and manage error!...
+				}
+			
+			});
+
+		}
+		getParametresActivites();
+
+		this.journaux = [];
+		this.idJournaux = {};
+	
+
+
+	</script>
+</parametrages-activites>

@@ -1,0 +1,331 @@
+<filtre-salaries>
+    <div class="reset" onclick={ resetFiltre }>
+    </div>
+	<div class="filtre_salarie_block1">
+		<!-- <label class="s-large margin-left" for="filtre_salarie">Nom / Prénom / { IS_CE ? 'Matricule' : "Matricule" }</label>
+  		<div class="filtre_salarie">
+	  		<input type="text" placeholder="{ this.parentTag.IS_CE ? 'Matricule' : 'N° adhérent' }" name="filtre_salarie" id="filtre_salarie">
+	  	</div> -->
+        <label class="s-large margin-left" for="filtre_salarie">Nom / Prénom / { this.parentTag.IS_CE ? 'Matricule' : ' N° adhérent' }</label>
+        <div class="filtre_salarie">
+            <select name="filtre_salarie" id="filtre_salarie" class="contacts print_select" onchange={ filterChange }>
+            </select>
+        </div>
+	</div>
+	<div class="filtre_salarie_block2">
+		<label class="s-large" for="filtre_statut">Statut</label>
+        <select  id="filtre_statut" onchange={ filterChange }>
+  			<!-- <option value=""></option>
+            <option each="{ this.parentTag.statuts }" value="{ id }" id="print_select_statuts_{id}" class="print_select">{ statut }</option> -->
+            <option value="" selected></option>
+            <option value="cadre" selected="{ isEdit && el.statut == 'cadre' ? 'selected' : '' }">Cadre</option>
+            <option value="employe" selected="{ isEdit && el.statut == 'employe' ? 'selected' : '' }">Employé</option>
+            <option value="etam" selected="{ isEdit && el.statut == 'etam' ? 'selected' : '' }">ETAM</option>
+            <option value="ouvrier" selected="{ isEdit && el.statut == 'ouvrier' ? 'selected' : '' }">Ouvrier</option>
+  		</select>
+
+  		<label class="s-large" for="filtre_situation">Situation Familiale</label>
+  		<select name="filtre_situation" id="filtre_situation" onchange={ filterChange }>
+  			<!-- <option value=""></option> -->
+  			<option value="" selected></option>
+  			<option value="celibataire">Célibataire</option>
+        <option value="marie">Marié(e)</option>
+        <option value="divorce">Divorcé(e)</option>
+        <option value="veuf">Veuf</option>
+        <option>Veuve</option>
+        <option value="pacse">Pacsé(e)</option>
+  			<!-- <option each="{ this.parentTag.budgets }" class="print_select" id="print_select_budget_{id}" value="{ id }">{ libelle }</option> -->
+  		</select>
+
+  		<label class="s-large" for="filtre_contrat">Type de Contrat</label>
+  		<select name="filtre_contrat" id="filtre_contrat" onchange={ filterChange }>
+  			<!-- <option value=""></option> -->
+  			<option value="" selected></option>
+			<option>CDI</option>
+			<option>CDD</option>
+			<option>Stagiaire</option>
+			<option>Retraité</option>
+			<option>Contrat d'apprentissage</option>
+  			<!-- <option each="{ this.parentTag.fournisseurs }" value="{ id }" id="print_select_fournisseur_{id}" class="print_select">{ libelle }</option> -->
+  		</select>
+
+		<label class="s-large margin-left" for="filtre_dette">Dette</label>
+  		<select name="filtre_dette" id="filtre_dette" onchange={ filterChange }>
+        <option value="" selected></option>
+        <option value="superior">Dette > 0</option>
+        <option value="equal">Dette = 0</option>
+  			<!-- <option each="{ this.parentTag.analytiques }" class="print_select" id="print_select_analytique_{id}" value="{ id }">{ libelle }</option> -->
+  		</select>  		
+	</div>
+	<div class="filtre_salarie_block3">
+  	    <label class="s-large margin-left" for="filtre_service">Service</label>
+        <select name="filtre_service" id="filtre_service" onchange={ filterChange }>
+        <!-- <option value=""></option> -->
+            <option value="" selected></option>
+    		<!-- <option each="{ this.parentTag.comptes }" class="print_select" id="print_select_comptes_{id}" value="{ id }">{ reference } { libelle }</option> -->
+    	</select>
+        <label class="s-large margin-left" for="filtre_site">Site</label>
+    	<select name="filtre_site" id="filtre_site" onchange={ filterChange }>
+    		<!-- <option value=""></option> -->
+    		<option value="" selected></option>
+    		<!-- <option each="{ this.parentTag.analytiques }" class="print_select" id="print_select_analytique_{id}" value="{ id }">{ libelle }</option> -->
+    	</select>
+        <label class="s-large">Quotient</label>
+        <input type="text" class="print_input_text" id="filtre_quotient_min" onchange={ filterChange } idfiltre="filtre_quotient">
+        <input class="print_input_text" type="text" id="filtre_quotient_max" onchange={ filterChange } idfiltre="filtre_quotient">
+	</div>
+	<div class="filtre_salarie_block4">
+      <label for="filtre_age" class="s-large margin-left">Age</label>
+      <input class="print_input_text" type="text" id="filtre_age_min" onchange={ filterChange } idfiltre="filtre_age">
+        <input class="print_input_text" type="text" id="filtre_age_max" onchange={ filterChange } idfiltre="filtre_age">
+      	<label for="filtre_anciennete" class="s-large margin-left">Ancienneté</label>
+        <input class="print_input_text" type="text" id="filtre_anciennete_min" onchange={ filterChange } idfiltre="filtre_anciennete">
+        <input class="print_input_text" type="text" id="filtre_anciennete_max" onchange={ filterChange } idfiltre="filtre_anciennete">
+    </div>
+
+    <script>
+    var _this = this;
+    this.parentTag = opts.parentTag;
+    var app = this.parentTag.app;
+    this.app = this.parentTag.app;
+    this.checked = opts.checked || null;
+    this.numToLoad = 2;
+    this.loaded = false;
+
+    this.convertDateToDb = function convertDateToDb(date){
+        var year = date.substr(6, 4);
+        var month = date.substr(3,2);
+        var day = date.substr(0,2);
+      var convertedDate = year + "-" + month + "-" + day;
+      return convertedDate;
+    }
+
+    this.parentTag.filtres = [
+      { 
+        nom_db: 'id',
+        id: 'filtre_salarie',
+        value: false,
+        ignore: true,
+        type: "select",
+      },
+      {
+        nom_db: 'statut',
+        id: 'filtre_statut',
+        value: false,
+        ignore: true,
+        type: "select",
+      },
+      {
+        nom_db: 'situation_familiale',
+        id: 'filtre_situation',
+        value: false,
+        ignore: true,
+        type: "select",
+      },
+      {
+        nom_db: 'contrat',
+        id: 'filtre_contrat',
+        value: false,
+        ignore: true,
+        type: "select",
+      },
+      { 
+				nom_db: 'solde',
+				id: 'filtre_dette',
+				value: false,
+				ignore: true,
+				type: "select",
+      },
+      {
+        nom_db: 'date_de_naissance',
+        id: 'filtre_age',
+        min: false,
+        max: false,
+        ignore: true,
+        type: 'text_between'
+      },
+      {
+        nom_db: 'date_entree',
+        id: 'filtre_anciennete',
+        min: false,
+        max: false,
+        ignore: true,
+        type: 'text_between'
+      },
+      {
+        nom_db: 'quotient',
+        id: 'filtre_quotient',
+        min: false,
+        max: false,
+        ignore: true,
+        type: 'text_between'
+      }
+    ];
+
+    this.parentTag.idFiltres = { filtre_salarie: 0, filtre_statut: 1, filtre_situation: 2, filtre_contrat: 3, filtre_dette: 4, filtre_age: 5, filtre_anciennete: 6, filtre_quotient: 7 };
+
+    this.filterChange = function filterChange (e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var $current = $(e.currentTarget);
+			var currentVal = $current.val();
+      var id = $current.attr('id');
+      var idfiltre = $current.attr('idfiltre');
+			var filtre = _this.parentTag.filtres[_this.parentTag.idFiltres[(idfiltre ? idfiltre : id)]];
+			
+			if(filtre.type == "select" || filtre.type == 'text') {
+				if(currentVal != "") {
+					filtre.ignore = false;
+					filtre.value = currentVal;
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'checkbox') {
+				if($current.is(':checked') == true) {
+					
+					filtre.ignore = false;
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'text_between') {
+        var type = id.substr(id.length - 3);
+        if(currentVal != "") {
+          filtre.ignore = false;
+          filtre[type] = currentVal;
+        } else { 
+          filtre[type] = false;
+          if( ! filtre.min && ! filtre.max) {
+            filtre.ignore = true;
+          }
+        }
+			} else {
+
+      }
+			_this.parentTag.getSalaries();
+		}
+
+    resetFiltre(e) {
+      e.preventDefault();
+      e.preventUpdate = true;
+
+      for(var index in _this.parentTag.filtres) {
+        _this.parentTag.filtres[index].ignore = true;
+        if(_this.parentTag.filtres[index].id == 'ec_non_valides') {
+          _this.parentTag.filtres[index].ignore = false;
+        }
+      }
+      $('input[type=text], select', $('.block-filtre')).val('');
+      $('input[type=checkbox]', $('.block-filtre')).prop('checked', false);
+      $('#ec_non_valides').prop('checked', true);
+      var selectize = $('#filtre_salarie')[0].selectize;
+      selectize.clear();
+
+      if( typeof _this.parentTag.getSalaries == "function" ){
+        _this.parentTag.getSalaries();
+      }
+
+      if( typeof _this.parentTag.getEcritures == "function" ){
+        _this.parentTag.getEcritures();
+      }
+    }
+
+    function formatName(item) {
+        return $.trim((item.prenom || '') + ' ' + (item.nom || ''));
+    };
+
+    function loadSelectize (selector) {
+      var $select = $(selector).selectize({
+        maxItems: 1,
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['prenom', 'nom', 'numero_salarie'],
+        sortField: [
+          {field: 'prenom', direction: 'asc'},
+          {field: 'nom', direction: 'asc'}
+        ],
+        options: _this.parentTag.salaries ? _this.parentTag.salaries : null,
+        persist: false,
+        openOnFocus: false,
+        closeAfterSelect: true,
+          onType: function (str) {
+            if (str === "") {
+                this.close();
+            }
+        },
+        onFocus: function () {
+          console.log($(this));
+          this.clear();
+        },
+        render: {
+          item: function(item, escape) {
+            var name = formatName(item);
+            return '<div>' +
+              (name ? '<span class="name">' + escape(name) + '</span>' : '') +
+              (item.numero_salarie ? '<span class="email">' + escape(item.numero_salarie) + '</span>' : '') +
+            '</div>';
+          },
+          option: function(item, escape) {
+            var name = formatName(item);
+            var label = name || item.numero_salarie;
+            var caption = name ? item.numero_salarie : null;
+            return '<div>' +
+              '<span class="label">' + escape(label) + '</span>' +
+              (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+            '</div>';
+          }
+        },
+      });
+      var selectize = $select[0].selectize;
+
+      var hackToClose = false;
+      selectize.on('item_remove', function(value, $item) {
+          hackToClose = true;
+      });
+      selectize.on('dropdown_open', function($dropdown) {
+          if ( hackToClose )
+              selectize.close();
+
+          hackToClose = false;
+      });
+        }
+
+    this.app.loadScript('/js/admin/selectize.min.js','selectize_js',
+          function () {
+            _this.numToLoad--;
+            if(_this.numToLoad == 0 && ! _this.loaded) {
+              loadSelectize('#filtre_salarie');
+              _this.loaded = true;
+            }
+        }
+    );
+
+    this.parentTag.on('update', function() {
+      _this.update();
+    })
+
+    this.on('mount', function(){
+      if( typeof _this.parentTag.getEcritures == "function" ){
+        _this.parentTag.getEcritures();
+      }
+      if( typeof _this.parentTag.getFiltresElements == "function" ){
+        console.log('parent', this.parentTag);
+        _this.parentTag.getFiltresElements();
+      }
+      $('#filtre_date_fin, #filtre_date_debut').datepicker({
+        dateFormat: 'dd/mm/yy'
+      });
+    });
+    this.parentTag.on('mount', function() {
+
+    })
+
+    this.parentTag.on('salarie_loaded', () => {
+        _this.numToLoad--;
+        if(_this.numToLoad == 0 && ! _this.loaded) {
+          loadSelectize('#filtre_salarie');
+          _this.loaded = true;
+        }
+    })
+  </script>
+</filtre-salaries>

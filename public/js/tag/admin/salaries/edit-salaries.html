@@ -1,0 +1,1843 @@
+<edit-salaries>
+	<div id="edit_block_adherent" class="table edit_block_adherent">
+		<div class="row">
+			<div class="cell">
+				<div class="table">
+					<div class="row">
+						<div class="cell_1 photo_profil">
+							<button class="add_photo_profil" name="add_photo_profil{ isEdit ? '_' + el.id : '' }" id="add_photo_profil{ isEdit ? '_' + el.id : '' }">
+								Modifer
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="cell_2 visibilite center">
+				<input onclick={ toggleVisible } type="image" src={ isEdit && el.visible === 'hidden' ? '/img/btn_nonvisible.png' : '/img/btn_visible.png' } title={ isEdit && el.visible === 'visible' ? 'Visible' : 'Invisible' } value="{ isEdit && el.visible ? el.visible : 'visible' }" id="visible{ isEdit ? '_' + el.id : '' }" name="visible{ isEdit ? '_' + el.id : '' }">
+			</div>
+			<div class="cell info_adherent">
+				<div class="table">
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="numero_salarie{ isEdit ? '_' + el.id : '' }">{ IS_CE ? 'Matricule' : "N° d'adhérent" }</label>
+						</div>
+						<div class="cell_2">
+							<input type="text" name="numero_salarie{ isEdit ? '_' + el.id : '' }" id="numero_salarie{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.numero_salarie : '' }">
+						</div>
+						<div class="cell_3 right">
+							<label for="">Nombre Ayant(s)-droit</label>
+						</div>
+						<div class="cell_4">
+							<input  type="text" id="ayant_droit { el.ayantsDroits.length }" name="nombre_ayant_droit{ el.ayantsDroits.length }" disabled="disabled" value="{ el.ayantsDroits.length }" >
+						</div>
+						<div class="cell_5 right">
+							<label for="montant{ isEdit ? '_' + el.id : '' }">Montant</label>
+						</div>
+						<div class="cell_6">
+							<input type="text" id="montant{ isEdit ? '_' + el.id : '' }" name="montant{ isEdit ? '_' + el.id : '' }" disabled="disabled" value="{ isEdit ? el.montant : '' }" disabled="disabled">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="titre{ isEdit ? '_' + el.id : '' }">Titre</label>
+						</div>
+						<div class="cell_2">
+							<select class="titre" name="titre{ isEdit ? '_' + el.id : '' }" id="titre{ isEdit ? '_' + el.id : '' }">
+								<option value="madame" selected="{ isEdit && el.titre == 'madame' ? 'selected' : '' }">
+									Madame
+								</option>
+								<option value="monsieur" selected="{ isEdit && el.titre == 'monsieur' ? 'selected' : '' }">
+									Monsieur
+								</option>
+							</select>
+						</div>
+						<div class="cell_3 right">
+							<label for="">Nombre Enfant(s)</label>
+						</div>
+						<div class="cell_4" >
+							<input  type="text" id="nombre_enfant" name="nombre_enfant" disabled="disabled" value="{ getNumEnfants() }" >
+						</div>
+						<div class="cell_5 right">
+							<label for="participation_adherent{ isEdit ? '_' + el.id : '' }">{ IS_CE ? 'Part. Salarié' : "Part. Adhérent" }</label>
+						</div>
+						<div class="cell_6">
+							<input type="text" id="participation_adherent{ isEdit ? '_' + el.id : '' }" name="participation_adherent{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.participation_adherent : '' }" disabled="disabled">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="nom{ isEdit ? '_' + el.id : '' }">Nom</label>
+						</div>
+						<div class="cell_2">
+							<input type="text" name="nom{ isEdit ? '_' + el.id : '' }" id="nom{ isEdit ? '_' + el.id : '' }" onkeyup="{ makeId }" required="required" value="{ isEdit ? el.nom : '' }">
+						</div>
+						<div class="cell_3 right">
+						</div>
+						<div class="cell_4">
+						</div>
+						<div class="cell_5 right">
+							<label for="participation_association{ isEdit ? '_' + el.id : '' }">{ IS_CE ? "Part. Comité d'Entreprise" : "Part. Association" }</label>
+						</div>
+						<div class="cell_6">
+							<input type="text" name="participation_association{ isEdit ? '_' + el.id : '' }" id="participation_association{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.participation_association : '' }" disabled="disabled">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="prenom{ isEdit ? '_' + el.id : '' }">Prénom</label>
+						</div>
+						<div class="cell_2">
+							<input type="text" name="prenom{ isEdit ? '_' + el.id : '' }" id="prenom{ isEdit ? '_' + el.id : '' }" onkeyup="{ makeId }" required="required" value="{ isEdit ? el.prenom : '' }">
+						</div>
+						<div class="cell_3 right">
+						</div>
+						<div class="cell_4">
+						</div>
+						<div class="cell_5 right">
+							<label for="reglement{ isEdit ? '_' + el.id : '' }">Règlement</label>
+						</div>
+						<div class="cell_6">
+							<input type="text" name="reglement{ isEdit ? '_' + el.id : '' }" id="reglement{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.reglement : '' }" disabled="disabled">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right"></div>
+						<div class="cell_2"></div>
+						<div class="cell_3 right">
+						</div>
+						<div class="cell_4">
+						</div>
+						<div class="cell_5 right">
+							<label for="solde{ isEdit ? '_' + el.id : '' }">Solde</label>
+						</div>
+						<div class="cell_6">
+							<input type="text" name="solde{ isEdit ? '_' + el.id : '' }" id="solde{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.solde : '' }" disabled="disabled">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="renseignements edit_block">
+		<header class="opened" onclick="{ showContents }">Renseignements</header>
+		<div class="slide-up">
+			<div class="line-separator"></div>
+			<div class="table">
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="numero_et_voie{ isEdit ? '_' + el.id : '' }">N° et Voie</label>
+					</div>
+					<div class="cell_2">
+						<input type="text" name="numero_et_voie{ isEdit ? '_' + el.id : '' }" id="numero_et_voie{ isEdit ? '_' + el.id : '' }" class="long_input" value="{ isEdit ? el.numero_et_voie : '' }">
+					</div>
+					<div class="cell_3 right">
+						<label for="nom_de_naissance{ isEdit ? '_' + el.id : '' }">Nom de Naissance</label>
+					</div>
+					<div class="cell_4">
+						<input type="text" name="nom_de_naissance{ isEdit ? '_' + el.id : '' }" id="nom_de_naissance{ isEdit ? '_' + el.id : '' }" class="long_input" value="{ isEdit ? el.nom_de_naissance : '' }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="numero_appartement_ou_etage{ isEdit ? '_' + el.id : '' }">N° Appartement ou Etage</label>
+					</div>
+					<div class="cell_2">
+						<input type="text" name="numero_appartement_ou_etage{ isEdit ? '_' + el.id : '' }" id="numero_appartement_ou_etage{ isEdit ? '_' + el.id : '' }" class="long_input" value="{ isEdit ? el.numero_appartement_ou_etage : '' }">
+					</div>
+					<div class="cell_3 right">
+						<label for="date_de_naissance{ isEdit ? '_' + el.id : '' }">Date de Naissance</label>
+					</div>
+					<div class="cell_4">
+						<input type="hidden" name="date_de_naissance{ isEdit ? '_' + el.id : '' }" id="date_de_naissance{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.date_de_naissance : '' }">
+						<input type="text" id="front_date_de_naissance{ isEdit ? '_' + el.id : '' }" placeholder="jj/mm/aaaa" maxlength="10" field-for-age="age{ isEdit ? '_' + el.id : '' }" field-for-date="date_de_naissance{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? parentTag.convertDateToView(el.date_de_naissance) : '' }" required="required" onchange={ formatDateField }>
+						<span id="age{ isEdit ? '_' + el.id : '' }">{ isEdit ? parentTag.showAgeToView(parentTag.convertDateToView(el.date_de_naissance)) : '' }</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="entree_batiment{ isEdit ? '_' + el.id : '' }">Entrée, Batiment</label>
+					</div>
+					<div class="cell_2">
+						<input type="text" name="entree_batiment{ isEdit ? '_' + el.id : '' }" id="entree_batiment{ isEdit ? '_' + el.id : '' }" class="long_input" value="{ isEdit ? el.entree_batiment : '' }">
+					</div>
+					<div class="cell_3 right">
+						<span>Situation Familiale</span>
+					</div>
+					<div class="cell_4">
+						<select name="situation_familiale{ isEdit ? '_' + el.id : '' }" id="situation_familiale{ isEdit ? '_' + el.id : '' }">
+							<option value=""></option>
+							<option value="celibataire" selected="{ situation_familiale == 'celibataire' ? 'selected' : '' }">Célibataire</option>
+							<option value="marie" selected="{ situation_familiale == 'marie' ? 'selected' : '' }">Marié(e)</option>
+							<option value="pacse" selected="{ situation_familiale == 'pacse' ? 'selected' : '' }">Pacsé(e)</option>
+							<option value="divorce" selected="{ situation_familiale == 'divorce' ? 'selected' : '' }">Divorcé(e)</option>
+							<option value="veuf" selected="{ situation_familiale == 'veuf' ? 'selected' : '' }">Veuf</option>
+							<option value="veuve" selected="{ situation_familiale == 'veuve' ? 'selected' : '' }">Veuve</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="lieu_dit_boite_postale{ isEdit ? '_' + el.id : '' }">Lieu Dit, Boite Postale</label>
+					</div>
+					<div class="cell_2">
+						<input type="text" name="lieu_dit_boite_postale{ isEdit ? '_' + el.id : '' }" id="lieu_dit_boite_postale{ isEdit ? '_' + el.id : '' }" class="long_input" value="{ isEdit ? el.lieu_dit_boite_postale : '' }">
+					</div>
+					<div class="cell_3 right">
+						<label for="telephone{ isEdit ? '_' + el.id : '' }">Téléphone</label>
+					</div>
+					<div class="cell_4">
+						<input type="text" name="telephone{ isEdit ? '_' + el.id : '' }" id="telephone{ isEdit ? '_' + el.id : '' }"  maxlength="14" class="telephone" value="{ isEdit ? el.telephone : '' }">
+						<label for="portable">Portable</label>
+						<input type="text" name="portable{ isEdit ? '_' + el.id : '' }" id="portable{ isEdit ? '_' + el.id : '' }"  maxlength="14" class="telephone" value="{ isEdit ? el.portable : '' }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="code_postal{ isEdit ? '_' + el.id : '' }">Code Postal</label>
+					</div>
+					<div class="cell_2">
+						<input type="text" name="code_postal{ isEdit ? '_' + el.id : '' }" id="code_postal{ isEdit ? '_' + el.id : '' }" maxlength="5" class="medium_input" value="{ isEdit ? el.code_postal : '' }">
+						<label for="ville">Ville</label>
+						<input type="text" name="ville{ isEdit ? '_' + el.id : '' }" id="ville{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.ville : '' }" class="medium_input">
+					</div>
+					<div class="cell_3 right">
+						<label for="email_personnel{ isEdit ? '_' + el.id : '' }">E-mail Personnel</label>
+					</div>
+					<div class="cell_4">
+						<input type="text" name="email_personnel{ isEdit ? '_' + el.id : '' }" id="email_personnel{ isEdit ? '_' + el.id : '' }" class="long_input_email" value="{ isEdit ? el.email_personnel : '' }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<span>Pays</span>
+					</div>
+					<div class="cell_2">
+						<select name="pays{ isEdit ? '_' + el.id : '' }" id="pays{ isEdit ? '_' + el.id : '' }" class="medium_select">
+							<option value=""></option>
+							<option value="france" selected="{ isEdit && el.pays == 'france' ? 'selected' : '' }">France</option>
+							<option value="autre" selected="{ isEdit && el.pays == 'france' ? 'selected' : '' }">Autre</option>
+						</select>
+					</div>
+					<div class="cell_3 right">
+						<label for="email_professionnel{ isEdit ? '_' + el.id : '' }">E-mail Professionnel</label>
+					</div>
+					<div class="cell_4">
+						<input id="email_professionnel{ isEdit ? '_' + el.id : '' }" type="text" name="email_professionnel{ isEdit ? '_' + el.id : '' }" class="long_input_email" value="{ isEdit ? el.email_professionnel : '' }">
+					</div>
+				</div>
+			</div>
+			<div class="line-separator margin_top_bottom"></div>
+			<div if={ IS_CE } class="table c111">
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="statut{ isEdit ? '_' + el.id : '' }">Statut</label>
+					</div>
+					<div class="cell_2">
+						<select name="statut{ isEdit ? '_' + el.id : '' }" id="statut{ isEdit ? '_' + el.id : '' }" class="big_select">
+							<option value=""></option>
+                            <option value="cadre" selected="{ isEdit && el.statut == 'cadre' ? 'selected' : '' }">Cadre</option>
+                            <option value="employe" selected="{ isEdit && el.statut == 'employe' ? 'selected' : '' }">Employé</option>
+                            <option value="etam" selected="{ isEdit && el.statut == 'etam' ? 'selected' : '' }">ETAM</option>
+                            <option value="ouvrier" selected="{ isEdit && el.statut == 'ouvrier' ? 'selected' : '' }">Ouvrier</option>
+						</select>
+					</div>
+					<div class="cell_3 right">
+						<label for="date_entree{ isEdit ? '_' + el.id : '' }">Date d'entrée</label>
+					</div>
+					<div class="cell_4">
+						<input type="hidden" value="{ isEdit ? el.date_entree : '' }" name="date_entree{ isEdit ? '_' + el.id : '' }" id="date_entree{ isEdit ? '_' + el.id : '' }">
+						<input type="text" id="date_entree_view{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? parentTag.convertDateToView(el.date_entree) : '' }" maxlength="10" onchange={ formatDateField } field-for-date="date_entree{ isEdit ? '_' + el.id : '' }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="type_de_contrat{ isEdit ? '_' + el.id : '' }">Type de Contrat</label>
+					</div>
+					<div class="cell_2">
+						<select name="type_de_contrat{ isEdit ? '_' + el.id : '' }" id="type_de_contrat{ isEdit ? '_' + el.id : '' }" class="big_select">
+							<option value=""></option>
+							<option value="cdi" selected="{ isEdit && el.type_de_contrat == 'cdi' ? 'selected' : '' }">CDI</option>
+							<option value="cdd" selected="{ isEdit && el.type_de_contrat == 'cdd' ? 'selected' : '' }">CDD</option>
+							<option value="stage" selected="{ isEdit && el.type_de_contrat == 'stage' ? 'selected' : '' }">Stagiaire</option>
+							<option value="retraite" selected="{ isEdit && el.type_de_contrat == 'retraite' ? 'selected' : '' }">Retraité</option>
+							<option value="apprentissage" selected="{ isEdit && el.type_de_contrat == 'apprentissage' ? 'selected' : '' }">Contrat d'apprentissage</option>
+						</select>
+					</div>
+					<div class="cell_3 right">
+						<label for="date_sortie{ isEdit ? '_' + el.id : '' }">Date de sortie</label>
+					</div>
+					<div class="cell_4">
+						<input type="hidden" value="{ isEdit ? el.date_sortie : '' }" name="date_sortie{ isEdit ? '_' + el.id : '' }" id="date_sortie{ isEdit ? '_' + el.id : '' }">
+						<input type="text" id="date_sortie_view{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? parentTag.convertDateToView(el.date_sortie) : '' }" maxlength="10" onchange={ formatDateField } field-for-date="date_sortie{ isEdit ? '_' + el.id : '' }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="fonction{ isEdit ? '_' + el.id : '' }">Fonction</label>
+					</div>
+					<div class="cell_2">
+						<input type="text" name="fonction{ isEdit ? '_' + el.id : '' }" id="fonction{ isEdit ? '_' + el.id : '' }" class="long_input" value="{ isEdit ? el.fonction : '' }">
+					</div>
+					<div class="cell_3 right">
+						<span>Site</span>
+					</div>
+					<div class="cell_4">
+						<select name="site{ isEdit ? '_' + el.id : '' }" id="site{ isEdit ? '_' + el.id : '' }" class="big_select">
+							<option value=""></option>
+							<option value="" selected="{ isEdit && el.site == '' ? 'selected' : '' }"></option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+					</div>
+					<div class="cell_2">
+					</div>
+					<div class="cell_3 right">
+						<span>Service</span>
+					</div>
+					<div class="cell_4">
+						<select name="service{ isEdit ? '_' + el.id : '' }" id="service{ isEdit ? '_' + el.id : '' }" class="big_select">
+							<option value=""></option>
+							<option value="" selected="{ isEdit && el.service == '' ? 'selected' : '' }"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="line-separator margin_top"></div>			
+			<div class="table c111">
+				<div class="cell border_right">
+					<div class="table c112">
+						<div class="row">
+							<div class="cell_1 right">
+								<label for="identifiant_internet{ isEdit ? '_' + el.id : '' }">Identifiant Internet</label>
+							</div>
+							<div class="cell_2">
+								<input type="text" name="identifiant_internet{ isEdit ? '_' + el.id : '' }" id="identifiant_internet{ isEdit ? '_' + el.id : '' }" disabled="disabled" value="{ isEdit ? el.identifiant_internet : '' }">
+							</div>
+						</div>
+						<div class="row">
+							<div class="cell_1 right">
+								<label for="mot_de_passe{ isEdit ? '_' + el.id : '' }">Mot de Passe</label>
+							</div>
+							<div class="cell_2">
+								<input type="password" name="mot_de_passe{ isEdit ? '_' + el.id : '' }" id="mot_de_passe{ isEdit ? '_' + el.id : '' }" disabled="disabled" value="{ isEdit ? el.mot_de_passe : '' }">
+							</div>
+						</div>
+						<div class="row buttons">
+							<div class="cell_1"></div>
+							<div class="cell_2 left">
+								<button class="button enregistrer desactiver_cpte">
+									Désactiver le compte
+								</button>
+								<button class="button annuler generer_mdp" onclick="{ genPass }">
+									Générer un nouveau mot de passe
+								</button>
+							</div>
+						</div>  
+					</div>
+				</div>
+				<div class="cell">
+					<div class="table">
+						<div class="row">
+							<div class="cell_1 right">
+								<label for="banque{ isEdit ? '_' + el.id : '' }">Banque</label>
+							</div>
+							<div class="cell_2">
+								<input type="text" id="banque{ isEdit ? '_' + el.id : '' }" name="banque{ isEdit ? '_' + el.id : '' }" class="banque" value="{ isEdit ? el.banque : '' }">
+							</div>
+						</div>
+						<div class="row">
+							<div class="cell_1 right">
+								<label for="titulaire{ isEdit ? '_' + el.id : '' }">Titulaire</label>
+							</div>
+							<div class="cell_2">
+								<input type="text" id="titulaire{ isEdit ? '_' + el.id : '' }" name="titulaire{ isEdit ? '_' + el.id : '' }" class="titulaire" value="{ isEdit ? el.titulaire : '' }">
+							</div>
+						</div>
+						<div class="row">
+							<div class="cell_1 right">
+								<span>R.I.B</span>
+							</div>
+							<div class="cell_2">
+								<input type="hidden" name="rib{ isEdit ? '_' + el.id : '' }" id="rib{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.rib : '' }">
+								<input type="text" value="{ isEdit ? el.rib.substr(0, 5) : '' }" id="rib_1{ isEdit ? '_' + el.id : '' }" class="rib1 cell_block" name="rib_1{ isEdit ? '_' + el.id : '' }" maxlength="5" size="5" required="required" next-to-focus="rib_2{ isEdit ? '_' + el.id : '' }" onkeyup="{ focusNextOne }">
+								<input value="{ isEdit ? el.rib.substr(5, 10) : '' }" id="rib_2{ isEdit ? '_' + el.id : '' }" type="text" class="rib2 cell_block" name="rib_2{ isEdit ? '_' + el.id : '' }" maxlength="5" size="5" required="required" next-to-focus="rib_3{ isEdit ? '_' + el.id : '' }" onkeyup="{ focusNextOne }">
+								<input value="{ isEdit ? el.rib.substr(10, 21) : '' }" id="rib_3{ isEdit ? '_' + el.id : '' }" type="text" class="rib3 cell_block" name="rib_3{ isEdit ? '_' + el.id : '' }" maxlength="11" size="11" required="required" next-to-focus="rib_4{ isEdit ? '_' + el.id : '' }" onkeyup="{ focusNextOne }">
+								<input  value="{ isEdit ? el.rib.substr(21, 23) : '' }" id="rib_4{ isEdit ? '_' + el.id : '' }" type="text" class="rib4 cell_block" name="rib_4{ isEdit ? '_' + el.id : '' }" maxlength="2" size="2" required="required">
+							</div>
+						</div>
+						<div class="row">
+							<div class="cell_1 right">
+								<label for="IBAN{ isEdit ? '_' + el.id : '' }">IBAN</label>
+							</div>
+							<div class="cell_2">
+								<input type="text" class="iban cell_block" name="iban{ isEdit ? '_' + el.id : '' }" id="iban{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.iban : '' }">
+								<label for="bic{ isEdit ? '_' + el.id : '' }" class="cell_block bic_text">BIC</label>
+								<input type="text" class="bic cell_block" name="bic{ isEdit ? '_' + el.id : '' }" id="bic{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.bic : '' }">
+							</div>
+						</div>  
+					</div>  
+				</div>
+			</div>
+		</div>						
+	</div>
+	<div class="info_complementaire edit_block">
+		<header class="closed" onclick="{ showContents }">Informations Complémentaires</header>
+		<div class="slide-up hidden">
+			<div class="line-separator"></div>
+			<div class="table c100 options">
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="option_1{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_1 }</label>
+					</div>
+					<div class="cell_2 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_1 ) }" type="text" name="option_1{ isEdit ? '_' + el.id : '' }" id="option_1{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_1 : '' }" placeholder="{ parentTag.champs.champ_1 }">
+					</div>
+					<div class="cell_3 right">									
+						<label for="option_6{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_6 }</label>
+					</div>
+					<div class="cell_4 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_6 ) }" type="text" name="option_6{ isEdit ? '_' + el.id : '' }" id="option_6{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_6 : '' }" placeholder="{ parentTag.champs.champ_6 }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="option_2{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_2 }</label>
+					</div>
+					<div class="cell_2 left">									
+						<input class="{ hidden : ( ! parentTag.champs.champ_2 ) }" type="text" name="option_2{ isEdit ? '_' + el.id : '' }" id="option_2{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_2 : '' }" placeholder="{ parentTag.champs.champ_2 }">
+					</div>
+					<div class="cell_3 right">
+						<label for="option_7{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_7 }</label>
+					</div>
+					<div class="cell_4 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_7 ) }" type="text" name="option_7{ isEdit ? '_' + el.id : '' }" id="option_7{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_7 : '' }" placeholder="{ parentTag.champs.champ_7 }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="option_3{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_3 }</label>							
+					</div>
+					<div class="cell_2 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_3 ) }" type="text" name="option_3{ isEdit ? '_' + el.id : '' }" id="option_3{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_3 : '' }" placeholder="{ parentTag.champs.champ_3 }">								
+					</div>
+					<div class="cell_3 right">
+						<label for="option_8{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_8 }</label>
+					</div>
+					<div class="cell_4 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_8 ) }" type="text" name="option_8{ isEdit ? '_' + el.id : '' }" id="option_8{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_8 : '' }" placeholder="{ parentTag.champs.champ_8 }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="option_4{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_4 }</label>
+					</div>
+					<div class="cell_2 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_4 ) }" type="text" name="option_4{ isEdit ? '_' + el.id : '' }" id="option_4{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_4 : '' }" placeholder="{ parentTag.champs.champ_4 }">
+					</div>
+					<div class="cell_3 right">
+						<label for="option_9{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_9 }</label>
+					</div>
+					<div class="cell_4 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_9 ) }" type="text" name="option_9{ isEdit ? '_' + el.id : '' }" id="option_9{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_9 : '' }" placeholder="{ parentTag.champs.champ_9 }">
+					</div>
+				</div>
+				<div class="row">
+					<div class="cell_1 right">
+						<label for="option_5{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_5 }</label>	
+					</div>
+					<div class="cell_2 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_5 ) }" type="text" name="option_5{ isEdit ? '_' + el.id : '' }" id="option_5{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_5 : '' }" placeholder="{ parentTag.champs.champ_5 }">
+					</div>
+					<div class="cell_3 right">
+						<label for="option_10{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_10 }</label>
+					</div>
+					<div class="cell_4 left">
+						<input class="{ hidden : ( ! parentTag.champs.champ_10 ) }" type="text" name="option_10{ isEdit ? '_' + el.id : '' }" id="option_10{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.option_10 : '' }" placeholder="{ parentTag.champs.champ_10 }">
+					</div>
+				</div>
+			</div>
+			<div class="line-separator"></div>
+			<div class="c49 cell_block">
+				<div class="cell_block block_quotient">
+					<div class="cell_block">
+						<label for="quotient{ isEdit ? '_' + el.id : '' }">Quotient</label>
+					</div>
+					<div class="cell_block">
+						<input type="text" name="quotient{ isEdit ? '_' + el.id : '' }" id="quotient{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.quotient : '' }">
+					</div>
+				</div>
+				<div class="cell_block">
+					<button onclick={ calculeQuotient }>Calcul</button>
+				</div>
+			</div>
+			<div class="c48 cell_block">
+				<div class="cell_block block_quotient c49">
+					<div class="cell_block">
+						<label for="quotientN1{ isEdit ? '_' + el.id : '' }">Quotient N-1</label>
+						<input type="text" name="quotientN1{ isEdit ? '_' + el.id : '' }" id="quotientN1{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.quotientN1 : '' }">
+					</div>
+				</div>
+				<div class="cell_block block_quotient c49">
+					<div class="cell_block ">
+						<label for="quotientN2">Quotient N-2</label>
+						<input type="text" name="quotientN2{ isEdit ? '_' + el.id : '' }" id="quotientN2{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.quotientN2 : '' }">
+					</div>
+				</div>
+			</div>
+			<div class="cell_block_tranche">
+				<div class="cell_block">
+					<label for="quotient" class="tranche_valeur">Tranche Sur Salaire</label>
+					<input type="text" name="tranche_salaire{ isEdit ? '_' + el.id : '' }" id="tranche_salaire{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.tranche_salaire : '' }" maxlength="2">
+				</div>
+				<div class="cell_block">
+					<label for="quotient">Points</label>
+					<input type="text" name="valeur{ isEdit ? '_' + el.id : '' }" id="valeur{ isEdit ? '_' + el.id : '' }" value="{ isEdit ? el.valeur : '' }" maxlength="5">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="situation_inscription edit_block">
+		<header class="closed" onclick="{ showContents }">Situation d'inscription</header>
+		<div class="slide-up hidden">
+			<div class="line-separator"></div>
+			<div class="block_inscription">
+				<div each={ this.el.inscriptions } class="nav_compta_parametrage block-slider { type_modele }">
+					<header class="comptes-title capitalize center opened" onclick= { showContents }>
+						{ type_modele }
+					</header>
+					<div class="slide-up">
+						<div class="line-separator"></div>
+						<div class="block_categorie_inscription">
+							<div class="entete-tableau" if={ type_modele == 'billetterie' }>
+								<div class="cell_1">
+									<p>Date Inscription</p>
+								</div>
+								<div class="cell_2">
+									<p class="">Produits</p>
+								</div>
+								<div class="cell_3">
+									<p class="">Qté</p>
+								</div>
+								<div class="cell_4">
+									<p class="">Montant</p>
+								</div>
+								<div class="cell_5">
+									<p class="">Part.CE</p>
+								</div>
+								<div class="cell_6">
+									<p class="">Règlement</p>
+								</div>
+								<div class="cell_7">
+									<p>A Payer</p>
+								</div>
+							</div>
+							<div class="entete-tableau" if={ type_modele == 'remboursement' }>
+								<div class="cell_1">
+									<p>Date Inscription</p>
+								</div>
+								<div class="cell_2">
+									<p class="">Produits</p>
+								</div>
+							<!-- 	<div class="cell_3">
+									<p class=""></p>
+								</div> -->
+								<div class="cell_4">
+									<p class="">Montant</p>
+								</div>
+								<div class="cell_5">
+									<p class="">Part.CE</p>
+								</div>
+								<div class="cell_6">
+									<p class="">Mode de paiement</p>
+								</div>
+								<div class="cell_7">
+									<p>N° cheques</p>
+								</div>
+							</div>
+							<div class="inscription" id="inscription_{ id }" each={ inscriptions } id_produit={ id_produit }>
+								<div class="table c100">
+									<div class="cell_1">
+										<p class="date_inscription" value={ date_inscription }>{ convertDateToView(date_inscription) }</p>
+									</div>
+									<div class="cell_2">
+										<p class="libelle" value={ libelle }>{ libelle }</p>
+									</div>
+									<div class="cell_3" if={ type_modele == 'billetterie' }>
+										<p class="quantite" value={ quantite }>{ quantite }</p>
+									</div>
+									<div class="cell_4">
+										<p class="montant" value={ montant }>{ montant }</p>
+									</div>
+									<div class="cell_5">
+										<p class="participation_ce" value={ participation_ce }>{ participation_ce }</p>
+									</div>
+									<div class="cell_6">
+										<p class="reglement" value={ reglement } if={ reglement }>{ reglement }</p>
+										<p class="mode_paiement" value={ libelle_paiement } if={ libelle_paiement }>{ libelle_paiement }</p>
+									</div>
+									<div class="cell_7">
+										<p class="solde" value={ solde } if={ solde }>{ solde }</p>
+										<p class="solde" value={ numero_cheque } if={ numero_cheque }>{ numero_cheque }</p>
+									</div>
+									<div class="hidden">
+										<p class="participation_salarie" value={ participation_salarie }></p>
+									</div>
+								</div>
+								<div class="table c100">
+									<div class="cell_0">
+									</div>
+									<div class="cell">
+										<p>
+											<span if={ id_ayant_droit }>{ this.ayants_droit[this.idAyants_droit[id_ayant_droit]].prenom } { this.ayants_droit[this.idAyants_droit[id_ayant_droit]].nom }</span>
+											<span if={ ! id_ayant_droit }>{ currentSalarie.prenom } { currentSalarie.nom }</span>
+											<span if={ id_ayant_droit }>{ this.ayants_droit[this.idAyants_droit[id_ayant_droit]].lien } </span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <fieldset class="filtre"> 
+				<legend class="left">Filtres</legend>
+				<div class="table_flex">
+					<div class="row_flex2">
+						<p>Activités</p>
+						<input type="text" id="activites{ isEdit ? '_' + el.id : '' }" placeholder="Activités" name="activites{ isEdit ? '_' + el.id : '' }">
+					</div>
+					<div class="row_flex">
+						<p>Dette</p>
+						<select id="dette_filtre{ isEdit ? '_' + el.id : '' }" name="dette_filtre{ isEdit ? '_' + el.id : '' }" >
+							<option each={ activites } value="{ id }">
+							</option>
+						</select>
+					</div>
+					<div class="row_flex">
+						<p>Mode de Paiement</p>
+						<select id="mode_paiement{ isEdit ? '_' + el.id : '' }" name="mode_paiement{ isEdit ? '_' + el.id : '' }">
+							<option each={ activites } value="{ id }">
+							</option>
+						</select>
+					</div>	
+				</div>
+			</fieldset>
+			<div id="content_flex">
+				<div class="groupe_bloc">
+					<div class="element_flex">
+						<div class="cell_block center block_couleur_info color1 flex_block">
+							<span class="italic">Impression Relevé de compte</span>
+						</div>
+						<div class="cell_block center block_couleur_info color2 flex_block">
+							<span class="italic">Inscription</span>
+						</div>
+						<div class="cell_block center block_couleur_info color3 flex_block">
+							<span class="italic">Règlement</span>
+						</div>
+					</div>
+				</div>
+				<div class="groupe_bloc">
+					<div class="element_flex">
+						<div class="center block_couleur_info color4 flex_block2">
+							<span class="italic">Part. { IS_CE ? 'Salariés ' : "Adhérents " }</span>
+							<br>
+							<span class="montant">19<span class="euro-sign">€</span></span>
+						</div>
+						<div class="center block_couleur_info color4 flex_block2">
+							<span class="italic">Part. { IS_CE ? 'CE ' : "Association " }</span>
+							<br>
+							<span class="montant">162<span class="euro-sign">€</span></span>
+						</div>
+						<div class="center block_couleur_info color4 flex_block2">
+							<span class="italic">Règlement</span>
+							<br>
+							<span class="montant">19<span class="euro-sign">€</span></span>
+						</div>
+						<div class="center block_couleur_info color5 flex_block2">
+							<span class="italic">A Payer</span>
+							<br>
+							<span class="montant">0<span class="euro-sign">€</span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="line-separator"></div>
+			<div class="flex_rubrique1">
+				<div class="flex2">
+					<p class="small">Date</p>
+				</div>
+				<div class="flex2">
+					<p class="small">Activité</p>
+				</div>
+				<div class="flex2">
+					<p class="small">Produits</p>
+				</div>
+				<div class="flex">
+					<p class="small">Quantité</p>
+				</div>
+				<div class="flex">
+					<p class="small">Doc</p>
+				</div>
+				<div class="flex2">
+					<p class="small">{ IS_CE ? 'Part. Salarié' : "Part. Adhérent" }</p>
+				</div>
+				<div class="flex2">									
+					<p class="small">{ IS_CE ? "Part. CE" : "Part. Association" }</p>
+				</div>
+				<div class="flex">
+					<p class="small">Règlement</p>
+				</div>
+				<div class="flex">
+					<p class="small">A payer</p>
+				</div>
+				<div class="flex">
+					<p class="small">Action</p>
+				</div>
+			</div>
+			<div class="fiche_inscription">
+			<div class="fiche">
+				<div class=" flex_rubrique">
+					<div class=" flex2">
+						<p class="small nature">15/05/2016</p>
+					</div>
+					<div class=" flex2">
+						<p class="small nature">Remboursement</p>
+					</div>
+					<div class=" flex2">
+						<p class="small nature">Sportive&Culturelle</p>
+					</div>
+					<div class=" flex">
+						<p class="small nature">1</p>
+					</div>
+					<div class=" flex">
+						<p class="modif">
+							<img class="edit_element_img editAyantDroit" onclick="{ editAyantDroit }" title="Modifier" 
+							src="/img/link.png">
+						</p>
+					</div>
+					<div class=" flex2">
+						<p class="small">0.00<span class="euro-sign">€</span></p>
+					</div>
+					<div class=" flex2">
+						<p class="small">150.00<span class="euro-sign">€</span></p>
+					</div>
+					<div class=" flex">
+						<p class="small">0.00<span class="euro-sign">€</span></p>
+					</div>
+					<div class=" flex">
+						<p class="small">0.00<span class="euro-sign">€</span></p>
+					</div>
+					<div class=" flex">										
+						<p class="modif">
+							<img class="edit_element_img editAyantDroit" onclick="{ editAyantDroit }" title="Modifier" 
+							src="/img/visible_oeil.png">
+						</p>
+					</div>
+				</div>
+				</div>
+			</div>
+ -->		</div>
+	</div>
+	<div class="block-slider situation_reglement edit_block">
+		<header class="closed" onclick="{ showContents }">Situation de Règlement</header>
+		<div class="slide-up hidden">
+			<div class="line-separator"></div>
+			<div class="block_reglement">
+				<div class="entete-tableau">
+					<div class="cell_1">
+						<p>Date Reglement</p>
+					</div>
+					<div class="cell_2">
+						<p class="">Mode de paiement</p>
+					</div>
+					<div class="cell_4">
+						<p class="">N° cheque</p>
+					</div>
+					<div class="cell_5">
+						<p class="">Remis</p>
+					</div>
+					<div class="cell_6">
+						<p class="">Montant</p>
+					</div>
+				</div>
+				<div each={ this.el.reglements } class="reglement">
+					<div class="cell_1">
+						<p>{ convertDateToView(date_reglement) }</p>
+					</div>
+					<div class="cell_2">
+						<p class="">{ type }</p>
+					</div>
+					<div class="cell_4">
+						<p class="">{ numero_cheque }</p>
+					</div>
+					<div class="cell_5">
+						<p class="" if={ type != 'especes' }>{ remis ? 'oui' : 'non' }</p>
+					</div>
+					<div class="cell_6">
+						<p class="">{ montant }</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="composition_famille edit_block">
+		<header class="closed" onclick="{ showContents }">Composition de la Famille</header>
+		<div class="slide-up hidden">
+			<div class="add_ayant_droit hidden show_when_add_ayant_droit" id="add_ayant_droit{ isEdit ? '_' + el.id : '' }">
+				<div class="table infos_ayant_droit">
+					<div class="row">
+						<div class="cell_1">
+							<label for="ayant_droit_titre{ isEdit ? '_' + el.id : '' }" class="label-60">Titre</label>
+							<select class="titre" name="ayant_droit_titre{ isEdit ? '_' + el.id : '' }" id="ayant_droit_titre{ isEdit ? '_' + el.id : '' }">
+								<option value=""></option>
+								<option value="madame">Madame</option>
+								<option value="monsieur">Monsieur</option>
+							</select>
+						</div>
+						<div class="cell_2">
+							<label for="ayant_droit_nom{ isEdit ? '_' + el.id : '' }" class="label-60">Nom</label>
+							<input type="text" class="nom" name="ayant_droit_nom{ isEdit ? '_' + el.id : '' }" id="ayant_droit_nom{ isEdit ? '_' + el.id : '' }" required="required">
+						
+						</div>
+						<div class="cell_3">
+							<label for="ayant_droit_lien{ isEdit ? '_' + el.id : '' }" class="label-60">Lien</label>
+							<select class="lien" name="ayant_droit_lien{ isEdit ? '_' + el.id : '' }" id="ayant_droit_lien{ isEdit ? '_' + el.id : '' }">
+								<option value="conjoint">Conjoint</option>
+								<option value="enfant">Enfant</option>
+								<option value="exterieur">Extérieur</option>
+							</select>
+						</div>
+						<div class="cell_4">
+							<div class="type_lien_fiscal">
+								<input type="radio" class="type_lien" name="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }" id="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }" value="fiscal" checked="checked">
+								<label class="small" for="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }">Fiscal</label>
+							</div>
+						</div>
+						<div class="cell_5">
+							<div class="table c100">
+								<div class="cell">
+									<input type="radio" class="type_lien" name="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }" id="ayant_droit_type_lien_familial{ isEdit ? '_' + el.id : '' }" value="familial">
+									<label class="small" for="ayant_droit_type_lien_familial{ isEdit ? '_' + el.id : '' }">Familial</label>
+								</div>
+								<div class="cell right">
+									<input onclick={ toggleVisible } type="image" class="visible" src="/img/btn_visible.png" name="ayant_droit_visible{ isEdit ? '_' + el.id : '' }" id="ayant_droit_visible{ isEdit ? '_' + el.id : '' }" title="Visible" value="visible">									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1">
+							<label for="ayant_droit_matricule{ isEdit ? '_' + el.id : '' }" class="label-60">Matricule</label>
+							<input type="text" class="matricule" name="ayant_droit_matricule{ isEdit ? '_' + el.id : '' }" id="ayant_droit_matricule{ isEdit ? '_' + el.id : '' }" required="required">
+						</div>
+						<div class="cell_2">
+							<label for="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }" class="label-60">Prénom</label>
+							<input type="text" class="prenom" name="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }" id="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }" required="required">
+						</div>
+						<div class="cell_3">
+							<label for="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }">Date de Naissance</label>
+							<input type="hidden" value="" class="date_de_naissance" name="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }" id="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }">
+							<input type="text" value="" id="ayant_droit_date_view{ isEdit ? '_' + el.id : '' }" onchange="{ formatDateField }" maxlength="10" field-for-age="ayant_droit_age{ isEdit ? '_' + el.id : '' }" field-for-date="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }" class="date_de_naissance" required="required">
+						</div>
+						<div class="cell_4">
+							<span id="ayant_droit_age{ isEdit ? '_' + el.id : '' }"></span>	
+						</div>
+						<div class="cell_5">
+							<label>Genre</label>
+							<select class="genre" name="ayant_droit_genre{ isEdit ? '_' + el.id : '' }" id="ayant_droit_genre{ isEdit ? '_' + el.id : '' }">
+								<option value="feminin">Féminin</option>
+								<option value="masculin">Masculin</option>
+							</select>
+						</div>
+					</div>
+					<!-- <div class="row">
+						<div class="cell_1">
+													</div>
+						<div class="cell_2">
+
+						</div>
+						<div class="cell_3">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1">
+						</div>
+						<div class="cell_2">
+							
+						</div>
+						<div class="cell_3">
+						</div>
+					</div> -->
+				</div>
+				<div class="line-separator"></div>
+				<div class="table c100">
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="ayant_droit_option_1{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_1_ayant_droit }</label>
+						</div>
+						<div class="cell_2 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_1_ayant_droit ) } option_1" value="{ isEdit ? el.option_1 : '' }" type="text" name="ayant_droit_option_1{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_1{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_1_ayant_droit }">
+						</div>
+						<div class="cell_3 right">
+							<label for="ayant_droit_option_6{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_6_ayant_droit }</label>
+						</div>
+						<div class="cell_4 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_6_ayant_droit ) } option_6" value="{ isEdit ? el.option_6 : '' }" type="text" name="ayant_droit_option_6{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_6{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_6_ayant_droit }">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="ayant_droit_option_2{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_2_ayant_droit }</label>
+						</div>
+						<div class="cell_2 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_2_ayant_droit ) } option_2" value="{ isEdit ? el.option_2 : '' }" type="text" name="ayant_droit_option_2{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_2{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_2_ayant_droit }">
+						</div>
+						<div class="cell_3 right">
+							<label for="ayant_droit_option_7{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_7_ayant_droit }</label>
+						</div>
+						<div class="cell_4 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_7_ayant_droit ) } option_7" value="{ isEdit ? el.option_7 : '' }" type="text" name="ayant_droit_option_7{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_7{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_7_ayant_droit }">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="ayant_droit_option_3{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_3_ayant_droit }</label>
+						</div>
+						<div class="cell_2 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_3_ayant_droit ) } option_3" value="{ isEdit ? el.option_3 : '' }" type="text" name="ayant_droit_option_3{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_3{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_3_ayant_droit }">
+						</div>
+						<div class="cell_3 right">
+							<label for="ayant_droit_option_8{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_8_ayant_droit }</label>
+						</div>
+						<div class="cell_4 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_8_ayant_droit ) } option_8" value="{ isEdit ? el.option_8 : '' }" type="text" name="ayant_droit_option_8{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_8{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_8_ayant_droit }">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="ayant_droit_option_4{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_4_ayant_droit }</label>
+						</div>
+						<div class="cell_2 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_4_ayant_droit ) } option_4" value="{ isEdit ? el.option_4 : '' }" type="text" name="ayant_droit_option_4{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_4{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_4_ayant_droit }">
+						</div>
+						<div class="cell_3 right">
+							<label for="ayant_droit_option_9{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_9_ayant_droit }</label>
+						</div>
+						<div class="cell_4 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_9_ayant_droit ) } option_9" value="{ isEdit ? el.option_9 : '' }" type="text" name="ayant_droit_option_9{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_9{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_9_ayant_droit }">
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							<label for="ayant_droit_option_5{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_5_ayant_droit }</label>	
+						</div>
+						<div class="cell_2 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_5_ayant_droit ) } option_5" value="{ isEdit ? el.option_5 : '' }" type="text" name="ayant_droit_option_5{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_5{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_5_ayant_droit }">
+						</div>
+						<div class="cell_3 right">
+							<label for="ayant_droit_option_10{ isEdit ? '_' + el.id : '' }">{ parentTag.champs.champ_10_ayant_droit }</label>
+						</div>
+						<div class="cell_4 left">
+							<input class="{ hidden : ( ! parentTag.champs.champ_10_ayant_droit ) } option_10" value="{ isEdit ? el.option_10 : '' }" type="text" name="ayant_droit_option_10{ isEdit ? '_' + el.id : '' }" id="ayant_droit_option_10{ isEdit ? '_' + el.id : '' }" placeholder="{ parentTag.champs.champ_10_ayant_droit }">
+						</div>
+					</div>
+				</div>
+				<div>
+					<button class="button annuler cell_block actions cancel_ayant_droit" onclick={ cancelAddAyantDroit }>Annuler</button>
+					<button class="button enregistrer cell_block actions add_ayant_droit" onclick={ addAyantDroit }>Ajouter un ayant droit</button>
+				</div>
+			</div>
+			<button class="button ajouter cell_block actions add_ayant_droit hide_when_add_ayant_droit hide_when_edit_ayant_droit" onclick={ showAddAyantDroit }>Ajouter un ayant droit</button>
+		</div>
+		<div class="hidden slide-up hide_when_add_ayant_droit" id="hide_ayant_droit{ isEdit ? '_' + el.id : '' }">
+			<!-- <div class="line-separator"></div> -->
+			<div class="ayants_droits" id="ayants_droits{ isEdit ? '_' + el.id : '' }">
+				<div class="entete-tableau hide_when_edit_ayant_droit center table">
+					<div class="cell_1 cell_ayant_droit">
+						<p class="small">{ IS_CE ? 'Matricule' : "N° de salarié" }</p>
+					</div>
+					<div class="cell_2 cell_ayant_droit">
+						<p class="small">Nom</p>
+					</div>
+					<div class="cell_3 cell_ayant_droit">
+						<p class="small">Prénom</p>
+					</div>
+					<div class="cell_4 cell_ayant_droit">
+						<p class="small">Lien</p>
+					</div>
+					<div class="cell_5 cell_ayant_droit">
+						<p class="small">Age</p>
+					</div>
+					<div class="cell_6 cell_ayant_droit">
+						<p class="small">Genre</p>
+					</div>
+					<div class="cell_7 cell_ayant_droit">									
+						<p class="small">Visible</p>
+					</div>
+					<div class="cell_8 cell_ayant_droit">
+						<p class="small">Actions</p>
+					</div>
+				</div>
+				<div class="fiche_salaries">
+				<div each={ this.el.ayantsDroits } if={ action != 'delete' } id="ayant_droit_{ isEdit ? el.id + '_' : '' }{ id }" class="fiche ayant_droit" action="{ action }">
+					<div class="show_infos hide_when_add_ayant_droit hide_when_edit_ayant_droit">
+						<div class="cell_1 cell_ayant_droit">
+							<p class="small">{ isEdit ? el.numero_salarie : '' }</p>
+						</div>
+						<div class="cell_2 cell_ayant_droit">
+							<p class="small">{ nom }</p>
+						</div>
+						<div class="cell_3 cell_ayant_droit">
+							<p class="small">{ prenom }</p>
+						</div>
+						<div class="cell_4 cell_ayant_droit">
+							<p class="small">{ lien == 'conjoint' ? 'Conjoint' : '' }{ lien == 'enfant' ? 'Enfant' : '' }{ lien == 'exterieur' ? 'Extérieur' : '' }</p>
+						</div>
+						<div class="cell_5  cell_ayant_droit">
+							<p class="small">{ parentTag.showAgeToView(parentTag.convertDateToView(date_de_naissance)) }</p>
+						</div>
+						<div class="cell_6 cell_ayant_droit">
+							<p class="small">{ titre === 'monsieur' ? 'Masculin' : 'Féminin' }</p>
+						</div>
+						<div class="cell_7 cell_ayant_droit">
+							<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" >
+						</div>
+						<div class="cell_8 cell_ayant_droit">
+							<p class="modif">
+								<img class="edit_element_img editAyantDroit" onclick="{ editAyantDroit }" title="Modifier" src="/img/edit.png">
+								<img class="delete_element_img validDeleteAyantDroit" onclick="{ validDeleteAyantDroit }" title="Supprimer" delete_id="{ id }" src="/img/delete.png">
+							</p>
+						</div>
+					</div>
+					<div id="ayant_droit_{ isEdit ? el.id + '_' : '' }{ id }_edit" class="ayant_droit_edit hidden">
+						<!-- <div class="table c100">
+							<div class="row">
+								<div class="cell_1">
+									<label for="ayant_droit_titre{ isEdit ? '_' + el.id : '' }_{ id }">Titre</label>
+									<select class="titre" name="ayant_droit_titre{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_titre{ isEdit ? '_' + el.id : '' }_{ id }">
+										<option value="madame" selected="{ selected : titre == 'madame' }">Madame</option>
+										<option value="monsieur" selected="{ selected : titre == 'monsieur' }">Monsieur</option>
+									</select>
+								</div>
+								<div class="cell_2">
+									<label for="ayant_droit_lien{ isEdit ? '_' + el.id : '' }_{ id }">Lien</label>
+									<select class="lien" name="ayant_droit_lien{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_lien{ isEdit ? '_' + el.id : '' }_{ id }">
+										<option value="conjoint" selected="{ selected : lien == 'conjoint' }">Conjoint</option>
+										<option value="enfant" selected="{ selected : lien == 'enfant' }">Enfant</option>
+										<option value="exterieur" selected="{ selected : lien == 'exterieur' }">Extérieur</option>
+									</select>
+								</div>
+								<div class="cell_3">
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1">
+									<label for="ayant_droit_nom{ isEdit ? '_' + el.id : '' }_{ id }">Nom</label>
+									<input  class="nom" type="text" value="{ nom }" name="ayant_droit_nom{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_nom{ isEdit ? '_' + el.id : '' }_{ id }" required="required">
+								</div>
+								<div class="cell_2">
+									<div class="type_lien_fiscal">
+										<input class="type_lien" type="radio" name="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }" value="fiscal" checked="{ checked : type_lien == 'fiscal'}">
+										<label class="small" id="fiscal" for="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }">Fiscal</label>
+										<input class="type_lien" type="radio" name="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_type_lien_familial{ isEdit ? '_' + el.id : '' }_{ id }" value="familial" checked="{ checked : type_lien == 'familial'}">
+										<label class="small" id="familial" for="ayant_droit_type_lien_familial{ isEdit ? '_' + el.id : '' }_{ id }">Familial</label>
+									</div>
+								</div>
+								<div class="cell_3 visible">
+									<input class="visible" onclick={ toggleVisible } type="image" src="{ visible == 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' }" name="ayant_droit_visible{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_visible{ isEdit ? '_' + el.id : '' }_{ id }" title="{ visible == 'visible' ? 'Visible' : 'Invisible' }" value="{ visible }">
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1">
+									<label for="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }_{ id }">Prénom</label>
+									<input  class="prenom" type="text" value="{ prenom }" name="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }_{ id }" required="required">
+								</div>
+								<div class="cell_2">
+									<label for="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }">Date de Naissance</label>
+									<input class="date_de_naissance" type="hidden" value="{ date_de_naissance }" name="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }">
+									<input type="text" class="front_ayant_droit_date_de_naissance" value="{ parentTag.convertDateToView(date_de_naissance) }" id="ayant_droit_date_view{ isEdit ? '_' + el.id : '' }_{ id }" onchange="{ formatDateField }" maxlength="10" field-for-age="ayant_droit_age{ isEdit ? '_' + el.id : '' }_{ id }" field-for-date="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }" required="required">
+									<span id="ayant_droit_age{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.showAgeToView(parentTag.convertDateToView(date_de_naissance)) }</span>
+								</div>
+								<div class="cell_3">
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1">
+								</div>
+								<div class="cell_2">
+									<label for="ayant_droit_genre{ isEdit ? '_' + el.id : '' }_{ id }">Genre</label>
+									<select class="genre" name="ayant_droit_genre{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_genre{ isEdit ? '_' + el.id : '' }_{ id }">
+										<option value="feminin" selected="{ genre == 'feminin' ? 'selected' : '' }">Féminin</option>
+										<option value="masculin" selected="{ genre == 'masculin' ? 'selected' : '' }">Masculin</option>
+									</select>
+								</div>
+								<div class="cell_3">
+								</div>
+							</div>
+						</div>					 -->
+						<div class="table infos_ayant_droit">
+							<div class="row">
+								<div class="cell_1">
+									<label for="ayant_droit_titre{ isEdit ? '_' + el.id : '' }_{ id }">Titre</label>
+									<select class="titre" name="ayant_droit_titre{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_titre{ isEdit ? '_' + el.id : '' }_{ id }">
+										<option value=""></option>                
+										<option value="madame" selected="{ selected : titre == 'madame' }">Madame</option>
+										<option value="monsieur" selected="{ selected : titre == 'monsieur' }">Monsieur</option>
+									</select>
+								</div>
+								<div class="cell_2">
+									<label for="ayant_droit_nom{ isEdit ? '_' + el.id : '' }_{ id }" class="label-60">Nom</label>
+									<input  class="nom" type="text" value="{ nom }" name="ayant_droit_nom{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_nom{ isEdit ? '_' + el.id : '' }_{ id }" required="required">
+								</div>
+								<div class="cell_3">
+									<label for="ayant_droit_lien{ isEdit ? '_' + el.id : '' }_{ id }" class="label-60">Lien</label>
+									<select class="lien" name="ayant_droit_lien{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_lien{ isEdit ? '_' + el.id : '' }_{ id }">
+										<option value="conjoint" selected="{ selected : lien == 'conjoint' }">Conjoint</option>
+										<option value="enfant" selected="{ selected : lien == 'enfant' }">Enfant</option>
+										<option value="exterieur" selected="{ selected : lien == 'exterieur' }">Extérieur</option>
+									</select>
+								</div>
+								<div class="cell_4">
+									<div class="type_lien_fiscal">
+										<input class="type_lien" type="radio" name="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }" value="fiscal" checked="{ checked : type_lien == 'fiscal'}">
+										<label class="small" id="fiscal" for="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }">Fiscal</label>
+									</div>
+								</div>
+								<div class="cell_5">
+									<div class="table c100">
+										<div class="cell">
+											<input class="type_lien" type="radio" name="ayant_droit_type_lien{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_type_lien_familial{ isEdit ? '_' + el.id : '' }_{ id }" value="familial" checked="{ checked : type_lien == 'familial'}">
+											<label class="small" id="familial" for="ayant_droit_type_lien_familial{ isEdit ? '_' + el.id : '' }_{ id }">Familial</label>
+										</div>
+										<div class="cell right">
+											<input class="visible" onclick={ toggleVisible } type="image" src="{ visible == 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' }" name="ayant_droit_visible{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_visible{ isEdit ? '_' + el.id : '' }_{ id }" title="{ visible == 'visible' ? 'Visible' : 'Invisible' }" value="{ visible }">                        
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1">
+									<label for="ayant_droit_matricule{ isEdit ? '_' + el.id : '' }" class="label-60">Matricule</label>
+									<input type="text" class="matricule" name="ayant_droit_matricule{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_matricule{ isEdit ? '_' + el.id : '' }_{ id }" required="required" value="{ matricule }">
+								</div>
+								<div class="cell_2">
+									<label for="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }_{ id }" class="label-60">Prénom</label>
+									<input  class="prenom" type="text" value="{ prenom }" name="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_prenom{ isEdit ? '_' + el.id : '' }_{ id }" required="required">
+								</div>
+								<div class="cell_3">
+									<label for="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }">Date de Naissance</label>
+									<input class="date_de_naissance" type="hidden" value="{ date_de_naissance }" name="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }">
+									<input type="text" class="front_ayant_droit_date_de_naissance" value="{ parentTag.convertDateToView(date_de_naissance) }" id="ayant_droit_date_view{ isEdit ? '_' + el.id : '' }_{ id }" onchange="{ formatDateField }" maxlength="10" field-for-age="ayant_droit_age{ isEdit ? '_' + el.id : '' }_{ id }" field-for-date="ayant_droit_date_de_naissance{ isEdit ? '_' + el.id : '' }_{ id }" required="required">
+								</div>
+								<div class="cell_4">
+									<span id="ayant_droit_age{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.showAgeToView(parentTag.convertDateToView(date_de_naissance)) }</span>
+								</div>
+								<div class="cell_5">
+									<label for="ayant_droit_genre{ isEdit ? '_' + el.id : '' }_{ id }">Genre</label>
+									<select class="genre" name="ayant_droit_genre{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_genre{ isEdit ? '_' + el.id : '' }_{ id }">
+										<option value="feminin" selected="{ genre == 'feminin' ? 'selected' : '' }">Féminin</option>
+										<option value="masculin" selected="{ genre == 'masculin' ? 'selected' : '' }">Masculin</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="line-separator"></div>
+						<div class="table c100">
+							<div class="row">
+								<div class="cell_1 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_1_ayant_droit ) }" for="ayant_droit_option_1{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_1_ayant_droit }</label>
+								</div>
+								<div class="cell_2 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_1_ayant_droit ) } option_1" value="{ option_1 }" type="text" name="ayant_droit_option_1{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_1{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_1_ayant_droit }">
+								</div>
+								<div class="cell_3 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_6_ayant_droit ) }" for="ayant_droit_option_6{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_6_ayant_droit }</label>
+								</div>
+								<div class="cell_4 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_6_ayant_droit ) } option_6" value="{ option_6 }" type="text" name="ayant_droit_option_6{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_6{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_6_ayant_droit }">
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_2_ayant_droit ) }" for="ayant_droit_option_2{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_2_ayant_droit }</label>
+								</div>
+								<div class="cell_2 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_2_ayant_droit ) } option_2" value="{ option_2 }" type="text" name="ayant_droit_option_2{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_2{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_2_ayant_droit }">
+								</div>
+								<div class="cell_3 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_7_ayant_droit ) }" for="ayant_droit_option_7{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_7_ayant_droit }</label>
+								</div>
+								<div class="cell_4 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_7_ayant_droit ) } option_7" value="{ option_7 }" type="text" name="ayant_droit_option_7{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_7{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_7_ayant_droit }">
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_3_ayant_droit ) }" for="ayant_droit_option_3{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_3_ayant_droit }</label>
+								</div>
+								<div class="cell_2 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_3_ayant_droit ) } option_3" value="{ option_3 }" type="text" name="ayant_droit_option_3{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_3{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_3_ayant_droit }">
+								</div>
+								<div class="cell_3 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_8_ayant_droit ) }" for="ayant_droit_option_8{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_8_ayant_droit }</label>
+								</div>
+								<div class="cell_4 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_8_ayant_droit ) } option_8" value="{ option_8 }" type="text" name="ayant_droit_option_8{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_8{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_8_ayant_droit }">
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_4_ayant_droit ) }" for="ayant_droit_option_4{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_4_ayant_droit }</label>
+								</div>
+								<div class="cell_2 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_4_ayant_droit ) } option_4" value="{ option_4 }" type="text" name="ayant_droit_option_4{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_4{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_4_ayant_droit }">
+								</div>
+								<div class="cell_3 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_9_ayant_droit ) }" for="ayant_droit_option_9{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_9_ayant_droit }</label>
+								</div>
+								<div class="cell_4 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_9_ayant_droit ) } option_9" value="{ option_9 }" type="text" name="ayant_droit_option_9{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_9{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_9_ayant_droit }">
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell_1 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_5_ayant_droit ) }" for="ayant_droit_option_5{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_5_ayant_droit }</label>
+								</div>
+								<div class="cell_2 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_5_ayant_droit ) } option_5" value="{ option_5 }" type="text" name="ayant_droit_option_5{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_5{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_5_ayant_droit }">
+								</div>
+								<div class="cell_3 right">
+									<label class="{ hidden : ( ! parentTag.champs.champ_10_ayant_droit ) }" for="ayant_droit_option_10{ isEdit ? '_' + el.id : '' }_{ id }">{ parentTag.champs.champ_10_ayant_droit }</label>
+								</div>
+								<div class="cell_4 left">
+									<input class="{ hidden : ( ! parentTag.champs.champ_10_ayant_droit ) } option_10" value="{ option_10 }" type="text" name="ayant_droit_option_10{ isEdit ? '_' + el.id : '' }_{ id }" id="ayant_droit_option_10{ isEdit ? '_' + el.id : '' }_{ id }" placeholder="{ parentTag.champs.champ_10_ayant_droit }">
+								</div>
+							</div>
+						</div>
+						<div class="right">
+							<button class="button annuler cell_block cancelEditAyantDroit" onclick={ cancelEditAyantDroit }>Annuler</button>
+							<button class="button enregistrer cell_block save_edited_element updateAyantDroit" onclick={ updateAyantDroit }>Enregistrer</button>
+						</div>
+					</div>
+					<div id="ayant_droit_{ id }_delete" class="delete hidden">
+						<div>
+							<p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p>
+							<button name="cancel_{ id }" onclick={ cancelDeleteAyantDroit }>Annuler</button>
+							<button name="delete_{ id }" id="delete_{ id }" onclick={ deleteAyantDroit }>Supprimer</button>
+						</div>
+					</div>			
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="right edit_block_actions hide_when_add_ayant_droit hide_when_edit_ayant_droit" id="hide_button{ isEdit ? '_' + el.id : '' }">
+		<button class="button annuler cell_block cancelSalarie" onclick={ cancelSalarie }>Annuler</button>
+		<button class="button enregistrer cell_block save_edited_element" onclick={ saveSalarie }>Enregistrer</button>
+	</div>
+	<script>
+		var _this = this;
+		var parentTag = this.parentTag = opts.parentTag;
+		var app = this.app = parentTag.app;
+		var element = this.el = this.element = opts.element;
+		var isEdit = this.isEdit = false;
+
+		if(opts.element){
+			isEdit = true;
+			this.isEdit = true;
+		}else{
+			element = this.el = this.element = {};
+		}
+
+		if( ! _this.el.ayantsDroits ){
+			_this.el.ayantsDroits = [];
+			_this.el.idAyantsDroits = {};
+		}
+
+		if(isEdit){
+			_this.parentTag.getAyantDroit(_this.el.id, function(){
+				_this.update();
+			});
+			_this.parentTag.getReglements(_this.el.id, function(){
+				_this.update();
+			});
+			_this.parentTag.getInscriptions(_this.el.id, function(){
+				_this.update();
+			});
+		}
+
+		this.loaded = false;
+		var permissions = app.session.permissions;
+      	var SALARIES_READ = this.SALARIES_READ = permissions.SALARIES_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+
+		this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+        }
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+            if(_this.parentTag.E_M){
+                _this.parentTag.E_M.showContents(e, { toggleClass: 'hidden', });
+            }
+		}
+
+		genPass(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			var pass;
+			if( isEdit && _this.el.id ){
+			 	pass = 'mot_de_passe_' + _this.el.id;
+			}else{
+				pass = 'mot_de_passe';
+			}
+			_this.genString(pass);
+
+		}
+
+		_this.genString = function genString(id) {
+			var cible = document.getElementById(id);
+			cible.value = '';
+			var abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&@$_{';
+			var pass = '';
+        	longueur = 8;
+        	for(i=0;i<longueur;i++){
+            	var wpos = Math.round(Math.random()*abc.length);
+            	pass+=abc.substring(wpos,wpos+1);
+        	}        	
+        	cible.value = pass;
+		}
+
+		cancelSalarie(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if( _this.parentTag.E_M ){
+				if( isEdit ){
+					e.item = _this.element;
+				}
+				_this.parentTag.cancelSalarie(e);
+			    _this.unmount();
+			}
+		}
+
+		saveSalarie(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if( _this.parentTag.E_M ){
+				if( isEdit ){
+					e.item = _this.element;
+				}
+
+				var idElement = isEdit ? _this.element.id : '';
+				var suffixId = isEdit ? '_' + _this.element.id : '';
+
+                $("#ajout_ou_edit").text("");
+
+                var rib_1 = document.getElementById("rib_1" + suffixId);
+                var rib_2 = document.getElementById("rib_2" + suffixId);
+                var rib_3 = document.getElementById("rib_3" + suffixId);
+                var rib_4 = document.getElementById("rib_4" + suffixId);
+                var rib_for_db = document.getElementById("rib" + suffixId);
+                rib_for_db.value = rib_1.value + rib_2.value + rib_3.value + rib_4.value;
+
+				var fields = ['numero_salarie', 'nom', 'prenom', 'titre','numero_et_voie', 'numero_appartement_ou_etage', 'entree_batiment', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'identifiant_internet', 'mot_de_passe', 'nom_de_naissance', 'date_de_naissance', 'situation_familiale', 'telephone', 'portable', 'email_personnel', 'email_professionnel', 'fonction', 'statut', 'date_entree', 'date_sortie', 'banque', 'titulaire', 'rib', 'iban', 'bic', 'option_1', 'option_2', 'option_3', 'option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10', 'quotient', 'quotientN1', 'quotientN2', 'tranche_salaire', 'valeur','solde', 'reglement', 'participation_adherent', 'participation_association', 'visible', 'nombre_enfant', 'nombre_ayant_droit'];
+
+				var l = fields.length;
+				var element = _this.el;
+				var ayantsDroits = _this.el.ayantsDroits;
+
+/*********************************************************************************************
+				if( isEdit ){
+					// element = _this.salaries[ _this.idSalaries[ idElement ] ];
+					element = _this.element;
+				}else{
+					element = new Object();
+					element.ayantsDroits = {};					
+				}
+**********************************************************************************************/
+
+				var data = {};
+
+				for(i=0; i<l; i++){
+					field = fields[i];
+
+					if( isEdit ){
+						fieldId  = field + '_' + idElement;
+					}else{
+						fieldId  = field;
+					}
+
+					if(document.getElementById( fieldId )){
+						elem = document.getElementById( fieldId );
+						if( elem.type === 'checkbox'){
+							if( elem.checked ){
+								value = 1;
+							}else{
+								value = 0;
+							}
+						}else if( elem.type === 'radio'){
+							elem = document.querySelector('input[name="' + fieldId + '"]:checked');
+							if(elem){
+								value = elem.value;
+							}else{
+								value = null;
+							}
+						}else{
+							value = elem.value;
+						}
+					}else{
+						value = null;
+					}
+
+					data[field] = value;
+
+					element[field] = value;
+				}
+
+				data['ayants_droits'] = ayantsDroits;
+
+				data['id_exercice'] = document.getElementById('id_exercice').value;
+
+				if( isEdit ){
+					data['id'] = idElement;
+					data.action = 'update';
+				}else{
+					data.action = 'add';
+				}
+
+			console.log('saveSalarie data: ' + JSON.stringify(data));
+			console.log('id_exercice: ' + data.id_exercice);
+				$.ajax('/admin/salaries/salaries', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						console.log('saveElement result: ' + JSON.stringify(result));
+						this.result = result;
+						if(result && ! result.error){
+							if( isEdit ){
+								var $container = $('#salarie_' + idElement);
+								var $editContainer = $('#salarie_' + idElement + '_edit');
+								var $show_infos = $('.show_infos', $container);
+							}else{
+								var $addElement = $('#add_element');
+								var $filtres = $('.filtres');
+
+								if( result.id ){
+									element.id = result.id;
+								}
+
+								_this.parentTag.salaries.push(element);
+
+								numElement = _this.parentTag.salaries.length - 1;
+								_this.parentTag.idSalaries[result.id] = numElement;
+							}
+
+							_this.parentTag.update();
+
+							if( isEdit ){
+								$show_infos.removeClass('hidden');
+								$editContainer.addClass('hidden');
+							}else{
+								$addElement.addClass('hidden');
+								$filtres.removeClass('hidden');
+							}
+							$('.hide_when_add, .hide_when_edit').removeClass('hidden');
+						}else if(result.ids){
+							// TODO:
+						}else if(result.error){
+							// TODO:
+							setTimeout(function(){ $('#loader').addClass('hidden'); }, 0);
+						}
+					}
+				}).done(function(){
+					console.log('done!...');
+				}).fail(function(){
+					console.log('fail!...');
+				}); //, 'json'
+
+			    _this.unmount();
+			}
+		}
+
+		makeId(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(isEdit){
+				e.item = _this.element;
+			}
+			_this.parentTag.makeId(e);
+		}
+
+		formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(isEdit){
+				e.item = _this.element;
+			}
+			_this.parentTag.formatDateField(e);
+		}
+
+		focusNextOne(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(isEdit){
+				e.item = _this.element;
+			}
+			_this.parentTag.focusNextOne(e);
+		}
+
+		toggleVisible(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(isEdit){
+				e.item = _this.element;
+			}
+			_this.parentTag.toggleVisible(e);
+		}
+
+		calculeQuotient(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(isEdit){
+				e.item = _this.element;
+			}
+			_this.parentTag.calculeQuotient(e);
+		}
+
+		editAyantDroit(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.parentTag.E_M){
+				var htmlPrefixId = '';
+				var htmlId = '';
+				var ayantDroitId = e.item ? e.item.id : '';
+				if(isEdit){
+					//e.item => we are in a loop on el.ayantsDroits
+					htmlPrefixId = _this.el.id + '_';
+					htmlId = '_' + _this.el.id;
+				}
+				$(".hide_when_edit_ayant_droit", $(_this.root)).addClass('hidden');
+				$(".show_infos", $(_this.root)).addClass('hidden');
+				_this.parentTag.E_M.editElement({
+					event: e, 
+					tag: _this,
+					prefixId: 'ayant_droit_' + htmlPrefixId,
+					hideClass: 'hidden',
+				});
+
+				loadDateTemplateAyantsDroits(ayantDroitId);
+			}
+		}
+
+		updateAyantDroit(e){
+			e.preventDefault();
+			e.stopPropagation();
+			if(_this.parentTag.E_M){
+				var htmlId = '';
+				var id_salarie;
+				var id = e.item.id;
+				if(isEdit){
+					id_salarie = e.item.id_salarie;
+					htmlId = '_' + id_salarie;
+				}
+				
+				htmlId = htmlId + '_' + id;
+				var ayantDroit = _this.el.ayantsDroits[ _this.el.idAyantsDroits[ id ] ];
+
+				ayantDroit.numero_salarie = $('#numero_salarie' + htmlId).val();
+				ayantDroit.titre = $('#ayant_droit_titre' + htmlId).val();
+				ayantDroit.lien = $('#ayant_droit_lien' + htmlId).val();
+				ayantDroit.type_lien = $('input[name=ayant_droit_type_lien' + htmlId + ']:checked').val();
+				ayantDroit.nom = $('#ayant_droit_nom' + htmlId).val();
+				ayantDroit.prenom = $('#ayant_droit_prenom' + htmlId).val();
+				ayantDroit.date_de_naissance = $('#ayant_droit_date_de_naissance' + htmlId).val();
+				ayantDroit.genre = $('#ayant_droit_genre' + htmlId).val();
+				ayantDroit.visible = $('#ayant_droit_visible' + htmlId).val();
+				ayantDroit.option_1 = $('#ayant_droit_option_1' + htmlId).val();
+				ayantDroit.option_2 = $('#ayant_droit_option_2' + htmlId).val();
+				ayantDroit.option_3 = $('#ayant_droit_option_3' + htmlId).val();
+				ayantDroit.option_4 = $('#ayant_droit_option_4' + htmlId).val();
+				ayantDroit.option_5 = $('#ayant_droit_option_5' + htmlId).val();
+				ayantDroit.option_6 = $('#ayant_droit_option_6' + htmlId).val();
+				ayantDroit.option_7 = $('#ayant_droit_option_7' + htmlId).val();
+				ayantDroit.option_8 = $('#ayant_droit_option_8' + htmlId).val();
+				ayantDroit.option_9 = $('#ayant_droit_option_9' + htmlId).val();
+				ayantDroit.option_10 = $('#ayant_droit_option_10' + htmlId).val();
+
+				$('#ayant_droit' + htmlId + '_edit').addClass('hidden');
+				$('.show_infos', $('#ayant_droit' + htmlId)).removeClass('hidden');
+				$(".hide_when_edit_ayant_droit", $(_this.root)).removeClass('hidden');
+			}
+		}
+
+		cancelEditAyantDroit(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.parentTag.E_M){
+				var htmlId = '';
+				var suffixId = '';
+				var id_salarie;
+				var id = e.item.id;
+				if(isEdit){
+					id_salarie = e.item.id_salarie;
+					htmlId = '_' + id_salarie;
+					suffixId = id_salarie + '_';
+				}
+				
+				htmlId = htmlId + '_' + id;
+				_this.parentTag.E_M.cancelElement({
+					event: e,
+					fields: ['numero_salarie', 'nom', 'prenom', 'titre', 'genre', 'lien', 'type_lien', 'date_de_naissance', 'visible', 'option_1', 'option_2', 'option_3', 'option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10'],
+					tag: _this,
+					elements: _this.ayantsDroits,
+					idElements: _this.idAyantsDroits,
+					prefixId: 'ayant_droit_' + suffixId,
+					hideClass: 'hidden',
+					end: function(params){
+						$('.front_ayant_droit_date_de_naissance', this.$editContainer ).val(params.tag.parentTag.convertDateToView(this.item['date_de_naissance']));
+					}
+				});
+				$('#ayant_droit' + htmlId + '_edit').addClass('hidden');
+				$('.show_infos', $('#ayant_droit' + htmlId)).removeClass('hidden');
+				$(".hide_when_edit_ayant_droit", $(_this.root)).removeClass('hidden');
+
+			}
+
+
+			if(isEdit){
+				e.item = _this.element;
+			}
+			$(".hide_when_edit_ayant_droit", $(_this.root)).removeClass('hidden');
+			//_this.parentTag.cancelEditAyantDroit(e);
+		}
+
+
+		showAddAyantDroit(e){
+			//ayant_droit_date_view{ isEdit ? '_' + el.id : '' }
+
+			//$('#add_ayant_droit' + ( isEdit ? '_' + _this.el.id : '' )).removeClass('hidden');
+			$('.show_when_add_ayant_droit').removeClass('hidden');
+			$('.hide_when_add_ayant_droit').addClass('hidden');			
+			loadDateTemplateAyantsDroits();
+		}
+
+		cancelAddAyantDroit(e){
+			$('.show_when_add_ayant_droit').addClass('hidden');
+			$('.hide_when_add_ayant_droit').removeClass('hidden');
+
+			var suffixId = isEdit ? '_' + _this.element.id : '';
+
+			$('#ayant_droit_titre' + suffixId).val('');
+			$('#ayant_droit_lien' + suffixId).val('');
+			$('#ayant_droit_type_lien' + suffixId).val('');
+			$('#ayant_droit_type_lien_familial' + suffixId).val('');
+			$('#ayant_droit_nom' + suffixId).val('');
+			$('#ayant_droit_prenom' + suffixId).val('');
+			$('#ayant_droit_date_de_naissance' + suffixId).val('');
+			$('#ayant_droit_genre' + suffixId).val('');
+			$('#ayant_droit_visible' + suffixId).val('');
+			$('#ayant_droit_option_1' + suffixId).val('');
+			$('#ayant_droit_option_2' + suffixId).val('');
+			$('#ayant_droit_option_3' + suffixId).val('');
+			$('#ayant_droit_option_4' + suffixId).val('');
+			$('#ayant_droit_option_5' + suffixId).val('');
+			$('#ayant_droit_option_6' + suffixId).val('');
+			$('#ayant_droit_option_7' + suffixId).val('');
+			$('#ayant_droit_option_8' + suffixId).val('');
+			$('#ayant_droit_option_9' + suffixId).val('');
+			$('#ayant_droit_option_10' + suffixId).val('');
+
+		}
+
+		addAyantDroit(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+
+			var salarieId;
+			var id;
+
+			if(isEdit){
+				e.item = _this.element;
+				salarieId = _this.element.id;
+			}
+
+			if( ! _this.el.ayantsDroits ){
+				_this.el.ayantsDroits = [];
+				_this.el.idAyantsDroits = {};
+			}
+
+			do {
+				id = app.makeRandString();
+			} while ( _this.el.idAyantsDroits[id] );
+
+			var ayantDroit = {};
+			var suffixId = isEdit ? '_' + salarieId : '';
+
+			ayantDroit.id = id;
+			ayantDroit.numero_salarie = $('#numero_salarie' + suffixId).val();
+			ayantDroit.titre = $('#ayant_droit_titre' + suffixId).val();
+			ayantDroit.lien = $('#ayant_droit_lien' + suffixId).val();
+			ayantDroit.type_lien = $('input[name=ayant_droit_type_lien' + suffixId + ']:checked').val();
+			ayantDroit.nom = $('#ayant_droit_nom' + suffixId).val();
+			ayantDroit.prenom = $('#ayant_droit_prenom' + suffixId).val();
+			ayantDroit.date_de_naissance = $('#ayant_droit_date_de_naissance' + suffixId).val();
+			ayantDroit.genre = $('#ayant_droit_genre' + suffixId).val();
+			ayantDroit.visible = $('#ayant_droit_visible' + suffixId).val();
+			ayantDroit.option_1 = $('#ayant_droit_option_1' + suffixId).val();
+			ayantDroit.option_2 = $('#ayant_droit_option_2' + suffixId).val();
+			ayantDroit.option_3 = $('#ayant_droit_option_3' + suffixId).val();
+			ayantDroit.option_4 = $('#ayant_droit_option_4' + suffixId).val();
+			ayantDroit.option_5 = $('#ayant_droit_option_5' + suffixId).val();
+			ayantDroit.option_6 = $('#ayant_droit_option_6' + suffixId).val();
+			ayantDroit.option_7 = $('#ayant_droit_option_7' + suffixId).val();
+			ayantDroit.option_8 = $('#ayant_droit_option_8' + suffixId).val();
+			ayantDroit.option_9 = $('#ayant_droit_option_9' + suffixId).val();
+			ayantDroit.option_10 = $('#ayant_droit_option_10' + suffixId).val();
+			ayantDroit.action = 'add';
+
+			_this.el.idAyantsDroits[ id ] = _this.el.ayantsDroits.length;
+			_this.el.ayantsDroits.push(ayantDroit);
+
+console.log('addAyantDroit _this.el.ayantsDroits : ' + JSON.stringify(_this.el.ayantsDroits));
+
+			$('.show_when_add_ayant_droit').addClass('hidden');
+			$('.hide_when_add_ayant_droit').removeClass('hidden');			
+
+			_this.update();
+
+			$('#ayant_droit_titre' + suffixId).val('');
+			$('#ayant_droit_lien' + suffixId).val('');
+			$('#ayant_droit_type_lien' + suffixId).val('');
+			$('#ayant_droit_type_lien_familial' + suffixId).val('');
+			$('#ayant_droit_nom' + suffixId).val('');
+			$('#ayant_droit_prenom' + suffixId).val('');
+			$('#ayant_droit_date_de_naissance' + suffixId).val('');
+			$('#ayant_droit_genre' + suffixId).val('');
+			$('#ayant_droit_visible' + suffixId).val('');
+			$('#ayant_droit_option_1' + suffixId).val('');
+			$('#ayant_droit_option_2' + suffixId).val('');
+			$('#ayant_droit_option_3' + suffixId).val('');
+			$('#ayant_droit_option_4' + suffixId).val('');
+			$('#ayant_droit_option_5' + suffixId).val('');
+			$('#ayant_droit_option_6' + suffixId).val('');
+			$('#ayant_droit_option_7' + suffixId).val('');
+			$('#ayant_droit_option_8' + suffixId).val('');
+			$('#ayant_droit_option_9' + suffixId).val('');
+			$('#ayant_droit_option_10' + suffixId).val('');
+		}
+
+		cancelDeleteAyantDroit(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+			
+				//$(".show_infos", $('#salaries_' + e.item.id )).removeClass('hidden');
+				//$('#salaries_' + e.item.id + '_delete').addClass('hidden');
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'ayant_droit_',});
+			}
+		}
+
+		validDeleteAyantDroit(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			_this.parentTag.validDeleteAyantDroit(e);
+		}
+
+		deleteAyantDroit(e){
+			e.preventDefault();
+			//e.preventUpdate = true;
+			e.stopPropagation();
+			var id = e.item.id;
+			_this.el.ayantsDroits[ _this.el.idAyantsDroits[ id ] ].action = "delete";
+			$('#ayant_droit_' + id + '_delete').addClass('hidden');
+console.log('deleteAyantDroit : id : ' + id);
+			 
+			
+		}
+
+		function loadDateTemplateAyantsDroits(id) {
+			var suffixId = isEdit ? '_' + _this.el.id : '';
+
+			if(id){
+				suffixId = suffixId + '_' + id;
+			}
+
+			$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+			$( "#ayant_droit_date_view" + suffixId).datepicker({
+			  dateFormat: 'dd/mm/yy',
+			  showOtherMonths: true,
+			  selectOtherMonths: true
+			});
+		}
+
+		function loadDateTemplate() {
+			var suffixId = isEdit ? '_' + _this.el.id : '';
+			$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+			
+			$( "#front_date_de_naissance" + suffixId).datepicker({
+			  dateFormat: 'dd/mm/yy',
+			  showOtherMonths: true,
+			  selectOtherMonths: true
+			});
+			$( "#date_entree_view" + suffixId).datepicker({
+			  dateFormat: 'dd/mm/yy',
+			  showOtherMonths: true,
+			  selectOtherMonths: true
+			});
+			$( "#date_sortie_view" + suffixId).datepicker({
+			  dateFormat: 'dd/mm/yy',
+			  showOtherMonths: true,
+			  selectOtherMonths: true
+			});
+		}
+
+		_this.getNumEnfants = function getNumEnfants(){
+			var num = 0;
+			var i;
+			var ayantsDroits = _this.el.ayantsDroits;
+			var l = ayantsDroits.length;
+			for( i=0; i<l; i++){
+				if( ayantsDroits[i].lien == 'enfant' ){
+					num++;
+				}
+			}
+			return num;
+		}
+
+		this.on('mount', function(){
+			loadDateTemplate();
+		});
+
+	</script>
+</edit-salaries>

@@ -1,0 +1,826 @@
+<comptanalytique>
+    <div id="titre_page"><h1>Impressions</h1></div>
+    <div if={ COMPTA_READ } class="content with_submenu">
+        <div class="compta compta_impressions">
+            <div class="block-filtre block-slider">
+                <header class="filtre-header center opened header-title" onclick= { showContents }>
+                    Filtres
+                </header>
+                <div class="slide-up">
+                    <div class="line-separator"></div>
+                    <div class="filtre">
+                    </div>
+                </div>
+            </div>
+            <!-- <div if={ COMPTA_READ } class="nav_compta_impressions block-slider">
+                <header class="opened" onclick="{ showContents }">Filtres</header>
+                <div class="slide-up filtre hidden">
+                    <div class="inline_block">
+                        <div class="filtre_journaux_comptes">
+                            <label class="s-large" for="filtre_journal">Journaux</label>
+                            <select name="filtre_journal" id="filtre_journal" class="" onchange={ filterChange }>
+                                <option value=""></option>
+                                <option each="{ this.journaux }" value="{ id }">{ libelle }</option>
+                            </select>
+                            <label class="s-large" for="filtre_compte">Comptes</label>
+                            <select name="filtre_compte" id="filtre_compte" class="" onchange={ filterChange }>
+                                <option value=""></option>
+                                <option each="{ this.comptes }" value="{ id }">{ reference } { libelle }</option>
+                            </select>
+                        </div>
+                        <div class="filtre_budget_analyt">
+                            <label class="s-large" for="filtre_budget">Budget</label>
+                            <select name="filtre_budget" id="filtre_budget" class="" onchange={ filterChange }>
+                                <option value=""></option>
+                                <option each="{ this.budgets }" value="{ id }">{ libelle }</option>
+                            </select>
+                            <label class="s-large" for="filtre_analytique">Analytique</label>
+                            <select name="filtre_analytique" id="filtre_analytique" class="" onchange={ filterChange }>
+                                <option value=""></option>
+                                <option each="{ this.analytiques }" value="{ id }">{ libelle }</option>
+                            </select>
+                        </div>
+                        <div class="filtre_fournisseur_salarie">
+                            <label class="s-large" for="filtre_fournisseur">Fournisseur</label>
+                            <select name="filtre_fournisseur" id="filtre_fournisseur" class="" onchange={ filterChange }>
+                                <option value=""></option>
+                                <option each="{ this.fournisseurs }" value="{ id }">{ libelle }</option>
+                            </select>
+                            <label class="s-large" for="filtre_salarie">{ IS_CE ? 'Salarié' : 'Adhérent' }</label>
+                            <select name="filtre_salarie" id="filtre_salarie" class="" onchange={ filterChange }>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="filtre_libelle">
+                            <label class="s-large" for="filtre_libelle">Libelle</label>
+                            <input type="text" id="filtre_libelle" onchange={ filterChange }>
+                        </div>
+                    </div>
+                    <div class="c40 inline_block filtres_checkbox">
+                        <div class="c49 inline_block">
+                            <input type="checkbox" id="ec_valides" onchange={ filterChange }><label for="ec_valides">Ecritures Validées</label>
+                        </div>
+                        <div class="c49 inline_block">
+                            <input type="checkbox" id="ec_lettrees" onchange={ filterChange }><label for="ec_lettrees">Ecritures Lettrées</label>
+                        </div>
+                        <div class="c49 inline_block">
+                            <input type="checkbox" id="ec_non_valides" onchange={ filterChange } checked><label for="ec_non_valides">Ecritures Non Validées</label>
+                        </div>
+                        <div class="c49 inline_block">
+                            <input type="checkbox" id="ec_non_lettrees" onchange={ filterChange }><label for="ec_non_lettrees">Ecritures Non Lettrées</label>
+                        </div>
+                        <div class="c40 inline_block">
+                            <input type="checkbox" id="ec_du_jour" onchange={ filterChange }><label for="ec_du_jour">Ecritures du Jour</label>
+                        </div>
+                        <div class="c55 inline_block">
+                            <label>Date</label><input type="text" id="filtre_date_debut" onchange={ filterChange }><input type="text" id="filtre_date_fin" onchange={ filterChange }>
+                        </div>
+                        <div class="c49 inline_block">
+                            <label for="filtre_operation">N° Opération</label><input type="text" id="filtre_operation" onchange={ filterChange }>
+                        </div>
+                        <div class="c49 inline_block">
+                            <label for="filtre_piece">N° Pièce</label><input type="text" id="filtre_piece" onchange={ filterChange }>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div if={ COMPTA_READ } class="nav_compta_impressions block-slider">
+                <header class="closed">
+                    <a class="comptes-title center"  href="#/compta/impressions">
+                        Comptabilité Générale
+                    </a>
+                </header>
+            </div>
+            <div if={ COMPTA_READ } class="nav_compta_impressions block-slider">
+                <header class="closed">
+                    <a class="comptes-title center">
+                        Comptabilité Analytique
+                    </a>
+                </header>
+                <div class="slide-up">
+                    <div class="line-separator"></div>
+                    <div class="compta_content">
+                        <div class="compta_content">
+                            <div class="impressions_comptanalytique">
+                                <div class="table table_impressions_comptanalytique">
+                                    <div class="row row_impressions_comptanalytique">
+                                        <div class="cell cell_impressions_comptanalytique1">
+                                            <!-- <img src="/img/compta/button_grandLivreAnalytique.png" value="2" alt="grandlivreanalytique" onclick= { Onglet_grandLivre }> -->
+                                            <input id="img_grand_livre_analytique" onclick={ Onglet_grandLivreAnalytique } id-for-uncheck="id_grand_livre_analytique" type="checkbox" value="grandlivreanalytique">
+                                            <label for="img_grand_livre_analytique"></label>
+                                        </div>
+                                        <div class="cell cell_impressions_comptanalytique2">
+                                            <!-- <img src="/img/compta/button_balanceAnalytique.png" value="2" alt="balanceanalytique" onclick= { Onglet_balanceAnalytique }> -->
+                                            <input id="img_balance_analytique" onclick={ Onglet_balanceAnalytique } id-for-uncheck="id_balance_analytique" type="checkbox" value="balance_analytique">
+                                            <label for="img_balance_analytique"></label>
+                                        </div>
+                                        <div class="cell cell_impressions_comptanalytique3">
+                                            <!-- <img src="/img/compta/button_situationBudget.png" alt="situation_budgetaire"> -->
+                                            <input id="img_situation_budgetaire" onclick={ Onglet_situationBudgetaire } id-for-uncheck="id_situation_budgetaire" type="checkbox" value="situation_budgetaire">
+                                            <label for="img_situation_budgetaire"></label>
+                                        </div>
+                                         <div class="cell cell_impressions_comptanalytique4">
+                                            <!-- <img src="/img/compta/button_syntheseBudget.png" alt="synthese_budgetaire"> -->
+                                            <input id="img_synthese_budgetaire" onclick={ Onglet_syntheseBudgetaire } id-for-uncheck="id_synthese_budgetaire" type="checkbox" value="synthese_budgetaire">
+                                            <label for="img_synthese_budgetaire"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nombreEcritures_analytique">
+                                    Nombre d'écritures : { nbr_analy_ecritures }
+                                </div>
+                            </div>
+                            <!-- GRAND LIVRE ANALYTIQUE -->
+                                <div id="ongletgrandlivreAnalytique2" class="ongletgrandlivreAnalytique hidden">
+                                    <div class="table table_grandlivres_filtres_ongletgrandlivreAnalytique">
+                                        <div class="cell_1 button_retour" onclick={ retourPageImpression } value="2"></div>
+                                        <div class="cell_2 button_export"> </div>
+                                        <div class="cell_3 button_imprimer"></div>
+                                        <div class="cell_4">
+                                            <b>GRAND LIVRE ANALYTIQUE</b>
+                                            <div if={ OeuvresSocialesClikChecked } class="only_oeuvres_sociales">Oeuvres Sociales</div>
+                                            <div if={ FonctionnementClikChecked } class="only_fonctionnement">Fonctionnement</div>
+                                        </div>
+                                        <div class="cell_5"></div>
+                                        <div class="cell_6"></div>
+                                        <div class="cell_7"></div>
+                                    </div>
+                                    <div class="entete-tableau_3">
+                                        <div if={ IS_CE } class="cell_4">
+                                            <input type="radio" onclick={ ToutAnalytique1 } value="2" name="oeuvres_sociales_fonctionnement2" checked="checked">Tous les analytiques
+                                        </div>
+                                        <div if={ IS_CE } class="cell_1">
+                                            <input type="radio" onclick={ OnlyFonctionnement1 } value="2" name="oeuvres_sociales_fonctionnement2">Uniquement Fonctionnement  
+                                        </div>
+                                        <div if={ IS_CE } class="cell_2">
+                                            <input type="radio" onclick={ OnlyOeuvres1 } value="2" name="oeuvres_sociales_fonctionnement2">Uniquement Oeuvres Sociales
+                                        </div>
+                                        <div if={ IS_CE } class="cell_3"></div> 
+                                    </div>
+                                    <div class="entete-tableau">
+                                        <div class="cell_1">
+                                            <p>Journal</p>
+                                            <p>Date</p>
+                                        </div>
+                                        <div class="cell_2">
+                                            <p>Opération</p>
+                                            <p>Pièce</p>
+                                        </div>
+                                        <div class="cell_3">Libelle</div>
+                                        <div class="cell_4"><p>N° Compte</p></div>
+                                        <div class="cell_5 L_R">L/R</div>
+                                        <div class="cell_6 reel_debit">Débit</div>
+                                        <div class="cell_7 reel_credit">Crédit</div>
+                                        <div class="cell_8">Solde</div>
+                                    </div>
+                                    <div each={ comptanalytique } if={ ( AnalytiqueMovChecked || ( credit_reel != 0) || ( debit_reel != 0)) && (( ! OeuvresSocialesClikChecked && ! FonctionnementClikChecked ) || ( OeuvresSocialesClikChecked && nb_oeuvre != 0) || ( FonctionnementClikChecked && nb_fonctionnement != 0)) } class="table c100 table_livreAnalytique hidden" test={ nb_oeuvre }>
+                                        <div class="show_infos show_budgets" if={ ! FonctionnementClikChecked && ! OeuvresSocialesClikChecked || ( FonctionnementClikChecked && ( credit_reel_f != 0 || debit_reel_f != 0)) || ( OeuvresSocialesClikChecked && ( credit_reel_o != 0 || debit_reel_o != 0)) } onclick={ showAnalytiques }>
+                                            <div class="cell_1">{ libelle_budget }</div>
+                                            <div if={ ( ! OeuvresSocialesClikChecked && ! FonctionnementClikChecked ) } class="cell_4">{ formatNumber(debit_reel) }</div>
+                                            <div if={ ( FonctionnementClikChecked && nb_fonctionnement != 0) } class="cell_4">{ formatNumber(debit_reel_f) }</div>
+                                            <div if={ ( OeuvresSocialesClikChecked && nb_oeuvre != 0) } class="cell_4">{ formatNumber(debit_reel_o) }</div>
+                                            <div if={ ( ! OeuvresSocialesClikChecked && ! FonctionnementClikChecked ) } class="cell_5">{ formatNumber(credit_reel) }</div>
+                                            <div if={ ( FonctionnementClikChecked && nb_fonctionnement != 0) } class="cell_5">{ formatNumber(credit_reel_f) }</div>
+                                            <div if={ ( OeuvresSocialesClikChecked && nb_oeuvre != 0) } class="cell_5">{ formatNumber(credit_reel_o) }</div>
+                                            <div if={ ( ! OeuvresSocialesClikChecked && ! FonctionnementClikChecked ) } class="cell_6">{ formatNumber(solde) }</div>
+                                            <div if={ ( FonctionnementClikChecked && nb_fonctionnement != 0) } class="cell_6">{ formatNumber(solde_f) }</div>
+                                            <div if={ ( OeuvresSocialesClikChecked && nb_oeuvre != 0) } class="cell_6">{ formatNumber(solde_o) }</div>
+                                        </div>
+                                        <div each={ analytique } if={ ( AnalytiqueMovChecked || ( credit_reel != 0) || ( debit_reel != 0)) && (( ! OeuvresSocialesClikChecked && ! FonctionnementClikChecked ) || ( OeuvresSocialesClikChecked && nature == 'oeuvres_sociales') || ( FonctionnementClikChecked && nature == 'fonctionnement')) } class="table c100 analytiques hidden">
+                                            <div class="show_infos show_analytiques" onclick={ showEcritures }>
+                                                <div class="cell_1">{ libelle_analytique }</div>
+                                                <div if={ IS_CE } class="cell_2">{ nature }</div>
+                                                <div if={ IS_ASSO } class="cell_2"></div>
+                                                <div class="cell_4">{ formatNumber(debit_reel) }</div>
+                                                <div class="cell_5">{ formatNumber(credit_reel) }</div>
+                                                <div class="cell_6">{ formatNumber(solde) }</div>
+                                            </div>
+                                            <div each={ ecritures } if={ (credit_reel != 0) || (debit_reel != 0) } class="table c100 ecritures hidden">
+                                                <div class="show_infos show_ecritures">
+                                                    <div class="cell_1"><p>{ this.journaux[ this.idJournaux[ id_journal ]].libelle }</p><p>{ formatDate(date_ecriture) }</p></div>
+                                                    <div class="cell_2"><p>{ operation }</p> <p>{ piece }</p></div>
+                                                    <div class="cell_3">{ libelle_ecriture }</div>
+                                                    <div class="cell_4"> <p>{ ref_compte }</p></div>
+                                                    <div class="cell_5"></div>
+                                                    <div class="cell_6">{ formatNumber(debit_reel) }</div>
+                                                    <div class="cell_7">{ formatNumber(credit_reel) }</div>
+                                                    <div class="cell_8">{ formatNumber(solde) }</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- FIN GRAND LIVRE ANALYTIQUE -->
+                            <!-- BALANCE ANALYTIQUE -->
+                            <div id="balanceanalytique2" class="balanceanalytique hidden">
+                                <div class="table table_impressions_filtres_balanceanalytique">
+                                    <div class="cell_1 button_retour" onclick={ retourPageImpression } value="2"></div>
+                                    <div class="cell_2 button_export"></div>
+                                    <div class="cell_3 button_imprimer"></div>
+                                    <div class="cell_4">
+                                        <b>BALANCE ANALYTIQUE</b>
+                                        <div if={ OeuvresSocialesClikChecked2 } class="only_oeuvres_sociales">Oeuvres Sociales</div>
+                                        <div if={ FonctionnementClikChecked2 } class="only_fonctionnement">Fonctionnement</div>
+                                    </div>
+                                    <div class="cell_5"></div>
+                                    <div class="cell_6"></div>
+                                    <div class="cell_7"></div>
+                                </div>
+                                <div class="entete-tableau_2">
+                                    <div if={ IS_CE } class="cell_4">
+                                        <input type="radio" onclick={ ToutAnalytique } value="2" name="only_oeuvres_sociales_fonctionnement2" checked="checked">Tous les analytiques
+                                    </div>
+                                    <div if={ IS_CE } class="cell_1">
+                                        <input type="radio" onclick={ OnlyFonctionnement } value="2" name="only_oeuvres_sociales_fonctionnement2">Uniquement Fonctionnement
+                                    </div>
+                                    <div if={ IS_CE } class="cell_2">
+                                        <input type="radio" onclick={ OnlyOeuvres } value="2" name="only_oeuvres_sociales_fonctionnement2">Uniquement Oeuvres Sociales
+                                    </div>
+                                    <div if={ IS_CE } class="cell_3">
+                                    </div> 
+                                </div>
+                                <div class="entete-tableau_1">
+                                    <div class="cell_1">
+                                        <input onclick={ AnalytiqueMov } type="checkbox" name="comptes_mov">
+                                        Uniquement analytiques mouvementés
+                                    </div>
+                                    <div class="cell_2"></div>
+                                    <div class="cell_3">Cumuls</div>
+                                    <div class="cell_4">Solde</div>
+                                </div>
+                                <div class="entete-tableau entete-tableau-balanceanalytique">
+                                    <div class="cell_1 comptes_vide"></div>
+                                    <div if={ IS_CE } class="cell_2 libelle_nature">Nature</div>
+                                    <div if={ IS_ASSO } class="cell_2 libelle_vide"></div>
+                                    <div class="cell_3">
+                                        <div class="debit_credit">
+                                            <div class="cell_debit">Débit</div>
+                                            <div class="cell_credit">Crédit</div>
+                                        </div>
+                                    </div>
+                                    <div class="cell_4">
+                                        <div class="debit_credit">
+                                            <div class="cell_debit">Débit</div>
+                                            <div class="cell_credit">Crédit</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div each={ comptanalytique } if={ (! AnalytiqueMovChecked || ( debit_reel != 0 || credit_reel != 0)) && (( ! OeuvresSocialesClikChecked2 && ! FonctionnementClikChecked2 ) || ( OeuvresSocialesClikChecked2 && nb_oeuvre != 0) || ( FonctionnementClikChecked2 && nb_fonctionnement != 0)) } class="table c100 table_livreAnalytique" nb_o={ nb_oeuvre } nb_f={ nb_fonctionnement }>
+                                    <div class="show_infos show_budgets" if={ ( ! AnalytiqueMovChecked && FonctionnementClikChecked2 ) || ( AnalytiqueMovChecked && FonctionnementClikChecked2 && ( debit_reel_f != 0 || credit_reel_f != 0)) || ( ! AnalytiqueMovChecked && OeuvresSocialesClikChecked2 ) || ( AnalytiqueMovChecked && OeuvresSocialesClikChecked2 && ( debit_reel_o != 0 || credit_reel_o != 0)) || ( ! AnalytiqueMovChecked && ! FonctionnementClikChecked2 && ! OeuvresSocialesClikChecked2 ) || ( AnalytiqueMovChecked && ! FonctionnementClikChecked2 && ! OeuvresSocialesClikChecked2  && ( debit_reel != 0 || credit_reel != 0)) } onclick={ showAnalytiques }>
+                                        <div class="cell_1">{ libelle_budget }</div>
+                                        <div class="cell_2"></div>
+                                        <div class="cell_3">
+                                            <div class="debit_credit">
+                                                <div if={ ( ! OeuvresSocialesClikChecked2 && ! FonctionnementClikChecked2 ) } class="cell_debit">{ formatNumber(debit_reel) }</div>
+                                                <div if={ ( ! OeuvresSocialesClikChecked2 && ! FonctionnementClikChecked2 ) }  class="cell_credit">{ formatNumber(credit_reel) }</div>
+                                                <div if={ ( FonctionnementClikChecked2 && nb_fonctionnement != 0) } class="cell_debit">{ formatNumber(debit_reel_f) }</div>
+                                                <div if={ ( FonctionnementClikChecked2 && nb_fonctionnement != 0) } class="cell_credit">{ formatNumber(credit_reel_f) }</div>
+                                                <div if={ ( OeuvresSocialesClikChecked2 && nb_oeuvre != 0) } class="cell_debit">{ formatNumber(debit_reel_o) }</div>
+                                                <div if={ ( OeuvresSocialesClikChecked2 && nb_oeuvre != 0) } class="cell_credit">{ formatNumber(credit_reel_o) }</div>
+                                            </div>
+                                        </div>
+                                        <div class="cell_4">
+                                            <div class="debit_credit">
+                                                <!-- <div class="cell_debit">{ formatNumber(solde_debit) }</div>
+                                                <div class="cell_credit">{ formatNumber(solde_credit) }</div> -->
+                                                <div if={ ( ! OeuvresSocialesClikChecked2 && ! FonctionnementClikChecked2 ) } class="cell_debit">{ formatNumber(solde_debit) }</div>
+                                                <div if={ ( ! OeuvresSocialesClikChecked2 && ! FonctionnementClikChecked2 ) }  class="cell_credit">{ formatNumber(solde_credit) }</div>
+                                                <div if={ ( FonctionnementClikChecked2 && nb_fonctionnement != 0) } class="cell_debit">{ formatNumber(solde_debit_f) }</div>
+                                                <div if={ ( FonctionnementClikChecked2 && nb_fonctionnement != 0) } class="cell_credit">{ formatNumber(solde_credit_f) }</div>
+                                                <div if={ ( OeuvresSocialesClikChecked2 && nb_oeuvre != 0) } class="cell_debit">{ formatNumber(solde_debit_o) }</div>
+                                                <div if={ ( OeuvresSocialesClikChecked2 && nb_oeuvre != 0) } class="cell_credit">{ formatNumber(solde_credit_o) }</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div each={ analytique } if={ (! AnalytiqueMovChecked || ( debit_reel != 0 || credit_reel != 0)) && (( ! OeuvresSocialesClikChecked2 && ! FonctionnementClikChecked2 ) || ( OeuvresSocialesClikChecked2 && nature == 'oeuvres_sociales') || ( FonctionnementClikChecked2 && nature == 'fonctionnement') ) } class="table c100 analytiques">
+                                        <div class="show_infos show_analytiques" onclick={ showEcritures }>
+                                            <div class="cell_1">{ libelle_analytique }</div>
+                                            <div if={ IS_CE } class="cell_2 libelle_nature">{ nature }</div>
+                                            <div if={ IS_ASSO } class="cell_2"></div>
+                                            <div class="cell_3">
+                                                <div class="debit_credit">
+                                                    <div class="cell_debit">{ formatNumber(debit_reel) }</div>
+                                                    <div class="cell_credit">{ formatNumber(credit_reel) }</div>
+                                                </div>
+                                            </div>
+                                            <div class="cell_4">
+                                                <div class="debit_credit">
+                                                    <div class="cell_debit">{ formatNumber(solde_debit) }</div>
+                                                    <div class="cell_credit">{ formatNumber(solde_credit) }</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div each={ ecritures } if={ ( credit_reel != 0) || ( debit_reel != 0) } class="table c100 ecritures hidden">
+                                            <div class="show_infos show_ecritures">
+                                                <div class="cell_1">{ ref_compte }</div>
+                                                <div class="cell_2">{ libelle_compte }</div>
+                                                <div class="cell_3">
+                                                    <div class="debit_credit">
+                                                        <div class="cell_debit">{ formatNumber(debit_reel) }</div>
+                                                        <div class="cell_credit">{ formatNumber(credit_reel) }</div>
+                                                    </div>
+                                                </div>
+                                                <div class="cell_4">
+                                                    <div class="debit_credit">
+                                                        <div class="cell_debit">{ formatNumber(solde_debit) }</div>
+                                                        <div class="cell_credit">{ formatNumber(solde_credit) }</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIN BALANCE ANALYTIQUE -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var app = opts;
+        this.app = opts;
+        var _this = this;
+        _this.AnalytiqueMovChecked = false;
+        _this.OeuvresSocialesClikChecked = false;
+        _this.FonctionnementClikChecked = false;
+        //_this.vueEnsembleClikChecked = false;
+        _this.OeuvresSocialesClikChecked2 = false;
+        _this.FonctionnementClikChecked2 = false;
+        //_this.vueEnsembleClikChecked2 = false;
+
+        var permissions = app.session.permissions;
+        var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+        var IS_CE = this.IS_CE = permissions.IS_CE || false;
+        var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+        app.on('unmount-comptanalytique', function(){
+            app.off('unmount-comptanalytique');
+            _this.unmount();
+        });
+
+        _this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+            _this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+            if( _this.loaded ){
+            }
+        });
+
+//
+// TOUT ANALYTIQUE 
+        _this.comptanalytique = [];
+
+        function getComptanalytique(params){
+            console.log("test : " + params );
+            var params = params || {};
+            var getParams = {};
+            getParams.balance_analytique = params.balance_analytique || undefined;
+            /*if ($('#img_balance_analytique')[0]) {
+                var getParams = { balance_analytique : 1 };  
+            }*/
+            var callback = params.callback || undefined;
+            console.log("toto : " + JSON.stringify(getParams));
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/comptanalytique', getParams, function(data){
+                //console.log(JSON.stringify(data));
+                if(data && data.elements){
+                    var newBudgets = false;
+                    var newAnalytiques = false;
+                    var nb_oeuvre = 0;
+                    var nb_fonctionnement = 0;
+                    var currentBudgetsReference = undefined;
+                    var currentAnalytiquesReference = undefined;
+                    var budgets_fields = { id_budget: 'id_budget', libelle_budget: 'libelle_budget' };
+                    var analytiques_fields = { id_analytique: 'id_analytique', libelle_analytique: 'libelle_analytique', nature: 'nature'};
+                    var ecriture_fields = { id_ecriture: 'id_ecriture', id_journal: 'id_journal', libelle_ecriture: 'libelle_ecriture', date_ecriture: 'date_ecriture', operation: 'operation', piece: 'piece', debit_reel: 'debit_reel', credit_reel: 'credit_reel', id_compte: 'id_compte', ref_compte: 'ref_compte', libelle_compte: 'libelle_compte' };
+                    for(var i = 0, l = data.elements.length; i < l; i++) {
+                        if(data.elements[i].id_budget != currentBudgetsReference) {
+                            newBudgets = true;
+                            var objetBudgets = new Object();
+                            currentBudgetsReference = data.elements[i].id_budget;
+                            for(field in budgets_fields){
+                                objetBudgets[budgets_fields[field]] = data.elements[i][field];
+                            }
+                            objetBudgets.nb_oeuvre = 0;
+                            objetBudgets.nb_fonctionnement = 0;
+                            objetBudgets.credit_reel = 0;
+                            objetBudgets.debit_reel = 0;
+                            objetBudgets.credit_reel_f = 0;
+                            objetBudgets.debit_reel_f = 0;
+                            objetBudgets.credit_reel_o = 0;
+                            objetBudgets.debit_reel_o = 0;
+                            objetBudgets.analytique = [];
+                        }else{
+                            newBudgets = false;
+                        }
+
+                        if(data.elements[i].id_analytique != currentAnalytiquesReference) {
+                            newAnalytiques = true;
+                            var objetAnalytiques = new Object();
+                            currentAnalytiquesReference = data.elements[i].id_analytique;
+                            for(field in analytiques_fields){
+                                objetAnalytiques[analytiques_fields[field]] = data.elements[i][field];
+                            }
+                            objetAnalytiques.credit_reel = 0;
+                            objetAnalytiques.debit_reel = 0;
+                            objetAnalytiques.ecritures = [];
+                        }else{
+                            newAnalytiques = false;
+                        }
+                           if (objetAnalytiques.nature == 'oeuvres_sociales') {
+                                    objetBudgets.nb_oeuvre++;
+                                } else if (objetAnalytiques.nature == 'fonctionnement') {
+                                    objetBudgets.nb_fonctionnement++; 
+                                }
+
+                        var objetEcriture = new Object();
+                        for(field in ecriture_fields){
+                            objetEcriture[ecriture_fields[field]] = data.elements[i][field];
+                        }
+                            objetEcriture.credit_reel = 0;
+                            objetEcriture.debit_reel = 0;
+
+                        if (data.elements[i].credit_reel != null) {
+                            objetEcriture.credit_reel = parseInt(data.elements[i].credit_reel);
+                            objetAnalytiques.credit_reel += parseInt(data.elements[i].credit_reel);
+                            //objetBudgets.credit_reel += parseInt(data.elements[i].credit_reel);
+                            if (objetAnalytiques.nature == 'oeuvres_sociales'){
+                              objetBudgets.credit_reel_o += parseInt(data.elements[i].credit_reel);  
+                            }
+                            else if (objetAnalytiques.nature == 'fonctionnement'){
+                                objetBudgets.credit_reel_f += parseInt(data.elements[i].credit_reel);
+                            }
+                            objetBudgets.credit_reel += parseInt(data.elements[i].credit_reel);
+                            
+                        }
+
+                        if (data.elements[i].debit_reel != null) {
+                            objetEcriture.debit_reel = parseInt(data.elements[i].debit_reel);
+                            objetAnalytiques.debit_reel += parseInt(data.elements[i].debit_reel);
+                            //objetBudgets.debit_reel += parseInt(data.elements[i].debit_reel);
+                            if (objetAnalytiques.nature == 'oeuvres_sociales'){
+                              objetBudgets.debit_reel_o += parseInt(data.elements[i].debit_reel);  
+                            } else if (objetAnalytiques.nature == 'fonctionnement'){
+                                objetBudgets.debit_reel_f += parseInt(data.elements[i].debit_reel);
+                            }
+                            objetBudgets.debit_reel += parseInt(data.elements[i].debit_reel);
+                        }
+
+                        var solde = data.elements[i].debit_reel - data.elements[i].credit_reel;
+                        if(solde >= 0) {
+                            objetEcriture.debit_reel = solde;
+                            objetEcriture.credit_reel = 0;
+                        } else {
+                            objetEcriture.credit_reel = Math.abs(solde);
+                            objetEcriture.debit_reel = 0; 
+                        }                         
+
+                        var solde_ecriture = objetEcriture.debit_reel - objetEcriture.credit_reel;
+                        objetEcriture.solde = solde_ecriture;
+
+                        var solde_analytique = objetAnalytiques.debit_reel - objetAnalytiques.credit_reel;
+                        objetAnalytiques.solde = solde_analytique;
+
+                        if (objetAnalytiques.nature == 'oeuvres_sociales'){
+                            var solde_budget_o = objetBudgets.debit_reel_o - objetBudgets.credit_reel_o;
+                            objetBudgets.solde_o = solde_budget_o;  
+                        } else if (objetAnalytiques.nature == 'fonctionnement'){
+                            var solde_budget_f = objetBudgets.debit_reel_f - objetBudgets.credit_reel_f;
+                            objetBudgets.solde_f = solde_budget_f;
+                        }
+                        var solde_budget = objetBudgets.debit_reel - objetBudgets.credit_reel;
+                        objetBudgets.solde = solde_budget;
+
+                        var solde_balance_ecriture = data.elements[i].debit_reel - data.elements[i].credit_reel;
+                        if (solde_balance_ecriture >= 0){
+                            objetEcriture.solde_debit = Math.abs(solde_balance_ecriture);
+                            objetEcriture.solde_credit = 0;
+                        } else {
+                            objetEcriture.solde_debit = 0;
+                            objetEcriture.solde_credit = Math.abs(solde_balance_ecriture);
+                        }
+
+                        var solde_balance_analytique = objetAnalytiques.debit_reel - objetAnalytiques.credit_reel;
+                        if (solde_balance_analytique >= 0){
+                            objetAnalytiques.solde_debit = Math.abs(solde_balance_analytique);
+                            objetAnalytiques.solde_credit = 0;
+                        } else {
+                            objetAnalytiques.solde_debit = 0;
+                            objetAnalytiques.solde_credit = Math.abs(solde_balance_analytique);
+                        }
+
+                        if (objetAnalytiques.nature == 'oeuvres_sociales'){
+                            var solde_balance_budget_o = objetBudgets.debit_reel_o - objetBudgets.credit_reel_o;
+                            if (solde_balance_budget_o >= 0){
+                                objetBudgets.solde_debit_o = Math.abs(solde_balance_budget_o);
+                                objetBudgets.solde_credit_o = 0;
+                            } else {
+                                objetBudgets.solde_debit_o = 0;
+                                objetBudgets.solde_credit_o = Math.abs(solde_balance_budget_o);
+                            }  
+                        } else if (objetAnalytiques.nature == 'fonctionnement'){
+                            var solde_balance_budget_f = objetBudgets.debit_reel_f - objetBudgets.credit_reel_f;
+                            if (solde_balance_budget_f >= 0){
+                                objetBudgets.solde_debit_f = Math.abs(solde_balance_budget_f);
+                                objetBudgets.solde_credit_f = 0;
+                            } else {
+                                objetBudgets.solde_debit_f = 0;
+                                objetBudgets.solde_credit_f = Math.abs(solde_balance_budget_f);
+                            }
+                        }
+                        var solde_balance_budget = objetBudgets.debit_reel - objetBudgets.credit_reel;
+                        if (solde_balance_budget >= 0){
+                            objetBudgets.solde_debit = Math.abs(solde_balance_budget);
+                            objetBudgets.solde_credit = 0;
+                        } else {
+                            objetBudgets.solde_debit = 0;
+                            objetBudgets.solde_credit = Math.abs(solde_balance_budget);
+                        }
+                        
+                        objetAnalytiques.ecritures.push(objetEcriture);
+                        if(newAnalytiques){
+                            objetBudgets.analytique.push(objetAnalytiques);
+                        }
+                        if(newBudgets){
+
+                            _this.comptanalytique.push(objetBudgets);
+                        }
+                        }
+                    }
+                    if(typeof callback == 'function'){
+                        callback();
+                    }
+                    
+                    //console.log('tata:', _this.comptanalytique)
+                    _this.update();  
+            })
+        }
+        getComptanalytique();
+//
+////
+        this.exercices = [];
+        this.idExercices = {};
+
+        function getExercices(){
+            var getParams = { union: 1, id: 1, analytique: 1 };
+            if(_this.E_M) {
+                _this.E_M.showLoader();
+            } else {
+                $('#loader').removeClass('hidden'); 
+            }
+            $.getJSON('/admin/compta/exercices', getParams, function (data){
+                console.log(data);
+                if(data && data.elements){
+                    var i, field, d; 
+                    var l = data.elements.length;
+                                            
+                    var fields = { date_debut: 'date_debut', date_fin: 'date_fin', ecritures: 'ecritures', nbr_analy_ecritures: 'nbr_analy_ecritures' };
+                    for(i=0; i<l; i++){
+                        d = new Object();
+                        for(field in fields){
+                            d[fields[field]] = data.elements[i][field];
+                            console.log(d[fields['nbr_analy_ecritures']]);
+                            var nbr_analy_ecritures;
+                            _this.nbr_analy_ecritures = parseInt(d[fields['nbr_analy_ecritures']]).toFixed();
+                        }
+                        if(data.elements[i]['status'] === 'active') {
+                            _this.nbExercicesActif++;
+                        }
+                        _this.idExercices[d['id']] = i;
+                        _this.exercices.push(d);
+                    }
+                    _this.update();
+                    if(_this.E_M) {
+                        _this.E_M.removeLoader({});
+                    } else {
+                        $('#loader').addClass('hidden');
+                    }
+
+                    _this.loaded = true;
+                }else{
+                    if(data && data.error){
+                    }
+                }
+            });
+        }
+
+        getExercices();
+
+
+        this.formatDate = function formatDate(date) {
+                                var datePart = date.match(/\d+/g),
+                                year = datePart[0],
+                                month = datePart[1], 
+                                day = datePart[2];
+                                return day+'/'+month+'/'+year;
+                            }
+
+        this.formatNumber = function formatNumber(x) {
+                                x = x.toFixed(2);
+                                var parts = x.toString().split(".");
+                                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+                                return parts.join(".");
+                            }
+
+        /*Onglet_grandLivre(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            $('#ongletgrandlivreAnalytique' + indexdiv).removeClass('hidden');
+            $('.table_livreAnalytique').removeClass('hidden');
+            $('.analytiques').removeClass('hidden');
+            $('.ecritures').removeClass('hidden');
+            $('.impressions_comptanalytique').addClass('hidden');
+        }*/
+
+        Onglet_grandLivreAnalytique(e) {
+            var id = e.currentTarget.getAttribute("id-for-uncheck");
+            var checked = e.currentTarget.checked;
+            if (checked == true){
+                $('#ongletgrandlivreAnalytique2').removeClass('hidden');
+                $('.table_livreAnalytique').removeClass('hidden');
+                $('.analytiques').removeClass('hidden');
+                $('.ecritures').removeClass('hidden');
+                $('.impressions_comptanalytique').addClass('hidden');
+                console.log("true");
+            } else {
+                console.log("false");
+            }
+        }
+
+        /*Onglet_balanceAnalytique(e){
+            var indexdiv = $(e.currentTarget).attr('value');
+            $('#balanceanalytique' + indexdiv).removeClass('hidden');
+            $('.impressions_comptanalytique').addClass('hidden');
+            $('.ecritures').addClass('hidden');
+        }*/
+
+        Onglet_balanceAnalytique(e) {
+            //console.log('::::: ::::: ::::: ::::: Onglet_balanceAnalytique: ' + e.currentTarget.value);
+            var id = e.currentTarget.getAttribute("id-for-uncheck");
+            var checked = e.currentTarget.checked;
+            if (checked == true){
+                getComptanalytique({
+                    balance_analytique: 1, 
+                    callback: function(){
+                        //var getParams = { balance_analytique : 1 };
+                        $('#balanceanalytique2').removeClass('hidden');
+                        $('.impressions_comptanalytique').addClass('hidden');
+                        $('.ecritures').addClass('hidden');
+                        console.log("true");
+                    }
+                });
+            } else {
+                console.log("false");
+            }
+        }
+
+        retourPageImpression(e) {
+            var indexdiv = $(e.currentTarget).attr('value');
+            $('#ongletgrandlivreAnalytique' + indexdiv).addClass('hidden');
+            $('#balanceanalytique' + indexdiv).addClass('hidden');
+            $('.impressions_comptanalytique').removeClass('hidden');   
+        }
+
+        showAnalytiques(e){
+            var parentAnalytiques = $(e.currentTarget.parentNode);
+            $(".analytiques", parentAnalytiques).toggleClass('hidden')
+        }
+
+        showEcritures(e){
+            var parentEcritures = $(e.currentTarget.parentNode);
+            $(".ecritures", parentEcritures).toggleClass('hidden')
+        }
+
+        AnalytiqueMov(e) {
+            _this.AnalytiqueMovChecked = e.currentTarget.checked;
+            _this.update();
+        }
+
+        /*vueEnsembleClik(e) {
+            _this.OeuvresSocialesClikChecked = false;
+            _this.FonctionnementClikChecked = false;
+            _this.ToutClikChecked = false;
+            _this.vueEnsembleClikChecked = e.currentTarget.checked;
+            _this.update(); 
+        }
+
+        vueEnsembleClik2(e) {
+            _this.OeuvresSocialesClikChecked2 = false;
+            _this.FonctionnementClikChecked2 = false;
+            _this.vueEnsembleClikChecked2 = e.currentTarget.checked;
+            _this.update(); 
+        }*/
+
+        OeuvresSocialesClik(e) {
+            _this.FonctionnementClikChecked = false;
+            _this.OeuvresSocialesClikChecked = e.currentTarget.checked;
+            _this.update();
+        }
+
+        OeuvresSocialesClik2(e) {
+            _this.FonctionnementClikChecked2 = false;
+            _this.OeuvresSocialesClikChecked2 = e.currentTarget.checked;
+            _this.update();
+        }
+
+        FonctionnementClik(e) {
+            _this.OeuvresSocialesClikChecked = false;
+            _this.FonctionnementClikChecked = e.currentTarget.checked;
+            _this.update(); 
+        }
+
+        ToutClik(e) {
+            _this.OeuvresSocialesClikChecked = true;
+            _this.FonctionnementClikChecked = true;
+            _this.ToutClikChecked = e.currentTarget.checked;
+            _this.update(); 
+        }
+
+        FonctionnementClik2(e) {
+            _this.OeuvresSocialesClikChecked2 = false;
+            _this.FonctionnementClikChecked2 = e.currentTarget.checked;
+            _this.update(); 
+        }
+
+        OnlyFonctionnement(e) {
+            var indexdiv = $(e.currentTarget).attr('value');/*
+            $('#test_f' + indexdiv).removeClass('hidden');
+            $('.test_g').addClass('hidden');
+            $('.test_o').addClass('hidden');*/
+            _this.OeuvresSocialesClikChecked2 = false;
+            _this.FonctionnementClikChecked2 = e.currentTarget.checked;
+            _this.update();  
+        }
+
+        OnlyOeuvres(e) {
+            var indexdiv = $(e.currentTarget).attr('value');/*
+            $('#test_o' + indexdiv).removeClass('hidden');
+            $('.test_f').addClass('hidden');
+            $('.test_g').addClass('hidden');*/
+            _this.FonctionnementClikChecked2 = false;
+            _this.OeuvresSocialesClikChecked2 = e.currentTarget.checked;
+            _this.update(); 
+        }
+
+        ToutAnalytique(e){
+          var indexdiv = $(e.currentTarget).attr('value');/*
+            $('#test_g' + indexdiv).removeClass('hidden');
+            $('.test_f').addClass('hidden');
+            $('.test_o').addClass('hidden');*/
+            _this.OeuvresSocialesClikChecked2 = false;
+            _this.FonctionnementClikChecked2 = false;
+            _this.ToutClikChecked2 = e.currentTarget.checked;
+            _this.update();   
+        }
+
+        OnlyFonctionnement1(e) {
+            var indexdiv = $(e.currentTarget).attr('value');/*
+            $('#test_af' + indexdiv).removeClass('hidden');
+            $('.test_ag').addClass('hidden');
+            $('.test_ao').addClass('hidden');*/
+            _this.OeuvresSocialesClikChecked = false;
+            _this.FonctionnementClikChecked = e.currentTarget.checked;
+            _this.update();  
+        }
+
+        OnlyOeuvres1(e) {
+            var indexdiv = $(e.currentTarget).attr('value');/*
+            $('#test_ao' + indexdiv).removeClass('hidden');
+            $('.test_af').addClass('hidden');
+            $('.test_ag').addClass('hidden');*/
+            _this.FonctionnementClikChecked = false;
+            _this.OeuvresSocialesClikChecked = e.currentTarget.checked;
+            _this.update(); 
+        }
+
+        ToutAnalytique1(e){
+          var indexdiv = $(e.currentTarget).attr('value');/*
+            $('#test_ag' + indexdiv).removeClass('hidden');
+            $('.test_af').addClass('hidden');
+            $('.test_ao').addClass('hidden');*/
+            _this.OeuvresSocialesClikChecked = false;
+            _this.FonctionnementClikChecked = false;
+            _this.ToutClikChecked2 = e.currentTarget.checked;
+            _this.update();   
+        }
+
+        this.update();
+
+        showContents(e){
+            e.preventDefault();
+            e.preventUpdate = true;
+            if(_this.E_M){
+                console.log(e.target);
+                _this.E_M.showContents(e);
+            }
+        };
+    </script>
+
+</comptanalytique>

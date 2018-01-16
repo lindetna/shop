@@ -1,0 +1,503 @@
+<exercices>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> -->
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div id="loader" class="loader">
+        </div>
+		<div class="compta compta_exercices">
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/journaux">
+						Journaux
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/comptes">
+						Comptes
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/budgets">
+						Budgets
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/cle_repartition">
+						Clé de répartition
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/chapitres">
+						Chapitres Bilan et Compte de Résultat
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/parametres">
+						Paramètres Comptables	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/mode_paiement">Mode de Paiement</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage excercices block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+						Exercices	
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="compta_content">
+						<!-- Onglet ajout excercice -->
+						<div id="add_element" class="edit_exercice edit hidden">
+							<div class="table c100">
+								<div class="cell_1">
+									<input type="hidden" name="type_element" value="classe">
+								</div>
+								<div class="cell_2">
+									<div>
+										<label for="nom">Exercice : </label>
+										<input type="text" id="nom" name="nom" required="required">
+									</div>
+								</div>
+								<div class="cell_3">
+									<div>
+										<label for="date_debut">Début</label>
+										<input type="text" name="date_debut" id="date_debut" type="date">
+
+										<label for="date_fin">Fin</label>
+										<input type="text" name="date_fin" id="date_fin" type="date">
+										<!-- <input type="hidden" name="date_enregistrement" id="date_enregistrement" type="date">
+										<input type="text" id="dateView" onkeyup='{ formatDateField }' maxlength="10" field-for-age="age" field-for-date="date_enregistrement" required="required" class="date l-large date_enregistrement">
+-->
+									</div>
+								</div>
+								<div class="cell_4">
+									<div class="cell_1 imputation_classe_cell1">Imputation Classe 1-5 :</div>
+									<div class="cell_2 imputation_classe_cell2">
+										<label class="switch">
+											<input type="checkbox" id="imputation" value="1">
+											<div class="slider round">
+												<p class="switch_oui">Oui</p>
+												<p class="switch_non">Non</p>
+											</div>
+										</label>
+									</div>	
+								</div>
+							</div>
+							<div class="table c100">
+								<div class="cell_1">
+								</div>
+								<div class="cell_2">
+								</div>
+								<div class="cell_3">
+								</div>
+								<div class="cell_4 saveCancelCell">
+									<div id="save_exo">
+										<button class="button annuler cancel_submit" onclick={ cancelExercice }>Annuler</button>
+										<button class="button enregistrer save_submit" onclick={ saveExercice }>Enregistrer</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="actions">
+							<button id="add_exercice_button" onclick={ addExercice } class="button ajouter">Ajouter un Exercice
+							</button>
+							<button id="choix_parDefaut" class="button" onclick={ saveDefault }>Par défaut
+							</button>
+							<button id="button_cloturer" class="button" onclick={ saveStatus }>Cloturer</button>
+						</div>
+						<!-- -->
+						<div>
+							<div class="row_add_exo_entete entete-tableau">
+								<div class="cell cell_add_exo_1 cell_1"></div>
+								<div class="cell cell_add_exo_2 cell_2">
+									<p>Exercice</p>
+								</div>
+								<div class="cell cell_add_exo_3 cell_3">
+									<p>Date</p>
+								</div>
+								<div class="cell cell_add_exo_4 cell_4">
+									<p>Imputation Classe 1-5</p>
+								</div>
+								<div class="cell cell_add_exo_5 cell_5">
+									<p>Statut</p>
+								</div>
+								<div class="cell cell_add_exo_6 cell_6">
+									<p>Nbre Ecritures</p>
+								</div>
+								<div class="cell cell_add_exo_7 cell_7">
+									<p>Actions</p>
+								</div>
+							</div>
+							<div each={ exercices } id="{ id }" class="exercice { 'isdefault' : is_default == 1 }" id="exercice_{ id }" db_id ="{ id }">
+								<div class="show_infos">
+									<div class="cell cell_add_exo_1 cell_1">
+										<input type="checkbox" id="checkbox_{ id }">
+									</div>
+									<div class="cell cell_add_exo_2 cell_2">
+										<p>{ nom }</p>
+									</div>
+									<div class="cell cell_add_exo_3 cell_3">
+										<p>{ convertDateToView(date_debut) } { convertDateToView(date_fin) }</p>
+									</div>
+									<div class="cell cell_add_exo_4 cell_4">
+										<label class="switch">
+											<input type="checkbox" checked="{ checked : imputation == 1 }" disabled>
+											<div class="slider round">
+												<p class="switch_oui">Oui</p>
+												<p class="switch_non">Non</p>
+											</div>
+										</label>
+										<!-- <p>{ imputation_classe }</p> -->
+									</div>
+									<div class="cell cell_add_exo_5 cell_5">
+										<p>{ status === "active" ? "Ouvert" : "Fermé" }</p>
+									</div>
+									<div class="cell cell_add_exo_6 cell_6">
+										<p>{ ecritures }</p>
+									</div>
+									<div class="cell cell_add_exo_7 cell_7">
+										<p>
+											<!-- <img class="modifier_image" alt="modifier" title="Modifier" src="/img/edit.png"> -->
+											<p id="modifier_exo" class="modif">
+												<input onclick={ editExercice } type="image" src="/img/edit.png" title="Modifier" id="modif_exo" class="modifier_image" name="modif_exo">
+												<img if={ ! is_delete } class="delete_element_img" alt="supprimer" title="Supprimer" src="/img/delete.png" onclick={ validDeleteElement }>
+											</p>
+										</p>
+									</div>
+								</div>
+								<div id="{ id }_edit" class="edit edit_exercice hidden">
+									<div class="cell cell_fill">
+										<label for="nom_{ id }" class="small">Nom :</label>
+										<input type="text" value="{ nom }" id="nom_{ id }" class="nom">
+									</div>
+									<div class="cell cell_add_exo_3 cell_3">
+										<p class="small">{ convertDateToView(date_debut) } { convertDateToView(date_fin) }</p>
+									</div>
+									<div class="cell cell_add_exo_4 cell_4">
+										<label class="switch">
+											<input type="checkbox" checked="{ checked : imputation == 1 }" disabled>
+											<div class="slider round">
+												<p class="switch_oui">Oui</p>
+												<p class="switch_non">Non</p>
+											</div>
+										</label>
+										<!-- <p>{ imputation_classe }</p> -->
+									</div>
+									<div class="cell cell_add_exo_5 cell_5">
+										<p class="small">{ status === "active" ? "Ouvert" : "Fermé" }</p>
+									</div>
+									<div class="cell cell_add_exo_6 cell_6">
+										<p class="small">{ ecritures }</p>
+									</div>
+									<div class="cell cell_add_exo_7 cell_7">
+									 	<button onclick={ saveExercice } class="button enregistrer save_submit">Enregistrer</button><!--
+									 --><button onclick={ cancelExercice } class="button annuler cancel_submit">Annuler</button>
+									</div>
+								</div>
+								<div id="{ id }_delete" class="delete hidden">
+									<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button onclick={ deleteExercice }>Supprimer</button><button onclick={ cancelDeleteExercice }>Annuler</button></div>
+								</div>
+
+							</div>
+							<!-- <div class="table table_modif_exo">
+								<div id="edit_exercice" class="row row_modif_exo hidden">
+									<div class="cell cell_add_exo_1 cell_1"></div>
+									<div class="cell cell_add_exo_2 cell_2">Exercice : 2015</div>
+									<div class="cell cell_add_exo_3 cell_3"> Date : 01/01/2015 31/12/2015</div>
+									<div class="cell cell_add_exo_4 cell_4"></div>
+									<div class="cell cell_add_exo_5 cell_5">Imputation Classe 1-5 :</div>
+									<div class="cell cell_add_exo_6 cell_6"></div>
+								</div>
+							</div>	 -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/tableau_de_bord">
+						Tableau de Bord	
+					</a>
+				</header>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var app = opts;
+		this.app = opts;
+	  	var _this = this;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+	  	app.on('unmount-exercices', function(){
+			app.off('unmount-exercices');
+			_this.unmount();
+		});
+
+	  	this.on('mount', function(){
+			var $date = $('#date_debut');
+			$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+
+			if($date.length) {
+				$date.datepicker({
+					dateFormat: 'dd/mm/yy',
+				});
+				$date.datepicker('setDate', new Date());
+			}
+			var $date = $('#date_fin');
+			if($date.length) {
+				$date.datepicker({
+					dateFormat: 'dd/mm/yy',
+				});
+			}
+		})
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+			if( _this.loaded ){
+			}
+		});
+
+		this.update();
+
+		this.nbExercicesActif = 0; 
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				console.log(e.target);
+				_this.E_M.showContents(e);
+			}
+		};
+
+		formatDateField(e){
+			console.log(e);
+			if(_this.E_M){
+				_this.E_M.formatDateField({
+					event: e
+				});
+			}
+        }
+
+        _this.convertDateToDb = function convertDateToDb(date){   
+            var year = date.substr(6, 4);
+		    var month = date.substr(3,2);
+		    var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			return convertedDate;
+        }
+
+        _this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+        }
+
+		editExercice(e){
+			if(_this.E_M){
+				_this.E_M.editElement({ event: e});
+			}
+		}
+
+		addExercice(e) {
+            if(_this.E_M){
+            	$('.actions').addClass('hidden');
+				_this.E_M.addElement({event: e,});
+			}
+        }
+
+        cancelDeleteExercice(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteExercice(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({loader: true, event: e, elements: _this.exercices, idElements: _this.idExercices, tag: _this, url: '/admin/compta/exercices', end: function(params){ app.trigger('get-exercice'); _this.nbExercicesActif--;}});
+			}
+		}
+
+        edit_exo(e){
+        	$('#edit_exercice').removeClass('hidden');
+            $('.row_add_exo').addClass('hidden');
+        }
+
+        cancelExercice(e){
+        	if(_this.E_M){
+           		$('.actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['nom'],
+				});
+			}
+        }
+
+
+		this.exercices = [];
+
+		this.idExercices = {};
+
+		saveExercice(e){
+			if((_this.E_M && (_this.nbExercicesActif < 2 || (_this.E_M && e.item)))){
+            	$('.actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/exercices', 
+					fields: ['nom', 'date_debut', 'date_fin', 'imputation'],
+					tag: _this,
+					elements: _this.exercices,
+					idElements: _this.idExercices,
+					beforeSend: function(params){
+						params.element.status = "active";
+						params.element.ecritures = 0;
+						params.data.date_debut = _this.E_M.convertDateToDb(params.data.date_debut);
+						params.data.date_fin = _this.E_M.convertDateToDb(params.data.date_fin);
+						params.element.date_debut = _this.E_M.convertDateToDb(params.element.date_debut);
+						params.element.date_fin = _this.E_M.convertDateToDb(params.element.date_fin);
+					},
+					end: function(params){
+						app.trigger('get-exercice');
+					}
+				});
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		saveDefault(e) {
+			saveOne('is_default');
+		}
+
+		saveStatus(e) {
+			saveOne('status');
+		}
+
+		function saveOne(element){
+			var id = [];
+			$('.exercice').each(function() {
+				var myId = $(this).attr('db_id');
+				if($('#checkbox_' + myId).is(':checked')) {
+					id.push(myId);
+				}
+				$('input[type=checkbox]', this).prop('checked', false);
+
+			});
+			if(id.length === 1 && _this.exercices[_this.idExercices[id[0]]].status === 'active') {
+				data = {
+					action: 'update',
+					id: id[0],
+				};
+
+				if(element === 'is_default') {
+					data.is_default = 0;
+					data.id = $('#id_exercice option[selected=selected]').val();
+					$.ajax('/admin/compta/exercices', {
+						data : data,
+						type : 'POST',
+						dataType: 'json',
+						success: function (result, textStatus, jqXHR){
+						}
+					})
+					data.is_default = 1;
+					data.id = id[0];
+				} else {
+					data.status = 'archived';
+				}
+
+				$.ajax('/admin/compta/exercices', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						$('.exercice').removeClass('isdefault');
+						$('.exercice[db_id=' + result.id + ']').addClass('isdefault');
+						app.trigger('get-exercice');
+
+					}
+				}).done(function(){
+					console.log('done!...');
+					tag = null;
+				}).fail(function(){
+					console.log('fail!...');
+					tag = null;
+				});
+			}
+		}
+
+		function getExercices(){
+			var getParams = { union: 1};
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON('/admin/compta/exercices', getParams, function (data){
+				console.log(data);
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+											
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', is_default: 'is_default', nom: 'nom', prefixe: 'prefixe', status: 'status', date_debut: 'date_debut', date_fin: 'date_fin', is_delete: 'is_delete', imputation: 'imputation'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						d['ecritures'] = parseInt(data.elements[i]['ecritures']);
+						if(data.elements[i]['status'] === 'active') {
+							_this.nbExercicesActif++;
+						}
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+
+					_this.loaded = true;
+				}else{
+					if(data && data.error){
+					}
+				}
+			});
+		}
+
+		getExercices();
+
+		/* _this.update(); */
+
+	</script>
+
+</exercices>

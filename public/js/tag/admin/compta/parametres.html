@@ -1,0 +1,570 @@
+<parametres>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> -->
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div id="loader" class="loader">
+        </div>
+		<div class="compta compta_parametres">
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/journaux">
+						Journaux
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/comptes">
+						Comptes
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/budgets">
+						Budgets
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/cle_repartition">
+						Clé de répartition
+					</a>
+				</header>
+			</div> -->
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/chapitres">
+						Chapitres Bilan et Compte de Résultat
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage parametrages block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+						Paramètres Comptables	
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="compta_content">
+						<div class="liaison_comptable">
+							<span>Liaison Comptable des paiements en attente</span>
+							<div class="table liaison">
+								<div class="row row_liaison">
+									<div class="cell_1">
+										<!-- <input type="checkbox" value="cheque">
+										Chèques -->
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_cheques" type="checkbox" value="cheque" checked="{ checked : parametresCompte.id_journal_cheques }">Chèques
+									</div>
+									<div class="cell_2">
+										<select id="id_journal_cheques" name="id_journal_cheques" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_cheques }">
+											<option value=""></option>
+					  						<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_cheques }">{ libelle }</option>
+					  					</select>
+									</div>
+									<div class="cell_3">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_chequesvacances" type="checkbox" value="chequesvac" checked="{ checked : parametresCompte.id_journal_chequesvacances }">Chèques Vacances
+									</div>
+									<div class="cell_4">
+										<select id="id_journal_chequesvacances" name="id_journal_chequesvacances" name="compta_select" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_chequesvacances }">
+											<option value=""></option>
+					  						<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_chequesvacances }">{ libelle }</option>
+										</select>
+									</div>
+								</div>
+								<div class="row row_liaison">
+									<div class="cell_1">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_especes" type="checkbox" value="especes" checked="{ checked : parametresCompte.id_journal_especes }">Espèces
+									</div>
+									<div class="cell_2">
+										<select id="id_journal_especes" name="id_journal_especes" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_especes }">
+											<option value=""></option>
+											<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_especes }">{ libelle }</option>
+										</select>
+									</div>
+									<div class="cell_3">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_couponsjeunes" type="checkbox" value="id_journal_couponsjeunes" checked="{ checked : parametresCompte.id_journal_couponsjeunes }">Coupons Jeunes
+									</div>
+									<div class="cell_4">
+										<select id="id_journal_couponsjeunes" name="id_journal_couponsjeunes" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_couponsjeunes }">
+											<option value=""></option>
+					  						<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_couponsjeunes }">{ libelle }</option>
+										</select>
+									</div>
+								</div>
+								<div class="row row_liaison">
+									<div class="cell_1">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_virements" type="checkbox" value="virements" checked="{ checked : parametresCompte.id_journal_virements }">Virements
+									</div>
+									<div class="cell_2">
+										<select id="id_journal_virements" name="id_journal_virements" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_virements }">
+											<option value=""></option>
+											<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_virements }">{ libelle }</option>
+										</select>
+										Frais
+										<input id="frais_virements" class="frais" type="text" name="frais_virements" placeholder="0.00" value="{ parametresCompte.frais_virements ? parametresCompte.frais_virements : '' }">
+									</div>
+									<div class="cell_3">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_couponsports" type="checkbox" value="sport" checked="{ checked : parametresCompte.id_journal_couponsports }">Coupons Sports
+									</div>
+									<div class="cell_4">
+										<select id="id_journal_couponsports" name="id_journal_couponsports" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_couponsports }">
+											<option value=""></option>
+					  						<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_couponsports }">{ libelle }</option>
+										</select>
+									</div>
+								</div>
+								<div class="row row_liaison">
+									<div class="cell_1">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_prelevements" type="checkbox" value="prelevement" checked="{ checked : parametresCompte.id_journal_prelevements }">Prélèvements
+									</div>
+									<div class="cell_2">
+										<select id="id_journal_prelevements" name="id_journal_prelevements" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_prelevements }">
+											<option value=""></option>
+					  						<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_prelevements }">{ libelle }</option>
+										</select>
+										Frais
+										<input id="frais_prelevements" class="frais" type="text" name="frais_prelevements" placeholder="0.00" value="{ parametresCompte.frais_prelevements ? parametresCompte.frais_prelevements : '' }">
+									</div>
+									<div class="cell_3">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_prelevements_salaire" type="checkbox" value="presalaire" checked="{ checked : parametresCompte.id_journal_prelevements_salaire }">Prélèvements sur Salaire
+									</div>
+									<div class="cell_4">
+										<select id="id_journal_prelevements_salaire" name="id_journal_prelevements_salaire" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_prelevements_salaire }">
+											<option value=""></option>
+					  						<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_prelevements_salaire }">{ libelle }</option>
+										</select>
+									</div>
+								</div>
+								<div class="row row_liaison">
+									<div class="cell_1">
+										<input onclick={ trueCheckbox } id-for-uncheck="id_journal_cartebleue" type="checkbox" value="cb" checked="{ checked : parametresCompte.id_journal_cartebleue }">Carte Bleue
+									</div>
+									<div class="cell_2">
+										<select id="id_journal_cartebleue" name="id_journal_cartebleue" class="compta_select" disabled="{ disabled : !parametresCompte.id_journal_cartebleue }">
+											<option value=""></option>
+					  						<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_cartebleue }">{ libelle }</option>
+										</select>
+										Taux
+										<input id="taux_cartebleue" class="taux" type="text" name="taux_cartebleue" placeholder="0.00%" value="{ parametresCompte.taux_cartebleue ? parametresCompte.taux_cartebleue : '' }">
+										Frais
+										<input id="frais_cartebleue" class="frais" type="text" name="frais_cartebleue" placeholder="0.00" value="{ parametresCompte.frais_cartebleue ? parametresCompte.frais_cartebleue : '' }">
+									</div>
+									<div class="cell_3">
+									</div>
+									<div class="cell_4">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="param_bancaires">
+							<div class="param_bancaires_left">
+								<span>Coordonnées Bancaires</span>
+								<div class="coordonnees_bancaires">
+									<div class="row row_bankleft">
+										<div class="cell_bank_1">
+											Banque
+										</div>
+										<div class="cell_bank_2">
+											<input id="banque" class="banque" type="text" name="banque" value="{ parametresCompte.banque ? parametresCompte.banque : '' }">
+										</div>
+									</div>
+									<div class="row row_bankleft">								
+										<div class="cell_bank_1">
+											Titulaire
+										</div>
+										<div class="cell_bank_2">
+											<input id="titulaire" class="titulaire" type="text" name="titulaire" value="{ parametresCompte.titulaire ? parametresCompte.titulaire : '' }">
+										</div>
+									</div>
+									<div class="row row_bankleft">								
+										<div class="cell_bank_1">
+											R.I.B
+										</div>
+										<div class="cell_bank_2">
+											<input id="rib" class="rib_1" type="text" name="rib" maxlength="4" minlength="4" placeholder="0000" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(0, 4) : '' }">
+											<input id="rib2" class="rib_2" type="text" name="rib" maxlength="4" minlength="4" placeholder="0000" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(4, 4) : '' }">
+											<input id="rib3" class="rib_3" type="text" name="rib" maxlength="11" minlength="11" placeholder="00000000000" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(8, 11) : '' }">
+											<input id="rib4" class="rib_4" type="text" name="rib" minlength="2" maxlength="2" placeholder="00" value="{ parametresCompte.rib && parametresCompte.rib.length == 21 ? parametresCompte.rib.substr(19, 2) : '' }">
+										</div>
+									</div>
+									<div class="row row_bankleft">								
+										<div class="cell_bank_1">
+											IBAN
+										</div>
+										<div class="cell_bank_2">
+											<input id="iban" class="iban" type="text" name="iban" placeholder="FR00 0000 0000 0000 0000 0000 00" value="{ parametresCompte.iban ? parametresCompte.iban : '' }">
+											BIC <input id="bic" type="text" name="bic" value="{ parametresCompte.bic ? parametresCompte.bic : '' }">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="param_bancaires_right">
+								<div class="table_bancaires_right">
+									<div if={ IS_ASSO }	>
+										<div class="row row_bankright">								
+											<div class="cell_banque_1">
+												Journal A-Nouveaux
+											</div>
+											<div class="cell_banque_2">
+												<select id="id_journal_nouveaux" name="compta_select" class="compta_select">
+													<option value=""></option>
+						  							<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_nouveaux }">{ libelle }</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div if={ IS_CE }>
+										<div class="row row_bankright">								
+											<div class="cell_banque_1">
+												Journal A-Nouveaux OS 
+											</div>
+											<div class="cell_banque_2">
+												<select id="id_journal_nouveaux" name="compta_select" class="compta_select">
+													<option value=""></option>
+						  							<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_nouveaux }">{ libelle }</option>
+												</select>
+											</div>
+										</div>
+										<div class="row row_bankright">								
+											<div class="cell_banque_1">
+												Journal A-Nouveaux FO
+											</div>
+											<div class="cell_banque_2">
+												<select id="id_journal_nouveaux" name="compta_select" class="compta_select">
+													<option value=""></option>
+						  							<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_nouveaux }">{ libelle }</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="row row_bankright">								
+										<div class="cell_banque_1">
+											Journal de Paye
+										</div>
+										<div class="cell_banque_2">
+											<select id="id_journal_paye" name="compta_select" class="compta_select">
+												<option value=""></option>
+					  							<option each="{ this.journaux }" value="{ id }" selected="{ selected : id == parametresCompte.id_journal_paye }">{ libelle }</option>
+											</select>
+										</div>
+									</div>
+									<!-- Si Association -->
+									<div if={ IS_ASSO }	>
+										<div class="row row_bankright">
+											<div class="cell_banque_1">
+												Compte de résultat
+											</div>
+											<div class="cell_banque_2">
+												<select id="id_compte_asso" name="compta_select" class="compta_select">
+													<option value=""></option>
+						  							<option each={ this.comptes } value="{ id }" reference="{ reference }" selected="{ selected : id == parametresCompte.id_compte_asso }">{ reference } { libelle }</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<!-- Si C.E -->
+									<div if={ IS_CE }>
+										<div class="row row_bankright">
+											<div class="cell_banque_1">
+												Compte de résultat OS
+											</div>
+											<div class="cell_banque_2">
+												<select id="id_compte_os" name="compta_select" class="compta_select">
+													<option value=""></option>
+						  							<option each={ this.comptes } value="{ id }" reference="{ reference }" selected="{ selected : id == parametresCompte.id_compte_os }">{ reference } { libelle }</option>
+												</select>
+											</div>
+										</div>
+										<div class="row row_bankright">
+											<div class="cell_banque_1">
+												Compte de résultat FO
+											</div>
+											<div class="cell_banque_2">
+												<select id="id_compte_fo"	 name="compta_select" class="compta_select">
+													<option value=""></option>
+						  							<option each={ this.comptes } value="{ id }" reference="{ reference }" selected="{ selected : id == parametresCompte.id_compte_fo }">{ reference } { libelle }</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<!-- FIN si ASSO / si CE -->
+									<div class="row row_bankright">								
+										<div class="cell_banque_1">
+											Préfixe N° Opérations
+										</div>
+										<div class="cell_banque_2">
+											<input  class="operation" id="prefixe_numero_operations" type="text" name="prefixe_numero_operations" placeholder="0" value="{ parametresCompte.prefixe_numero_operations ? parametresCompte.prefixe_numero_operations : '' }">
+										</div>
+									</div>
+									<div class="row row_bankright">								
+										<div class="cell_banque_1">
+											Préfixe N° Pièces
+										</div>
+										<div class="cell_banque_2">
+											<input class="piece" id="prefixe_numero_pieces" type="text" name="prefixe_numero_pieces" placeholder="0" value="{ parametresCompte.prefixe_numero_pieces ? parametresCompte.prefixe_numero_pieces : '' }">
+										</div>
+									</div>
+								</div>	
+							</div>
+						</div>
+						<div class="annuler_valider">
+							<!-- <button name="cancel_submit" class="button annuler cancel_submit" onclick={ cancelElement }>Annuler</button> -->
+							<button name="save_submit" class="button enregistrer save_submit" onclick={ saveElement }>Enregistrer</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/mode_paiement">Mode de Paiement</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header>
+					<a class="comptes-title center" href="#/compta/exercices">
+						Exercices
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/tableau_de_bord">
+						Tableau de Bord	
+					</a>
+				</header>
+			</div>
+		</div>
+
+	<script>
+		var app = opts;
+		this.app = opts;
+	  	var _this = this;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	  	app.on('unmount-parametres', function(){
+			app.off('unmount-parametres');
+			_this.unmount();
+		});
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+			if( _this.loaded ){
+			}
+		});
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] == 'visible') {
+							d = new Object();
+
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idComptes[d['id']] = i;
+							_this.comptes.push(d);
+						}
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+		this.elements = [];
+		this.idElements = {};
+
+		cancelElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['id_compte_asso', 'id_compte_fo', 'id_compte_os', 'id_journal_cheques', 'id_journal_especes', 'id_journal_virements', 'id_journal_prelevements', 'id_journal_cartebleue', 'id_journal_chequesvacances', 'id_journal_couponsjeunes', 'id_journal_couponsports', 'id_journal_prelevements_salaire', 'id_journal_nouveaux', 'id_journal_paye', 'frais_virements', 'frais_prelevements', 'frais_cartebleue', 'taux_cartebleue', 'prefixe_numero_operations', 'prefixe_numero_pieces', 'banque', 'titulaire', 'rib', 'bic', 'iban'],
+					tag: _this,
+				});
+			}
+		}
+
+		saveElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/parametres', 
+					fields: ['id_compte_asso', 'id_compte_fo', 'id_compte_os', 'id_journal_cheques', 'id_journal_especes', 'id_journal_virements', 'id_journal_prelevements', 'id_journal_cartebleue', 'id_journal_chequesvacances', 'id_journal_couponsjeunes', 'id_journal_couponsports', 'id_journal_prelevements_salaire', 'id_journal_nouveaux', 'id_journal_paye', 'frais_virements', 'frais_prelevements', 'frais_cartebleue', 'taux_cartebleue', 'prefixe_numero_operations', 'prefixe_numero_pieces', 'banque', 'titulaire', 'rib', 'bic', 'iban'],
+					tag: _this,
+					beforeSend: function(params){
+						var a = $('#rib').val();
+						a += $('#rib2').val();
+						a += $('#rib3').val();
+						a += $('#rib4').val();
+						params.data.rib = a;
+					},
+				});
+			}
+			console.log("Enregistré!");
+		}
+
+		/*this.parametresComptes = [];
+		this.idParametresComptes = {};*/
+
+		this.parametresCompte = {};
+
+		function getParametresComptes(){
+			console.log("ok");
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON( '/admin/compta/parametres', getParams, function(data){
+				if(data && data.elements){
+					_this.parametresCompte = data.elements[0];
+					_this.numToLoad--;
+					_this.update();
+					if(_this.E_M) {
+						_this.E_M.removeLoader({});
+					} else {
+						$('#loader').addClass('hidden');
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				_this.numToLoad--;
+			})
+		}
+		getParametresComptes();
+
+
+		function getParametresActivites(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/parametres', getParams, function(data){
+				console.log('data:', data);
+				if(data && data.elements){
+
+					// 		var i, d; 
+					// var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte'};
+					// for(i=0; i<l; i++){
+					// 		d = new Object();
+					// 		for(field in fields){
+					// 			_this.[fields[field]] = data.elements[i][field];
+					// 		}
+							
+					// }
+
+					// _this.id_categorie_1 = data.elements['id_categorie_1'];
+					// _this.update();
+				
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			
+			})
+		}
+		getParametresActivites();
+
+		this.journaux = [];
+		this.idJournaux = {};
+
+		function getJournaux(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/journaux', getParams, function(data){
+				//console.log(JSON.stringify(data));
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte'};
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] == 'visible') { 
+							d = new Object();
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idJournaux[d['id']] = i;
+							_this.journaux.push(d);
+						}
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				_this.numToLoad--;
+			})
+		}
+		getJournaux();
+
+		this.update();
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				console.log(e.target);
+				_this.E_M.showContents(e);
+			}
+		};
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			cancelElement = null;
+			saveElement = null;
+		});
+
+		trueCheckbox(e) {
+			var id = e.currentTarget.getAttribute("id-for-uncheck");
+			var checked = e.currentTarget.checked;
+		    if (checked == true){
+		    	document.getElementById(id).disabled = false;
+		    } else {
+		    	document.getElementById(id).disabled = true;
+		    	$('#' + id).val('');
+		    }
+		}
+
+	</script>
+
+</parametres>

@@ -1,0 +1,666 @@
+<mode_paiement>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> -->
+	    <div if={ COMPTA_READ } class="content with_submenu">
+			<!--<div id="loader" class="loader hidden">
+        </div> -->
+
+		<div class="compta compta_journaux mode_paiement">
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/journaux">
+						Journaux
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/comptes">
+						Comptes
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/budgets">
+						Budgets
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/cle_repartition">
+						Clé de répartition
+					</a>
+				</header>
+			</div> -->
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/chapitres">
+						Chapitres Bilan et Compte de Résultat
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/parametres">
+						Paramètres Comptables	
+					</a>
+				</header>
+			</div>
+		<div class="compta mode_paiement">
+			<div if={ COMPTA_READ } class="nav_compta_parametrage mode_paiement block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+				Mode de Paiement
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="compta_content">
+						<div id="add_element" class="edit edit_journal hidden" >
+							<div id="bloc_modePaiement">
+								<div class="cell_1"></div>
+								<div class="cell_2 libelle_journal" >
+									<div>
+										<label class="" for="libelle">Libellé mode de paiement :</label>
+										<input name="libelle" id="libelle" class="libelle libelle_journal" type="text">
+									</div>
+									<div id="types">
+										<label class="" for="type">Type :</label>
+										<select class="type mode_paiement" name="type" id="type" onchange={ isCarteBleu }>
+											<option value="cheques"></option>
+											<option value="cheques">Chèques</option>
+											<option value="especes">Espèces</option>
+											<option value="virement">virement</option>
+											<option value="prelevement">Prélèvement</option>
+											<option value="carte_bleue">Carte bleue</option>
+											<option value="prelevement_salaire">Prélèvement sur salaire</option>
+											<option value="cheques_vacances">Chèques vacances</option>
+											<option value="coupon_sport">Coupon sport</option>
+										</select>
+										<input type="checkbox" name="permanence" value="permanence" id="permanence"><label for="permanence">Permanence</label>
+									</div>
+								</div>
+								<div class="cell_3">
+									<div>
+										<label class="" for="id_compte">Journal:</label>
+										<select class="id_compte " name="id_journal" id="id_journal">
+											<option value=""></option>
+											<option each={ journaux } value="{ id }" title="{ libelle }">{ libelle } </option>
+										</select>
+										<input onclick={ toggleVisible } type="image" src="/img/btn_visible.png" name="visible" id="visible" title="Visible" value="visible">
+									</div>
+									<div > 	
+										<input type="checkbox" name="fournisseur" value="fournisseur" id="fournisseur"><label for="fournisseur">Fournisseur</label> 
+									</div>
+								</div>
+							</div>
+							<div id="carte_bleue_hidden" class="hidden">
+								<div class="vide"></div>
+								<label>Taux</label>
+								<input id="taux" class="taux" type="text" name="taux" placeholder="0.00%" value="{ parametresCompte.taux_cartebleue ? parametresCompte.taux_cartebleue : '' }">
+								<label>Frais</label>
+								<input id="frais" class="frais" type="text" name="frais" placeholder="0.00" value="{ parametresCompte.frais_cartebleue ? parametresCompte.frais_cartebleue : '' }">
+								<label class="" for="id_compte">Comptes:</label>
+								<select class="id_compte journal_input" name="id_compte" id="id_compte">
+									<option value=""></option>
+									<option each={ comptes } value="{ id }" title="{ libelle }">{ libelle } </option>
+								</select>
+								<label class="" for="id_compte">Analytiques:</label>
+								<select class="id_analytique journal_input" name="id_analytique" id="id_analytique">
+									<option value=""></option>
+									<option each={ analytiques } value="{ id }" title="{ libelle }" >{ libelle } </option>
+								</select>
+							</div>
+							<div class="right buttonInsertion">
+								<button name="cancel_submit" class="button annuler cancel_submit" onclick={ cancelElement }>Annuler</button>
+								<button name="save_submit" class="button enregistrer save_submit" onclick={ saveElement }>Enregistrer</button>
+								
+							</div> 
+							<div class="type_tresorerie hidden">
+							  <span>
+							  	<label class="small" for="domiciliation">Domiciliation :</label>
+							  	<input name="domiciliation" type="text" class="big domiciliation" value="">
+							  </span>
+							  <span>
+							  	<label class="small" for="iban">IBAN :</label>
+							  	<input name="iban" type="text" class="big iban" value="">
+							  </span>
+							  <span>
+							  	<label class="small" for="bic">BIC :</label>
+							  	<input name="bic" type="text" class="big bic" value="">
+							  </span>
+							</div>
+						</div>
+						<div class="actions" id="actions">
+							<button id="add_element_button" class="button ajouter" name="add_element_button" onclick={ addElement }>Ajouter un mode paiement</button>
+						</div>
+						<div class="entete-tableau"  id="mode-paiement">
+							<div class="cell_1"></div>
+							<div class="cell_2">
+								<p class="small">Libelle <!-- <span if={ IS_CE }>/ Nature</span> --></p>
+							</div>
+							<div class="cell_3">
+								<p class="small">Type</p>
+							</div>
+							<div class="cell_4">
+								<p class="small">Journal</p>
+							</div>
+							<div class="cell_5">
+								<p class="small">Détail</p>
+							</div>
+							<div class="cell_6">
+								<p class="small">Visibilité</p>
+							</div>
+							<div class="cell_7">
+								<p class="small">Actions</p>
+							</div>
+						</div>
+						<div each={ elements } id="{ id }" class="modePaiement " >
+							<div class="show_infos">
+								<div class="cell_1"></div>
+								<div class="cell_2">
+									<p class="title libelle">{ libelle }</p>
+								</div>
+								<div class="cell_3">
+									<p class="type">
+										<span if={ type==='cheques' }>Chèques</span>
+										<span if={ type==='especes' }>Espèces</span>
+										<span if={ type==='virement' }>Virement</span>
+										<span if={ type==='prelevement' }>Prélèvement</span>
+										<span if={ type==='carte_bleue' }>Carte bleue</span>
+										<span if={ type==='prelevement_salaire' }>Prélèvement salaire</span>
+										<span if={ type==='cheques_vacances' }>Chèques vacances</span>
+										<span if={ type==='coupon_sport' }>Coupon sport</span>
+									</p> 
+								</div>
+								<div class="cell_4">
+									<p class="title libelle">{ journaux[idJournaux[id_journal]].libelle }</p>
+								</div>
+								<div class="cell_5">
+									<p class="title "> { fournisseur == 1 ? 'fournisseur' : '' } { permanence == 1 ? 'permanence' : '' }</p>
+								</div>   
+								<div class="cell_6">
+									<input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }">
+								</div>
+								<div class="cell_7">
+									<div>
+										<p class="modif"><img class="edit_element_img" onclick={ editElement } title="Modifier" src="/img/edit.png"> <img class="delete_element_img" onclick={ validDeleteElement } title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+									</div>
+								</div>
+							</div>
+							<div id="{ id }_edit" class="edit edit_mode_paiement hidden">
+								<div id="bloc_modePaiement">
+								<div class="cell_1"></div>
+								<div class="cell_2 libelle_journal_edit" >
+									<div class="block_input">
+										<label class="" for="libelle">Libellé mode de paiement :</label>
+										<input name="libelle_{ id }" id="libelle_{ id }" class="libelle libelle_journal" type="text"  value={ libelle }>
+									</div>
+									<div id="types" class="types">
+										<label class="" for="type">Type :</label>
+										<select class="type type_journal xl-large" name="type_{ id }" id="type_{ id }" >
+											<option value="cheques" selected="{ type === 'cheques' }">Chèques</option>
+											<option value="especes" selected="{ type=== 'especes'}">Espèces</option>
+											<option value="virement" selected="{ type=== 'virement'}">virement</option>
+											<option value="prelevement" selected="{ type=== 'prelevement'}">Prélèvement</option>
+											<option value="carte_bleue" selected="{ type=== 'carte_bleue'}" class="carteBleue">Carte bleue</option>
+											<option value="prelevement_salaire" selected="{ type=== 'prelevement_salaire'}">Prélèvement sur salaire</option>
+											<option value="cheques_vacances" selected="{ type=== 'cheques_vacances'}">Chèques vacances</option>
+											<option value="coupon_sport" selected="{ type=== 'coupon_sport'}">Coupon sport</option>
+										</select>
+										<input type="checkbox" name="permanence_{ id }" value="permanence" id="permanence_{ id }" checked="{ checked : permanence == 1 }"><label for="permanence_{ id }">Permanence</label>
+									</div>
+
+								</div>
+								<div class="cell_3">
+									<div  class="block_input">
+										<label class="" for="id_compte">Journal:</label>
+										<select class="id_compte journal_input" name="id_journal_{ id }" id="id_journal_{ id }">
+											<option value=""></option>
+											<option each={ journaux } value="{ id }" title="{ libelle }" selected={ selected : id === id_journal } >{ libelle } </option>
+										</select>
+										<input onclick={ toggleVisible } type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" id="visible_{ id }" name="visible_{ id }" class="buttonVisible">
+									</div>
+									<div > 	
+										<input type="checkbox" name="fournisseur_{ id }" value="fournisseur" id="fournisseur_{ id }" checked={ checked : fournisseur == 1 }><label for="fournisseur_{ id }">Fournisseur</label> 
+									</div>
+								</div>
+							</div>
+							<div id="carte_bleue_Edit_{ id }" class="">
+								<label>Taux</label>
+								<input id="taux_{ id }" class="taux" type="text" name="taux_{ id }" placeholder="0.00%" value="{ taux }">
+								<label>Frais</label>
+								<input id="frais_{ id }" class="frais" type="text" name="frais_{ id }" placeholder="0.00" value="{ frais }">
+
+								<label class="" for="id_compte">Comptes:</label>
+								<select class="id_compte journal_input" name="id_compte_{ id }" id="id_compte_{ id }">
+									<option value=""></option>
+									<option each={ comptes } value="{ id }" title="{ libelle }"  selected={ selected : id === id_compte } >{ libelle } </option>
+								</select>
+
+								<label class="" for="id_analytique">Analytiques:</label>
+								<select class="id_analytique journal_input" name="id_analytique_{ id }" id="id_analytique_{ id }">
+									<option value=""></option>
+									<option each={ analytiques } value="{ id }" title="{ libelle }"  selected={ selected : id === id_analytique } >{ libelle } </option>
+								</select>
+							</div>
+							<div class="right" >	
+								<button name="cancel_submit_{ id }" onclick={ cancelElement } class="button annuler cancel_submit">Annuler</button>
+								<button name="save_submit_{ id }" onclick={ saveElement } class="button enregistrer save_submit">Enregistrer</button>
+							</div> 
+							</div>
+							<div id="{ id }_delete" class="delete hidden">
+								<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" id="delete_{ id }" onclick={ deleteElement }>Supprimer</button><button name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteElement }>Annuler</button></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/exercices">
+						Exercices	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/tableau_de_bord">
+						Tableau de Bord	
+					</a>
+				</header>
+			</div>
+	</div>
+
+	<script>
+	  	var _this = this;
+		var app = opts;
+		this.app = opts;
+		var permissions = app.session.permissions;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+		this.loaded = false;
+
+		this.thingsToLoad = [ 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idComptes[d['id']] = i;
+						_this.comptes.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.comptes = data.elements;
+				//_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+			if( _this.loaded ){
+			}
+		});
+	  	_this.app.on('unmount-mode_paiement', function(){
+			_this.app.off('unmount-mode_paiement');
+			_this.unmount();
+		});
+
+		// showCarteBleue(e) {
+
+		// 	$("#carteBleue").show();
+		// }
+
+
+		this.elements = [];
+		this.idElements = {};
+
+		editElement(e){
+			if(_this.E_M){
+			_this.E_M.editElement({event: e, tag: _this,
+					end: function(params){
+						var item = params.item;
+						var edit = params.edit;
+						if(item.type === 'carte_bleue' || item.type === 'virement' || item.type === 'prelevement' ){
+							$('#carte_bleue_Edit', edit).show();
+						}
+					}
+				});
+			}else{
+				
+			}
+
+		}
+
+		addElement(e){
+			$('#actions').addClass('hidden').removeClass('inline_block');
+			$('input[type=text], select', '#add_element').val('');
+			if(_this.E_M){
+				_this.E_M.addElement({event: e});
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteElement(e){
+			if(_this.E_M){
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/compta/mode_paiement', loader: true,});
+			}
+		}
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		cancelElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.cancelElement({
+					event: e,
+					fields:  ['libelle','type', 'permanence', 'id_journal', 'fournisseur', 'visible', 'frais', 'taux', 'id_compte', 'id_analytique'],
+					tag: _this,
+				});
+			}
+		}
+
+		saveElement(e){
+			if(_this.E_M){
+				$('#actions').removeClass('hidden');
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/mode_paiement', 
+					fields: ['libelle', 'id_analytique', 'type', 'permanence', 'id_journal', 'fournisseur', 'visible', 'frais', 'taux', 'id_compte'],
+					tag: _this,
+				});
+			}
+
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		typeTresorerie(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			var item = e.item;
+			var currentTarget = e.currentTarget;
+			var id_element;
+
+			if(item){
+				id_element = '#' + item.id;
+			}else{
+				id_element = '#add_element';
+			}
+
+			if(currentTarget.value === 'tresorerie'){
+				$('.type_tresorerie', id_element).slideDown();
+				$('.id_compte option', id_element).each(function(){
+					var t = this.text;
+					if(t.charAt(0)!=='5'){
+						this.setAttribute('disabled', 'disabled');
+					}
+				});
+			}else{
+				$('.type_tresorerie', id_element).slideUp();
+				$('.id_compte option', id_element).each(function(){
+					this.removeAttribute('disabled');
+				});
+			}
+		}
+
+		selectExercice(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+
+		function getModePaiement(){
+			var getParams = {};
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON('/admin/compta/mode_paiement', getParams, function (data){
+				console.log('mode_paiement 1 mode_paiement: ', JSON.stringify(data));
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+											
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', fournisseur: 'fournisseur', permanence: 'permanence', id_journal: 'id_journal', type: 'type' ,frais: 'frais',taux: 'taux', id_compte: 'id_compte', id_exercice: 'id_exercice', visible: 'visible', id_analytique: 'id_analytique'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idElements[d['id']] = i;
+						_this.elements.push(d);
+					}
+
+					_this.update();
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			});
+		}
+		getModePaiement();
+
+		this.journaux = [];
+		this.idJournaux = {};
+
+		function getJournaux(){
+			var getParams = { };
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/journaux', getParams, function(data){
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte', _type: 'type', nature: 'nature'};
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] === 'visible') { 
+							d = new Object();
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idJournaux[d['id']] = i;
+							_this.journaux.push(d);
+						}
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		getJournaux();
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+				if($(e.currentTarget).val()== 'carte_bleue'){
+				$('#carte_bleue_Edit').show();
+			}
+		});
+
+
+		this.analytiques = [];
+		this.idAnalytiques = {};
+
+	    function getAnalytiques(){
+	        var getParams = { type_element: 'analytique', visible: 'visible'};
+	        if( _this.selectedExercice ){
+	            getParams.id_exercice = _this.selectedExercice;
+	        }else if(document.getElementById('id_exercice')){
+	            getParams.id_exercice = document.getElementById('id_exercice').value;
+	        }
+
+	        $.getJSON( '/admin/compta/budgets', getParams, function(data){
+	            if(data && data.elements){
+	                var l = data.elements.length;
+	                var i, d; 
+	                var fields = {id: 'id', libelle: 'libelle', visible: 'visible'};
+	                for(i=0; i<l; i++){
+	                    d = new Object();
+
+	                    for(field in fields){
+	                        d[fields[field]] = data.elements[i][field];
+	                    }
+	                    _this.idAnalytiques[d['id']] = i;
+	                    _this.analytiques.push(d);
+	                }
+	                _this.update();
+	            }else{
+	            }
+	        })
+
+	    }
+
+	    getAnalytiques();
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			cancelDeleteElement = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelElement = null;
+			saveElement = null;
+			showContents = null;
+			makeVisible = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});		
+		
+			isCarteBleu(e) {
+				//console.log('reafea')
+				if($(e.currentTarget).val()== 'carte_bleue' || $(e.currentTarget).val()== 'virement' || $(e.currentTarget).val()== 'prelevement'){
+					$('#carte_bleue_hidden').show();
+				}else{
+					$('#carte_bleue_hidden').hide();
+   				// document.getElementById("demo").show();
+				}
+				
+			}
+	</script>
+
+</mode_paiement>

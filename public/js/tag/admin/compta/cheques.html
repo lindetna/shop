@@ -1,0 +1,1438 @@
+<cheques>
+	<div id="loader" class="loader hidden">
+    </div> 
+	<div id="print">
+		<span id="entreprisePrint"></span>
+		<header id="entete_print"></header>
+		<span id="num_remise"></span>
+		<span id="print_date_remise"></span>
+		<div id="vertical_print">
+			<span id="print_coordonnees_bancaire"></span>
+			<span id="banque_print">{banque}</span>
+			<span id="titulaire_print">{titulaire}</span>
+			<span id="rib_print">{rib}</span>
+			<span id="iban_print">{iban} BIC: {bic}</span>
+		</div>
+		<div class="divTable">
+			<div class="divTableBody">
+				<div class="divTableRow colorPrint">
+					<div class="divTableCell color">Nom du Titulaire</div>
+					<div class="divTableCell color">Banque</div>
+					<div class="divTableCell color">Numéro de Chéque</div>
+					<div class="divTableCell color">Montant</div>
+				</div>
+				<div class="divTableRow" each={ remisePrint } id='remisePrint_{ id }'>
+					<div class="divTableCell">{ titulairePrint }</div>
+					<div class="divTableCell">{ banquePrint }</div>
+					<div class="divTableCell">{ nu_chequePrint }</div>
+					<div class="divTableCell">{ montantPrint }</div>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div id="num_element">{nb_elements}</div>
+			<div id="table_print">
+				<div class="divTableCell">TOTAL</div>
+				<div id="total_remise_print" class="divTableCell">{total_remise}</div>
+			</div>
+		</div>
+	</div>
+    <!--<div id="titre_page"><h1>Trésorerie</h1></div>-->
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div class="compta compta_tresorerie">
+			<div if={ COMPTA_READ  && parametresCompte.id_journal_cheques } class="nav_compta_parametrage block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+					Chèques
+				</header>
+			</div>
+			<div class="slide-up">
+				<div class="fieldsets_liaison_comptable">
+					<div class="liaison_comptable_fs">
+						<div class="tresorerie_filtre">
+							<div if={ COMPTA_READ  && parametresCompte.id_journal_cheques } class="nav_compta_parametrage block-slider">
+								<header class="comptes-title center opened" onclick= { showContents }>
+									Filtres
+								</header>
+								<div class="filtre_up">
+									<div class="cell_1_filtre">
+										<label for="tresorerie_liaison_comptable">Mois</label>
+										<select class="tresorerie_liaison_comptable" onchange={ filterChange } name="tresorerie_liaison_comptable" id="tresorerie_liaison_comptable">
+											<option each={ month } value='{ value }' selected={ selected : value == (new Date()).getMonth() + 1 }>{ month }</option>
+										</select>
+									</div>
+									<div class="cell_2_filtre">
+										<label>Nom/Prénom - Matricule</label>
+										<input type="text" name="" placeholder="Nom/Prénom - Matricule">
+									</div>
+									<div class="cell_3_filtre">
+										<label>N° Cheque</label>
+										<input id="input_filtre_cheques" class="input_montant_liaison_comptable" name="input_montant_liaison_comptable" type="text" placeholder="Entrer le montant">
+									</div>
+									<div class="cell_4_filtre">
+										<label>Montant</label>
+										<input id="input_filtre_cheques_1" class="input_montant_liaison_comptable" name="input_montant_liaison_comptable" type="text" placeholder="0.00€">
+									</div>
+								</div>
+							</div>
+							<div class="entete-tableau_1">
+								<div class="bande_1">
+									<div class="cell_1">
+										<label> Titre - Nom - Prénom - Matricule </label>
+									</div>
+									<div class="cell_2">
+										<p>Date de Règlement</p>
+									</div>
+									<div class="cell_3">
+										<p>Date Prévisionelle</p>
+									</div>
+									<div class="cell_4">
+										<p>Domiciliation</p>
+									</div>
+									<div class="cell_5">
+										<p>Montant</p>
+									</div>
+									<div class="cell_6">
+										<p>Actions <input type="checkbox" class="action check_all_reglements" onchange={ checkAllReglements }></p>
+									</div>
+								</div>
+							</div>
+							
+							<div class="reglement" id="{ id }" each={ reglements }>
+								<div id="{id}" class="hidden">{id}</div>
+								<div class="cell_1">
+									<p id="titulairePrint_{id}">{ this.salaries[this.idSalaries[id_salarie]].titre } { this.salaries[this.idSalaries[id_salarie]].nom } { this.salaries[this.idSalaries[id_salarie]].prenom + ' ' }
+										<span class="matricule" if={ this.salaries[this.idSalaries[id_salarie]].matricule }> - { this.salaries[this.idSalaries[id_salarie]].matricule }</span>
+									</p>
+								</div>
+								<div class="cell_2">
+									<p>{ convertDateToView(date_reglement) }</p>
+								</div>
+								<div class="cell_3">
+									<p><input type="text" value="{ convertDateToView(date_previsionnelle) }" onchange={ changeDatePrevisionnelle } class="date_previsionnelle" class="right"></p>
+								</div>
+								<div class="cell_4">
+									<span id="banquePrint_{id}">{ domiciliation }</span><span id="nu_chequePrint_{id}">{ ' N° ' + numero_cheque }</span>
+								</div>
+								<div class="cell_5">
+									<p id="montantPrint_{id}">{ montant }</p>
+								</div>
+								<div class="cell_6">
+									<input type="checkbox" name="" class="action" onchange={ setRemise } value={ id }>
+								</div>
+							</div>
+						</div>
+						<div class="total_remise">
+							<div class="entete-tableau_4">
+								<div class="cell_1">
+									<div class="carre_total_remise cell">
+										<p><i>Total de la remise { total_remise }€</i></p>
+										<p><i>Nbre de <span class="capitalize">{ page_name }</span>: { nb_elements }</i></p> 
+									</div>
+									<div class="cell block_date_remise">
+										<label for="date_remise">Date de Remise</label>
+										<input type="text" id="date_remise" class="right">
+									</div>
+								</div>
+
+								<div class="cell_2">
+									<div class="sous_table_total_remise">
+										<div class="cell_1">
+
+											<div class="compte_banque">
+												<p>Journal de remise </p> 
+												<select id="journal_remise" class="compte_banque_select">
+													<option value="">Choisir un journal</option>
+													<option value={ id } each={ journaux }>{ libelle }</option>
+												</select>    
+											</div>
+
+											<div class="num_remise">
+												<label for="remise">Numéro de la remise</label>
+												<input type="text" id="remise" name="input_numero_remise" placeholder=" Numéro de remise">
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+
+								<div class="cell_3">
+									<button name="save_submit" id="submit_register" class="blue save_submit" onclick={ openModalSaveElement }>Enregistrer</button>
+								</div>
+							</div>                                        
+						</div>
+					</div>
+				</div>
+				<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+					<header class="closed" onclick= { showContents }>
+						Historique des remises { page_name }(s)
+					</header>
+					<div class="slide-up content_remise hidden">
+						<div class="compte_cheque">
+							<div class="cell_1">
+								<p>Numero de la remise</p>
+							</div>
+							<div class="cell_2">
+								<p>Date de la remise</p>
+							</div>
+							<div class="cell_3">
+								<p>Compte de cheques</p>
+							</div>
+							<div class="cell_4">
+								<p>Compte de la remise</p>
+							</div>
+							<div class="cell_5">
+								Nombre de cheques
+							</div>
+							<div class="cell_6">
+								<p>Montant</p>
+							</div>
+							<div class="cell_7">
+								<p>Actions</p>
+							</div>
+						</div>
+						<!-- <div class="entete-tableau_tab"></div> -->
+							<!-- <div class="bande_2">
+								<div class="cell_1">
+									<p>51564645</p>
+								</div>
+								<div class="cell_2">
+									<p>17/12/2016</p>
+								</div>
+								<div class="cell_3">
+									<p>511200000</p>
+								</div>
+								<div class="cell_4">
+									<p>51210000</p>
+								</div>
+								<div class="cell_5">
+									<p>380.00</p>
+								</div>
+								<div class="cell_6">
+									<img id="imprim" src="/img/compta/imprimer.png" alt="Impression">
+									<img id="rapprochement" src="/img/compta/loupe2.png" alt="Raprochement_Bancaire">
+								</div>
+							</div> -->
+						<div class="bande_2 remise" each={ remises } id='remise_{ id }'>
+							<div class="table c100">
+								<div class="cell_1">
+									<p id="numremisePrint2_{id}">{ numero }</p>
+								</div>
+								<div class="cell_2">
+									<p id="dateremisePrint2">{ convertDateToView(date) }</p>
+								</div>
+								<div class="cell_3">
+									<p>{ this.comptes[this.idComptes[id_compte_type_paiement]].reference + ' - ' + this.comptes[this.idComptes[id_compte_type_paiement]].libelle }</p>
+								</div>
+								<div class="cell_4">
+									<p>{ this.comptes[this.idComptes[id_compte_remise]].reference + ' - ' + this.comptes[this.idComptes[id_compte_remise]].libelle }</p>
+								</div>
+								<div class="cell_5">
+									<p>{ nb_elements }</p>
+								</div>
+								<div class="cell_6">
+									<p id="montantremisePrint2_{id}">{ montant }</p>
+								</div>
+								<div class="cell_7">
+									<img class="img" id="imprim" src="/img/compta/imprimer.png" alt="Impression" onclick={ lanceImpression }>
+									<img class="img" id="rapprochement" src="/img/compta/loupe2.png" alt="Raprochement_Bancaire" onclick={ showReglements }>
+								</div>
+							</div>
+							<div class="hidden block_remise_details" id="remise_details_{ id }">
+								<div class="table c100 entete_remise_details">
+									<div class="cell_1">
+										<p>Titre - Nom - Prenom - Matricule</p>
+									</div>
+									<div class="cell_2">
+										<p>Date de reglement</p>
+									</div>
+									<div class="cell_3">
+										<p>Banque</p>
+									</div>
+									<div class="cell_4">
+										<p>Montant</p>
+									</div>
+									<div class="cell_5">
+										Actions
+									</div>
+								</div>
+								<div id="{ id }" class="table c100 remise_details printSecond" each={ reglements } if={ numero_cheque }>
+									<div class="cell_1" >
+										<p id="titulairePrint_{id}">{ this.salaries[this.idSalaries[id_salarie]].titre + ' - ' + this.salaries[this.idSalaries[id_salarie]].nom + ' - ' + this.salaries[this.idSalaries[id_salarie]].prenom + ' ' }
+											<span class="matricule" if={ this.salaries[this.idSalaries[id_salarie]].matricule }> - { this.salaries[this.idSalaries[id_salarie]].matricule }</span>
+										</p>
+									</div>
+									<div class="cell_2">
+										<p>{ convertDateToView(date_reglement) }</p>
+									</div>
+									<div class="cell_3" >
+										<p id="banquePrint_{id}">{ domiciliation }</p>
+										<p id="nu_chequePrint_{id}" class="hidden">{ numero_cheque }</p>
+									</div>
+									<div class="cell_4" >
+										<p id="montantPrint_{id}">{ montant }</p>
+									</div>
+									<div class="cell_5">
+										<button class="btn_impaye" onclick={ openModal } if={ id_remise }>Impayé</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div if={ COMPTA_READ && parametresCompte.id_journal_especes } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/especes">
+							Espèces
+						</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ && parametresCompte.id_journal_virements } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/virements">
+							Virements
+						</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ && parametresCompte.id_journal_prelevements } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/prelevement">
+							Prélèvements
+						</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ && parametresCompte.id_journal_cartebleue } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/cartebleue">
+							Carte Bleue
+						</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ && parametresCompte.id_journal_chequesvacances } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/chequevacances">
+							Chèques Vacances
+						</a>
+					</header>
+				</div>
+				<div if={ COMPTA_READ && parametresCompte.id_journal_prelevements_salaire } class="nav_compta_parametrage block-slider">
+					<header class="closed">
+						<a class="comptes-title center" href="#/compta/prelevements_salaire">
+							Prélèvements sur Salaire
+						</a>
+					</header>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="modal_impaye" class="hidden">
+		<header class="banderole_modal center">
+			CHEQUE IMPAYE
+		</header>
+		<div class="block_modal">
+			<div class="block1 table c100">
+				<div class="cell_1 c50">
+					<div class="block_date">
+						<label for="modal_date" class="right_space">Date</label><input type="text" id="modal_date" class="right">
+					</div>
+					<p class="">{ modal_salarie.titre + ' ' + modal_salarie.nom + ' ' + modal_salarie.prenom }
+						<span class="matricule" if={ modal_salarie.matricule }> - { modal_salarie.matricule }</span>
+					</p>
+					<div class="table c100">
+						<div class="cell">
+							{ modal_date_reglement }
+						</div>
+						<div class="cell">
+							{ modal_banque } - N° { modal_numero_cheque }
+						</div>
+					</div>
+				</div>
+				<div class="cell_2 c50">
+					<span>{ modal_montant }</span>
+				</div>
+			</div>
+			<div class="block2 table c100">
+				<div class="cell_1 c40">
+					<div>
+						<input type="radio" id="btn_representer" name="action_impaye" value="representer" checked>
+						<label for="btn_representer">Représenter le chèque</label>
+					</div>
+					<div>
+						<input type="radio" id="btn_annuler" name="action_impaye" value="annuler">
+						<label for="btn_annuler">Annulation du chèque</label>
+					</div>
+				</div>
+				<div class="cell_2 c60">
+					<label class="right_space" for="modal_date_previsionnelle">Date prévisionnelle</label><input class="right" type="text" id="modal_date_previsionnelle">
+				</div>
+			</div>
+			<div class="block3">
+				<div class="">
+					<label class="right_space" for="modal_frais_bancaire">Frais Bancaire</label><input type="text" class="right" value="0.00" id="modal_frais_bancaire">
+				</div>
+				<div class="">
+					<label class="right_space" for="modal_compte">Compte</label>
+					<select id="modal_compte">
+						<option value=""></option>
+						<option value={ id } each={ comptesModal } selected="{ selected : reference == '62780000' }">{ reference + ' ' + libelle }</option>
+					</select>
+					<label class="left_space right_space" for="modal_id_analytique">Analytique</label>
+					<select id="modal_id_analytique">
+						<option value=""></option>
+						<option each={ analytiques } value="{ id }">{ libelle }</option>
+					</select>
+				</div>
+			</div>
+			<div class="modal_actions right">
+				<button class="button annuler cancelModal" onclick={ cancelModal }>Annuler</button>
+				<button class="button enregistrer cancelModal" onclick={ saveModal }>Enregistrer</button>
+			</div>
+		</div>
+	</div>
+	<div id="validation_remise" class="hidden">
+		<p class="center">Etes-vous sùr de vouloir enregistrer cette remise ?</p>
+		<div class="center">
+			<button class="button annuler" onclick={ cancelModal }>Annuler</button><button class="button enregistrer" onclick={ saveRemise }>Valider</button>
+		</div>
+	</div>
+	<script>
+
+	this.app = opts;
+	var app = opts;
+	var _this = this;
+	var permissions = app.session.permissions;
+	var IS_CE = this.IS_CE = permissions.IS_CE || false;
+	var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+	this.total_remise = "0.00";
+	this.nb_elements = 0;
+	this.page_name = "cheques";
+
+	this.month = [
+		{
+			value: 1,
+			month: 'Janvier',
+		},
+		{
+			value: 2,
+			month: 'Février',
+		},
+		{
+			value: 3,
+			month: 'Mars',
+		},
+		{
+			value: 4,
+			month: 'Avril',
+		},
+		{
+			value: 5,
+			month: 'Mai',
+		},
+		{
+			value: 6,
+			month: 'Juin',
+		},
+		{
+			value: 7,
+			month: 'Juillet',
+		},
+		{
+			value: 8,
+			month: 'Août',
+		},
+		{
+			value: 9,
+			month: 'Septembre',
+		},
+		{
+			value: 10,
+			month: 'Octobre',
+		},
+		{
+			value: 11,
+			month: 'Novembre',
+		},
+		{
+			value: 12,
+			month: 'Décembre',
+		},
+	];
+
+	cancelModal(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+
+    	$.modal.close();
+	}
+
+	openModalSaveElement(e) {
+		$('#validation_remise').modal();
+    }
+
+	checkAllReglements(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+		
+		if(_this.E_M) {
+			let montant = 0;
+			let i = 0;
+			const params = _this.E_M.toggleCheckAllElement({ event: e, selector: '.reglement input[type=checkbox]', montant: montant, i: i,
+			checked: function(params) {
+				params.parent.montant += parseFloat(_this.reglements[_this.idReglements[$(this).val()]].montant)
+				params.parent.i++
+			},
+			unchecked: function(params) {
+				params.parent.montant = 0
+			}});
+
+			montant = params.montant;
+			i = params.i;
+			_this.total_remise = isNaN(montant) ? '0.00' : parseFloat(montant).toFixed(2);
+			_this.nb_elements = i;
+			_this.update();
+		}
+	}
+
+	this.comptesModal = [];
+
+	function getComptes(){
+		var getParams = { referenceStartWith: 6 };
+		/*if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}*/
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+		$.getJSON( '/admin/compta/comptes', getParams, function(data){
+			if(data && data.elements){
+				_this.comptesModal = [];
+				_this.comptesModal = data.elements;
+				_this.update();
+			}else{
+				// TODO: no data elements, get and manage error!...
+			}
+		})
+	}
+	getComptes();
+
+	this.analytiques = [];
+	this.idAnalytiques = {};
+
+	function getAnalytiques(){
+		var getParams = { type_element: 'analytique', visible: 'visible'};
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+
+		$.getJSON( '/admin/compta/budgets', getParams, function(data){
+			if(data && data.elements){
+				var l = data.elements.length;
+				var i, d; 
+				var fields = {id: 'id', libelle: 'libelle', visible: 'visible'};
+				for(i=0; i<l; i++){
+					d = new Object();
+
+					for(field in fields){
+						d[fields[field]] = data.elements[i][field];
+					}
+					_this.idAnalytiques[d['id']] = i;
+					_this.analytiques.push(d);
+				}
+				_this.update();
+			}else{
+			}
+		})
+	}
+	getAnalytiques();
+
+	cancelModal(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+
+    	$.modal.close();
+	}
+
+
+	/* Filtres */
+
+	this.filtres = [
+		{ 
+			nom_db: 'date_previsionnelle',
+			id: 'tresorerie_liaison_comptable',
+			value: (new Date()).getMonth() + 1,
+			ignore: false,
+			type: "select",
+		}
+	];
+
+	this.idFiltres = { tresorerie_liaison_comptable: 0 };
+
+	filterChange (e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+
+		var $current = $(e.currentTarget);
+		var currentVal = $current.val();
+		var id = $current.attr('id');
+		var filtre = _this.filtres[_this.idFiltres[id]];
+
+		if(filtre.type == "select" || filtre.type == 'text') {
+			if(currentVal != '') {
+				filtre.ignore = false;
+				filtre.value = currentVal;
+			} else {
+				filtre.ignore = true;
+			}
+		} else if (filtre.type == 'checkbox') {
+			if($current.is(':checked') == true) {
+				
+				filtre.ignore = false;
+			} else {
+				filtre.ignore = true;
+			}
+		} else {
+		}
+		//_this.parentTag.getEcritures();
+		getReglements();
+	}
+
+
+	/* Fin Filtres */
+
+	app.on('unmount-cheques', function(){
+		app.off('unmount-cheques');
+		$('.jquery-modal, .modal').remove();
+		_this.unmount();
+	});
+
+	_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+		_this.E_M = new E_M();
+
+		//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+		if( _this.loaded ){
+		}
+	});
+
+	_this.app.loadScript('/js/admin/jquery.print-preview.js', 'print-preview_js', function print_preview() {
+	});
+
+	this.update();
+
+	showContents(e){
+		e.preventDefault();
+		e.preventUpdate = true;
+		if(_this.E_M){
+			_this.E_M.showContents(e);
+		}
+	}
+
+	saveModal(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+
+		var item = _this.modal_item;
+		var date = $('#modal_date').val();
+		var date_previsionnelle = $('#modal_date_previsionnelle').val();
+		var frais_bancaire = $('#modal_frais_bancaire').val();
+		var id_compte = $('#modal_compte').val();
+		var id_analytique = $('#modal_id_analytique').val();
+		var type = '';
+		if($('#btn_representer').is(':checked')) {
+			type = 'representer';
+		} else {
+			type = 'annuler';
+		}
+
+		if(document.getElementById('id_exercice')){
+			var id_exercice = document.getElementById('id_exercice').value;
+		} else if( _this.app.session.exercices.selected ){
+			var id_exercice = _this.app.session.exercices.selected;
+		}
+		if(date != '' && ((frais_bancaire == 0 && id_compte == '' && id_analytique == '') || (frais_bancaire > 0 && id_compte != '' && id_analytique != '')) && ((type == "representer" && date_previsionnelle != '') || (type == "annuler"))) {
+			date = _this.E_M.convertDateToDb(date);
+			date_previsionnelle = _this.E_M.convertDateToDb(date_previsionnelle);
+
+			var getParams = { id_exercice: id_exercice, date: date, date_previsionnelle: date_previsionnelle, montant: item.montant, frais_bancaire: frais_bancaire, id_compte: id_compte, id_journal_remise: item.id_journal_remise, type: type, action: 'cheque_impaye', numero_cheque: item.numero_cheque, id_reglement: item.id, id_analytique: id_analytique, id_salarie: item.id_salarie };
+			var url = '/admin/compta/reglement';
+			$.ajax(url, {
+			data : getParams,
+			type : 'POST',
+			dataType: 'json',
+			success: function (result, textStatus, jqXHR){
+					getReglements();
+					getRemise();
+					_this.E_M.removeLoader({time: 1000})
+					_this.total_remise = '0.00';
+					_this.nb_elements = 0;
+					if($('.check_all_reglements').is(':checked')) {
+						$('.check_all_reglements').prop('checked', false);
+					}
+					$.modal.close();
+					_this.update();
+				}
+			}).done(function(){
+				console.log('done!...');
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				tag = null;
+			});
+		}
+	}
+
+	openModal(e){
+		e.preventDefault();
+		e.preventUpdate = true;
+
+		var item = e.item;
+		_this.modal_item = e.item;
+		_this.modal_salarie = _this.salaries[_this.idSalaries[item.id_salarie]]; 
+		_this.modal_date_reglement = item.date_reglement;
+		_this.modal_banque = item.domiciliation;
+		_this.modal_numero_cheque = item.numero_cheque;
+		_this.modal_montant = item.montant;
+		_this.update();
+
+		// clear modal
+
+		$('#btn_representer').prop('checked', true);
+		$('#modal_impaye').modal();
+	};
+
+	this.salaries = [];
+	this.idSalaries = {};
+
+
+	function getSalaries(){
+		var getParams = {};
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+		// if(document.getElementById('id_exercice')){
+		// 	getParams.id_exercice = document.getElementById('id_exercice').value;
+		// }// else if( _this.app.session.exercices.selected ){
+		// 	getParams.id_exercice = _this.app.session.exercices.selected;
+		// }
+		$.getJSON('/admin/salaries/salaries', getParams, function (data){
+			if(data && data.elements){
+				var i, field, d;
+				var l = data.elements.length;
+				var fields = {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', visible: 'visible'};
+				for(i=0; i<l; i++){
+					d = new Object();
+					for(field in fields){
+						d[fields[field]] = data.elements[i][field];
+					}
+					if(data.elements[i]['titre'] == 'monsieur') {
+						d['titre'] = 'M';
+					} else if(data.elements[i]['titre'] == 'madame') {
+						d['titre'] = 'Mme';
+					}
+					_this.idSalaries[d['id']] = i;
+					_this.salaries.push(d);
+				}
+				_this.update();
+
+				_this.loaded = true;
+
+				_this.numToLoad--;
+	        	if(_this.numToLoad <= 0) {
+	        		loadSelectize();
+	    		}
+			}else{
+				// TODO: no data elements, get and manage error!...
+			}
+		});
+	}
+	getSalaries();
+
+	this.convertDateToView = function convertDateToView(date){
+    	var convertedDate = '';
+    	if( ! date){
+    		convertedDate = "Date sans valeur";
+    	}else{
+    		var year = date.substr(0,4);
+    		var month = date.substr(5,2);
+    		var day = date.substr(8,2);
+    		var convertedDate = day + "/" + month + "/" + year;
+    	}
+    	return convertedDate;
+    }
+
+    this.journaux = [];
+	this.idJournaux = {};
+
+	function getJournaux(){
+		var getParams = { type: "tresorerie" };
+		// if(document.getElementById('id_exercice')){
+		// 	getParams.id_exercice = document.getElementById('id_exercice').value;
+		// }
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+		$.getJSON('/admin/compta/journaux', getParams, function (data){
+			if(data && data.elements){
+				var i, field, d; 
+				var l = data.elements.length;
+										
+				var fields = {id: 'id', libelle: 'libelle', nom: 'nom', id_compte: 'id_compte', visible: 'visible'};
+				for(i=0; i<l; i++){
+					d = new Object();
+					for(field in fields){
+						if(field == "nom") {
+							$("#entreprisePrint").text(data.elements[i][field]);
+						}
+						d[fields[field]] = data.elements[i][field];
+					}
+					_this.idJournaux[d['id']] = i;
+					_this.journaux.push(d);
+				}
+				_this.update();
+			}else{
+				// TODO: no data elements, get and manage error!...
+				if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+				}
+			}
+		});
+	}
+	getJournaux();
+
+
+	showReglements(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+	
+		$('#remise_details_' + e.item.id).toggleClass('hidden');
+		$('#remise_' + e.item.id).toggleClass('active');
+	}
+
+	setRemise(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+
+		if(_this.E_M) {
+			let montant = 0;
+			let i = 0;
+			const params = _this.E_M.checkElement({ selector: '.reglement .action', checkAllSelector: '.check_all_reglements', montant: montant, i: i,
+				checked: function(params) {
+					params.parent.montant += parseFloat(_this.reglements[_this.idReglements[$(this).val()]].montant);
+					params.parent.i++;
+				}
+			});
+
+			montant = params.montant;
+			i = params.i;
+			_this.total_remise = parseFloat(montant).toFixed(2);
+			_this.nb_elements = i;
+			_this.update();
+		}
+	}
+
+	this.parametresCompte = {};
+
+	function getParametresComptes(){
+		var getParams = { };
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+
+		$.getJSON( '/admin/compta/parametres', getParams, function(data){
+			if(data && data.elements && data.elements[0]){
+				_this.parametresCompte = data.elements[0];
+				_this.prefixe_num_op = data.elements[0].prefixe_numero_operations;
+				_this.prefixe_num_pieces = data.elements[0].prefixe_numero_pieces;
+				//_this.numToLoad--;
+				_this.update();
+			}else{
+				// TODO: no data elements, get and manage error!...
+			}
+			//_this.numToLoad--;
+		})
+	}
+	getParametresComptes();
+
+	this.parametresBancaire = [];
+	this.idParametresBancaire = {};
+
+	function getParametresBancaire() {
+			var getParams = { };
+			var banque = "";
+			var rib = "";
+			var bic = "";
+			var iban = "";
+			var titulaire = "";
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/parametres', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', rib:'rib', bic:'bic', iban:'iban', titulaire:'titulaire', banque:'banque'};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+							if (field == 'banque') {
+								banque = d[fields[field]];
+							}
+							_this.banque = banque;
+							if (field == 'rib') {
+								rib = d[fields[field]];
+							}
+							_this.rib = rib;
+							if (field == 'bic') {
+								bic = d[fields[field]];
+							}
+							_this.bic = bic;
+							if (field == 'iban') {
+								iban = d[fields[field]];
+							}
+							_this.iban = iban;
+							if (field == 'titulaire') {
+								titulaire = d[fields[field]];
+							}
+							_this.titulaire = titulaire;
+						}
+						_this.idParametresBancaire[d['id']] = i;
+						_this.parametresBancaire.push(d);
+					}
+	                    //_this.numToLoad--;
+	                    _this.update();
+	                }else{
+	                    // TODO: no data elements, get and manage error!...
+	                }
+	                //_this.numToLoad--;
+	            })
+		}	
+		getParametresBancaire();
+
+	this.reglements = [];
+	this.idReglements = {};
+
+	function getReglements(){
+		var filtre_data = [];
+		for(var index in _this.filtres) {
+			if(_this.filtres[index].ignore == false) {
+				filtre_data.push(_this.filtres[index]);
+			}
+		}
+
+		var getParams = { mode_de_paiement: 'cheques', reglement: true, filtres: filtre_data, parent: 1 };
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+		$.getJSON( '/admin/compta/reglement', getParams, function(data){
+			if(data && data.elements){
+				_this.reglements = [];
+				_this.idReglements = {};
+				var i, field, d;
+				var l = data.elements.length;
+				var fields = { id: 'id', id_salarie: 'id_salarie', id_inscription: 'id_inscription', nom: 'nom', date_remise: 'date_remise', titulaire_paiement: 'titulaire_paiement', domiciliation: 'domiciliation', numero_cheque: 'numero_cheque', montant: 'montant', date_reglement: 'date_reglement', id_remise: 'id_remise', date_previsionnelle: 'date_previsionnelle' };
+				console.log("l :: " + l)
+				for(i=0; i<l; i++){
+					d = new Object();
+					for(field in fields){
+						if(field == "nom") {
+							$("#entreprisePrint").text(data.elements[i][field]);
+						}
+						console.log(field + ' ::: ' + data.elements[i][field]);
+						d[fields[field]] = data.elements[i][field];
+					}
+					_this.idReglements[d['id']] = i;
+					_this.reglements.push(d);
+				}
+				_this.update();
+			}
+		})
+	}
+	getReglements();
+
+	this.comptes = [];
+	this.idComptes = {};
+	function getCompte(){
+		var getParams = { type_element: 'compte' };
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+		$.getJSON( '/admin/compta/comptes', getParams, function(data){
+			if(data && data.elements){
+				var d = { };
+				var l = data.elements.length;
+				for(i=0; i<l; i++){
+					d = { };
+					d['id'] = data.elements[i]['id'];
+					d['libelle'] = data.elements[i]['libelle'];
+					d['reference'] = data.elements[i]['reference'];
+					_this.idComptes[d['id']] = i;
+					_this.comptes.push(d);
+				}
+				_this.update();
+			}else{
+				// TODO: no data elements, get and manage error!...
+			}
+		})
+	}
+	getCompte();
+
+	this.remises = [];
+	this.idRemises = {};
+	function getRemise(){
+		var getParams = { type: 'cheques', remise: true };
+		if( _this.selectedExercice ){
+			getParams.id_exercice = _this.selectedExercice;
+		}else if(document.getElementById('id_exercice')){
+			getParams.id_exercice = document.getElementById('id_exercice').value;
+		}
+
+		$.getJSON( '/admin/compta/reglement', getParams, function(data){
+			if(data && data.elements){
+				_this.remises = [];
+				_this.idRemises = {};
+				var i, field, d, y, r;
+				var l = data.elements.length;
+				/*var fields = { id: 'id', numero: 'numero', date: 'date', montant: 'montant', id_journal: 'id_journal', id_compte: 'id_compte' };*/
+				var remise_fields = { id: 'id' , numero: 'numero', date: 'date', montant: 'montant', id_compte_remise: 'id_compte_remise', id_compte_type_paiement: 'id_compte_type_paiement', type: 'type', nb_elements: 'nb_elements', id_journal: 'id_journal' };
+				var reglement_fields = { re_id: 'id' , id_inscription: 'id_inscription', id_salarie: 'id_salarie', re_montant: 'montant', date_remise: 'date_remise', titulaire_paiement: 'titulaire_paiement', domiciliation: 'domiciliation', numero_cheque: 'numero_cheque', date_reglement: 'date_reglement', date_inscription: 'date_inscription', id: 'id_parent', id_compte_remise: 'id_compte_remise', id_compte_type_paiement: 'id_compte_type_paiement', id_journal: 'id_journal_remise', id_remise: 'id_remise'};
+				var currentRemise = 0;
+				for(i=0, y=0; i<l; i++){
+					if(currentRemise != data.elements[i].id) {
+						currentRemise = data.elements[i].id;
+						d = {};
+						for(field in remise_fields){
+							d[remise_fields[field]] = data.elements[i][field];
+						}
+						d.reglements = [];
+					}
+					r = {};
+					for(field in reglement_fields){
+						r[reglement_fields[field]] = data.elements[i][field];
+					}
+
+					d.reglements.push(r);
+
+					if(i+1 == l || data.elements[i + 1].id != currentRemise) {
+						_this.idRemises[d['id']] = y;
+						_this.remises.push(d);
+						y++;
+					}
+				}
+				_this.update();
+			}
+		})
+	}
+	getRemise();
+
+	changeDatePrevisionnelle(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+
+		var url = '/admin/compta/reglement';
+		var data = { action: 'update_reglement', date_previsionnelle: _this.E_M.convertDateToDb($(e.currentTarget).val()), id: e.item.id };
+		_this.E_M.showLoader();
+
+		$.ajax(url, {
+			data : data,
+			type : 'POST',
+			dataType: 'json',
+			success: function (result, textStatus, jqXHR){
+				getReglements();
+				_this.E_M.removeLoader({time: 1000})
+				_this.update();
+			}
+		}).done(function(){
+			console.log('done!...');
+			tag = null;
+		}).fail(function(){
+			console.log('fail!...');
+			tag = null;
+		});
+	}
+
+	this.remisePrint = [];
+	this.idRemisePrint = {};
+
+	saveRemise(e) {
+		e.preventDefault();
+		e.preventUpdate = true;
+		//var id = e.item.id;
+		if(_this.nb_elements > 0) {
+			_this.reglements = [];
+			_this.idReglements = {};
+			var url = '/admin/compta/reglement';
+			var data = { action: 'add_remise' };
+			if(document.getElementById('id_exercice')){
+				var id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				var id_exercice = _this.app.session.exercices.selected;
+			}
+			data.id_exercice = id_exercice;
+
+			data.montant = _this.total_remise;
+			data.nb_elements = _this.nb_elements;
+			data.type = 'cheques';
+			data.id_journal = $('#journal_remise').val();
+			data.numero = $('#remise').val();
+			data.date = _this.E_M.convertDateToDb($('#date_remise').val());
+			var ids = [];
+			var valuePrint = {id: 'id',titulairePrint: 'titulairePrint', banquePrint: 'banquePrint', nu_chequePrint: 'nu_chequePrint', montantPrint: 'montantPrint'};
+			_this.remisePrint = [];
+			_this.idRemisePrint = {};
+			$('.action', $('.reglement')).each(function() {
+				if($(this).is(':checked')) {
+					ids.push($(this).val());
+				}
+			});
+			data.ids = ids;
+			//$('.action', $('.reglement')).each(function() {
+			var i, field, d;
+			//	if($(this).is(':checked')) {
+			for(i=0; i<data.ids.length; i++){
+						d = new Object();
+						for(field in valuePrint){
+							if (field == "id") {
+								d[valuePrint[field]] = ids[i];
+							} else {
+								d[valuePrint[field]] = $("#" + field + "_" + ids[i]).text();
+							}
+						}
+					_this.idRemisePrint[d['id']] = i;
+					_this.remisePrint.push(d);
+			}
+			_this.update();
+			//}
+			//})
+			_this.E_M.showLoader();
+			$.ajax(url, {
+			data : data,
+			type : 'POST',
+			dataType: 'json',
+			success: function (result, textStatus, jqXHR){
+					getReglements();
+					getRemise();
+					_this.E_M.removeLoader({time: 1000})
+					_this.total_remise = '0.00';
+					_this.nb_elements = 0;
+					$('#banque').val('');
+					$('#remise').val('');
+					$('#date_remise').datepicker({
+					 	dateFormat: 'dd/mm/yy'
+					});
+			 
+					$('#date_remise').datepicker( "setDate", new Date() );
+					if($('.check_all_reglements').is(':checked')) {
+						$('.check_all_reglements').prop('checked', false);
+					}
+					$.modal.close();
+					_this.update();
+				}
+			}).done(function(){
+				console.log('done!...');
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				tag = null;
+			});
+		}
+		$('#total_remise_print').text(_this.total_remise);
+		$('#num_element').text(_this.nb_elements);
+		$("#print_date_remise").text($('#date_remise').val());
+		$('#num_remise').text($('#remise').val());
+		document.title = $("#entreprisePrint").text();
+		window.print();
+    }
+
+    lanceImpression(e) {
+    	var ids = [];
+		var valuePrint = {id: 'id',titulairePrint: 'titulairePrint', banquePrint: 'banquePrint', nu_chequePrint: 'nu_chequePrint', montantPrint: 'montantPrint'};
+		_this.remisePrint = [];
+		_this.idRemisePrint = {};
+		$("#remise_details_" + e.item.id + " .printSecond").each(function() {
+				ids.push($(this).attr('id'));
+		});
+		ids = ids;
+		//$('.action', $('.reglement')).each(function() {
+		var i, field, d;
+		//	if($(this).is(':checked')) {
+		for(i=0; i<ids.length; i++){
+			d = new Object();
+			for(field in valuePrint){
+				if (field == "id") {
+					d[valuePrint[field]] = ids[i];
+				} else {
+					d[valuePrint[field]] = $("#" + field + "_" + ids[i]).text();
+				}
+			}
+			_this.idRemisePrint[d['id']] = i;
+			_this.remisePrint.push(d);
+		}
+		_this.update();
+		$("#print_date_remise").text($('#dateremisePrint2').text());
+		$('#num_remise').text($('#numremisePrint2_' + e.item.id).text());
+		$('#num_element').text(ids.length);
+		$('#total_remise_print').text($('#montantremisePrint2_' + e.item.id).text());
+		document.title = $("#entreprisePrint").text();
+    	window.print();
+
+    }
+
+	function loadDateTemplate() {
+		var $date = $('#front_date_remise');
+		if($date.length) {
+			$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+			$date.datepicker({
+				dateFormat: 'dd/mm/yy',
+			});
+			$date.datepicker('setDate', new Date());
+		}
+	}
+
+	formatDateField(e){
+		e.preventDefault();
+		e.preventUpdate = true;
+
+		if(_this.E_M){
+			_this.E_M.formatDateField({
+				event: e
+			});
+		}
+	}
+
+	this.on('mount', function(){
+		// var $date = $('#date_remise');
+
+		$('#date_remise').datepicker({
+		 	dateFormat: 'dd/mm/yy'
+		});
+ 
+		$('#date_remise').datepicker( "setDate", new Date() );
+
+		$('#modal_date, #modal_date_previsionnelle, .date_previsionnelle').datepicker({
+		 	dateFormat: 'dd/mm/yy'
+		});
+
+		$('#modal_date').datepicker("setDate", new Date());
+
+		$('#modal_date_previsionnelle').datepicker({
+		 	dateFormat: 'dd/mm/yy'
+		});
+	});
+
+	this.on('updated', function(){
+		$('.date_previsionnelle').datepicker({
+		 	dateFormat: 'dd/mm/yy'
+		});
+
+	});
+
+// FONCTION IMPRIMER
+	(function($) { 
+	    
+		// Initialization
+		$.fn.printPreview = function() {
+			this.each(function() {
+				$(this).bind('click', function(e) {
+				    e.preventDefault();
+				    if (!$('#print-modal').length) {
+				        $.printPreview.loadPrintPreview();
+				    }
+				});
+			});
+			return this;
+		};
+	    
+	    // Private functions
+	    var mask, size, print_modal, print_controls;
+	    $.printPreview = {
+	        loadPrintPreview: function() {
+	            // Declare DOM objects
+	            print_modal = $('<div id="print-modal"></div>');
+	            print_controls = $('<div id="print-modal-controls">' + 
+	                                    '<a href="#" class="print" title="Print page">Print page</a>' +
+	                                    '<a href="#" class="close" title="Close print preview">Close</a>').hide();
+	            var print_frame = $('<iframe id="print-modal-content" scrolling="no" border="0" frameborder="0" name="print-frame" />');
+
+	            // Raise print preview window from the dead, zooooooombies
+	            print_modal
+	                .hide()
+	                .append(print_controls)
+	                .append(print_frame)
+	                .appendTo('body');
+
+	            // The frame lives
+	            for (var i=0; i < window.frames.length; i++) {
+	                if (window.frames[i].name == "print-frame") {    
+	                    var print_frame_ref = window.frames[i].document;
+	                    break;
+	                }
+	            }
+	            print_frame_ref.open();
+	            print_frame_ref.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
+	                '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' + 
+	                '<head><title>' + document.title + '</title></head>' +
+	                '<body></body>' +
+	                '</html>');
+	            print_frame_ref.close();
+	            
+	            // Grab contents and apply stylesheet
+	            var $iframe_head = $('head link[media*=print], head link[media=all]').clone(),
+	                $iframe_body = $('body > *:not(#print-modal):not(script)').clone();
+	            $iframe_head.each(function() {
+	                $(this).attr('media', 'all');
+	            });
+	            if (!$.browser.msie && !($.browser.version < 7) ) {
+	                $('head', print_frame_ref).append($iframe_head);
+	                $('body', print_frame_ref).append($iframe_body);
+	            }
+	            else {
+	                $('body > *:not(#print-modal):not(script)').clone().each(function() {
+	                    $('body', print_frame_ref).append(this.outerHTML);
+	                });
+	                $('head link[media*=print], head link[media=all]').each(function() {
+	                    $('head', print_frame_ref).append($(this).clone().attr('media', 'all')[0].outerHTML);
+	                });
+	            }
+	            
+	            // Disable all links
+	            $('a', print_frame_ref).bind('click.printPreview', function(e) {
+	                e.preventDefault();
+	            });
+	            
+	            // Introduce print styles
+	            $('head').append('<style type="text/css">' +
+	                '@media print {' +
+	                    '/* -- Print Preview --*/' +
+	                    '#print-modal-mask,' +
+	                    '#print-modal {' +
+	                        'display: none !important;' +
+	                    '}' +
+	                '}' +
+	                '</style>'
+	            );
+
+	            // Load mask
+	            $.printPreview.loadMask();
+
+	            // Disable scrolling
+	            $('body').css({overflowY: 'hidden', height: '100%'});
+	            $('img', print_frame_ref).load(function() {
+	                print_frame.height($('body', print_frame.contents())[0].scrollHeight);
+	            });
+	            
+	            // Position modal            
+	            starting_position = $(window).height() + $(window).scrollTop();
+	            var css = {
+	                    top:         starting_position,
+	                    height:      '100%',
+	                    overflowY:   'auto',
+	                    zIndex:      10000,
+	                    display:     'block'
+	                }
+	            print_modal
+	                .css(css)
+	                .animate({ top: $(window).scrollTop()}, 400, 'linear', function() {
+	                    print_controls.fadeIn('slow').focus();
+	                });
+	            print_frame.height($('body', print_frame.contents())[0].scrollHeight);
+	            
+	            // Bind closure
+	            $('a', print_controls).bind('click', function(e) {
+	                e.preventDefault();
+	                if ($(this).hasClass('print')) { window.print(); }
+	                else { $.printPreview.distroyPrintPreview(); }
+	            });
+	    	},
+	    	
+	    	distroyPrintPreview: function() {
+	    	    print_controls.fadeOut(100);
+	    	    print_modal.animate({ top: $(window).scrollTop() - $(window).height(), opacity: 1}, 400, 'linear', function(){
+	    	        print_modal.remove();
+	    	        $('body').css({overflowY: 'auto', height: 'auto'});
+	    	    });
+	    	    mask.fadeOut('slow', function()  {
+	    			mask.remove();
+	    		});				
+
+	    		$(document).unbind("keydown.printPreview.mask");
+	    		mask.unbind("click.printPreview.mask");
+	    		$(window).unbind("resize.printPreview.mask");
+		    },
+		    
+	    	/* -- Mask Functions --*/
+		    loadMask: function() {
+		        size = $.printPreview.sizeUpMask();
+	            mask = $('<div id="print-modal-mask" />').appendTo($('body'));
+	    	    mask.css({				
+	    			position:           'absolute', 
+	    			top:                0, 
+	    			left:               0,
+	    			width:              size[0],
+	    			height:             size[1],
+	    			display:            'none',
+	    			opacity:            0,					 		
+	    			zIndex:             9999,
+	    			backgroundColor:    '#000'
+	    		});
+		
+	    		mask.css({display: 'block'}).fadeTo('400', 0.75);
+	    		
+	            $(window).bind("resize..printPreview.mask", function() {
+					$.printPreview.updateMaskSize();
+				});
+				
+				mask.bind("click.printPreview.mask", function(e)  {
+					$.printPreview.distroyPrintPreview();
+				});
+				
+				$(document).bind("keydown.printPreview.mask", function(e) {
+				    if (e.keyCode == 27) {  $.printPreview.distroyPrintPreview(); }
+				});
+	        },
+	    
+	        sizeUpMask: function() {
+	            if ($.browser.msie) {
+	            	// if there are no scrollbars then use window.height
+	            	var d = $(document).height(), w = $(window).height();
+	            	return [
+	            		window.innerWidth || 						// ie7+
+	            		document.documentElement.clientWidth || 	// ie6  
+	            		document.body.clientWidth, 					// ie6 quirks mode
+	            		d - w < 20 ? w : d
+	            	];
+	            } else { return [$(document).width(), $(document).height()]; }
+	        },
+	    
+	        updateMaskSize: function() {
+	    		var size = $.printPreview.sizeUpMask();
+	    		mask.css({width: size[0], height: size[1]});
+	        }
+	    }
+	})(jQuery);
+//// FIN FONCTION IMPRIMER
+	
+	</script>
+</cheques>

@@ -1,0 +1,112 @@
+<accueil-salaries>
+	<!-- /* new menutop*/<div id="titre_page"><h1>Tableau de Bord - { IS_CE ? 'Salariés' : 'Adhérents' }</h1></div>-->
+	<div class="accueil_salaries with_submenu left">
+		<div class="accueil_title left">
+			<div class="block center">
+				<div class="block_img">
+					<img src="/img/dette_a.png">
+				</div>
+				<div class="block_info">
+					870<br> { IS_CE ? 'Salariés' : 'Adhérents' }
+				</div>
+				<div class="block_content left">
+					<h2>Situation par Ville</h2>
+					<div class="situation_ville_activites">
+						<p>Sceaux</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+						<p>Arcueil</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+						<p>Anthony</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+						<p>Autres</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+					</div>
+				</div> 
+			</div>
+			<div class="block center">
+				<div class="block_img">
+					<img src="/img/salarie_accueil.png">
+				</div>
+				<div class="block_info">
+					132<br> Inscriptions
+				</div>
+				<div class="block_content left">
+					<h2>Situation par catégorie d'activités</h2>
+					<div class="situation_ville_activites">
+						<p>Chèques vacances</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+						<p>Bons d'achats</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+						<p>Billetterie</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+						<p>Voyages</p>
+						<div class="progress-bar stripes">
+							<span id="label">80%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- MODIFICATIONS DES IMGAES POUR LE BLOCK ALERTES  -->
+			<div class="alertes accueil block">
+				<h1>Les Alertes</h1>
+				<div class="widget_salaries">
+					<div class="widget_cell_salaries"><a href="accueil#/salaries/salaries">
+						<div class="vignette_cell_1">						
+						</div>
+						<div class="widget_alertes_salaries_dette">
+							<!-- <p class="quantite rouge">17</p> -->
+						</div>
+						<p class="center">Dette { IS_CE ? 'Salariés' : 'Adhérents' }</p></a>
+					</div>
+					<div class="widget_cell_salaries">
+						<div class="vignette_cell_2">						
+						</div>
+						<div class="widget_alertes_salaries_reservation">
+							<!-- <p class="quantite rouge">03</p> -->
+						</div>
+						<p class="center">Réservations en Ligne</p>
+					</div>
+					<div class="widget_cell_salaries">
+						<div class="vignette_cell_3">
+						</div>
+						<div class="widget_alertes_salaries_valid_doc">
+						</div>
+						<p class="center">Validation Documents</p>
+					</div>
+				</div>
+			</div>
+			<!-- FIN DES MODIFICATIONS DES IMAGES POUR LE BLOCK ALERTES -->
+		</div>
+	</div>
+	<script>
+		var app = opts;
+	  	var _this = this;
+        var permissions = app.session.permissions;
+        var IS_CE = this.IS_CE = permissions.IS_CE || false;
+        var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	  	app.on('unmount-accueil-salaries', function(){
+			console.log('unmount-accueil-salaries fired');
+			app.off('unmount-accueil-salaries');
+			console.log('before unmount-accueil-salaries, ' + _this.tagName);
+			_this.unmount();
+			console.log('after unmount-accueil-salaries');
+		});
+
+		this.update();
+
+	</script>
+</accueil-salaries>

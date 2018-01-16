@@ -1,0 +1,1153 @@
+<immobilisations>
+	<!--<div id="titre_page"><h1>Immobilisations <h1 id="ajout_ou_edit"></h1></h1></div>-->
+	<div class="lettrages with_submenu">
+		<div class="header">
+			<header class="opened" onclick="{ showContents }">Filtres</header>
+			<div class="slide-up filtre">
+				<div class="inline_block">
+					<div class="filtre_libelle">
+						<label class="s-large" for="filtre_libelle">Libelle</label>
+						<input type="text" id="filtre_libelle" onchange={ filterChange }>
+					</div>
+				</div>
+				<div class="">
+					<div class="">
+						<label for="" class="filtre2">Valeur d'achat</label><input type="text" id="valeur_achat" onchange={ filterChange }>
+						<label  class="filtre3">Date d'achat</label><input type="text" id="filtre_date_debut" onchange={ filterChange }><input class="filtre_date"type="text" id="filtre_date_fin" onchange={ filterChange }>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="add_immo" class="edit edit_journal hidden">
+			<div class="border">
+			<div class="flex">
+				<div class="block_gauche">
+					<div class="celladd">
+						<input type="hidden" name="type_element" value="actualites">
+						<input type="hidden" id="immo_classe" name="immo_classe" value="">
+					</div>
+					<div class="celladd">
+						<div>
+							<label for="numero" class="label_titre label1">Numéro:</label>
+							<input name="immo_numero_immobilisation" id="immo_numero_immobilisation" class="numero readonly" value={numero_immobilisation} readonly>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<label for="libelle" class="label2">Libelle:</label>
+							<input name="immo_libelle" id="immo_libelle" class="titre "></input>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<label for="prix_achat" class="label3">Prix d'achat:</label>
+							<input id="immo_prix_achat" name="immo_prix_achat" onchange={calculTableau}></input>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<label for="ammortissement" class="label4">Amortissement:</label>
+							<input id="immo_ammortissement" name="immo_ammortissement" onchange={calculTableau}></input>
+						</div>
+					</div>		
+					<div class="celladd block">
+						<div>
+							<label for="valeur" class="label5">Valeur Nette:</label>
+							<input id="immo_valeur_nette" name="immo_valeur_nette" readonly></input>
+						</div>
+					</div>	
+					<div class="celladd block">
+						<div>
+							<label for="date_ammortissement" class="label6">Date d'Amortissement:</label>
+							<input type="hidden" name="immo_date_ammortissement" id="immo_date_ammortissement" type="date">
+							<input id="front_immo_date_ammortissement" field-for-date="immo_date_ammortissement" type="text" name="front_immo_date_ammortissement" onchange={calculTableau} ></input>
+						</div>
+					</div>	
+					<div class="celladd block">
+						<div>
+							<label for="duree_ammortissement" class="label7">Durée d'Amortissement:</label>
+							<input id="immo_duree_ammortissement" name="immo_duree_ammortissement" onchange={calculTableau}></input>
+						</div>
+					</div>
+				</div>		
+				<div class="bloc_droit">
+					<div class="celladd block">
+						<div class="label_for_textarea">
+							<label for="informations">Informations:</label>
+						</div>
+						<div>
+							<textarea name="immo_informations" id="immo_informations" class="titre "></textarea>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<label class="" for="id_compte_immo">Compte Immobilisation</label>
+							<select name="immo_id_immo" id="immo_id_immo" class="id_compte" onchange={ showComplementaire }>
+								<option value=""></option>
+								<option each={ this.comptes } value="{ id }" reference="{ reference }">{ reference } { libelle }</option>
+							</select>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<label class="" for="id_compte_ammortissement">Compte Amortissement</label>
+							<select  name="immo_id_ammo" id="immo_id_ammo" class="id_compte" onchange={ showComplementaire }>
+								<option value=""></option>
+								<option each={ this.comptes } value="{ id }" reference="{ reference }">{ reference } { libelle }</option>
+							</select>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<label class="" for="id_compte_dotation_ammortissement">Compte Dotation Amortissement</label>
+							<select  name="immo_id_dota_ammortissement" id="immo_id_dota_ammortissement" class="id_compte" onchange={ showComplementaire }>
+								<option value=""></option>
+								<option each={ this.comptes } value="{ id }" reference="{ reference }">{ reference } { libelle }</option>
+							</select>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<label class="" for="id_code_analytique_dotation_ammortissement">Code Analytique Dotation Amortissement</label>
+							<select name="immo_id_analytique_dota_ammortissement" id="immo_id_analytique_dota_ammortissement" class="id_compte" onchange={ showComplementaire }>
+								<option value=""></option>
+								<option each={ this.comptes } value="{ id }" reference="{ reference }">{ reference } { libelle }</option>
+							</select>
+						</div>
+					</div>
+					<div class="celladd block">
+						<div>
+							<form>
+								<label class="" for="id_mode_ammortissement">Mode d'Amortissement</label>
+								<input type="radio" name="id_mode_ammortissement" id="id_mode_ammortissement" checked="checked">Linéaire</input>
+								<input type="radio" name="id_mode_ammortissement" id="id_mode_ammortissement">Dégressif Fiscal</input>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="block_bas">
+				<label>Tableau d'amortissement<img src="../img/immotableau.png"></label>
+				<div class="flex">
+					<div class="rTable">
+						<div class="rTableRow">
+						<div class="rTableHead"><span>Date</span></div>
+						<div class="rTableHead"><div>Valeur Résiduelle</div><div>Début d'exercice</div></div>
+						<div class="rTableHead"><span>Dotation</span></div>
+						<div class="rTableHead"><div>Valeur Résiduelle</div><div>Fin d'exercice</div></div>
+						</div>
+						<!--<div class="rTableRow">
+						<div class="rTableCell">31/12/2015</div>
+						<div class="rTableCell">12 000.00</div>
+						<div class="rTableCell">4 000.00</div>
+						<div class="rTableCell">8 000.00</div>
+						</div>
+						<div class="rTableRow">
+						<div class="rTableCell">31/12/2016</div>
+						<div class="rTableCell">8 000.00</div>
+						<div class="rTableCell">4 000.00</div>
+						<div class="rTableCell">4 000.00</div>
+						</div>
+						<div class="rTableRow">
+						<div class="rTableCell">31/12/2017</div>
+						<div class="rTableCell">4 000.00</div>
+						<div class="rTableCell">4 000.00</div>
+						<div class="rTableCell">00.00</div>
+						</div>-->
+					</div>
+					<div class="image_immo">
+						<img class="inline_block" src="../img/compta/imprimer_immo.png">
+						<img class="inline_block" src="../img/compta/export_immo.png">
+					</div>
+				</div>
+			</div>
+			</div>
+			<div class="celladd add_button">
+				<button name="cancel_submit" class="button annuler cancel_submit pointer" onclick={ cancelImmobilisations }>Annuler</button>
+				<button name="save_submit" class="button enregistrer save_submit pointer" onclick={ saveImmobilisations }>Enregistrer</button>
+			</div>
+		</div>
+		<div class="actions" id="actions">
+			<input id="add_immo_button" type="button" value="Ajouter un Amortissement" class="button ajouter pointer" name="add_element_button" onclick={ addImmobilisations }>
+		</div>
+		<div class="immo_content immo_edit_content">
+			<div class="corps_immo">
+				<div class="entete_immo">
+					<div class=" cell_1">N° Immobilisation</div>
+					<div class=" cell_2">Libelle</div>
+					<div class=" cell_3">Valeur d'achat</div>
+					<div class=" oeil_visibilite cell_4">Date d'achat</div>
+					<div class=" cell_5">Actions</div>
+				</div>
+				<div each={ immobilisations } id="immo_{ id }" class="immo_ligne immo_edit_ligne ui-state-default" onclick={move}>
+					<div class="show_infos hide_when_edit">
+						<div class=" image cell_1">{numero_immobilisation}</div>
+						<div class=" cell_2">{libelle}</div>
+						<div id="" class="cell_3">{prix_achat}</div>
+						<div id="dateView" class=" oeil_visibilite cell_4">{date_ammortissement}</div>
+						<div class=" actions cell_5">
+							<div>
+								<p class="modif"><img class="edit_element_img" onclick={ editImmobilisations} title="Modifier" src="/img/edit.png"><img class="delete_element_img" onclick={ validDeleteImmobilisations} title="Supprimer" delete_id="{ id }" src="/img/delete.png"></p>
+							</div>
+						</div>
+					</div>
+					<div id="immo_{ id }_edit" class="cancel edit edit_immo hidden">
+						<div class="border">
+							<div class="flex">
+								<div class="block_gauche">
+									<div class="celladd">
+										<input type="hidden" name="type_element" value="actualites">
+										<input type="hidden" id="immo_classe" name="immo_classe" value="">
+									</div>
+									<div class="celladd">
+										<div>
+											<label for="numero" class="label_titre label1">Numéro:</label>
+											<input name="immo_numero_immobilisation_{ id }" id="immo_numero_immobilisation_{ id }" class="numero readonly" value={numero_immobilisation} readonly>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<label for="libelle" class="label2">Libelle:</label>
+											<input name="immo_libelle_{ id }" id="immo_libelle_{ id }" class="titre libelle_edit" value={libelle} ></input>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<label for="prix_achat" class="label3">Prix d'achat:</label>
+											<input id="immo_prix_achat_{ id }" name="immo_prix_achat_{ id }"  value={prix_achat} onchange={calculTableauEdit} ></input>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<label for="ammortissement" class="label4">Amortissement:</label>
+											<input id="immo_ammortissement_{ id }" name="immo_ammortissement_{ id }" value={ammortissement} onchange={calculTableauEdit} ></input>
+										</div>
+									</div>		
+									<div class="celladd block">
+										<div>
+											<label for="valeur" class="label5">Valeur Nette:</label>
+											<input id="immo_valeur_nette_{ id }" name="immo_valeur_nette_{ id }" class="readonly" value={valeur_nette} readonly></input>
+										</div>
+									</div>	
+									<div class="celladd block">
+										<div>
+											<label for="date_ammortissement" class="label6">Date d'Amortissement:</label>
+											<input type="hidden" name="immo_date_ammortissement_{ id }" id="immo_date_ammortissement_{ id }" type="date">
+											<input id="front_immo_date_ammortissement_{ id }" name="front_immo_date_ammortissement_{ id }" field-for-date="immo_date_ammortissement_{ id }" value={date_ammortissement} onchange={calculTableauEdit}></input>
+										</div>
+									</div>	
+									<div class="celladd block">
+										<div>
+											<label for="duree_ammortissement" class="label7">Durée d'Amortissement:</label>
+											<input id="immo_duree_ammortissement_{ id }" name="immo_duree_ammortissement_{ id }" value={duree_ammortissement} onchange={calculTableauEdit}></input>
+										</div>
+									</div>
+								</div>		
+								<div class="bloc_droit">
+									<div class="celladd block">
+										<div class="label_for_textarea">
+											<label for="informations">Informations:</label>
+										</div>
+										<div>
+											<textarea name="immo_informations_{ id }" id="immo_informations_{ id }" class="titre textarea_edit" value={informations} ></textarea>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<label class="" for="id_compte_immo">Compte Immobilisation</label>
+											<select name="immo_id_immo_{id}" id="immo_id_immo_{id}" class="id_compte" onchange={ showComplementaire }>
+												<option value=""></option>
+												<option each={ this.comptes } value="{ id }" reference="{ reference }" selected="{ id_immo === id }">{ reference } { libelle }</option>
+											</select>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<label class="" for="id_compte_ammortissement">Compte Amortissement</label>
+											<select name="immo_id_ammo_{id}" id="immo_id_ammo_{id}" class="id_compte" onchange={ showComplementaire }>
+												<option value=""></option>
+												<option each={ this.comptes } value="{ id }" reference="{ reference }" selected="{id_ammo === id }">{ reference } { libelle }</option>
+											</select>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<label class="" for="id_compte_dotation_ammortissement">Compte Dotation Amortissement</label>
+											<select  name="immo_id_dota_ammortissement_{id}" id="immo_id_dota_ammortissement_{id}"  class="id_compte" onchange={ showComplementaire }>
+												<option value=""></option>
+												<option each={ this.comptes } value="{ id }" reference="{ reference }" selected="{id_dota_ammortissement === id }">{ reference } { libelle }</option>
+											</select>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<label class="" for="id_code_analytique_dotation_ammortissement">Code Analytique Dotation Amortissement</label>
+											<select name="immo_id_analytique_dota_ammortissement_{id}" id="immo_id_analytique_dota_ammortissement_{id}" class="id_compte" onchange={ showComplementaire }>
+												<option value=""></option>
+												<option each={ this.comptes } value="{ id }" reference="{ reference }" selected="{id_analytique_dota_ammortissement === id }">{ reference } { libelle }</option>
+											</select>
+										</div>
+									</div>
+									<div class="celladd block">
+										<div>
+											<form>
+												<label class="" for="id_mode_ammortissement">Mode d'Amortissement</label>
+												<input type="radio" name="id_mode_ammortissement" id="id_mode_ammortissement" checked="checked">Linéaire</input>
+												<input type="radio" name="id_mode_ammortissement" id="id_mode_ammortissement">Dégressif Fiscal</input>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="block_bas">
+								<label>Tableau d'amortissement<img src="../img/immotableau.png"></label>
+								<div class="flex">
+									<div id="{id}" class="rTableEdit">
+										<div class="rTableRow">
+										<div class="rTableHead"><span>Date</span></div>
+										<div class="rTableHead"><div>Valeur Résiduelle</div><div>Début d'exercice</div></div>
+										<div class="rTableHead"><span>Dotation</span></div>
+										<div class="rTableHead"><div>Valeur Résiduelle</div><div>Fin d'exercice</div></div>
+										</div>
+										<!--<div class="rTableRow">
+										<div class="rTableCell">31/12/2015</div>
+										<div class="rTableCell">12 000.00</div>
+										<div class="rTableCell">4 000.00</div>
+										<div class="rTableCell">8 000.00</div>
+										</div>
+										<div class="rTableRow">
+										<div class="rTableCell">31/12/2016</div>
+										<div class="rTableCell">8 000.00</div>
+										<div class="rTableCell">4 000.00</div>
+										<div class="rTableCell">4 000.00</div>
+										</div>
+										<div class="rTableRow">
+										<div class="rTableCell">31/12/2017</div>
+										<div class="rTableCell">4 000.00</div>
+										<div class="rTableCell">4 000.00</div>
+										<div class="rTableCell">00.00</div>
+										</div>-->
+									</div>
+									<div class="image_immo">
+										<img class="inline_block" src="../img/compta/imprimer_immo.png">
+										<img class="inline_block" src="../img/compta/export_immo.png">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="celladd add_button">
+							<button name="cancel_submit_{ id }" onclick={ cancelEditImmobilisations } class="button annuler pointer cancel_submit">Annuler</button>
+							<button name="save_submit_{ id }" onclick={ saveEditImmobilisations } class="button enregistrer pointer save_submit">Enregistrer</button>
+						</div>
+					</div>
+					<div id="immo_{ id }_delete" class="delete hidden">
+						<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button name="delete_{ id }" id="delete_{ id }" class="pointer" onclick={ deleteImmobilisations }>Supprimer</button><button class="pointer" name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteImmobilisations }>Annuler</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		var app = opts;
+		var _this = this;
+		this.app = opts;
+		var permissions = app.session.permissions;
+
+		app.on('unmount-immobilisations', function(){
+			app.off('unmount-immobilisations');		
+			_this.unmount();
+		});
+
+		this.loaded = false;
+
+		this.thingsToLoad = [ 'immobilisations', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		this.immobilisations = [];
+		this.idImmobilisations = {};
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		move(e) {
+		    $( ".corps_immo" ).sortable({
+		    	sort: function() {
+		        	if ($(this).hasClass("cancel")) {
+		            	$(this).sortable("cancel");
+		        	}
+		   		},
+				revert: true
+		    });
+		    /*$( "#draggable" ).draggable({
+		      connectToSortable: "#sortable",
+		      helper: "clone",
+		      revert: "invalid"
+		    });*/
+		    $( ".corps_immo, #immo_" + e.item.id  ).disableSelection();
+	  	}
+
+		this.comptes = [];
+		this.idComptes = {};
+
+		function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			getParams.visible = 'visible';
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				/*debugtime-console.log('getComptes AFTER : ', Date.now() - _this.debugTime);-debugTime*/
+
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					var invisible_nb = 0;
+					for(i=0; i<l; i++){
+						if(data.elements[i]['visible'] === 'visible') {
+							d = new Object();
+
+							for(field in fields){
+								d[fields[field]] = data.elements[i][field];
+							}
+							_this.idComptes[d['id']] = i - invisible_nb;
+							_this.comptes.push(d);
+						} else {
+							invisible_nb += 1;
+						}
+					}
+					//_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				//_this.numToLoad--;
+			})
+		}
+		getComptes();
+
+// TODO: rewrite it with riot.js please !!!...
+		calculTableau(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+			var rowNum = parseInt($("#immo_duree_ammortissement").val(), 10);
+			var date = $('#front_immo_date_ammortissement').val();
+			var year = date.substr(6, 4);
+			var month = date.substr(3,2);
+			var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			$('#immo_date_ammortissement').val(convertedDate);
+			year = parseInt(date.substr(6,4));
+			var jourAc = 30 - (parseInt(day)) + 1;
+			var jourRes = (12 - (parseInt(month))) * 30;
+			var totalJour = jourRes + jourAc;
+			var achat = $('#immo_prix_achat').val();
+			achat = parseFloat(achat);
+			var ammortissement = $('#immo_ammortissement').val();
+			ammortissement = parseFloat(ammortissement);
+			var dotation = ammortissement/rowNum;
+			valeurFin = achat - dotation;
+			var firstAnnuite = dotation * (totalJour / 360);
+			valeurfirstAnnuite = achat - firstAnnuite;
+			var table = $(".rTable");
+		    var resultHtml = "<div class='rTableRow'><div class='rTableHead'><span>Date</span></div><div class='rTableHead'><div>Valeur Résiduelle</div><div>Début d'exercice</div></div><div class='rTableHead'><span>Dotation</span></div><div class='rTableHead'><div>Valeur Résiduelle</div><div>Fin d'exercice</div></div></div>";
+		    if ((day == "01" && month == "01")) {
+				for(var i = 0 ; i < rowNum ; i++) {
+					resultHtml += ["<div class='rTableRow'>", 
+				 "<div class='rTableCell'>", 
+				  ('31' + '/' + '12' + '/' + year),
+				 "</div>",
+				 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+				 '<div class="rTableCell">',(dotation.toFixed(2)),'</div>',
+				 '<div class="rTableCell">',(valeurFin.toFixed(2)),'</div>',
+				 '</div>'].join("\n");
+				 year++;
+				 achat -= dotation;
+				 valeurFin = achat - dotation; 
+				} 
+
+				valeurFin += dotation; 
+				var valeurNette = $('#immo_valeur_nette');
+				valeurNette.val(valeurFin);
+			} else {
+				for(var i = 0 ; i <= rowNum ; i++) {
+					if (i == 0) {
+						resultHtml += ["<div class='rTableRow'>", 
+					 "<div class='rTableCell'>", 
+					  (day + '/' + month + '/' + year),
+					 "</div>",
+					 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+					 '<div class="rTableCell">',(firstAnnuite.toFixed(2)),'</div>',
+					 '<div class="rTableCell">',(valeurfirstAnnuite.toFixed(2)),'</div>',
+					 '</div>'].join("\n");
+					 year++;
+					 achat -= firstAnnuite;
+					 valeurFin = achat - dotation;
+					} else {
+						resultHtml += ["<div class='rTableRow'>", 
+						 "<div class='rTableCell'>", 
+						  ('31' + '/' + '12' + '/' + year),
+						 "</div>",
+						 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+						 '<div class="rTableCell">',(dotation.toFixed(2)),'</div>',
+						 '<div class="rTableCell">',(valeurFin.toFixed(2)),'</div>',
+						 '</div>'].join("\n");
+						 year++;
+						 achat -= dotation;
+						 valeurFin = achat - dotation; 
+						 if ((i + 1) == rowNum) {
+						 	dotation = achat;
+						 	valeurFin = achat - dotation; 
+						 }
+					}
+				}
+
+				valeurFin += dotation; 
+				var valeurNette = $('#immo_valeur_nette');
+				valeurNette.val(valeurFin);
+			}
+			table.html(resultHtml);
+		    return false; 
+			}
+		}
+
+// TODO: rewrite it with riot.js please !!!...
+		calculTableauEdit(e) {
+			var rowNum = parseInt($("#immo_duree_ammortissement_" + e.item.id).val(), 10);
+			var date = $('#front_immo_date_ammortissement_'+ e.item.id).val();
+			var year = date.substr(6, 4);
+			var month = date.substr(3,2);
+			var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			$('#immo_date_ammortissement_' + e.item.id).val(convertedDate);
+			year = parseInt(date.substr(6,4));
+			var jourAc = 30 - (parseInt(day)) + 1;
+			var jourRes = (12 - (parseInt(month))) * 30;
+			var totalJour = jourRes + jourAc;
+			var achat = $('#immo_prix_achat_'+ e.item.id).val();
+			achat = parseFloat(achat);
+			var ammortissement = $('#immo_ammortissement_'+ e.item.id).val();
+			ammortissement = parseFloat(ammortissement);
+			var dotation = ammortissement/rowNum;
+			valeurFin = achat - dotation;
+			var firstAnnuite = dotation * (totalJour / 360);
+			valeurfirstAnnuite = achat - firstAnnuite;
+			var table = $("#" + e.item.id);
+		    var resultHtml = "<div class='rTableRow'><div class='rTableHead'><span>Date</span></div><div class='rTableHead'><div>Valeur Résiduelle</div><div>Début d'exercice</div></div><div class='rTableHead'><span>Dotation</span></div><div class='rTableHead'><div>Valeur Résiduelle</div><div>Fin d'exercice</div></div></div>";
+		    
+		    if ((day == "01" && month == "01")) {
+				for(var i = 0 ; i < rowNum ; i++) {
+					resultHtml += ["<div class='rTableRow'>", 
+				 "<div class='rTableCell'>", 
+				  ('31' + '/' + '12' + '/' + year),
+				 "</div>",
+				 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+				 '<div class="rTableCell">',(dotation.toFixed(2)),'</div>',
+				 '<div class="rTableCell">',(valeurFin.toFixed(2)),'</div>',
+				 '</div>'].join("\n");
+				 year++;
+				 achat -= dotation;
+				 valeurFin = achat - dotation; 
+				} 
+
+				valeurFin += dotation; 
+				var valeurNette = $('#immo_valeur_nette');
+				valeurNette.val(valeurFin);
+			} else {
+				for(var i = 0 ; i <= rowNum ; i++) {
+					if (i == 0) {
+						resultHtml += ["<div class='rTableRow'>", 
+					 "<div class='rTableCell'>", 
+					  (day + '/' + month + '/' + year),
+					 "</div>",
+					 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+					 '<div class="rTableCell">',(firstAnnuite.toFixed(2)),'</div>',
+					 '<div class="rTableCell">',(valeurfirstAnnuite.toFixed(2)),'</div>',
+					 '</div>'].join("\n");
+					 year++;
+					 achat -= firstAnnuite;
+					 valeurFin = achat - dotation;
+					} else {
+						resultHtml += ["<div class='rTableRow'>", 
+						 "<div class='rTableCell'>", 
+						  ('31' + '/' + '12' + '/' + year),
+						 "</div>",
+						 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+						 '<div class="rTableCell">',(dotation.toFixed(2)),'</div>',
+						 '<div class="rTableCell">',(valeurFin.toFixed(2)),'</div>',
+						 '</div>'].join("\n");
+						 year++;
+						 achat -= dotation;
+						 valeurFin = achat - dotation; 
+						 if ((i + 1) == rowNum) {
+						 	dotation = achat;
+						 	valeurFin = achat - dotation; 
+						 }
+					}
+				}
+
+				valeurFin += dotation; 
+				var valeurNette = $('#immo_valeur_nette_'+ e.item.id);
+				valeurNette.val(valeurFin);
+			}
+			table.html(resultHtml);
+		    return false;
+		}
+
+		formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			if(_this.E_M){
+				_this.E_M.formatDateField({
+					event: e
+				});
+			}
+			// recupère l'id de l'élément sur lequel on a cliqué
+
+			// var currentTarget = e.currentTarget;
+			// var date = currentTarget.value;
+			// var length = date.length;
+			// var id = currentTarget.id;
+
+			// // input hidden pour qu'on lui envoie la bonne value
+			// var field_for_date = currentTarget.getAttribute('field-for-date');
+			// var fieldDate = document.getElementById(field_for_date);
+			
+			// var date_for_db = '';
+			
+			// date_for_db = _this.convertDateToDb(date);
+
+			// if(length == 10){
+			// 	fieldDate.value = date_for_db;
+			// } else {
+			// 	fieldDate.value = '';
+			// }
+
+        }
+
+        this.convertDateToDb = function convertDateToDb(date){   
+            var year = date.substr(6, 4);
+		    var month = date.substr(3,2);
+		    var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			return convertedDate;
+        }
+
+        this.convertDateToView = function convertDateToView(date){
+        	var convertedDate = '';
+        	if( ! date){
+        		convertedDate = "Date sans valeur";
+        	}else{
+        		var year = date.substr(0,4);
+        		var month = date.substr(5,2);
+        		var day = date.substr(8,2);
+        		var convertedDate = day + "/" + month + "/" + year;
+        	}
+        	return convertedDate;
+        }
+
+		function getImmobilisations() {
+			getElements({
+				tag: _this,
+				url: '/admin/compta/immobilisations', 
+				elements: _this.immobilisations,
+				idElements: _this.idImmobilisations,
+				fields: {id: 'id', id_entreprise: 'id_entreprise',id_immo: 'id_immo',id_ammo: 'id_ammo', id_dota_ammortissement: 'id_dota_ammortissement',id_analytique_dota_ammortissement: 'id_analytique_dota_ammortissement', libelle: 'libelle', numero_immobilisation: 'numero_immobilisation', prix_achat: 'prix_achat' ,ammortissement: 'ammortissement', valeur_nette: 'valeur_nette', date_ammortissement: 'date_ammortissement', duree_ammortissement: 'duree_ammortissement', informations: 'informations'},
+				getParameters: { type_element: 'immobilisations'},
+				type: 'immobilisations',
+				end: function(tag){ 
+					tag.loaded = true; 
+				},
+			});
+
+		}
+		getImmobilisations();
+
+		editImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			$(".corps_immo").addClass('cancel');
+			var rowNum = parseInt($("#immo_duree_ammortissement_" + e.item.id).val(), 10);
+			var date = $('#front_immo_date_ammortissement_'+ e.item.id).val();
+			console.log(date);
+			var year = date.substr(6, 4);
+			var month = date.substr(3,2);
+			var day = date.substr(0,2);
+			var convertedDate = year + "-" + month + "-" + day;
+			$('#immo_date_ammortissement_' + e.item.id).val(convertedDate);
+			console.log($('#immo_date_ammortissement_' + e.item.id))
+			year = parseInt(date.substr(6,4));
+			var achat = $('#immo_prix_achat_'+ e.item.id).val();
+			var jourAc = 30 - (parseInt(day)) + 1;
+			var jourRes = (12 - (parseInt(month))) * 30;
+			var totalJour = jourRes + jourAc;
+			achat = parseFloat(achat);
+			var ammortissement = $('#immo_ammortissement_'+ e.item.id).val();
+			ammortissement = parseFloat(ammortissement);
+			var dotation = ammortissement/rowNum;
+			valeurFin = achat - dotation;
+			var firstAnnuite = dotation * (totalJour / 360);
+			valeurfirstAnnuite = achat - firstAnnuite;
+			var table = $("#" + e.item.id);
+		    var resultHtml = "<div class='rTableRow'><div class='rTableHead'><span>Date</span></div><div class='rTableHead'><div>Valeur Résiduelle</div><div>Début d'exercice</div></div><div class='rTableHead'><span>Dotation</span></div><div class='rTableHead'><div>Valeur Résiduelle</div><div>Fin d'exercice</div></div></div>";
+		    
+ 			if ((day == "01" && month == "01")) {
+				for(var i = 0 ; i < rowNum ; i++) {
+					resultHtml += ["<div class='rTableRow'>", 
+				 "<div class='rTableCell'>", 
+				  ('31' + '/' + '12' + '/' + year),
+				 "</div>",
+				 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+				 '<div class="rTableCell">',(dotation.toFixed(2)),'</div>',
+				 '<div class="rTableCell">',(valeurFin.toFixed(2)),'</div>',
+				 '</div>'].join("\n");
+				 year++;
+				 achat -= dotation;
+				 valeurFin = achat - dotation; 
+				} 
+
+				valeurFin += dotation; 
+				var valeurNette = $('#immo_valeur_nette');
+				valeurNette.val(valeurFin);
+			} else {
+				for(var i = 0 ; i <= rowNum ; i++) {
+					if (i == 0) {
+						resultHtml += ["<div class='rTableRow'>", 
+					 "<div class='rTableCell'>", 
+					  (day + '/' + month + '/' + year),
+					 "</div>",
+					 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+					 '<div class="rTableCell">',(firstAnnuite.toFixed(2)),'</div>',
+					 '<div class="rTableCell">',(valeurfirstAnnuite.toFixed(2)),'</div>',
+					 '</div>'].join("\n");
+					 year++;
+					 achat -= firstAnnuite;
+					 valeurFin = achat - dotation;
+					} else {
+						resultHtml += ["<div class='rTableRow'>", 
+						 "<div class='rTableCell'>", 
+						  ('31' + '/' + '12' + '/' + year),
+						 "</div>",
+						 '<div class="rTableCell">',(achat.toFixed(2)),'</div>',
+						 '<div class="rTableCell">',(dotation.toFixed(2)),'</div>',
+						 '<div class="rTableCell">',(valeurFin.toFixed(2)),'</div>',
+						 '</div>'].join("\n");
+						 year++;
+						 achat -= dotation;
+						 valeurFin = achat - dotation; 
+						 if ((i + 1) == rowNum) {
+						 	dotation = achat;
+						 	valeurFin = achat - dotation; 
+						 }
+					}
+				}
+
+				valeurFin += dotation; 
+				var valeurNette = $('#immo_valeur_nette_'+ e.item.id);
+				valeurNette.val(valeurFin);
+			}
+			table.html(resultHtml);
+			if(_this.E_M){
+				var id = e.item.id;
+				$(".immo_edit_ligne").removeClass("immo_ligne");
+				$(".immo_edit_content").removeClass("immo_content");
+		 		$(".actions").hide();
+		 		$(".header").hide();
+		 		$(".preview").hide();
+				$(".entete_immo").hide();
+				$(".show_infos").hide();
+				$( function() {
+					$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				    $( "#front_immo_date_ammortissement_"+ e.item.id ).datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				} );
+				$("#ajout_ou_edit").text("- Modifier");
+				_this.E_M.editElement({ event: e, prefixId: 'immo_', hideClass: 'hidden' });
+			}
+		}
+
+		addImmobilisations(e){
+			$(".immo_content").hide();
+			$(".header").hide();
+			$("#add_immo").show();
+			$('input[type=text]', '#add_actualites').val('');
+			$("#ajout_ou_edit").text("- Création");
+			if(_this.E_M){
+				$("#add_immo_button").hide();
+				$(".preview").hide();
+				$( function() {
+					$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				    $( "#front_immo_date_ammortissement" ).datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				  } );
+				_this.E_M.addElement({event: e, prefixId: 'immo_', hideClass: 'hidden'});
+			}
+		}
+
+		validDeleteImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e, prefixId: 'immo_',});
+			}
+		}
+
+		deleteImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				var index_element;
+				index_element = _this.idImmobilisations[e.item.id];
+				if(_this.immobilisations.length == 2) {
+					if(_this.immobilisations[index_element + 1]){
+						_this.immobilisations[index_element + 1].first = true;
+					}
+					else if(_this.immobilisations[index_element - 1]){
+						_this.immobilisations[index_element - 1].last = true;
+					}
+				} else if(!_this.immobilisations[index_element - 1] && _this.immobilisations[index_element + 1]){
+					_this.immobilisations[index_element + 1].first = true;
+				} else if(!_this.immobilisations[index_element + 1] && _this.immobilisations[index_element - 1]){
+					_this.immobilisations[index_element - 1].last = true;
+				}
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/compta/immobilisations', elements: _this.immobilisations, idElements: _this.idImmobilisations, type_element: 'immobilisations',});
+			}
+		}
+
+
+		cancelDeleteImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'immo_',});
+			}
+		}
+
+		cancelImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: [ 'id_immo', 'id_ammo','id_dota_ammortissement', 'id_analytique_dota_ammortissement','libelle', 'prix_achat' , 'ammortissement', 'valeur_nette','date_ammortissement',  'duree_ammortissement', 'informations',],
+					prefixId: 'immo_',
+					hideClass: 'hidden',
+				});
+				$("#add_immo_button").show();
+				$(".immo_content").show();
+				$(".header").show();
+				$("#add_immo").hide();
+				$(".entete_immo").show();
+				$("#ajout_ou_edit").text("");
+			}
+		}
+
+		cancelEditImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['id_immo', 'id_ammo','id_dota_ammortissement', 'id_analytique_dota_ammortissement','libelle', 'prix_achat' , 'ammortissement', 'valeur_nette','date_ammortissement',  'duree_ammortissement', 'informations',],
+					prefixId: 'immo_',
+					hideClass: 'hidden',
+				});
+				$("#add_immo_button").show();
+				$(".immo_edit_content").addClass("immo_content");
+				$(".immo_content").show();
+				$(".entete_immo").show();
+				$(".immo_edit_ligne").addClass("immo_ligne");
+				$(".immo_ligne").show();
+				$('.show_infos').show();
+				$('.actions').show();
+				$(".header").show();
+				$("#ajout_ou_edit").text("");
+				$(".corps_immo").removeClass('cancel');
+		    	$( ".corps_immo" ).sortable({
+			    	sort: function() {
+				        	if ($(this).hasClass("cancel")) {
+				            	$(this).sortable("cancel");
+				        	}
+				   		},
+						revert: true
+				});
+				$( ".corps_immo, #immo_" + e.item.id  ).disableSelection();
+			}
+		}
+
+		saveImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/compta/immobilisations', 
+					fields: ['id_immo', 'id_ammo','id_dota_ammortissement', 'id_analytique_dota_ammortissement','libelle', 'prix_achat' , 'ammortissement', 'valeur_nette','date_ammortissement',  'duree_ammortissement', 'informations',],
+					tag: _this,
+					elements: _this.immobilisations,
+					idElements: _this.idImmobilisations,
+					typeElement: 'immobilisations',
+					suffixId: 'immobilisations',
+					prefixFields: 'immo_',
+					prefixId: 'immo_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							params.element.date_ammortissement = _this.convertDateToView(params.element.date_ammortissement);
+							var max_reference = 0;
+							_this.immobilisations.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && element.id_parent == null
+									&& _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+								if(element.last == true) {
+									element.last = false;
+								}
+							})
+							params.element.reference = max_reference + 1;
+							params.element.last = true;
+							if(_this.immobilisations.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (parseInt(a.reference) < parseInt(b.reference)){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			$(".immo_content").show();
+			$("#add_immo_button").show();
+			$(".entete_immo").show();
+		 	$('.show_infos').show();
+		 	$(".immo_ligne").addClass();
+		 	$(".immo_content").addClass();
+		 	$(".header").show();
+		 	$("#add_immo").hide();
+			$("#ajout_ou_edit").text("");
+			$(".corps_immo").removeClass('cancel');
+			$( ".corps_immo" ).sortable({
+			    	sort: function() {
+				        	if ($(this).hasClass("cancel")) {
+				            	$(this).sortable("cancel");
+				        	}
+				   		},
+						revert: true
+				});
+			//$( ".corps_immo, #immo_" + e.item.id  ).disableSelection();
+			}
+		}
+		
+		saveEditImmobilisations(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if(_this.E_M){
+				_this.E_M.saveElement({
+					event: e, 
+					url: '/admin/compta/immobilisations', 
+					fields: ['id_immo', 'id_ammo','id_dota_ammortissement', 'id_analytique_dota_ammortissement','libelle', 'prix_achat' , 'ammortissement', 'valeur_nette','date_ammortissement',  'duree_ammortissement', 'informations',],
+					tag: _this,
+					elements: _this.immobilisations,
+					idElements: _this.idImmobilisations,
+					typeElement: 'immobilisations',
+					suffixId: 'immobilisations',
+					prefixFields: 'immo_',
+					prefixId: 'immo_',
+					hideClass: 'hidden',
+					beforeSend: function(params){
+						if(params.action == "add") {
+							var max_reference = 0;
+							_this.immobilisations.forEach(function(element){
+								if(parseInt(max_reference) < parseInt(element.reference) && element.id_parent == null
+									&& _this.currentClasse == element.classe)
+									max_reference = parseInt(element.reference);
+								if(element.last == true) {
+									element.last = false;
+								}
+							})
+							params.element.reference = max_reference + 1;
+							params.element.last = true;
+							if(_this.immobilisations.length != 0) {
+								params.element.first = false;
+							} else {
+								params.element.first = true;
+							}
+						}
+					},
+					beforeUpdate: function(params){
+						params.elements.sort(function (a, b) {
+							if (parseInt(a.reference) > parseInt(b.reference)){
+								return 1;
+							}else if (parseInt(a.reference) < parseInt(b.reference)){
+								return -1;
+							}else{
+							// a doit être égale à b 
+								return 0;
+							}
+						});
+					},
+				});
+			$(".entete_immo").show();
+		 	$('.actions').show();
+		 	$(".immo_edit_ligne").addClass("immo_ligne");
+		 	$(".immo_edit_content").addClass("immo_content");
+		 	$(".immo_content").addClass();
+		 	$('.show_infos').show();
+		 	$(".header").show();
+		 	$("#ajout_ou_edit").text("");
+			}
+		}
+
+		/*showActualites(e){
+			e.stopPropagation();
+			e.preventDefault();
+			$('#add_immo_button').removeClass('hidden');
+			var actualitesId = $('#current_actualites').val();
+			$('.show_infos', $('#immo_' + actualitesId)).removeClass('hidden');
+			$('#current_actualites').val('').addClass('hidden');
+			$('#entete_actualites').removeClass('hidden');
+			$('.actualites').removeClass('hidden');
+			if( _this.currentactualitesReference != '') {
+				$('#add_actualites').slideUp().addClass('hidden');
+			}
+			_this.currentActualitesReference = '';
+		}*/
+		
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		toggleVisible(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			console.log(params);
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+							if (field == "date_ammortissement") {
+								d[fields[field]] = _this.convertDateToView(data.elements[i][field]);
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+						console.log(idElements[d['id']]);
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+					console.log('elements: ' + JSON.stringify(tag.actualites))
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addImmobilisations = null;
+			calculTableau = null;
+			move = null;
+			editImmobilisations = null;
+			validDeleteImmobilisations = null;
+			cancelDeleteImmobilisations = null;
+			deleteImmobilisations = null;
+			cancelImmobilisations = null;
+			cancelEditImmobilisations = null;
+			showContents = null;
+			makeVisible = null;
+			saveImmobilisations = null;
+			getImmobilisations = null;
+			getElements = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+
+	</script>
+</immobilisations>

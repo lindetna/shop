@@ -1,0 +1,1701 @@
+<salaries>
+	<!-- <div id="titre_page"><h1>{ IS_CE ? 'Salariés ' : "Adhérents " }  </h1><h1 id="ajout_ou_edit"></h1></div> /* new menutop*/--> 
+	<div class="content with_submenu">
+		<div class="salaries salaries_salaries">
+			<!-- <div class="filtres hide_when_edit filtres_container">
+				<div class="filtre_block">
+					<header class="opened" onclick="{ showContents }">Filtres</header>
+					<div class="slide-up hidden">
+						<div class="line-separator"></div>
+						<div class="table">
+							<div class="row">
+								<p value={ IS_CE ? 'de salariés' : "d'adhérents" }>Nom / Prénom / { IS_CE ? 'Matricule' : "N° d'adhérent" }</p>
+								<input type="text" placeholder="{ IS_CE ? 'Matricule' : 'N° adhérent' }" name="num_adherent">
+								<p>Activités</p>
+								<input type="text" placeholder="Activités" name="activites_adherent">
+							</div>
+							<div class="row">
+								<p value={ IS_CE ? 'de salariés' : "d'adhérents" } class="inline">Statut</p>
+								<select class="activite" id="statut_filtre" name="statut_filtre" onchange={ selectActivites }>
+									<option disabled selected>Choisir un Statut</option>
+									<option>Cadre</option>
+									<option>Employé</option>
+									<option>ETAM</option>
+									<option>Ouvrier</option>
+								</select>
+								<p value={ IS_CE ? 'de salariés' : "d'adhérents" } class="inline">Situation Familiale</p>
+								<select class="activite" id="situation_filtre" name="situation_filtre" onchange={ selectActivites }>
+									<option disabled selected>Choisir une Situation</option>
+									<option>Célibataire</option>
+									<option>Marié(e)</option>
+									<option>Divorcé(e)</option>
+									<option>Veuf</option>
+									<option>Veuve</option>
+									<option>Pacsé(e)</option>
+								</select>
+								<div>
+									<p value={ IS_CE ? 'de salariés' : "d'adhérents" } class="inline">Type de Contrat</p>
+									<select class="activite" id="type_filtre" name="type_filtre" onchange={ selectActivites }>
+										<option  disabled selected>Choisir un Contrat</option>
+										<option>CDI</option>
+										<option>CDD</option>
+										<option>Stagiaire</option>
+										<option>Retraité</option>
+										<option>Contrat d'apprentissage</option>
+									</select>
+								</div>
+								<div>
+									<p class="inline">Dette</p>
+									<select class="activite" id="dette_filtre" name="dette_filtre" onchange={ selectActivites }>
+										<option each={ dette } value="{ id }">{ nom }
+										</option>
+									</select>
+								</div>
+								<p class="inline" for="quotient_filtre">Quotient</p>
+								<input type="text" name="quotient_filtre" id="quotient_filtre" value="" class="double_input">
+								<input type="text" name="quotient_filtre" id="quotient_filtre" value="" class="double_input">
+							</div>
+							<div class="row">
+								<p class="inline">Service</p>
+								<select class="activite" id="service_filtre" name="service_filtre" onchange={ selectActivites }>
+									<option disabled selected>Choisir un Service</option>
+								</select>
+								<div>
+									<p class="inline">Site</p>
+									<select class="activite" id="site_filtre" name="site_filtre" onchange={ selectActivites }>
+										<option disabled selected>Choisir un Site</option>
+									</select>
+								</div>
+								<div>
+									<p class="inline">Age</p>
+									<input type="text" name="age_filtre" id="age_filtre" class="double_input2">
+									<input type="text" name="age_filtre" id="age_filtre" class="double_input">
+								</div>
+								<div>
+									<p class="inline">Ancienneté</p>
+									<input type="text" name="anciennete_filtre" id="anciennete_filtre" class="double_input2">
+									<input type="text" name="anciennete_filtre" id="anciennete_filtre" class="double_input">
+								</div>
+							</div>	
+						</div>
+					</div>
+				</div>					
+			</div> -->
+			<div class="block-filtre block-slider">
+                <header class="filtre-header center opened header-title" onclick= { showContents }>
+                    Filtres
+                </header>
+                <div class="slide-up hidden">
+                    <div class="line-separator"></div>
+                    <div class="filtre">
+                    </div>
+                </div>
+            </div> 
+			<!-- debut add salaries -->
+			<div id="add_element" class="add_salaries edit_element fiche">
+			</div>
+			<!-- /End Describe add_salarie edition -->
+			<div class="actions hide_when_add hide_when_edit">
+				<div class="cell_block right">
+					<div class="table">
+						<button id="add_element_button" class="button ajouter cell" name="add_element_button" onclick={ addElement }>
+							Ajouter un { IS_CE ? 'salarié' : "adhérent" }
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="entete-tableau entete-tableau_salaries hide_when_add hide_when_edit center table">
+				<div class="cell_1"></div>
+				<div class="cell_2">
+					<p class="small">{ IS_CE ? 'Matricule' : "N° d'adhérent" }</p>
+					<!-- <div class="decroissant_croissant">
+						<div class="odre_decroissant" id="ordre_decroissant" onclick={ numeriqueSortDecroissant }></div>
+						<div class="odre_croissant" id="ordre_croissant" onclick={ numeriqueSort }></div>
+					</div> -->
+				</div>
+				<div class="cell_3">
+					<p class="small">Titre</p>
+				</div>
+				<div class="cell_4">
+					<p class="small">Nom & Prénom</p>
+					<!-- <div class="odre_croissant" id="ordre_croissant" onclick={ ordre_croissant }></div> -->
+					<!-- <div class="decroissant_croissant">
+						<div class="odre_decroissant" id="ordre_decroissant" onclick={ alphabetSortDecroissant }></div>
+						<div class="odre_croissant" id="ordre_croissant" onclick={ alphabetSort }></div>
+					</div> -->
+				</div>
+				<div class="cell_5">
+					<p class="small">Ville</p>
+					<!-- <div class="decroissant_croissant">
+						<div class="odre_decroissant" id="ordre_decroissant" onclick={ alphabetSortDecroissant_ville }></div>
+						<div class="odre_croissant" id="ordre_croissant" onclick={ alphabetSort_ville }></div>
+					</div> -->
+				</div>
+				<div class="cell_6">
+					<p class="small">Quotient</p>
+					<!-- <div class="decroissant_croissant">
+						<div class="odre_decroissant" id="ordre_decroissant" onclick={ numeriqueSortDecroissant_quotient }></div>
+						<div class="odre_croissant" id="ordre_croissant" onclick={ numeriqueSort_quotient }></div>
+					</div> -->
+				</div>
+				<div class="cell_7">
+					<p class="small">Solde</p>
+				</div>
+				<div class="cell_8">
+					<p class="small">Visible</p>
+				</div>
+				<div class="cell_9">
+					<p class="small">Actions</p>
+				</div>
+			</div>
+			<div id="container">
+				<div each={ salaries } id="salaries_{ id }" class="fiche">
+					<div class="show_infos hide_when_add hide_when_edit" onclick={ editElement }>
+						<div class="cell_1"><!--<input type="checkbox" name="action[]">--></div>
+						<div class="cell_2 box">
+							<p class="numerique small nature">{ numero_salarie }</p>
+						</div>
+						<div class="cell_3">
+							<p class="small nature">{ titre == "madame" ? "Mme" : "M" }</p>
+						</div>
+						<div class="cell_4 box">
+							<p class="alphabet small nature">{ nom } { prenom }</p>
+						</div>
+						<div class="cell_5 box">
+							<p class="alphabet_ville small nature">{ ville }</p>
+						</div>
+						<div class="cell_6 box">
+							<p class="numerique_quotient small nature">{ quotient }</p>
+						</div>
+						<div class="cell_7">
+							<p class="small nature">{ solde }</p>
+						</div>
+						<div class="cell_8">
+							<p class="small nature"><input type="image" src={ visible === 'visible' ? '/img/btn_visible.png' : '/img/btn_nonvisible.png' } title={ visible === 'visible' ? 'Visible' : 'Invisible' } value="{ visible }" ></p>
+						</div>
+						<div class="cell_9">
+							<p class="modif">
+								<img class="edit_element_img editElement" onclick={ editElement } title="Modifier" src="/img/edit.png">
+								<img class="delete_element_img" onclick={ validDeleteSalaries  } title="Supprimer" delete_id="{ id }" src="/img/delete.png">
+							</p>
+						</div>										
+					</div>
+					<!--debut edit salaries-->
+					<div id="salaries_{ id }_edit" class="hidden edit_salaries edit_element">
+					</div>
+					<!--fin edit salaries-->
+					<div id="salaries_{ id }_delete" class="delete hidden">
+						<div>
+							<p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p>
+							<button name="cancel_{ id }" onclick={ cancelDeleteSalaries }>Annuler</button>
+							<button name="delete_{ id }" id="delete_{ id }" onclick={ deleteSalaries }>Supprimer</button>
+						</div>
+					</div>			
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+      	var _this = this;
+      	this.app = opts;
+      	this.loaded = false;
+      	this.thingsToLoad = [ 'exercices', 'E_M', 'pegjs' ];
+		this.numToLoad = this.thingsToLoad.length;
+		this.champs = {};
+		this.observable = riot.observable();  
+      	var permissions = app.session.permissions;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+      	var SALARIES_READ = this.SALARIES_READ = permissions.SALARIES_READ || false;
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+		this.PEG;
+
+		this.comptes = [];
+		this.idComptes = {};
+		this.grammar = {};
+
+		this.filtres = [
+			{ 
+				nom_db: 'id_salarie',
+				id: 'filtre_salarie',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'solde',
+				id: 'filtre_dette',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_categorie',
+				id: 'filtre_categorie',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_activite',
+				id: 'filtre_activite',
+				value: false,
+				ignore: true,
+				type: "select",
+			},
+			{ 
+				nom_db: 'id_produit',
+				id: 'filtre_produit',
+				value: false,
+				ignore: true,
+				type: "select",
+			}
+		];
+
+		this.idFiltres = { filtre_salarie: 0, filtre_dette: 1, filtre_categorie: 2, filtre_activite: 3, filtre_produit: 4 };
+		
+		this.filterChange = function filterChange (e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+
+			var $current = $(e.currentTarget);
+			var currentVal = $current.val();
+			var id = $current.attr('id');
+			var filtre = _this.filtres[_this.idFiltres[id]];
+			
+			if(filtre.type == "select" || filtre.type == 'text') {
+				if(currentVal != "") {
+					filtre.ignore = false;
+					filtre.value = currentVal;
+				} else {
+					filtre.ignore = true;
+				}
+			} else if (filtre.type == 'checkbox') {
+				if($current.is(':checked') == true) {
+					
+					filtre.ignore = false;
+				} else {
+					filtre.ignore = true;
+				}
+			} else {
+
+			}
+			getInscription();
+		}
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+
+			}
+		});
+
+		/******************************************************************************************************
+		_this.app.loadScript('/js/admin/jquery-ui/jquery-ui-datepicker-fr.js','jquery-ui-datepicker-fr_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			  $( function() {
+			    $( "#datepicker" ).datepicker({
+			      showOtherMonths: true,
+			      selectOtherMonths: true
+			    });
+			  } );
+			}
+		});
+		********************************************************************************************************/
+
+		function getGrammar(id){
+
+			id =  id ? '_' + id : '' ;
+			var cl1 = $('#option_1' + (id)).val();
+			var cl2 = $('#option_2' + (id)).val();
+			var cl3 = $('#option_3' + (id)).val();
+			var cl4 = $('#option_4' + (id)).val();
+			var cl5 = $('#option_5' + (id)).val();
+			var cl6 = $('#option_6' + (id)).val();
+			var cl7 = $('#option_7' + (id)).val();
+			var cl8 = $('#option_8' + (id)).val();
+			var cl9 = $('#option_9' + (id)).val();
+			var cl10 = $('#option_10' + (id)).val();
+
+			var grammar = `
+{
+`
+	+ (_this.champs.champ_1 ? ( "_this.grammar.cl1 = '" + cl1 + "';\n") : '')
+	+ (_this.champs.champ_2 ? ( "_this.grammar.cl2 = '" + cl2 + "';\n") : '')
+	+ (_this.champs.champ_3 ? ( "_this.grammar.cl3 = '" + cl3 + "';\n") : '')
+	+ (_this.champs.champ_4 ? ( "_this.grammar.cl4 = '" + cl4 + "';\n") : '')
+	+ (_this.champs.champ_5 ? ( "_this.grammar.cl5 = '" + cl5 + "';\n") : '')
+	+ (_this.champs.champ_6 ? ( "_this.grammar.cl6 = " + (cl6 != '' ? cl6 : '0.00') + ";\n") : '')
+	+ (_this.champs.champ_7 ? ( "_this.grammar.cl7 = " + (cl7 != '' ? cl7 : '0.00') + ";\n") : '')
+	+ (_this.champs.champ_8 ? ( "_this.grammar.cl8 = " + (cl8 != '' ? cl8 : '0.00') + ";\n") : '')
+	+ (_this.champs.champ_9 ? ( "_this.grammar.cl9 = " + (cl9 != '' ? cl9 : '0.00') + ";\n") : '')
+	+ (_this.champs.champ_10 ? ( "_this.grammar.cl10 = " + (cl10 != '' ? cl10 : '0.00') + ";\n") : '')
++ `
+}
+
+Expression
+  = Func / Operation
+Operation
+  =  _ head:Factor tail:(_ ("+" / "-" / "*" / "/") _ Factor)* _  {
+      var result = head, i;
+      for (i = 0; i < tail.length; i++) {
+        if (tail[i][1] === "+") { result += tail[i][3]; }
+        if (tail[i][1] === "-") { result -= tail[i][3]; }
+        if (tail[i][1] === "*") { result *= tail[i][3]; }
+		if (tail[i][1] === "/") { result /= tail[i][3]; }
+      }
+
+      return result;
+    }
+
+Factor
+  = Func 
+  / "(" _ expr:Operation _ ")" { return expr; }
+  / variable
+  / Float
+  / FloatFR
+  / Integer
+
+
+Func
+  = si
+  / arrondi
+
+si
+  = "si" _ "(" _ boolExpr:BooleanOperation _ ";" _ arg1:Operation _ ";" _ arg2:Operation _ ")" _ {
+  	if(boolExpr){
+    	return arg1;
+    }else{
+    	return arg2;
+    }
+  }
+
+arrondi
+  = "arrondi" _ "(" _ expr:Operation _ ";" _ precision:Integer _ ")" _ {
+  	var factor = Math.pow(10, precision);
+    var tempNumber = expr * factor;
+    var roundedTempNumber = Math.round(tempNumber);
+    return roundedTempNumber / factor;
+  }
+
+BooleanOperation
+  = _ head:Factor tail:(_ ("<=" / ">=" / "<" / ">" / "!=" / "==" / "=" ) _ Factor)* _ {
+      var result,i;
+      for (i = 0; i < tail.length; i++) {
+        if (tail[i][1] === "<=") { result = (head <= tail[i][3]); }
+        if (tail[i][1] === ">=") { result = (head >= tail[i][3]); }
+        if (tail[i][1] === "<") { result = (head < tail[i][3]); }
+		if (tail[i][1] === ">") { result = (head > tail[i][3]); }
+		if (tail[i][1] === "!=") { result = (head != tail[i][3]); }
+		if (tail[i][1] === "==" || tail[i][1] === "=") { result = (head == tail[i][3]); }
+      }
+
+	return result;
+}
+
+variable
+    = s:word _ {
+        var str = '';
+        for (var i = 0; i < s.length; i++) {
+           str = str + s[i];
+        }
+		str = str.toLowerCase();
+        if(_this.grammar[str]){
+            return _this.grammar[str];
+        }else{
+            return 0;
+        }
+    }
+
+word
+    = firstLetter:letter rest:alNum* { 
+        var str = firstLetter;
+        for (var i = 0; i < rest.length; i++) {
+           str = str + rest[i];
+        }
+        
+        return str;
+      }
+alNum
+    = [a-zA-Z0-9_]
+letter
+    = [a-zA-Z]
+Integer "integer"
+    = [0-9]+ { return parseInt(text(), 10); }
+Float "float"
+    = left:[0-9]+ "." right:[0-9]+ { return parseFloat(left.join("") + "." +   right.join("")); }
+FloatFR "floatFR"
+    = left:[0-9]+ "," right:[0-9]+ { return parseFloat(left.join("") + "." +   right.join("")); }
+
+_ "whitespace" = [ \t]*
+/***********************************************************************
+_ "whitespace" = [ \t\r\n]*
+_ "whitespace" = ( ([ \t])* \n\r ([ \t])* ) /  ( ([ \t])* \n ([ \t])* )
+***********************************************************************/
+whitespace "whitespace"
+    = _
+				`;
+
+			return grammar;
+		}
+
+		_this.app.loadScript('/js/peg.js','peg_js', function(){
+			_this.PEG = true;
+
+			_this.numToLoad--;
+			if( _this.loaded ){
+			}
+		});
+
+		calculeQuotient(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+		 	if( _this.PEG ){
+				if( _this.champs.formule_quotient && _this.champs.formule_quotient != '' ){
+					var $quotientField;
+					var resultQuotient;
+					var id;
+					if(e.item){
+						id = e.item.id;
+						$quotientField = $('#quotient_' + id);
+					}else{
+						$quotientField = $('#quotient');					
+					}
+					var parserSource = peg.generate(getGrammar(id), {
+						cache: false,
+						optimize: "speed",
+						output:   "source"
+					});
+
+					var pegParser = eval(parserSource);
+					var formule_quotient = _this.champs.formule_quotient.replace(/[\n\r]/g, '').toLowerCase();
+
+					if( _this.champs.arrondi_decimal && _this.champs.arrondi_decimal != 0 ){
+						formule_quotient = 'arrondi(' + formule_quotient + ';' + parseInt(_this.champs.arrondi_decimal, 10) + ')';
+					}
+
+					resultQuotient = pegParser.parse( formule_quotient );
+					console.log('resultQuotient: ' + resultQuotient);
+					$quotientField.val( resultQuotient );
+				}else{
+					// no formule quotient found ...
+				}
+			}
+		}
+
+		_this.app.on('unmount-salaries', function(){
+			_this.app.off('unmount-salaries');
+			_this.unmount();
+		});
+
+		this.ayantsDroits = [];
+		this.idAyantsDroits = {};
+
+		editElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+
+			if(_this.E_M){
+				var id = e.item.id;
+				$(".hide_when_edit").addClass('hidden');
+				$("#ajout_ou_edit").text("- Modifier");
+				var idMountTag = 'edit-salaries_' + id;
+				if( ! document.getElementById(idMountTag) ){
+					var htmlID = 'salaries_' + id + '_edit';
+					var tagContainer = document.getElementById(htmlID);
+					var mountTag = document.createElement('div');
+					mountTag.setAttribute('id', idMountTag);
+					tagContainer.appendChild(mountTag);
+				}
+				element = e.item;
+
+				riot.compile( '/js/tag/admin/salaries/edit-salaries.html', function() {
+					mounted = riot.mount( '#' + idMountTag, 'edit-salaries', { element: element, idElements: _this.idElements, parentTag: _this,});
+				});
+
+				_this.E_M.editElement({
+					event: e, 
+					tag: _this,
+					prefixId: 'salaries_',
+					hideClass: 'hidden',
+				});
+
+/*********************************************************************************
+				$( function() {
+					$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				    $( "#front_date_de_naissance_" + id).datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				    $( "#date_entree_view_" + id).datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				    $( "#date_sortie_view_" + id).datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				    $( "#date_view_ayant_droit_" + id).datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				});
+***********************************************************************************/
+
+				if (IS_CE) {
+					var fieldDateEntree = document.getElementById("date_entree_" + id);
+					//var convertedDateEntree = _this.convertDateToView(fieldDateEntree.value);
+					var date_entreeView = document.getElementById('date_entreeView_' + id);
+					//date_entreeView.value = convertedDateEntree;
+					var fieldDateSortie = document.getElementById("date_sortie_" + id);
+					//var convertedDateSortie = _this.convertDateToView(fieldDateSortie.value);
+					var date_sortieView = document.getElementById('date_sortieView_' + id);
+					//date_sortieView.value = convertedDateSortie;
+				}	
+				var fieldDate = document.getElementById("date_de_naissance_" + id);
+				//var convertedDate = _this.convertDateToView(fieldDate.value);
+				//var dateView = document.getElementById('date_view_' + id);
+				//dateView.value = convertedDate;
+/*
+				var rib = document.getElementById('rib_' + id);
+				var rib1 = document.getElementById('rib_1_' + id);
+				var rib2 = document.getElementById('rib_2_' + id);
+				var rib3 = document.getElementById('rib_3_' + id);
+				var rib4 = document.getElementById('rib_4_' + id);
+				rib1.value = rib.value.substr(0,5);
+				rib2.value = rib.value.substr(5,5);
+				rib3.value = rib.value.substr(10,11);
+				rib4.value = rib.value.substr(21,2);
+*/
+				//getAyantDroit(e.item.id);
+			}
+		}
+
+        _this.copyValue = function copyValue(base, target){
+        	var theBase = document.getElementById(base);
+        	var theTarget = document.getElementById(target);
+        	theTarget.value = theBase.value;
+        }
+
+        _this.copyNum = function copyNum(firstBase, target){
+            var n = document.getElementById(firstBase);
+            var i = document.getElementById(target);
+            var result = n.value;
+            result = _this.E_M.replaceAccents(result).toLowerCase();
+            i.value = result;
+        }
+
+        makeId(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+        	if(e.item){
+        		var id = e.item.id;
+        		_this.copyValues('nom_' + id, 'prenom_' + id, 'identifiant_internet_' + id);
+        	}else{
+        		_this.copyValues('nom', 'prenom', 'identifiant_internet');	
+        	}                     
+        }
+
+        copyMatricule(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+        	if(e.item){
+        		var id = e.item.id;
+        		_this.copyNum('numero_salarie_' + id, 'numero_salarie_ayant_droit_' + id);
+        	}else{
+        		_this.copyNum('numero_salarie', 'ayant_droit_numero_salarie');	
+        	}                     
+        }
+
+        _this.copyValues = function copyValues(firstBase, sndBase, target){
+            var n = document.getElementById(firstBase);
+            var p = document.getElementById(sndBase);
+            var i = document.getElementById(target);
+            var result = p.value + "." + n.value;
+            result = _this.E_M.replaceAccents(result).toLowerCase();
+            i.value = result;
+        }
+
+		genPass(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			var pass;
+			if(e.item){
+			 	pass = 'mot_de_passe' + e.item.id;
+			}else{
+				pass = 'mot_de_passe';
+			}
+			_this.genString(pass);
+
+		}
+
+		_this.genString = function genString(id) {
+			var cible = document.getElementById(id);
+			cible.value = '';
+			var abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&@$_{';
+			var pass = '';
+        	longueur = 8;
+        	for(i=0;i<longueur;i++){
+            	var wpos = Math.round(Math.random()*abc.length);
+            	pass+=abc.substring(wpos,wpos+1);
+        	}        	
+        	cible.value = pass;
+		}
+
+		//utile pour les 4 champs RIB
+		focusNextOne(e) {
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			var limit = e.currentTarget.getAttribute('maxlength');
+			var next_one = e.currentTarget.getAttribute('next-to-focus');
+			var next = document.getElementById(next_one);
+			var length = e.currentTarget.value.length;
+			if(length == limit){
+				next.focus();
+			}
+		}
+
+        formatDateField(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+
+			if(_this.E_M){
+				_this.E_M.formatDateField({
+					event: e
+				});
+			}
+
+			// la date ecrite par l'utilisateur
+			var date = e.currentTarget.value;
+
+			var length = date.length;
+
+			var field_for_age = e.currentTarget.getAttribute('field-for-age');
+
+			if(length == 10){
+				if (field_for_age) {
+					$('#' + field_for_age).text(_this.showAgeToView(date));
+				}
+			} else {
+				if (field_for_age) {
+					$('#' + field_for_age).text("");
+				}
+			}
+		}
+			
+        this.showAgeToView = function showAgeToView(date){
+			var age = _this.calcAgeFromDate(date);
+			return age + ( age > 1 ? ' Ans' : ' An' );
+		}
+
+        this.calcAgeFromDate = function calcAgeFromDate(date){
+			var year = date.substr(6, 4);
+			var month = date.substr(3,2);
+			var day = date.substr(0,2);
+			var todayDate = new Date();
+			var todayYear = todayDate.getFullYear();
+			var todayMonth = todayDate.getMonth();
+			var todayDay = todayDate.getDate();
+			var age = todayYear - year;
+
+			if(todayMonth < month - 1){
+				age --;
+			}else if(month - 1 == todayMonth && todayDay < day){
+				age --;
+			}
+
+			return age;
+        }
+
+        this.convertDateToDb = function convertDateToDb(date){   
+			if(_this.E_M){
+				return _this.E_M.convertDateToDb(date);
+			}
+        }
+
+        _this.convertDateToView = function convertDateToView(date){
+			if(_this.E_M){
+				return _this.E_M.convertDateToView(date);
+			}
+        }
+
+        //rajoute les '.' automatiquement
+        addDotToEndPhoneNumber(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+        	e.currentTarget.value = _this.E_M.addDotToEndPhoneNumber(e.currentTarget.value);
+        }
+
+		addElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				$(".hide_when_add").addClass('hidden');
+				$("#ajout_ou_edit").text("- Ajout");
+				$( function() {
+					$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				    $( "#front_date_de_naissance" ).datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				    $( "#date_entreeView").datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				    $( "#date_sortieView").datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				    $( "#front_date_de_naissance_ayant_droit").datepicker({
+				      dateFormat: 'dd/mm/yy',
+				      showOtherMonths: true,
+				      selectOtherMonths: true
+				    });
+				});
+
+				var idMountTag = 'edit-salaries';
+				if( ! document.getElementById(idMountTag) ){
+					var tagContainer = document.getElementById('add_element');
+					var mountTag = document.createElement('div');
+					mountTag.setAttribute('id', idMountTag);
+					tagContainer.appendChild(mountTag);
+				}
+
+				riot.compile( '/js/tag/admin/salaries/edit-salaries.html', function() {
+					mounted = riot.mount( '#' + idMountTag, 'edit-salaries', { elements: _this.salaries, idElements: _this.idSalaries, parentTag: _this,});
+				});
+
+				_this.E_M.addElement({
+					event: e,
+					prefixId: 'salaries_',
+ 					showClass: 'table',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		validDeleteSalaries(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({
+					event: e, 
+					prefixId: 'salaries_',
+				});
+			}
+		}
+
+		validDeleteAyantDroit(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({
+					event: e, 
+					prefixId: 'ayant_droit_',
+					hideClass: 'hidden',
+				});
+			}
+		}
+
+		deleteSalaries(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				var index_element;
+				index_element = _this.idSalaries[e.item.id];
+				if(_this.salaries.length == 2) {
+					if(_this.salaries[index_element + 1]){
+						_this.salaries[index_element + 1].first = true;
+					}
+					else if(_this.salaries[index_element - 1]){
+						_this.salaries[index_element - 1].last = true;
+					}
+				} else if(!_this.salaries[index_element - 1] && _this.salaries[index_element + 1]){
+					_this.salaries[index_element + 1].first = true;
+				} else if(!_this.salaries[index_element + 1] && _this.salaries[index_element - 1]){
+					_this.salaries[index_element - 1].last = true;
+				}
+				_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/salaries/salaries', elements: _this.salaries, idElements: _this.idSalaries, type_element: 'salaries',});
+			}
+		}
+
+		cancelDeleteSalaries(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+			
+				// $(".show_infos", $('#salaries_' + e.item.id )).removeClass('hidden');
+				// $('#salaries_' + e.item.id + '_delete').addClass('hidden');
+				_this.E_M.cancelDeleteElement({event: e, prefixId: 'salaries_',});
+			}
+		}
+
+		validDeleteElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				$(".show_infos", $('salaries_' + e.item.id )).addClass('hidden');
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				$(".show_infos", $('salaries_' + e.item.id )).addClass('hidden');
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		deleteElement(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				_this.E_M.deleteElement({
+					event: e, 
+					tag: _this, 
+					url: '/admin/salaries/salaries',
+					elements: _this.salaries,
+					idElements: _this.idSalaries,
+				});
+			}
+		}
+
+		cancelSalarie(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+
+			var isEdit = e.item ? true : false;
+
+			if(_this.E_M){
+				$("#ajout_ou_edit").text("");
+				_this.E_M.cancelElement({
+					event: e,
+					fields: ['numero_salarie', 'nom', 'prenom', 'titre','numero_et_voie', 'numero_appartement_ou_etage', 'entree_batiment', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'identifiant_internet', 'mot_de_passe', 'nom_de_naissance', 'date_de_naissance', 'situation_familiale', 'telephone', 'portable', 'email_personnel', 'email_professionnel', 'fonction', 'statut', 'date_entree', 'date_sortie', 'banque', 'titulaire', 'rib', 'iban', 'bic', 'option_1', 'option_2', 'option_3', 'option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10', 'quotient', 'quotientN1', 'quotientN2', 'tranche_salaire', 'valeur', 'solde', 'reglement', 'participation_adherent', 'participation_association', 'visible'],
+					tag: _this,
+					elements: _this.salaries,
+					idElements: _this.idSalaries,
+					prefixId: 'salaries_',
+					hideClass: 'hidden',
+					end: function(){
+					}
+				});
+
+				if( isEdit ){
+					$('#salaries_' + e.item.id + '_edit').addClass('hidden');
+				}else{
+					$(".hide_when_add").removeClass('hidden');
+				}
+				$('.hide_when_edit').removeClass('hidden');
+				$('.show_infos').removeClass('hidden');
+			}
+		}
+
+		saveSalarie(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				var isEdit = e.item ? true : false;
+
+				var idElement = isEdit ? e.item.id : '';
+				var suffixId = isEdit ? '_' + e.item.id : '';
+
+                $("#ajout_ou_edit").text("");
+
+                var rib_1 = document.getElementById("rib_1" + suffixId);
+                var rib_2 = document.getElementById("rib_2" + suffixId);
+                var rib_3 = document.getElementById("rib_3" + suffixId);
+                var rib_4 = document.getElementById("rib_4" + suffixId);
+                var rib_for_db = document.getElementById("rib" + suffixId);
+                rib_for_db.value = rib_1.value + rib_2.value + rib_3.value + rib_4.value;
+
+				var fields = ['numero_salarie', 'nom', 'prenom', 'titre','numero_et_voie', 'numero_appartement_ou_etage', 'entree_batiment', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'identifiant_internet', 'mot_de_passe', 'nom_de_naissance', 'date_de_naissance', 'situation_familiale', 'telephone', 'portable', 'email_personnel', 'email_professionnel', 'fonction', 'statut', 'date_entree', 'date_sortie', 'banque', 'titulaire', 'rib', 'iban', 'bic', 'option_1', 'option_2', 'option_3', 'option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10', 'quotient', 'quotientN1', 'quotientN2', 'tranche_salaire', 'valeur','solde', 'reglement', 'participation_adherent', 'participation_association', 'visible', 'nombre_enfant', 'nombre_ayant_droit'];
+
+				var l = fields.length;
+				var element, ayantsDroits;
+
+				if( isEdit ){
+					element = _this.salaries[ _this.idSalaries[ idElement ] ];
+				}else{
+					element = new Object();
+				}
+				var data = {};
+
+				for(i=0; i<l; i++){
+					field = fields[i];
+
+					if( isEdit ){
+						fieldId  = field + '_' + idElement;
+					}else{
+						fieldId  = field;
+					}
+
+					if(document.getElementById( fieldId )){
+						elem = document.getElementById( fieldId );
+						if( elem.type === 'checkbox'){
+							if( elem.checked ){
+								value = 1;
+							}else{
+								value = 0;
+							}
+						}else if( elem.type === 'radio'){
+							elem = document.querySelector('input[name="' + fieldId + '"]:checked');
+							if(elem){
+								value = elem.value;
+							}else{
+								value = null;
+							}
+						}else{
+							value = elem.value;
+						}
+					}else{
+						value = null;
+					}
+
+					data[field] = value;
+
+					element[field] = value;
+				}
+
+				if( isEdit ){
+					ayantsDroits = _this.salaries[ _this.idSalaries[ idElement ] ].ayantsDroits;
+					data['ayants_droits'] = ayantsDroits;
+					console.log('ayantsDroits: ' + JSON.stringify(ayantsDroits));
+				}else{
+
+				}
+
+				data['id_exercice'] = document.getElementById('id_exercice').value;
+
+				if( isEdit ){
+					data['id'] = idElement;
+					data.action = 'update';
+				}else{
+					data.action = 'add';
+				}
+
+			console.log('saveSalarie data: ' + JSON.stringify(data));
+			console.log('id_exercice: ' + data.id_exercice);
+				$.ajax('/admin/salaries/salaries', {
+					data : data,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						console.log('saveElement result: ' + JSON.stringify(result));
+						this.result = result;
+						if(result && ! result.error){
+							if( isEdit ){
+								var $container = $('#salarie_' + idElement);
+								var $editContainer = $('#salarie_' + idElement + '_edit');
+								var $show_infos = $('.show_infos', $container);
+							}else{
+								var $addElement = $('#add_element');
+								var $filtres = $('.filtres');
+
+								if( result.id ){
+									element.id = result.id;
+								}
+
+								_this.salaries.push(element);
+
+								numElement = _this.salaries.length - 1;
+								_this.idSalaries[result.id] = numElement;
+							}
+
+							_this.update();
+
+							if( isEdit ){
+								$show_infos.removeClass('hidden');
+								$editContainer.addClass('hidden');
+							}else{
+								$addElement.addClass('hidden');
+								$filtres.removeClass('hidden');
+							}
+							$('.hide_when_add, .hide_when_edit').removeClass('hidden');
+						}else if(result.ids){
+							// TODO:
+						}else if(result.error){
+							// TODO:
+							setTimeout(function(){ $('#loader').addClass('hidden'); }, 0);
+						}
+					}
+				}).done(function(){
+					console.log('done!...');
+				}).fail(function(){
+					console.log('fail!...');
+				}); //, 'json'
+
+/****************************************************
+				_this.E_M.saveElement({
+					event: e,
+					url: '/admin/salaries/salaries',
+					fields: ['numero_salarie', 'nom', 'prenom', 'titre','numero_et_voie', 'numero_appartement_ou_etage', 'entree_batiment', 'lieu_dit_boite_postale', 'code_postal', 'ville', 'pays', 'identifiant_internet', 'mot_de_passe', 'nom_de_naissance', 'date_de_naissance', 'situation_familiale', 'telephone', 'portable', 'email_personnel', 'email_professionnel', 'fonction', 'statut', 'date_entree', 'date_sortie', 'banque', 'titulaire', 'rib', 'iban', 'bic', 'option_1', 'option_2', 'option_3', 'option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10', 'quotient', 'quotientN1', 'quotientN2', 'tranche_salaire', 'valeur','solde', 'reglement', 'participation_adherent', 'participation_association', 'visible'],
+					tag: _this,
+					elements: _this.salaries,
+					idElements: _this.idSalaries,
+					typeElement: 'salaries',
+					prefixId: 'salaries_',
+					hideClass: 'hidden',
+					end: function(){
+						$('.hide_when_edit').removeClass('hidden');
+					}
+				});
+/*****************************************************/
+			}
+		}
+
+		makeVisible(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				_this.E_M.makeVisible({event: e});
+			}
+		}
+
+		makeInvisible(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				_this.E_M.makeInvisible({event: e});
+			}
+		}
+
+		filter(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if( _this.app.session.exercices.selected != $('#id_exercice').val()){
+				_this.app.session.exercices.selected = $('#id_exercice').val();
+			}
+		}
+
+		toggleVisible(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+			if(_this.E_M){
+				_this.E_M.toggleVisible(e);
+			}
+		}
+
+        showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			e.stopPropagation();
+            if(_this.E_M){
+                _this.E_M.showContents(e);
+            }
+        }
+
+        function getComptes(){
+			var getParams = { type_element: 'compte' };
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/salaries/comptes', getParams, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d;
+					var fields = {id: 'id', id_sous_classe: 'id_sous_classe', reference: 'reference', libelle: 'libelle', id_bilan_debit: 'id_bilan_debit', id_bilan_credit: 'id_bilan_credit', categorie_bilan_debit: 'categorie_bilan_debit', categorie_bilan_credit: 'categorie_bilan_credit', id_compte_resultat: 'id_compte_resultat', visible: 'visible',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idComptes[d['id']] = i;
+						_this.comptes.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+
+				_this.comptes = data.elements;
+				_this.app.setByIds(_this.comptes, _this.idComptes);
+				_this.numToLoad--;
+			})
+		}
+
+        function getParametrages(){
+        	var getParams = {};
+
+			$.getJSON('/admin/salaries/parametrages', getParams, function(data){
+				if(data && data.element && data.element[0]){
+					var i, field, d;
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', champ_1: 'champ_1', champ_2: 'champ_2', champ_3: 'champ_3', champ_4: 'champ_4', champ_5: 'champ_5', champ_6: 'champ_6', champ_7: 'champ_7',	champ_8: 'champ_8', champ_9: 'champ_9', champ_10: 'champ_10', champ_1_ayant_droit: 'champ_1_ayant_droit', champ_2_ayant_droit: 'champ_2_ayant_droit', champ_3_ayant_droit: 'champ_3_ayant_droit', champ_4_ayant_droit: 'champ_4_ayant_droit', champ_5_ayant_droit: 'champ_5_ayant_droit', champ_6_ayant_droit: 'champ_6_ayant_droit', champ_7_ayant_droit: 'champ_7_ayant_droit',	champ_8_ayant_droit: 'champ_8_ayant_droit', champ_9_ayant_droit: 'champ_9_ayant_droit', champ_10_ayant_droit: 'champ_10_ayant_droit', formule_quotient: 'formule_quotient', ville: 'ville',	code_postal: 'code_postal',	id_journal_achat: 'id_journal_achat', id_journal_vente: 'id_journal_vente', id_journal_remboursement: 'id_journal_remboursement', id_situation: 'id_situation', id_activite1: 'id_activite1', id_activite2: 'id_activite2', id_activite3: 'id_activite3', id_activite4:	'id_activite4', id_activite5: 'id_activite5', id_activite6: 'id_activite6', id_exercice: 'id_exercice', id_enumeration: 'id_enumeration',};
+					_this.champs.champ_1 = data.element[0].champ_1;
+					_this.champs.champ_2 = data.element[0].champ_2;
+					_this.champs.champ_3 = data.element[0].champ_3;
+					_this.champs.champ_4 = data.element[0].champ_4;
+					_this.champs.champ_5 = data.element[0].champ_5;
+					_this.champs.champ_6 = data.element[0].champ_6;
+					_this.champs.champ_7 = data.element[0].champ_7;
+					_this.champs.champ_8 = data.element[0].champ_8;
+					_this.champs.champ_9 = data.element[0].champ_9;
+					_this.champs.champ_10 = data.element[0].champ_10;
+					_this.champs.champ_1_ayant_droit = data.element[0].champ_1_ayant_droit;
+					_this.champs.champ_2_ayant_droit = data.element[0].champ_2_ayant_droit;
+					_this.champs.champ_3_ayant_droit = data.element[0].champ_3_ayant_droit;
+					_this.champs.champ_4_ayant_droit = data.element[0].champ_4_ayant_droit;
+					_this.champs.champ_5_ayant_droit = data.element[0].champ_5_ayant_droit;
+					_this.champs.champ_6_ayant_droit = data.element[0].champ_6_ayant_droit;
+					_this.champs.champ_7_ayant_droit = data.element[0].champ_7_ayant_droit;
+					_this.champs.champ_8_ayant_droit = data.element[0].champ_8_ayant_droit;
+					_this.champs.champ_9_ayant_droit = data.element[0].champ_9_ayant_droit;
+					_this.champs.champ_10_ayant_droit = data.element[0].champ_10_ayant_droit;
+					_this.champs.formule_quotient = data.element[0].formule_quotient;
+					_this.champs.arrondi_decimal = data.element[0].arrondi_decimal;
+					_this.champs.ville = data.element[0].ville;
+					_this.champs.code_postal = data.element[0].code_postal;
+					_this.champs.id_journal_achat = data.element[0].id_journal_achat;
+					_this.champs.id_journal_vente = data.element[0].id_journal_vente;
+					_this.champs.id_journal_remboursement = data.element[0].id_journal_remboursement;
+					_this.champs.id_situation = data.element[0].id_situation;
+					_this.champs.id_activite1 = data.element[0].id_activite1;
+					_this.champs.id_activite2 = data.element[0].id_activite2;
+					_this.champs.id_activite3 = data.element[0].id_activite3;
+					_this.champs.id_activite4 = data.element[0].id_activite4;
+					_this.champs.id_activite5 = data.element[0].id_activite5;
+					_this.champs.id_activite6 = data.element[0].id_activite6;
+					_this.champs.id_enumeration = data.element[0].id_enumeration;
+
+					_this.update();
+					_this.loaded = true;
+
+				}else{
+					// TODO: no data elements, get and manage error!...
+					console.log('else non if');
+				}
+			});
+        }
+		getParametrages();
+
+		this.salaries = [];
+		this.idSalaries = {};
+
+		this.getSalaries = function getSalaries() {
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+
+			}
+
+			var filtre_data = [];
+			for(var index in _this.filtres) {
+				if(_this.filtres[index].ignore == false) {
+					filtre_data.push(_this.filtres[index]);
+				}
+			}
+			var getParameters = { type_element: 'salaries' };
+
+			// if(_this.filtres && _this.filtres[0] && _this.filtres[0].nom_db == 'id') {
+			// 	getParameters.id = _this.filtres[0].value;
+			// }
+
+			getParameters.filtres = filtre_data;
+
+			_this.salaries = [];
+			_this.idSalaries = { };
+			getElements({
+				tag: _this,
+				url: '/admin/salaries/salaries', 
+				elements: _this.salaries,
+				idElements: _this.idSalaries,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', montant: 'montant', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', statut: 'statut', date_entree: 'date_entree', date_sortie: 'date_sortie', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', quotientN1: 'quotientN1', quotientN2: 'quotientN2', tranche_salaire: 'tranche_salaire', valeur: 'valeur',solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', fonction: 'fonction', visible: 'visible'},
+				getParameters: getParameters,
+				type: 'salaries',
+				action: 'update',
+				end: function(tag){
+					tag.loaded = true;
+					tag.trigger('salarie_loaded');
+				},
+			});
+		}
+		this.getSalaries();
+
+		ordre_croissant(e){
+			this.salaries = [];
+			this.idSalaries = {};
+			if (e.target.id == "ordre_croissant") {
+				params = { type_element: 'salaries', order: 'ASC', };
+			}
+			else if (e.target.id == "ordre_decroissant") {
+				params = { type_element: 'salaries', order: 'DESC', };
+			}
+			getElements({
+				tag: _this,
+				url: '/admin/salaries/salaries', 
+				elements: _this.salaries,
+				idElements: _this.idSalaries,
+				fields: {id: 'id', id_entreprise: 'id_entreprise', id_exercice: 'id_exercice', montant: 'montant', numero_salarie: 'numero_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre',numero_et_voie: 'numero_et_voie', numero_appartement_ou_etage: 'numero_appartement_ou_etage', entree_batiment: 'entree_batiment', lieu_dit_boite_postale: 'lieu_dit_boite_postale', code_postal: 'code_postal',  ville: 'ville', pays: 'pays', identifiant_internet: 'identifiant_internet', mot_de_passe: 'mot_de_passe', nom_de_naissance: 'nom_de_naissance', date_de_naissance: 'date_de_naissance', situation_familiale: 'situation_familiale', telephone: 'telephone', portable: 'portable', email_personnel: 'email_personnel', email_professionnel: 'email_professionnel', statut: 'statut', date_entree: 'date_entree', date_sortie: 'date_sortie', banque: 'banque', titulaire: 'titulaire', rib: 'rib', iban: 'iban', bic: 'bic', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', quotient: 'quotient', quotientN1: 'quotientN1', quotientN2: 'quotientN2', tranche_salaire: 'tranche_salaire', valeur: 'valeur',solde: 'solde', reglement: 'reglement', participation_adherent: 'participation_adherent', participation_association: 'participation_association', fonction: 'fonction', visible: 'visible'},
+				getParameters: params,
+				type: 'salaries',
+				action: 'update',
+				end: function(tag){
+					tag.loaded = true;
+				},
+			});
+			_this.update();
+		}
+
+		this.mode_paiement = [];
+		this.idMode_paiement = {};
+
+		function getModePaiement(){
+			var getParams = {};
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+			if(_this.E_M) {
+				_this.E_M.showLoader();
+			} else {
+				$('#loader').removeClass('hidden'); 
+			}
+			$.getJSON('/admin/compta/mode_paiement', getParams, function (data){
+				if(data && data.elements){
+					var i, field, d; 
+					var l = data.elements.length;
+											
+					var fields = {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', fournisseur: 'fournisseur', permanence: 'permanence', id_journal: 'id_journal', type: 'type', id_exercice: 'id_exercice', visible: 'visible'};
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idMode_paiement[d['id']] = i;
+						_this.mode_paiement.push(d);
+					}
+
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					if(data && data.error){
+//_this.E_M.backEndError({error: data.error, tag: _this,});
+					}
+				}
+			});
+		}
+		getModePaiement();
+
+		_this.getAyantDroit = function getAyantDroit(id_salarie, callback){
+			if( ! id_salarie ){
+				return false;
+			}
+
+			var salarie = _this.salaries[ _this.idSalaries[ id_salarie ] ];
+			salarie.ayantsDroits = [];
+			salarie.idAyantsDroits = {};
+
+			getElements({
+				tag: _this,
+				url: '/admin/salaries/ayant_droit',
+				elements: salarie.ayantsDroits,
+				idElements: salarie.idAyantsDroits,
+				fields: { id: 'id', numero_salarie: 'numero_salarie', id_salarie: 'id_salarie', prenom: 'prenom', nom: 'nom', titre: 'titre', date_de_naissance: 'date_de_naissance', genre: 'genre', lien: 'lien', type_lien: 'type_lien', option_1: 'option_1', option_2: 'option_2', option_3: 'option_3', option_4: 'option_4', option_5: 'option_5', option_6: 'option_6', option_7: 'option_7', option_8: 'option_8', option_9: 'option_9', option_10: 'option_10', visible: 'visible',},
+				getParameters: { type_element: 'ayant_droit', id_salarie: id_salarie, },
+				type: 'ayant_droit',
+				action: 'update',
+				end: function(tag){ 
+					tag.loaded = true;
+					if(callback && typeof callback === 'function'){
+						callback();
+					}
+				},
+			});
+		}
+
+		_this.getInscriptions = function getInscriptions(id, callback){
+			if( ! id ){
+				return false;
+			}
+
+			var salarie = _this.salaries[ _this.idSalaries[ id ] ];
+			salarie.inscriptions = [];
+			salarie.idInscriptions = {};
+
+			var getParams = { id_salarie : id };
+
+			if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			} else if( _this.app.session.exercices.selected ){
+				getParams.id_exercice = _this.app.session.exercices.selected;
+			}
+
+			$.getJSON('/admin/inscription/inscription', getParams, function (data){ 
+				if(data && data.elements){
+					var i, field, d, y, o, x;
+					var l = data.elements.length;
+					var fields = { id: 'id', id_salarie: 'id_salarie', quantite: 'quantite', date_inscription: 'date_inscription', date_validite: 'date_validite', participation_ce: 'participation_ce', id_produit: 'id_produit', montant: 'montant', participation_salarie: 'participation_salarie', solde: 'solde', libelle: 'libelle', reglement: 'reglement', type_modele: 'type_modele', id_mode_paiement: 'id_mode_paiement', numero_cheque: 'numero_cheque', id_ayant_droit: 'id_ayant_droit' };
+					var current_modele = '';
+					for(i=0, y=0; i<l; i++){
+						if(current_modele != data.elements[i]['type_modele']) {
+							if(i != 0) {
+								salarie.idInscriptions[d['type_modele']] = y;
+								salarie.inscriptions.push(d);
+								y++;
+							}
+							d = { };
+							d.inscriptions = [];
+							d.idInscriptions = {};
+							d.type_modele = data.elements[i]['type_modele'];
+							current_modele = data.elements[i]['type_modele']
+							x = 0;
+						}
+						o = { }
+						for(field in fields){
+							o[fields[field]] = data.elements[i][field];
+						}
+						if(current_modele == 'remboursement') {
+							var id_mode_paiement = data.elements[i]['id_mode_paiement'];
+							o['reglement'] = null;
+							o['type_paiement'] = _this.mode_paiement[_this.idMode_paiement[id_mode_paiement]].type;
+							o['libelle_paiement'] = _this.mode_paiement[_this.idMode_paiement[id_mode_paiement]].libelle;							
+						}
+						d.inscriptions.push(o);
+						d.idInscriptions[o['id']] = x;
+						x++;
+					}
+					if(i > 0) {
+						salarie.idInscriptions[d['type_modele']] = y;
+						salarie.inscriptions.push(d);
+					}
+					y++;
+					if(callback && typeof callback === 'function'){
+						callback();
+					}
+				}
+				console.log('insccc:', salarie.inscriptions);
+
+			});
+		}
+
+		_this.getReglements = function getReglements(id, callback){
+			if( ! id ){
+				return false;
+			}
+
+			var salarie = _this.salaries[ _this.idSalaries[ id ] ];
+			salarie.reglements = [];
+			salarie.idReglements = {};
+
+			var url = '/admin/compta/reglement';
+			var getParameters = { reglementSalarie: 1, id_salarie: id };
+			if( _this.selectedExercice ){
+				getParameters.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParameters.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					_this.reglements = [];
+					_this.idReglements = {};
+					var i, d;
+					var fields = { id: 'id', id_inscription: 'id_inscription', id_salarie: 'id_salarie', montant: 'montant', nom: 'nom',
+									numero_cheque: 'numero_cheque', date_reglement: 'date_reglement', id_remise: 'id_remise', id_mode_paiement: 'id_mode_paiement', remis: 'remis', date_previsionnelle: 'date_previsionnelle', titulaire_paiement: 'titulaire_paiement', domiciliation: 'domiciliation', date_remise: 'date_remise', parent_date_remise: 'parent_date_remise' };
+
+					var l = data.elements.length;
+					for(i=0, y=0; i<l; i++){
+						d = {};
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+
+						d['type'] = _this.mode_paiement[_this.idMode_paiement[d['id_mode_paiement']]].type;
+
+						salarie.reglements.push(d);
+						salarie.idReglements[d['id']] = i;
+					}
+					if(callback && typeof callback === 'function'){
+						callback();
+					}
+				}
+			});
+		}
+
+/* FONCTION SORT */
+		/*alphabetSort(e) {
+			var $divs = $("div.fiche");
+
+		    var alphabeticallyOrderedDivs = $divs.sort(function (a, b) {
+		        return $(a).find(".alphabet").text() > $(b).find(".alphabet").text();
+		    });
+		    $("#container").html(alphabeticallyOrderedDivs);
+		}
+
+		alphabetSortDecroissant(e) {
+			var $divs = $("div.fiche");
+
+		    var alphabeticallyOrderedDivs = $divs.sort(function (a, b) {
+		        return $(a).find(".alphabet").text() < $(b).find(".alphabet").text();
+		    });
+		    $("#container").html(alphabeticallyOrderedDivs);
+		}
+
+		numeriqueSort(e){
+			var $divs = $("div.fiche");
+
+		    var numericallyOrderedDivs = $divs.sort(function (a, b) {
+		        return parseFloat($(a).find(".numerique").text()) > parseFloat($(b).find(".numerique").text());
+		    });
+		    $("#container").html(numericallyOrderedDivs);
+		}
+
+		numeriqueSortDecroissant(e){
+			var $divs = $("div.fiche");
+
+		    var numericallyOrderedDivs = $divs.sort(function (a, b) {
+		        return parseFloat($(a).find(".numerique").text()) < parseFloat($(b).find(".numerique").text());
+		    });
+		    $("#container").html(numericallyOrderedDivs);
+		}
+
+		alphabetSort_ville(e) {
+			var $divs = $("div.fiche");
+
+		    var alphabeticallyOrderedDivs = $divs.sort(function (a, b) {
+		        return $(a).find(".alphabet_ville").text() > $(b).find(".alphabet_ville").text();
+		    });
+		    $("#container").html(alphabeticallyOrderedDivs);
+		}
+
+		alphabetSortDecroissant_ville(e) {
+			var $divs = $("div.fiche");
+
+		    var alphabeticallyOrderedDivs = $divs.sort(function (a, b) {
+		        return $(a).find(".alphabet_ville").text() < $(b).find(".alphabet_ville").text();
+		    });
+		    $("#container").html(alphabeticallyOrderedDivs);
+		}
+
+		numeriqueSort_quotient(e){
+			var $divs = $("div.fiche");
+
+		    var numericallyOrderedDivs = $divs.sort(function (a, b) {
+		        return parseFloat($(a).find(".numerique_quotient").text()) > parseFloat($(b).find(".numerique_quotient").text());
+		    });
+		    $("#container").html(numericallyOrderedDivs);
+		}
+
+		numeriqueSortDecroissant_quotient(e){
+			var $divs = $("div.fiche");
+
+		    var numericallyOrderedDivs = $divs.sort(function (a, b) {
+		        return parseFloat($(a).find(".numerique_quotient").text()) < parseFloat($(b).find(".numerique_quotient").text());
+		    });
+		    $("#container").html(numericallyOrderedDivs);
+		}
+		*****************************************************************************/
+/* FIN FONCTION SORT */
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+// console.log('getElements params: ' + JSON.stringify(params));
+// console.log('getElements data: ' + JSON.stringify(data));
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							if(field != 'first' && field != 'last') {
+								d[fields[field]] = data.elements[i][field];
+							} else if ( field == 'first' ) {
+								if (i == 0) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							} else if (field == 'last') {
+								if(i == (l - 1)) {
+									d[fields[field]] = true;
+								} else {
+									d[fields[field]] = false;
+								}
+							}
+						}
+						if(params.type){
+							d['type'] = params.type;
+						}
+
+						if(params.action){
+							d['action'] = params.action;
+						}
+
+						idElements[d['id']] = i;
+						elements.push(d);
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}			  
+					tag.update();
+
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+
+		function loadDateTemplate() {
+			var $date = $('#front_date_enregistrement');
+			if($date) {
+				$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+				$date.datepicker({
+			      dateFormat: 'dd/mm/yy',
+			    });
+			    $date.datepicker( "setDate", new Date() );
+			}
+		}
+
+		function loadTag(params) {
+			var selector = params.selector;
+			var tagName = params.tagName;
+			var opt = { parentTag: _this };
+			var url = params.url;
+			var newselector = "newtag";
+			var	mountTag = document.createElement('div');
+
+			if(params.newselector) {
+				newselector = params.newselector;
+			}
+			if(params.tagContainer) {
+				mountTag.setAttribute('id', newselector);
+				$(params.tagContainer).append(mountTag);
+			}
+			if(params.opt) {
+				opt = params.opt;
+			}
+			if( (params.selector || params.tagContainer) && params.tagName && params.url ) {
+				riot.compile( url, function() {
+					mounted = riot.mount( params.tagContainer ? '#' + newselector : selector, tagName, opt);
+				});
+			}
+		}
+
+		// wait the mount event to load event listeners
+		this.on('mount', function(){
+			loadDateTemplate();
+			var params = { selector: '.filtre', tagName: 'filtre-salaries', url: '/js/tag/admin/salaries/filtre-salaries.html', opt: { parentTag: _this, checked: 'ec_non_valides' } };
+			loadTag(params);
+		});
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			addAyantDroit = null;
+			cancelDeleteElement = null;
+			cancelAyantDroit = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelSalarie = null;
+			makeVisible = null;
+			makeInvisible = null;
+			showContents = null;
+			saveSalarie = null;
+			cancelEditedSalarie = null;
+			addDotsToPhoneNumber = null;
+			editAyantDroit = null;
+			makeId = null;
+			copyMatricule = null;
+			genPass = null;
+			copyMatricule = null;
+			focusNextOne = null;
+			getElements = null;
+			formatDateField = null;
+			toggleVisible = null;
+		});
+	</script>
+</salaries>

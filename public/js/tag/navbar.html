@@ -1,0 +1,35 @@
+<navbar>
+    <ul>
+        <li class="{ active : active == "accueil"}">
+            <a href="#/">
+                <span>Accueil</span>
+            </a>
+        </li>
+        <li class="{ active : active == "shop"}">
+            <a href="#/shop">
+                <span>shop</span>
+            </a>
+        </li>
+    </ul>
+
+    <script>
+        var _this = this;
+        var parentTag = this.parentTag = opts.parentTag;
+        var app = this.app = parentTag.app;
+        this.active = opts.active;
+
+        _this.app.on('unmount-navbar', function(){
+            _this.app.off('unmount-navbar');
+            _this.unmount();
+        });
+
+
+        this.on('mount', function(){
+        });
+
+        this.on('unmount', function(){
+
+        });
+    </script>
+
+</navbar>

@@ -1,0 +1,63 @@
+<submenu>
+	<ul if={ submenu && (COMPTA_READ || PLA_READ) } class="submenu">
+		<li each={ submenu } class="{ selected : ( menuField === currentSelected )} icon"><!--<div class="triangle"><a href="{ url }" class="{ class }"></a></div>--><span><a href="{url}">{ text }</a></span></li>
+	</ul>
+	<script>
+	var app = opts;
+	this.app = opts;
+	var _this = this;
+	var permissions = app.session.permissions;
+	var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+	var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+	this.currentModule;
+	this.currentPage;
+	this.currentSelected;
+
+	if( permissions.COMPTA_READ ){
+		this.submenu = [
+		{ url: '#/compta', text: 'Tableau de bord', menuField: 'root', class: 'tableau icon_submenu'},
+		{ url: '#/compta/ecritures', text: 'Ecritures', menuField: 'ecritures', class: 'ecritures icon_submenu'},
+		{ url: '#/compta/cheques', text: 'Trésorerie', menuField: 'tresorerie', class: 'tresorerie icon_submenu'},
+		{ url: '#/compta/fournisseurs', text: 'Fournisseurs', menuField: 'fournisseurs', class: 'fournisseurs icon_submenu'},
+		{ url: '#/compta/lettrages', text: 'Lettrages', menuField: 'lettrages', class: 'lettrages icon_submenu'},
+		{ url: '#/compta/immobilisations', text: 'Immobilisations', menuField: 'immobilisations', class: 'immobilisations icon_submenu'},
+		{ url: '#/compta/rapprochement_bancaire', text: 'Rapprochement bancaire', menuField: 'rapprochement_bancaire', class: 'rapprochement icon_submenu'},
+		{ url: '#/compta/impressions', text: 'Impressions', menuField: 'impressions', class: 'impressions icon_submenu'},
+		{ url: '#/compta/journaux', text: 'Paramétrages', menuField: 'parametrages', class: 'parametrages icon_submenu'},
+		];
+	}else if( permissions.PLA_READ ){
+		this.submenu = [
+		{ url: '#/compta', text: 'Tableau de bord', menuField: 'root', class: 'tableau icon_submenu'},
+		{ url: '#/compta/comptes', text: 'Plan comptable', menuField: 'comptes', class: 'ecritures icon_submenu'},
+		{ url: '#/compta/export_comptes', text: 'Export PLA', menuField: 'export_comptes', class: 'impressions icon_submenu'},
+		{ url: '#/compta/utilitaires', text: 'Paramétrages', menuField: 'parametrages', class: 'parametrages icon_submenu'},
+		];
+	}
+
+	app.on('unmount-submenu', function(){
+		app.off('unmount-submenu');			
+		_this.unmount();
+	});
+
+	app.on('mount-module', function(module){
+		console.log('submenu event => mount-module: module:' + module);
+		_this.currentModule = module;
+	});
+
+	app.on('mount-page', function(module, page){
+		console.log('submenu event => mount-page: module: ' + module + ', page: ' + page);
+		_this.currentModule = module;
+		_this.currentPage = page;
+		if( ( permissions.COMPTA_READ > 0 ) && ( page === 'journaux' || page === 'comptes' || page === 'budgets' || page === 'chapitres' || page === 'tableau_de_bord' || page === 'exercices' || page === 'parametres' || page === 'cle_repartition' ) ){
+			_this.currentSelected = 'parametrages';
+		}else if( page === 'cheques' || page === 'especes' || page === 'chequevacances'){
+			_this.currentSelected = 'tresorerie';
+		}else{
+			_this.currentSelected = page;
+		}
+		_this.update();
+	});
+
+	this.update();
+	</script>
+</submenu>

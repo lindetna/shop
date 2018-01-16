@@ -1,0 +1,564 @@
+<tableau_de_bord>
+	<!--<div id="titre_page"><h1>Paramètres</h1></div> -->
+	<div if={ COMPTA_READ } class="content with_submenu">
+		<div id="loader" class="loader hidden">
+        </div>
+		<div class="compta compta_tableau_de_bord">
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/journaux">
+						Journaux
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ || PLA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/comptes">
+						Comptes
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/budgets">
+						Budgets
+					</a>
+				</header>
+			</div>
+			<!-- <div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/cle_repartition">
+						Clé de répartition
+					</a>
+				</header>
+			</div> -->
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/chapitres">
+						Chapitres Bilan et Compte de Résultat
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/parametres">
+						Paramètres Comptables	
+					</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/mode_paiement">Mode de Paiement</a>
+				</header>
+			</div>
+			<div if={ COMPTA_READ } class="nav_compta_parametrage block-slider">
+				<header class="closed">
+					<a class="comptes-title center" href="#/compta/exercices">
+						Exercices	
+					</a>
+				</header>
+			</div>
+			 <div if={ COMPTA_READ } class="nav_compta_parametrage tableau_de_bord block-slider">
+				<header class="comptes-title center opened" onclick= { showContents }>
+						Tableau de Bord	
+				</header>
+				<div class="slide-up">
+					<div class="line-separator"></div>
+					<div class="compta_content">
+
+						<div class="table c100">
+							<div id="tresorerie">
+							<div class="panel_box">
+			                    <div class="panel_img_left"><!--<img src="/img/paiement.png">--></div><div class="panel_title"><p class="panel_texte">Trésorerie</p></div>
+			                </div>
+			                <div class="compta_tresorerie">
+				                <div class="compta_logo_1">
+					                <div class="tableau_comptes">
+										<div class="block_reset_img">		
+											<button class="reset_imgurl" num-val='1' onclick={ resetImg } if={ id_compte1_imgurl }>X</button>
+										</div>
+					                	<div class="image_position">
+		    								<img id="id_compte1_imgurl" value="{ id_compte1_imgurl }" class="preview1" src="{ id_compte1_imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + id_compte1_imgurl : '' }" width="170" height="170">
+										</div>
+					                	<select id="id_compte1">
+					                		<option value=""></option>
+					                		<option each={ comptes } value="{ id }" selected='{ selected : id_compte1 == id }'>{ reference + ' ' + libelle }</option>
+					                	</select><br>
+										<input type='file' value="id_compte1_imgurl"  id="imgurl1" num-val='1' class="photo_upload photo_add pointer { hidden : id_compte1_imgurl }" onchange={ setImgUrl }/>							
+									</div>
+					                <div class="tableau_comptes">
+										<div class="block_reset_img">													
+											<button class="reset_imgurl" num-val='2' onclick={ resetImg } if={ id_compte2_imgurl }>X</button>
+										</div>
+										<div class="image_position">
+		    								<img id="id_compte2_imgurl" value="{ id_compte2_imgurl }" class="preview2" src="{ id_compte2_imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + id_compte2_imgurl : '' }" width="170" height="170">
+										</div>
+					                	<select id="id_compte2">
+					                		<option value=""></option>
+					                		<option each={ comptes } value="{ id }" selected='{ selected : id_compte2 == id }'>{ reference + ' ' + libelle }</option>
+					                	</select><br>
+					                	<input type='file' value="id_compte2_imgurl"  id="imgurl2" num-val='2' class="photo_upload photo_add pointer { hidden : id_compte2_imgurl }" onchange={ setImgUrl }/>	
+				                	</div>
+				                </div>
+				                <div class="compta_logo_2">
+					                <div class="tableau_comptes">
+										<div class="block_reset_img">
+											<button class="reset_imgurl" num-val='3' onclick={ resetImg } if={ id_compte3_imgurl }>X</button>												
+										</div>
+					                	<div class="image_position">
+		    								<img id="id_compte3_imgurl" value="{ id_compte3_imgurl }" class="preview3" src="{ id_compte3_imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + id_compte3_imgurl : '' }" width="170" height="170">
+										</div>
+					                	<select id="id_compte3">
+					                		<option value=""></option>
+					                		<option each={ comptes } value="{ id }" selected='{ selected : id_compte3 == id }'>{ reference + ' ' + libelle }</option>
+					                	</select><br>
+										<input type='file' value="choisir une image" id="imgurl3" num-val='3' class="photo_upload photo_add pointer { hidden : id_compte3_imgurl }" onchange={ setImgUrl }/>		
+				                	</div>				        
+					                <div class="tableau_comptes">
+										<div class="block_reset_img">													
+					               			<button class="reset_imgurl" num-val='4' onclick={ resetImg } if={ id_compte4_imgurl }>X</button>
+										</div>
+										<div class="image_position">
+		    								<img id="id_compte4_imgurl" value="{ id_compte4_imgurl }" class="preview4" src="{ id_compte4_imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + id_compte4_imgurl : '' }" width="170" height="170">
+										</div>
+					                	<select id="id_compte4">
+					                		<option value=""></option>
+					                		<option each={ comptes } value="{ id }" selected='{ selected : id_compte4 == id }'>{ reference + ' ' + libelle }</option>
+					                	</select><br>
+										<input type='file' value="choisir une image" id="imgurl4" num-val='4' class="photo_upload photo_add pointer { hidden : id_compte4_imgurl }" onchange={ setImgUrl }/>		
+				                	</div>
+				                </div>
+				                 <div class="compta_logo_3">
+					                <div class="tableau_comptes">
+										<div class="block_reset_img">		
+					                		<button class="reset_imgurl" num-val='5' onclick={ resetImg } if={ id_compte5_imgurl }>X</button>
+										</div>
+										<div class="image_position">
+		    								<img id="id_compte5_imgurl" value="{ id_compte5_imgurl }" class="preview5" src="{ id_compte5_imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + id_compte5_imgurl : '' }" width="170" height="170">
+										</div>
+					                	<select id="id_compte5">
+					                		<option value=""></option>
+					                		<option each={ comptes } value="{ id }" selected='{ selected : id_compte5 == id }'>{ reference + ' ' + libelle }</option>
+					                	</select><br>
+										<input type='file'  value="choisir une image" id="imgurl5" num-val='5' class="photo_upload photo_add pointer { hidden : id_compte5_imgurl }" onchange={ setImgUrl }/>		
+				                	</div>
+
+					               <div class="tableau_comptes">
+										<div class="block_reset_img">										
+											<button class="reset_imgurl" num-val='6' onclick={ resetImg } if={ id_compte6_imgurl }>X</button>
+										</div>										
+										<div class="image_position">
+		    								<img id="id_compte6_imgurl" value="{ id_compte6_imgurl }" class="preview6" src="{ id_compte6_imgurl ? '/img/uploads/compta/tableau_de_bord/' + utilisateur.id_entreprise + '/' + id_compte6_imgurl : '' }" width="170" height="170">
+										</div>
+					                	<select id="id_compte6">
+					                		<option value=""></option>
+					                		<option each={ comptes } value="{ id }" selected='{ selected : id_compte6 == id }'>{ reference + ' ' + libelle }</option>
+					                	</select><br>
+										<input type='file' value="choisir une image" id="imgurl6" num-val='6' class="photo_upload photo_add pointer { hidden : id_compte6_imgurl }" onchange={ setImgUrl }/>
+					                </div>
+				                </div>
+					            
+			                </div>
+						</div>
+							<div id="budgets">
+								<div class="panel_box">
+				                    <div class="panel_img_right"><!--<img src="/img/compta/budget.png">--></div><div class="panel_title"><p class="panel_texte">Budgets</p></div>
+				                </div>
+				                <div class="tableau_budgets">
+				                	<label class="label" for=''>Budget</label>
+				                	<select id="id_budget1">
+				                		<option value=""></option>
+				                		<option each={ budgets } value="{ id }" selected='{ selected : id_budget1 == id }'> { libelle }</option>
+				                	</select>
+				                </div>
+				                <div class="tableau_budgets">
+				                	<label class="label" for=''>Budget</label>
+				                	<select id="id_budget2">
+				                		<option value=""></option>
+				                		<option each={ budgets } value="{ id }" selected='{ selected : id_budget2 == id }'> { libelle }</option>		                		
+				                	</select>
+				                </div>
+				                <div class="tableau_budgets">
+				                	<label class="label" for=''>Budget</label>
+				                	<select id="id_budget3">
+				                		<option value=""></option>
+				                		<option each={ budgets } value="{ id }" selected='{ selected : id_budget3 == id }'> { libelle }</option>
+				                  	</select>
+				                </div>
+				                <div class="tableau_budgets">
+				                	<label class="label" for=''>Budget</label>
+				                	<select id="id_budget4">
+				                		<option value=""></option>
+				                		<option each={ budgets } value="{ id }" selected='{ selected : id_budget4 == id }'> { libelle }</option>		                		
+				                	</select>
+				                </div>
+				                <div class="tableau_budgets">
+				                	<label class="label" for=''>Budget</label>
+				                	<select id="id_budget5">
+				                		<option value=""></option>
+				                		<option each={ budgets } value="{ id }" selected='{ selected : id_budget5 == id }'> { libelle }</option>		                		
+				                	</select>
+				                </div>
+				                <div class="tableau_budgets">
+				                	<label class="label" for=''>Budget</label>
+				                	<select id="id_budget6">
+				                		<option value=""></option>
+				                		<option each={ budgets } value="{ id }" selected='{ selected : id_budget6 == id }'> { libelle }</option>		                		
+				                	</select>
+				                </div>
+							</div>
+						</div>
+						<div class="right">
+							<button name="save_submit" class="button enregistrer save_submit" onclick={ saveElement }>Enregistrer</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	  	var _this = this;
+		var app = opts;
+		this.app = opts;
+		var permissions = app.session.permissions;
+		this.utilisateur = app.session.utilisateur;
+		var COMPTA_READ = this.COMPTA_READ = permissions.COMPTA_READ || false;
+		var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var PLA_READ = this.PLA_READ = permissions.PLA_READ || false;
+		this.loaded = false;
+
+		this.id_compte1_imgurl = '';
+		this.id_compte2_imgurl = '';
+		this.id_compte3_imgurl = '';
+		this.id_compte4_imgurl = '';
+		this.id_compte5_imgurl = '';
+		this.id_compte6_imgurl = '';
+
+		this.thingsToLoad = [ 'exercices', 'E_M' ];
+		this.numToLoad = this.thingsToLoad.length;
+
+		if( ! _this.app.session.exercices){
+			_this.app.session.exercices = {};
+			_this.app.session.exercices.elements = [];
+			_this.app.session.exercices.idElements = {};
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.idExercices = _this.app.session.exercices.idElements;
+			$.getJSON( '/admin/compta/exercices', {}, function(data){
+				if(data && data.elements){
+					var l = data.elements.length;
+					var i, d; 
+					var fields = {id: 'id', nom: 'nom', is_default: 'is_default', date_debut: 'date_debut', date_fin: 'date_fin', prefixe: 'prefixe', mode: 'mode', status: 'status',};
+					for(i=0; i<l; i++){
+						d = new Object();
+
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(d['id_default'] == 1){
+							_this.app.session.exercices.selected = d['id'];
+						}
+						_this.selectedExercice = _this.app.session.exercices.selected;
+						_this.idExercices[d['id']] = i;
+						_this.exercices.push(d);
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			});
+		}else{
+			_this.exercices = _this.app.session.exercices.elements;
+			_this.numToLoad--;
+		}
+
+		// root Tag jQuery context for fast class selecting $('.xx_class_xx', $this_root)
+		var $this_root = $(this.root);
+		this.E_M;
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+
+//_this.E_M.backEndError({error: { code: 1}, tag: _this,});
+
+			if( _this.loaded ){
+			}
+		});
+	  	_this.app.on('unmount-tableau_de_bord', function(){
+			_this.app.off('unmount-tableau_de_bord');
+			_this.unmount();
+		});
+
+		/*this.elements = [];
+		this.idElements = {};*/
+
+		this.tableau_de_bord = {};
+
+		function getTableauDeBord(){
+			var fields = ['id_compte1', 'id_compte2', 'id_compte3', 'id_compte4', 'id_compte5', 'id_compte6', 'id_budget1', 'id_budget2', 'id_budget3', 'id_budget4', 'id_budget5', 'id_budget6', 'id_compte1_imgurl', 'id_compte2_imgurl', 'id_compte3_imgurl', 'id_compte4_imgurl', 'id_compte5_imgurl', 'id_compte6_imgurl'];
+			var imgfields = [];
+			var getParams = {};
+			if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}
+
+			$.getJSON( '/admin/compta/tableau_de_bord', getParams, function(data){
+				console.log(data);
+				if(data && data.elements){
+					_this.tableau_de_bord = data.elements[0];
+					for(field in fields) {
+						_this[fields[field]] = data.elements[0][fields[field]];
+					}
+					_this.numToLoad--;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+			})
+		}
+		getTableauDeBord();
+
+		this.budgets = []
+		this.idBudgets = {}
+
+		function getBudgets(){
+			console.log("ok");
+			var getParams = { type_element: 'budget' };
+			var fields= {id: 'id', libelle: 'libelle', visible: 'visible'};
+			$.getJSON( '/admin/compta/budgets', getParams, function(data){
+				console.log(data);
+				if(data && data.elements){
+					_this.budgets = []
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						_this.idBudgets[d['id']] = i;
+						_this.budgets.push(d);
+					}
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				console.log(_this.budgets);
+			})
+		}
+
+	/*	saveImg(e) {
+			var data = new FormData();
+
+			data.append("image", $('.photo_add')[0].files[0],  $('.photo_add')[0].files[0].name);
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('post', '/admin/site/actualites', true);
+			var image = $('.photo_add')[0].files[0].name;
+			xhr.send(data);
+		}*/
+
+		getBudgets();
+
+		this.comptes = [];
+
+		function getCompteTresorerie(){
+			console.log("ok");
+			var getParams = { referenceStartWith: 5 };
+			/*if( _this.selectedExercice ){
+				getParams.id_exercice = _this.selectedExercice;
+			}else if(document.getElementById('id_exercice')){
+				getParams.id_exercice = document.getElementById('id_exercice').value;
+			}*/
+
+			$.getJSON( '/admin/compta/comptes', getParams, function(data){
+				console.log(data);
+				if(data && data.elements){
+					_this.comptes = [];
+					_this.comptes = data.elements;
+					_this.update();
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				console.log(_this.comptes);
+			})
+		}
+		getCompteTresorerie();
+
+		showContents(e){
+			e.preventDefault();
+			e.preventUpdate = true;
+			if(_this.E_M){
+				_this.E_M.showContents(e);
+			}
+		}
+
+		validDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.validDeleteElement({event: e});
+			}
+		}
+
+		cancelDeleteElement(e){
+			if(_this.E_M){
+				_this.E_M.cancelDeleteElement({event: e});
+			}
+		}
+
+		// deleteElement(e){
+		// 	if(_this.E_M){
+		// 		_this.E_M.showLoader();
+		// 		_this.E_M.deleteElement({event: e, tag: _this, url: '/admin/compta/journaux', end: function(p){
+		// 			_this.E_M.removeLoader({time: 1000});
+		// 		}});
+		// 	}
+		// }
+
+		deleteElements(e){
+			if(_this.E_M){
+
+			}
+		}
+
+		this.elements = [];
+		this.idElements = {};
+ 
+		resetImg(e) {
+			var numval = $(e.currentTarget).attr('num-val')
+			var $input = $('#id_compte' + numval + '_imgurl');
+			$input.removeAttr('src');
+			_this['id_compte' + numval + '_imgurl'] = '';
+			_this.update();
+		}
+
+		setImgUrl(e) {
+			var numval = $(e.currentTarget).attr('num-val')
+			var $input = $('#id_compte' + numval + '_imgurl');
+			var val = $(e.currentTarget).val().split("\\");
+			$input.val(val[val.length - 1]);
+			// _this['id_compte' + numval + '_imgurl'] = val[val.length - 1];
+
+			var reader = new FileReader();
+			var current_file = $(e.currentTarget)[0].files[0];
+			reader.onload = function (input) {
+				var image = new Image();
+				image.src = input.target.result;
+				image.onload = function() {
+					var maxWidth = 100,
+						maxHeight = 100;
+					var canvas = document.createElement('canvas');
+					canvas.width = maxWidth;
+					canvas.height = maxHeight;
+					image.width = maxWidth;
+					image.height = maxHeight;
+					var ctx = canvas.getContext("2d");
+					ctx.drawImage(this, 0, 0, maxWidth, maxHeight);
+					$('.preview'+numval)
+					.attr('src', canvas.toDataURL(current_file.type))
+					.width(170)
+					.height(170);
+				}
+			};
+            $(".preview" +numval).show();
+        	reader.readAsDataURL($(e.currentTarget)[0].files[0]);
+		}
+
+		function dataURLToBlob(dataURL) {
+			var BASE64_MARKER = ';base64,';
+			if (dataURL.indexOf(BASE64_MARKER) == -1) {
+			var parts = dataURL.split(',');
+			var contentType = parts[0].split(':')[1];
+			var raw = parts[1];
+
+			return new Blob([raw], {type: contentType});
+			}
+
+			var parts = dataURL.split(BASE64_MARKER);
+			var contentType = parts[0].split(':')[1];
+			var raw = window.atob(parts[1]);
+			var rawLength = raw.length;
+
+			var uInt8Array = new Uint8Array(rawLength);
+
+			for (var i = 0; i < rawLength; ++i) {
+			uInt8Array[i] = raw.charCodeAt(i);
+			}
+
+			return new Blob([uInt8Array], {type: contentType});
+		};
+
+		saveElement(e){
+			if(_this.E_M){
+				var data = new FormData();
+				$('.photo_add').each(function() {
+					var numval = $(this).attr('num-val');
+					var input = $('#id_compte' + numval + '_imgurl').val();
+					var tab = input.split('\\');
+
+					if($(this).val() != "" && tab[tab.length - 1] != "") {
+            			if ($(this) && $(this)[0] && $(this)[0].files && $(this)[0].files[0]) {
+							data.append("image", dataURLToBlob($('.preview' + numval).attr('src')), tab[tab.length - 1]);
+						}
+					}
+				})
+
+				var xhr = new XMLHttpRequest();
+
+				xhr.open('post', '/admin/compta/tableau_de_bord?action=add_image', true);
+
+				xhr.onreadystatechange = function() {//Call a function when the state changes.
+					console.log('compta tableau de bord xhr.readyState : ' + xhr.readyState + ', xhr.status: ' + xhr.status);
+					if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						// Request finished. Do processing here.
+					}
+				}
+
+				xhr.onload = function () {
+				  // Request finished. Do processing here.
+
+				};
+
+				xhr.send(data);
+				
+				$('#actions').removeClass('hidden');
+		
+				_this.E_M.saveElement({
+					loader: true,
+					event: e, 
+					url: '/admin/compta/tableau_de_bord', 
+					fields: ['id_compte1', 'id_compte2', 'id_compte3', 'id_compte4', 'id_compte5', 'id_compte6', 'id_budget1', 'id_budget2', 'id_budget3', 'id_budget4', 'id_budget5', 'id_budget6', 'id_compte1_imgurl', 'id_compte2_imgurl', 'id_compte3_imgurl', 'id_compte4_imgurl', 'id_compte5_imgurl', 'id_compte6_imgurl'],
+					tag: _this,
+				});
+			}
+		}
+
+
+		// wait the mount event to load event listeners
+
+
+		this.on('unmount', function(){
+			// save browser memory, free event handlers references to permit garbage collect it when the tag will be unmounted!...
+			if(_this.E_M){
+				_this.E_M.unload(_this);
+			}
+			addElement = null;
+			editElement = null;
+			validDeleteElement = null;
+			cancelDeleteElement = null;
+			deleteElement = null;
+			deleteElements = null;
+			cancelElement = null;
+			saveElement = null;
+			showContents = null;
+			makeVisible = null;
+			makeInvisible = null;
+			typeTresorerie = null;
+			toggleVisible = null;
+		});
+	</script>
+
+</tableau_de_bord>

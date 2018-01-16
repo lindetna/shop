@@ -1,0 +1,874 @@
+<parametrages>
+	<!-- /* new menutop*/ <div id="titre_page"><h1>Paramètrages</h1></div> -->
+	<main class="content with_submenu">
+		<div id="loader" class="loader hidden">
+        </div>
+		<div id="rubrique_adherents">	
+			<header id="head_ra" class="opened" onclick="{ showContents }">
+				Paramètres
+			</header>		
+			<div class="slide-up" id="slide_up_rub">
+				<div class="table">
+					<div class="row">
+						<div class="cell_1_params right">
+							Ville par Défaut
+						</div>
+						<div class="cell_2">
+							<input type="text" id="ville" name="ville" placeholder="Ville par Défaut" 
+							value="{ champs.ville }" change="no" onkeyup="{ checkChangeAttr }" /> 
+						</div>
+						<div class="cell_3_params left">
+							Journal de Vente Activités
+						</div>
+						<div class="cell_4">	
+ 								<select name="id_journal_vente" id="id_journal_vente" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ journaux_ventes }" value="{ id }" selected="{ selected : id == this.champs['id_journal_vente'] }">{ libelle }</option>
+                                </select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1_params right">
+							Code Postal par Défaut
+						</div>
+						<div class="cell_2">
+							<input type="text" id="code_postal" name="code_postal" placeholder="Code Postal par Défaut "  
+							value="{ champs.code_postal }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3_params left"> 
+							Journal d'achat Activités
+						</div>
+						<div class="cell_4">
+							<select name="id_journal_achat" id="id_journal_achat" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ journaux_achats }" value="{ id }" selected="{ selected : id == this.champs['id_journal_achat'] }">{ libelle }</option>
+                            </select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1_params right">
+						</div>
+						<div class="cell_2">
+						</div>
+						<div class="cell_3_params left"> 
+							Journal Remboursement
+						</div>
+						<div class="cell_4">
+							<select name="id_journal_remboursement" id="id_journal_remboursement" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ journaux }" value="{ id }" selected="{ selected : id == this.champs['id_journal_remboursement'] }">{ libelle }</option>
+                            </select>
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+		<div id="rubrique_adherents"> 	
+			<header id="head_ra" class="closed" onclick="{ showContents }">
+				Enumération
+			</header>		
+			<div class="slide-up hidden" id="slide_up_rub">
+				<div class="table">
+				<select id="enumeration_list" class="enumeration" onclick="{ ShowEnumeration }" multiple>
+					<option value="titre">Titre</option>
+					<option value="situation_familiale">Situation Familiale</option>
+					<option value="site">Site</option>
+					<option value="statut">Statut</option>
+					<option value="type_de_contrat">Type de contrat</option>
+					<option value="service">Service</option>
+				</select>
+				<select id="enumeration_options" class="enumeration options" multiple onclick="{ ShowOption }">
+					<option each="{ getDefaultFields() }" selected>{ text }</option>
+				</select>
+				<div class="enumeration submit">
+					<button name="save_submit" class="button enregistrer save_submit" onclick={ saveEnumeration } type="submit">Ajouter</button>
+					<button name="edit_submit" class="button enregistrer modifier save_submit save_and_new" onclick={ saveElementAndNew } type="submit">Modifier</button>
+					<button name="cancel_submit" class="button annuler cancel_submit" onclick={ validDeleteElement } title="Supprimer" delete_id="{ id }">Supprimer</button>
+					<input type="textarea" name="enumeration"  id="id_enumeration">
+				</div>
+				<div id="{ id }_delete" class="delete hidden">
+						<div><p class="warning">Etes-vous sùr de vouloir supprimer cet élément ?</p><button class="button annuler" name="cancel_{ id }" id="cancel_{ id }" onclick={ cancelDeleteElement }>Annuler</button><button class="button enregistrer" name="delete_{ id }" onclick={ deleteElement }>Supprimer</button>
+						</div>
+				</div>
+			</div>			
+		</div>
+		</div>
+		<div id="rubrique_adherents">	
+			<header id="head_ra" class="closed" onclick="{ showContents }">
+				Rubrique { IS_CE ? 'Salarié' : 'Adhérent' }
+			</header>		
+			<div class="slide-up hidden" id="slide_up_rub">
+				<div class="table">
+					<div class="row">
+						<div class="cell_1 right">
+							CL 1
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_1" name="champ_1" placeholder="Champ Libre 1 - Texte " 
+							value="{ champs.champ_1 }" change="no" onkeyup="{ checkChangeAttr }" /> 
+						</div>
+						<div class="cell_3 right">
+							CL 6
+						</div>
+						<div class="cell_4">	
+							<input type="text" id="champ_6" name="champ_6" placeholder="Champ Libre 6 - Numérique" 
+							value="{ champs.champ_6 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 2
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_2" name="champ_2" placeholder="Champ Libre 2 - Texte "  
+							value="{ champs.champ_2 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right"> 
+							CL 7
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_7" name="champ_7" placeholder="Champ Libre 7 - Numérique" 
+							value="{ champs.champ_7 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 3
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_3" name="champ_3" placeholder="Champ Libre 3 - Texte " 
+							value="{ champs.champ_3 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right"> 
+							CL 8
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_8" name="champ_8" placeholder="Champ Libre 8 - Numérique" 
+							value="{ champs.champ_8 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 4
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_4" name="champ_4" placeholder="Champ Libre 4 - Texte " 
+							value="{ champs.champ_4 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right">
+							CL 9
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_9" name="champ_9" placeholder="Champ Libre 9 - Numérique " 
+							value="{ champs.champ_9 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 5
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_5" name="champ_5" placeholder="Champ Libre 5 - Texte " 
+							value="{ champs.champ_5 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right">
+							CL 10
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_10" name="champ_10" placeholder="Champ Libre 10 - Numérique "
+							value="{ champs.champ_10 }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+		<div id="rubrique_adherents">	
+			<header id="head_ra" class="closed" onclick="{ showContents }">
+				Rubrique Ayant-Droit
+			</header>		
+			<div class="slide-up hidden" id="slide_up_rub">
+				<div class="table">
+					<div class="row">
+						<div class="cell_1 right">
+							CL 11
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_1_ayant_droit" name="champ_1_ayant_droit" placeholder="Champ Libre 1 - Texte " 
+							value="{ champs.champ_1_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" /> 
+						</div>
+						<div class="cell_3 right">
+							CL 16
+						</div>
+						<div class="cell_4">	
+							<input type="text" id="champ_6_ayant_droit" name="champ_6_ayant_droit" placeholder="Champ Libre 6 - Numérique" 
+							value="{ champs.champ_6_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 12
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_2_ayant_droit" name="champ_2_ayant_droit_ayant_droit" placeholder="Champ Libre 2 - Texte "  
+							value="{ champs.champ_2_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right"> 
+							CL 17
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_7_ayant_droit" name="champ_7_ayant_droit" placeholder="Champ Libre 7 - Numérique" 
+							value="{ champs.champ_7_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 13
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_3_ayant_droit" name="champ_3_ayant_droit" placeholder="Champ Libre 3 - Texte " 
+							value="{ champs.champ_3_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right"> 
+							CL 18
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_8_ayant_droit" name="champ_8_ayant_droit" placeholder="Champ Libre 8 - Numérique" 
+							value="{ champs.champ_8_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 14
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_4_ayant_droit" name="champ_4_ayant_droit" placeholder="Champ Libre 4 - Texte " 
+							value="{ champs.champ_4_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right">
+							CL 19
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_9_ayant_droit" name="champ_9_ayant_droit" placeholder="Champ Libre 9 - Numérique " 
+							value="{ champs.champ_9_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell_1 right">
+							CL 15
+						</div>
+						<div class="cell_2">
+							<input type="text" id="champ_5_ayant_droit" name="champ_5_ayant_droit" placeholder="Champ Libre 5 - Texte " 
+							value="{ champs.champ_5_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+						<div class="cell_3 right">
+							CL 20
+						</div>
+						<div class="cell_4">
+							<input type="text" id="champ_10_ayant_droit" name="champ_10_ayant_droit" placeholder="Champ Libre 10 - Numérique "
+							value="{ champs.champ_10_ayant_droit }" change="no" onkeyup="{ checkChangeAttr }" />
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+		<div id="quotient">
+			<header id="head_fc" class="closed" onclick="{ showContents }">
+				Formule de calcul du quotient
+			</header>			
+			<div class="slide-up hidden" id="slide_up_quot">
+				<div class="block_arrondi">
+					<input type="checkbox" id-to-disable="arrondi_decimal" name="check_arrondi" id="check_arrondi" onclick="{ disableElementById }" />
+					<label for="arrondi">Arrondi</label>
+					<input type="number" name="arrondi_decimal" id="arrondi_decimal" value="{ champs.arrondi_decimal }" disabled />	
+				</div>
+				<div class="zone_texte">
+					<textarea id="formule_quotient" name="formule_quotient" rows="4" cols="50" 
+					value="{ champs.formule_quotient }" />
+				</div>
+		</div>
+		</div>
+		<div id="quotient">
+			<header id="head_fc" class="closed" onclick="{ showContents }">
+				Formule de Calcul du Tranche sur Salaire 
+			</header>			
+			<div class="slide-up hidden" id="slide_up_quot">
+				<div class="block_arrondi">
+					<input type="checkbox" id-to-disable="arrondi_decimal" name="check_arrondi" id="check_arrondi" onclick="" />
+					<label for="arrondi">Arrondi</label>
+					<input type="number" name="arrondi_decimal" id="arrondi_decimal" value="" disabled />	
+				</div>
+				<div class="zone_texte">
+					<textarea id="formule_tranche" name="formule_quotient" rows="4" cols="50" 
+					value=""/>
+				</div>
+			</div>			
+		</div>
+		<div id="quotient">
+				<header id="head_fc" class="closed" onclick="{ showContents }">
+						Tableau de Bord	
+				</header>
+				<div class="slide-up hidden" id="slide_up_quot">
+						<div id="salaries">
+							<div class="panel_box">
+			                    <div class="panel_img_left"></div><div class="panel_title"><p class="panel_texte">Nombre de Salariés</p></div>
+			                </div>
+			                <div class="tableau_situation">
+			                	<label class="label" for=''>Champs</label>
+			                	<select id="id_situation">
+			                	<option value=""></option> 
+			                	<option value="age">Age</option> 
+			                	<option value="statut">Statut</option> 
+			                	<option value="quotient">Quotient</option> 
+			                	<option value="transche_sur_salaire">Tranche sur Salaire</option> 
+			                	<option value="type_de_contrat">Type de contrat</option> 
+			                	</select>
+			                </div>
+						</div>
+						<div id="inscription">
+							<div class="panel_box">
+			                    <div class="panel_img_right"></div><div class="panel_title"><p class="panel_texte">Nombre d'inscription</p></div>
+			                </div>
+			                <div class="tableau_activites">
+			                	<label class="label" for="">Catégorie d'activité</label>
+			                	<select name="id_activite1" id="id_activite1" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_activite1 == id  }">{ libelle }</option>
+                                </select>
+			                		
+			                	</select>
+			                </div>
+			                <div class="tableau_activites">
+			                	<label class="label" for="">Catégorie d'activité</label>
+			                	<select name="id_activite2" id="id_activite2" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_activite2 == id  }">{ libelle }</option>
+                                </select>
+			                		
+			                	</select>
+			                </div>
+			                <div class="tableau_activites">
+			                	<label class="label" for="">Catégorie d'activité</label>
+			                	<select name="id_activite3" id="id_activite3" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_activite3 == id  }">{ libelle }</option>
+                                </select>
+			                		
+			                	</select>
+			                </div>
+ 							<div class="tableau_activites">
+			                	<label class="label" for="">Catégorie d'activité</label>
+			                	<select name="id_activite4" id="id_activite4" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_activite4 == id  }">{ libelle }</option>
+                                </select>
+			                		
+			                	</select>
+			                </div>
+			                 <div class="tableau_activites">
+			                	<label class="label" for="">Catégorie d'activité</label>
+			                	<select name="id_activite5" id="id_activite5" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_activite5 == id  }">{ libelle }</option>
+                                </select>
+			                		
+			                	</select>
+			                </div>
+			                 <div class="tableau_activites">
+			                	<label class="label" for="">Catégorie d'activité</label>
+			                	<select name="id_activite6" id="id_activite6" class="" onchange={ filterChange }>
+                                    <option value=""></option>
+                                    <option each="{ categories }" value="{ id }" selected="{ selected : this.id_activite6 == id  }">{ libelle }</option>
+                                </select>
+			                		
+			                	</select>
+			                </div>
+						</div>
+				</div>
+			</div>
+		<footer class="submit">
+			<button name="save_submit" class="button enregistrer save_submit" onclick={ saveElement } type="submit">Enregistrer</button>
+		</footer>
+	</main>
+	<script>
+
+	  	var _this = this;
+	  	this.app = opts;
+	  	var permissions = app.session.permissions;
+	  	var IS_CE = this.IS_CE = permissions.IS_CE || false;
+		var IS_ASSO = this.IS_ASSO = permissions.IS_ASSO || false;
+	  	app.on('unmount-parametrages', function(){
+			console.log('unmount-parametrages fired');
+			app.off('unmount-parametrages');
+			console.log('before unmount-parametrages, ' + _this.tagName);
+			_this.unmount();
+			console.log('after unmount-parametrages');
+		});
+
+		this.update();
+		this.E_M;
+		this.elements = [];
+		this.idElements = {};
+		this.champs = {};
+		_this.defaultField = 'default';
+		_this.defaultFields = {
+			default: [],
+			titre : [
+				{ value: 'monsieur', text: 'Monsieur', }, 
+				{ value: 'madame', text: 'Madame' },
+			],
+			statut: [
+				{ value: 'cadre', text: 'Cadre',},
+				{ value: 'employe', text: 'Employé',},
+				{ value: 'etam', text: 'ETAM',},
+				{ value: 'ouvrier', text: 'Ouvrier',},
+			],
+			situation_familiale: [
+				{ value: 'celibataire', text: 'Célibataire',},
+				{ value: 'marie(e)', text: 'Marié(e)',},
+				{ value: 'pacse(e)', text: 'Pacsé',},
+				{ value: 'divorce(e)', text: 'Divorcé(e)',},
+				{ value: 'veuf', text: 'Veuf',},
+				{ value: 'veuve', text: 'Veuve',},
+			],
+			site: [
+				{ value: '', text: '',},
+			],
+			type_de_contrat: [
+				{ value: 'cdi', text: 'CDI',},
+				{ value: 'cdd', text: 'CDD',},
+				{ value: 'stagiaire', text: 'Stagiaire',},
+				{ value: 'Retraité', text: 'Retraité',},
+				{ value: 'contrat_d\'apprendissage', text: 'Contrat d\'apprentissage',},
+			],
+			service : [
+				{ value: '', text: '',},
+			]
+		};
+
+		this.getDefaultFields = function getDefaultFields(){
+			return _this.defaultFields[_this.defaultField];
+		} 
+
+
+		ShowEnumeration(e){
+			e.preventDefault();
+			_this.defaultField = e.currentTarget.value;
+		}
+		ShowOption(e){
+			e.preventDefault();
+			_this.defaultFIends = e.currentTarget.value;
+		}
+
+		_this.app.loadScript('/js/admin/elements-manager.js','elements-manager_js', function(){
+			_this.E_M = new E_M();
+			if( _this.loaded ){
+			}
+		});
+
+		disableElementById(e) {
+		    _this.E_M.disableElementById(e);
+		}
+
+		showContents(e){
+			e.preventDefault();
+            e.preventUpdate = true;
+            if(_this.E_M){
+                _this.E_M.showContents(e);
+            }
+        }
+
+       	checkChangeAttr(e){
+        	var field = e.currentTarget;
+        	if(field.getAttribute('change') == 'no'){
+        		field.setAttribute('change', 'yes');
+        	}
+        }
+
+        saveEnumeration(e){
+        	var enu = $('#id_enumeration').val();
+        	var object = {
+        		action: 'add', id_enumeration: enu === '' ? null : enu 
+        	}
+        	object['id_exercice'] = document.getElementById('id_exercice').value;
+        	console.log('object:', object)
+        	$.ajax('/admin/salaries/parametrages', {
+				data : object,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+                
+				}
+			}).done(function(){
+				console.log('done!...');
+				// free reference to permit garbage collect the tag when it will be unmounted
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				// free reference to permit garbage collect the tag when it will be unmounted
+				tag = null;
+			});
+		}
+
+        saveElement(e){
+/*
+        	var id1 = $('#id_activite1').val();
+	    	var id2 = $('#id_activite2').val();
+            var id3 = $('#id_activite3').val();
+            var id4 = $('#id_activite4').val();
+            var id5 = $('#id_activite5').val();
+            var id6 = $('#id_activite6').val();
+	 		var object = { action: 'update', id_activite1: id1 === '' ? null : id1, 
+	 			id_activite2: id2 === '' ? null : id2, id_activite3 : id3 === '' ? null: id3, 
+	 			id_activite4:  id4 === '' ? null : id4, id_activite5 : id5 === '' ? null :id5 , 
+	 			id_activite6 : id6 === '' ? null :id6 }
+	 		object['id_exercice'] = document.getElementById('id_exercice').value;
+	 		console.log('salaries/parametrages saveElement object::', object)
+	    	$.ajax('/admin/salaries/parametrages', {
+				data : object,
+				type : 'POST',
+				dataType: 'json',
+				success: function (result, textStatus, jqXHR){
+                
+				}
+			}).done(function(){
+				console.log('done!...');
+				// free reference to permit garbage collect the tag when it will be unmounted
+				tag = null;
+			}).fail(function(){
+				console.log('fail!...');
+				// free reference to permit garbage collect the tag when it will be unmounted
+				tag = null;
+			});
+*/
+        	if(_this.E_M){
+        		console.log('kk')
+				_this.E_M.saveElement({
+					loader: true,
+					event: e,
+					url: '/admin/salaries/parametrages',
+					fields: ['champ_1', 'champ_2', 'champ_3', 'champ_4', 'champ_5',
+					 'champ_6', 'champ_7', 'champ_8', 'champ_9', 'champ_10', 'champ_1_ayant_droit', 'champ_2_ayant_droit', 'champ_3_ayant_droit', 'champ_4_ayant_droit', 'champ_5_ayant_droit',
+					 'champ_6_ayant_droit', 'champ_7_ayant_droit', 'champ_8_ayant_droit', 'champ_9_ayant_droit', 'champ_10_ayant_droit', 'formule_quotient', 'arrondi_decimal', 'id_journal_achat', 'id_journal_remboursement', 'id_journal_vente', 'ville', 'code_postal', 'id_situation', 'id_enumeration', 'id_activite1', 'id_activite2', 'id_activite3', 'id_activite4', 'id_activite5', 'id_activite6'],
+					tag: _this,
+				});
+			}
+			_this.closeSlideById('slide_up_quot');
+			_this.closeSlideById('slide_up_rub');
+		}
+
+		cancelElement(e) {
+			_this.E_M.cancelElement({
+				event: e,
+				fields: ['champ_1', 'champ_2', 'champ_3', 'champ_4', 'champ_5',
+				'champ_6', 'champ_7', 'champ_8', 'champ_9', 'champ_10', 'champ_1_ayant_droit', 'champ_2_ayant_droit', 'champ_3_ayant_droit', 'champ_4_ayant_droit', 'champ_5_ayant_droit',
+					 'champ_6_ayant_droit', 'champ_7_ayant_droit', 'champ_8_ayant_droit', 'champ_9_ayant_droit', 'champ_10_ayant_droit', 'formule_quotient', 'arrondi_decimal','id_situation', 'id_activite1', 'id_activite2', 'id_activite3', 'id_activite4', 'id_activite5', 'id_activite6', 'id_enumeration'],
+				tag: _this,
+			});
+		}
+
+		closeSlides(e){
+			_this.closeSlideById('slide_up_quot');
+			_this.closeSlideById('slide_up_rub');
+			var tabInputs = document.getElementsByTagName('input');
+			var i;
+			for (i = 0; i < tabInputs.length; i++){
+				var theInput = tabInputs[i];
+				if(theInput.getAttribute('change') == 'yes'){
+					theInput.value = '';
+					theInput.setAttribute('change', 'no');
+				}
+			}
+		}
+
+		_this.closeSlideById = function closeSlideById(id){
+			var theId = document.getElementById(id);
+			if( ! $(theId).is(':hidden')){
+				$(theId).slideToggle();
+			}
+		}
+
+		this.journaux_achats = [];
+        this.idJournaux_achats = {};
+
+        function getJournauxAchats(){
+            var getParams = { type: 'achats', visible: 'visible' };
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/journaux', getParams, function(data){
+                if(data && data.elements){
+                    var l = data.elements.length;
+                    var i, d; 
+                    var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte', _type: 'type', nature: 'nature'};
+                    for(i=0; i<l; i++){
+                        if(data.elements[i]['visible'] === 'visible') { 
+                            d = new Object();
+                            for(field in fields){
+                                d[fields[field]] = data.elements[i][field];
+                            }
+                            _this.idJournaux_achats[d['id']] = i;
+                            _this.journaux_achats.push(d);
+                        }
+                    }
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //_this.numToLoad--;
+                console.log('journauxachats:', _this.journaux_achats);
+            })
+        }
+        getJournauxAchats();
+
+
+        this.journaux_ventes = [];
+        this.idJournaux_ventes = {};
+
+        function getJournauxVentes(){
+            var getParams = { type: 'ventes', visible: 'visible' };
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/journaux', getParams, function(data){
+                if(data && data.elements){
+                    var l = data.elements.length;
+                    var i, d; 
+                    var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte', _type: 'type', nature: 'nature'};
+                    for(i=0; i<l; i++){
+                        if(data.elements[i]['visible'] === 'visible') { 
+                            d = new Object();
+                            for(field in fields){
+                                d[fields[field]] = data.elements[i][field];
+                            }
+                            _this.idJournaux_ventes[d['id']] = i;
+                            _this.journaux_ventes.push(d);
+                        }
+                    }
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //_this.numToLoad--;
+                console.log('journauxvente:', _this.journaux_ventes);
+            })
+        }
+        getJournauxVentes();
+
+       this.categories = [];
+       this.idCategories = {};
+       // this.
+
+
+       function getCurrentCategorie() {
+			return _this.categories[ _this.idCategories[ _this.currentCategorieId ]];
+		}
+
+		function getActivites() {
+			var categorie = getCurrentCategorie();
+			return categorie.activites;
+		}
+
+		function getCurrentActivite(activiteId) {
+			var categorie = getCurrentCategorie();
+			var id;
+			if(activiteId){
+				id = activiteId;
+			}else{
+				id = _this.currentActiviteId;
+			}
+
+			return categorie.activites[ categorie.idActivites[ id ]];
+		}
+
+       
+		
+
+        this.journaux_operations = [];
+        this.idJournaux_operations = {};
+
+        function getJournauxOperationsDiverses(){
+            var getParams = { type: 'operations_diverses' };
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/journaux', getParams, function(data)
+
+
+
+
+
+
+
+            {
+                if(data && data.elements){
+                    var l = data.elements.length;
+                    var i, d; 
+                    var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte', _type: 'type', nature: 'nature'};
+                    for(i=0; i<l; i++){
+                        if(data.elements[i]['visible'] === 'visible') { 
+                            d = new Object();
+                            for(field in fields){
+                                d[fields[field]] = data.elements[i][field];
+                            }
+                            _this.idJournaux_operations[d['id']] = i;
+                            _this.journaux_operations.push(d);
+                        }
+                    }
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //_this.numToLoad--;
+                console.log('journaux op:', _this.journaux_operations);
+            })
+        }
+        getJournauxOperationsDiverses();
+
+        this.journaux = [];
+        this.idJournaux = {};
+
+        function getJournaux (){
+            var getParams = { visible: 'visible' };
+            if( _this.selectedExercice ){
+                getParams.id_exercice = _this.selectedExercice;
+            }else if(document.getElementById('id_exercice')){
+                getParams.id_exercice = document.getElementById('id_exercice').value;
+            }
+
+            $.getJSON( '/admin/compta/journaux', getParams, function(data){
+                if(data && data.elements){
+                    var l = data.elements.length;
+                    var i, d; 
+                    var fields = {id: 'id', libelle: 'libelle', visible: 'visible', id_compte: 'id_compte', _type: 'type', nature: 'nature'};
+                    for(i=0; i<l; i++){
+                        if(data.elements[i]['visible'] === 'visible') { 
+                            d = new Object();
+                            for(field in fields){
+                                d[fields[field]] = data.elements[i][field];
+                            }
+                            _this.idJournaux[d['id']] = i;
+                            _this.journaux.push(d);
+                        }
+                    }
+                    //_this.numToLoad--;
+                    _this.update();
+                }else{
+                    // TODO: no data elements, get and manage error!...
+                }
+                //_this.numToLoad--;
+            })
+        }
+        getJournaux();
+
+		function getParametrages(){
+        	var getParams = {};
+
+			console.log('params elements before: ' + JSON.stringify(_this.elements));
+			$.getJSON('/admin/salaries/parametrages', getParams, function(data){
+				console.log('data:', data)
+				if(data && data.element){
+					var i, field, d;
+					var fields = { champ_1: 'champ_1', champ_2: 'champ_2', champ_3: 'champ_3', champ_4: 'champ_4', champ_5: 'champ_5', champ_6: 'champ_6', champ_7: 'champ_7',	champ_8: 'champ_8', champ_9: 'champ_9', champ_10: 'champ_10', champ_1_ayant_droit: 'champ_1_ayant_droit', champ_2_ayant_droit: 'champ_2_ayant_droit', champ_3_ayant_droit: 'champ_3_ayant_droit', champ_4_ayant_droit: 'champ_4_ayant_droit', champ_5_ayant_droit: 'champ_5_ayant_droit', champ_6_ayant_droit: 'champ_6_ayant_droit', champ_7_ayant_droit: 'champ_7_ayant_droit',	champ_8_ayant_droit: 'champ_8_ayant_droit', champ_9_ayant_droit: 'champ_9_ayant_droit', champ_10_ayant_droit: 'champ_10_ayant_droit',formule_quotient: 'formule_quotient', arrondi_decimal: 'arrondi_decimal', ville: 'ville', code_postal: 'code_postal', id_journal_achat: 'id_journal_achat', id_journal_vente: 'id_journal_vente', id_journal_remboursement: 'id_journal_remboursement', id_situation: 'id_situation', id_activite1: 'id_activite1', id_activite2: 'id_activite2', id_activite3: 'id_activite3', id_activite4: 'id_activite4', id_activite5: 'id_activite5', id_activite6: 'id_activite6', enumeration: 'id_enumeration'};
+					if(data.element[0]) {
+						for(field in fields) {
+							_this.champs[fields[field]] = data.element[0][field];
+						}
+						console.log('this champs: ' + JSON.stringify(_this.champs));
+					}
+					_this.update();
+					_this.loaded = true;
+				}else{
+					// TODO: no data elements, get and manage error!...
+					console.log('else non if');
+
+				}
+			});
+        }
+        getParametrages();
+
+		function getElements(params){
+			var tag = params.tag;
+			var url = params.url;
+			var fields = params.fields;
+			var elements = params.elements;
+			var idElements = params.idElements;
+			var getParameters = params.getParameters || {};
+			$.getJSON( url, getParameters, function(data){
+				if(data && data.elements){
+					if(params.init && typeof params.init === 'function'){
+						params.init(tag);
+					}
+					var i, field, d;
+					var l = data.elements.length;
+					for(i=0; i<l; i++){
+						d = new Object();
+						for(field in fields){
+							d[fields[field]] = data.elements[i][field];
+						}
+						if(params.childsName){
+							d[params.childsName] = [];
+						}
+						if(params.idChildsName){
+							d[params.idChildsName] = {};
+						}
+
+						if( typeof idElements[d['id']] === 'undefined'){
+							idElements[d['id']] = i;
+							elements.push(d);
+						}else{
+							elements[ idElements[d['id']] ] = d;
+						}
+					}
+					if(params.beforeUpdate && typeof params.beforeUpdate === 'function'){
+						params.beforeUpdate(tag);
+					}
+					tag.update();
+					if(params.end && typeof params.end === 'function'){
+						params.end(tag);
+					}
+				}else{
+					// TODO: no data elements, get and manage error!...
+				}
+				tag = null;
+				url = null;
+				fields = null;
+				elements = null;
+				idElements = null;
+			});
+		}
+		getElements({
+			tag: _this,
+			url: '/admin/activites/activites',
+			elements: _this.categories,
+			idElements: _this.idCategories,
+			fields: {id: 'id', id_entreprise: 'id_entreprise', libelle: 'libelle', image_url: 'image_url', id_exercice: 'id_exercice', visible: 'visible', places: 'places', inscrits: 'inscrits', restants: 'restants', information_internet: 'information_internet', public_internet: 'public_internet', informations: 'informations', id_modele: 'id_modele', },
+			getParameters: { type_element: 'categorie', },
+			childsName: 'activites',
+			idChildsName: 'idActivites',
+			end: function(tag){
+				tag.loaded = true;
+				tag.numToLoad--;
+				/*********************************************
+				TODO:
+				better to run it from a generic function => app.loadThings() ...
+				test if every dependancie is loaded
+				and then run the dependant functions ...
+				maybe some pile of callback functions to run when each list of dependancies are loaded
+				**********************************************/
+			},
+		});
+
+	</script>
+</parametrages>
