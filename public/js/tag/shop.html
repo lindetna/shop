@@ -1,7 +1,10 @@
 <shop>
 	<div class="navbar"></div>
 	<div class="content_tag page_shop">
-		<div class="entete_tableau shop">
+		<div class="add_rows">
+			<input type="text" id="nb_rows_to_add" value="1" class="align-right"> <button onclick={ alter }>Ajouter une ligne</button>
+		</div>
+		<!-- <div class="entete_tableau shop">
 			<div class="cell cell_1">
 				<p class="">Reference</p>					
 			</div>
@@ -22,9 +25,9 @@
 			</div>
 		</div>
 		<div class="table full">
-			<div class="row">
+			<div class="row" each= { lignes }>
 				<div class="cell cell_1">
-					<select class="autocomplete contacts print_select"><select>					
+					<select class="autocomplete contacts print_select" index="{ ligne }" + "1"><select>					
 				</div>
 				<div class="cell cell_2">
 					<input type="text" disabled>
@@ -33,22 +36,233 @@
 					<input type="text" disabled>
 				</div>
 				<div class="cell cell_4">
-					<input type="text">
+					<input type="text" index="{ ligne }" + "2">
 				</div>
 				<div class="cell cell_5">
-					<input type="text">
+					<input type="text" index="{ ligne }" + "3">
 				</div>
 				<div class="cell cell_6">
 					<input type="text" disabled>
 				</div>
 			</div>
+		</div> -->
+		<div class="align-right">
+			<button id="reset" onclick={reset}>
+				remettre à zéro
+			</button>
+		</div>
+		<br>
+	
+		<div id="handsontable">
 
+		</div>
+		<div class="table full">
+			<div class="cell">
+				<button onclick={ exportCSV }>Exporter</button>
+			</div>
+			<div class="cell align-right">
+				<p> Prix Total: <span id="total_price">0.00</span>€</p>
+				<button id="save" onclick={ save }>Sauvegarder</button>					
+			</div>
 		</div>
 	</div>
 	<script>
 	  	var _this = this;
 		var app = opts;
 		this.app = opts;
+		this.nb_rows = 10;
+		this.handsontable = false;
+
+		save(e) {
+			const url = "/api/element";
+			const result = _this.datatmp.filter(arr => arr.every(elem => elem ) && arr[5] != "0.00");
+			let get_params = { action: "shop" };
+			let params = [];
+			for ( index in result ) {
+				let object = {}
+				const obj = result[index];
+				object.id = _this.elements[_this.idElements[_this.referenceId[obj[0]]]].id;
+				object.quantite = parseInt(obj[3]) * parseInt(obj[4]);
+				params.push(object);
+			}
+			get_params.elements = params;
+			if(get_params.elements.length > 0) {
+				$.ajax(url, {
+					data : get_params,
+					type : 'POST',
+					dataType: 'json',
+					success: function (result, textStatus, jqXHR){
+						getElement();
+					}
+				}).done(function(){
+					console.log('done!...');
+					tag = null;
+				}).fail(function(){
+					console.log('fail!...');
+					tag = null;
+				}); //, 'json'
+			}
+		}
+
+		exportCSV(e) {
+			console.log('test')
+			_this.exportPlugin.downloadFile('csv', {filename: 'MyFile'});
+		}
+
+		/* handson table */
+		this.hot;
+		this.data = [['','','','','','']]
+		this.datatmp = [['','','','','','']]
+		
+		_this.reset = function reset(e) {
+			_this.datatmp = [['','','','','','']]
+			
+			_this.hot.loadData(_this.datatmp);
+			$('#total_price').text('0.00')
+		}
+
+		function reloadData(change, source) {
+			const fields = ['reference', 'stock', 'price', 'packof'];
+			const row = change[0][0];
+			const column = change[0][1];
+			const before = change[0][2];
+			const after = change[0][3];
+			const id = _this.referenceId[after];
+			let tmp = []
+			if( column == 0 ) {//update ref  
+				if( id ) {
+					const elem = _this.elements[_this.idElements[id]];
+					for (value of fields) {
+						tmp.push(elem[value]);
+					}
+					
+					tmp.push(1); //nombre de packet default:1
+					tmp.push((elem.price * elem.packof).toFixed(2));
+					console.log('datatmp', _this.datatmp)
+					
+					_this.datatmp[row] = tmp;
+					_this.hot.loadData(_this.datatmp);
+				} else {
+					_this.datatmp[row] = ['','','','','',''];
+					_this.hot.loadData(_this.datatmp);
+				}
+			} else if (column == 3 || column == 4){
+				if(column == 3 && (after * _this.hot.getDataAtCell(row, 4)) > _this.hot.getDataAtCell(row, 1)) {
+					_this.datatmp[row][column] = before;
+
+					_this.hot.loadData(_this.datatmp);
+				} else if(column == 4 && (after * _this.hot.getDataAtCell(row, 3)) > _this.hot.getDataAtCell(row, 1)) {
+					_this.datatmp[row][column] = before;
+
+					_this.hot.loadData(_this.datatmp);
+				} else {
+					_this.datatmp[row][column] = after;
+					_this.datatmp[row][5] = (_this.hot.getDataAtCell(row,2) * _this.datatmp[row][3] * _this.datatmp[row][4]).toFixed(2);
+
+					_this.hot.loadData(_this.datatmp);
+				}		
+			}
+			setTotalPrice();
+		}
+
+		function setTotalPrice() {
+			var total_price = 0;
+			for(index in _this.datatmp) {
+				if( ! _this.hot.isEmptyRow(index)) {
+					total_price += parseInt(_this.datatmp[index][5]);
+				console.log('index:', index, '; value:', _this.datatmp[index]);
+				}
+			}
+			$('#total_price').text(total_price.toFixed(2));
+		}
+
+		alter(e) {
+			if( ! isNaN( parseInt($('#nb_rows_to_add').val()) ) ) {
+				_this.hot.alter('insert_row', null, $('#nb_rows_to_add').val());
+				_this.nb_rows += parseInt($('#nb_rows_to_add').val());
+			}
+		}
+
+		function handsontable() {
+			var container = document.getElementById('handsontable');
+			_this.hot = new Handsontable(container, {
+				data: _this.data,
+				colWidths: 150,
+				minCols: 6,
+				minRows: _this.nb_rows,
+				rowHeaders: true,
+				colHeaders: [
+					'Reference',
+					'Stock',
+					'Prix unité',
+					'Paquet de',
+					'Nombre de paquet',
+					'Prix total'
+				],
+				colums: [
+					{ data: 'reference' },
+					{ data: 'stock' },
+					{ data: 'price' },
+					{ data: 'packof' },
+				],
+				columnSorting: true,
+				filters: false,
+				dropdownMenu: true,
+				contextMenu: true,
+				autoRowSize: true,
+				manualColumnMove: true,
+				manualRowMove: true,
+				fillHandle: {
+					autoInsertRow: false,
+				},
+				afterChange: function (change, source) {
+					console.log('change:', change)
+					console.log('source:', source)
+					if(change && change[0] && source == "edit") {
+						console.log('row:', change[0][0]); // ligne
+						console.log('columns:', change[0][1]); // colonne
+						console.log('value before:', change[0][2]); // value before change
+						console.log('value after:', change[0][3]); // value after change
+						reloadData(change, source);	
+					}
+				},
+				cells: function(row, column) {
+					var cellMeta = {};
+
+					if(column == 0) {
+						cellMeta.type = "dropdown";
+						cellMeta.source = _this.reference;
+					}
+
+					if(column == 1) {
+						cellMeta.type = "text";
+						cellMeta.readOnly = true;
+					}
+
+					if(column == 2) {
+						cellMeta.type = "text";
+						cellMeta.readOnly = true;
+					}
+
+					if(column == 3) {
+						cellMeta.type = "text";
+					}
+
+					if(column == 4) {
+						cellMeta.type = "text";
+					}
+
+					if(column == 5) {
+						cellMeta.type = "text";
+						cellMeta.readOnly = true;
+					}
+					return cellMeta;
+				}
+			});
+			_this.exportPlugin = _this.hot.getPlugin('exportFile');
+			
+		}
+		/* end handson table */
 
 		this.loaded = false;
 
@@ -57,6 +271,8 @@
 		this.elements = [];
 		this.idElements = {};
 
+		this.referenceId = {}
+		this.reference = []
 		function getElement(){
 			var getParams = { };
 
@@ -64,18 +280,36 @@
 				if(data && data.elements){
 					var l = data.elements.length;
 					var i, d; 
+					_this.elements = [];
+					_this.idElements = {};
+					_this.referenceId = {};
+					_this.reference = [];
 					var fields = { id: 'id', reference: 'reference', packof: 'packof', stock: 'stock', number_sold: 'number_sold', price: 'price'};
 					for(i=0; i<l; i++){
 						d = new Object();
 
 						for(field in fields){
-							d[fields[field]] = data.elements[i][field];
+							if (field != 'packof') {
+								d[fields[field]] = data.elements[i][field];
+							} else {
+								if(parseInt(data.elements[i]['packof']) > parseInt(data.elements[i]['stock'])) {
+									d[fields[field]] = data.elements[i]['stock'];
+								} else {
+									d[fields[field]] = data.elements[i][field];
+								}
+							}
 						}
+						_this.reference.push(d['reference']);
 						_this.idElements[d['id']] = i;
+						_this.referenceId[d['reference']] = d['id'];
 						_this.elements.push(d);
 					}
-						loadSelectize('.autocomplete');
+					// loadSelectize('.autocomplete');
 					_this.update();
+					if( ! _this.handsontable) {
+						handsontable();
+						_this.handsontable = true;
+					}
 				}else{
 					// TODO: no data elements, get and manage error!...
 				}
@@ -192,6 +426,8 @@
 			}
 			_this.trigger('unmount-navbar');
 		});
+
+		
 	</script>
 
 </shop>

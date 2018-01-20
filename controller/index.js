@@ -24,14 +24,12 @@ Controller.prototype.accueil = function accueil(){
 };
 
 Controller.prototype.login = function login(){
-	// var auth = this.auth;
 	var _this = this;
-	// var isValidUser = auth.isValidUser('home_admin', Auth.READ);
 	var promise = this.model.getUserInfo();
 	promise.then((result) => {
+		console.log('sha:', sha256(_this.req.body.password));
         if(sha256(_this.req.body.password) == result.password && _this.req.body.connexion_type && _this.req.body.connexion_type === 'start') {
 			_this.res.redirect(Route.ROOT_ACCUEIL_URL + '/?valid=success');
-			// _this.res.redirect(Route.ROOT_ACCUEIL_URL);
         } else {
 			_this.view.login('Mdp incorrect');			
         }

@@ -149,6 +149,61 @@ Element_Model.prototype.update = function update(params){
 };
 
 
+Element_Model.prototype.shop = function shop(params){
+	console.log('params:::', params)
+	var db = this.db;
+
+	var promise = new Promise(function(resolve,reject){
+		
+		let sql = '';
+		var val = [];
+
+		for( let index in params.elements ) {
+			const element = params.elements[index];
+			sql = sql + 'SET @quantite=?;';
+			val.push(element.quantite);
+			sql = sql + ' UPDATE `items` SET stock=(SELECT stock_moins_quantite FROM  \
+				( SELECT (stock - @quantite) AS stock_moins_quantite FROM `items` WHERE id=? LIMIT 1 ) tmp) \
+				WHERE id=?;';
+			val.push(element.id)
+			val.push(element.id)
+
+			sql = sql + ' UPDATE `items` SET number_sold=(SELECT number_sold_plus_quantite FROM  \
+				( SELECT (number_sold + @quantite) AS number_sold_plus_quantite FROM `items` WHERE id=? LIMIT 1 ) tmp) \
+				WHERE id=?';
+			val.push(element.id)
+			val.push(element.id)
+		}
+		console.log('sql::', sql);
+		console.log('val::', val);
+
+		db.connect({multiStatements: true});
+		var query = db.query(
+			sql,
+			val, 
+			null, 
+			function(err, rows){
+				db.close();
+				if( ! err){
+					console.log('rows:::', rows);
+					if(typeof rows.info != 'undefined'
+					  && typeof rows.info.affectedRows != 'undefined'
+					){
+						resolve(params.id);
+					}else{
+						reject(new Error('Element_Model.update Unable to insert in the DB!....'));
+					}
+				}else{
+					reject(err);
+				}
+			}
+		);
+	});
+
+	return promise;
+};
+
+
 Element_Model.prototype.del = function del(params){
 	var db = this.db;
 

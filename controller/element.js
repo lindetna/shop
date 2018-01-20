@@ -53,6 +53,8 @@ Element_Controller.prototype._post = function _post(){
             model_promise = this.model.update(model_params);
         }else if(model_params.action === 'delete'){
             model_promise = this.model.del(model_params);
+        } else if(model_params.action === 'shop') {
+            model_promise = this.model.shop(model_params);
         }
 
         model_promise.then(function(result){
@@ -91,6 +93,9 @@ Element_Controller.prototype.getPostQuery = function getPostQuery(){
 			}else if(query.action === 'delete'){
 				params.action = 'delete';
 				names = this.getDeleteNames();
+			}else if(query.action === 'shop'){
+                params.action = 'shop';
+                names = { elements: {required: true} };
 			}else{
 				throw new Error('Element_Controller._post :: Invalid post request action!...');
 			}
@@ -128,7 +133,6 @@ Element_Controller.prototype.getUpdateNames = function getUpdateNames(){
         packof: 	{required: true},
         id:         {required: true},
     };
-
 }
 
 Element_Controller.prototype.getDeleteNames = function getDeleteNames(){

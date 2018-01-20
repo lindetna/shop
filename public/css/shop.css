@@ -1,3 +1,17 @@
+/* fixed */
+.add_rows {
+    width: 200px;
+    height: 50px;
+    position: fixed;
+    left: 20px;
+    top: 200px;
+}
+
+.add_rows input {
+    width: 50px;
+}
+/* fixed */
+
 .page_shop .selectize-input {
     border: 1px solid #8b8b8b;
     display: inline-block;
@@ -28,11 +42,11 @@
 	/* border: 1px solid grey; */
 }
 
-input {
+/* input {
 	box-sizing: border-box;
 	border: 1px solid black;
 	width: 100%;
-}
+} */
 /* NEW */
 
 .actions {
